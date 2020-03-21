@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Handwashing reminder</string>
+    <string name="activity_notification_channel_name">Activity
+        notifications</string>
+    <string name="activity_notification_channel_desc">Get a
+        notification when you get out of a vehicle to remind you to
+        wash your hands</string>
+    <string name="test_notification">This is a test notification</string>
+    <string name="test_content">This is the content for a test
+        notification</string>
+    <string name="hours_abbrev">hh</string>
+    <string name="double_dot">:</string>
+    <string name="minutes_abbrev">mm</string>
+    <string name="tpicker_title">Choose an hour</string>
+    <string name="time_config_title_tpl">When do you usually have %1$s?</string>
+    <string name="breakfast">breakfast</string>
+    <string name="lunch">lunch</string>
+    <string name="dinner">dinner</string>
+    <string name="transition_card" translatable="false">card_transition</string>
+    <string-array name="transitions">
+        <item>first_card</item>
+        <item>second_card</item>
+        <item>third_card</item>
+    </string-array>
+    <string name="done">Done</string>
+</resources>

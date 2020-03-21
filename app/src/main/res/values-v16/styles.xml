@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="actionBarTheme" parent="ThemeOverlay.MaterialComponents.ActionBar">
+        <item name="android:fontFamily">@font/raleway_bold</item>
+    </style>
+</resources>
