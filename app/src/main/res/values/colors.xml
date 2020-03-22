@@ -5,4 +5,5 @@
     <color name="colorAccent">#4D4DFF</color>
     <!--    <color name="colorAccent">#03DAC5</color>-->
     <color name="white">#FFFFFFFF</color>
+    <color name="dkgray">#FF444444</color>
 </resources>

@@ -126,26 +126,22 @@ class IntroActivity : AppIntro2(), AdapterView.OnItemClickListener {
         val title = view.findViewById<TextView>(R.id.title)
         val image = view.findViewById<ImageView>(R.id.infoImage)
         val timeCtr = view.findViewById<ConstraintLayout>(R.id.timeCtr)
+        val clockIcon = timeCtr.findViewById<ImageView>(R.id.clockIcon)
+        val hours = timeCtr.findViewById<TextView>(R.id.hours)
+        val ddot = timeCtr.findViewById<TextView>(R.id.ddot)
+        val minutes = timeCtr.findViewById<TextView>(R.id.minutes)
         Log.d("Intro", title.toString())
         Log.d("Intro", title.text.toString())
         val options = if (isAtLeast(AndroidVersion.LOLLIPOP)) {
-//            title.transitionName = TimeConfigActivity.VIEW_TITLE_NAME
-//            ActivityOptionsCompat.makeSceneTransitionAnimation(
-//                this, title, TimeConfigActivity.VIEW_TITLE_NAME
-//            )
             ActivityOptionsCompat.makeSceneTransitionAnimation(
                 this,
                 Pair.create(title, TimeConfigActivity.VIEW_TITLE_NAME),
                 Pair.create(image, TimeConfigActivity.INFO_IMAGE_NAME),
-                Pair.create(timeCtr, TimeConfigActivity.USER_TIME_NAME)
+                Pair.create(clockIcon, TimeConfigActivity.USER_TIME_ICON),
+                Pair.create(hours, TimeConfigActivity.USER_TIME_HOURS),
+                Pair.create(ddot, TimeConfigActivity.USER_DDOT),
+                Pair.create(minutes, TimeConfigActivity.USER_TIME_MINUTES)
             )
-            /*ActivityOptionsCompat
-                .makeSceneTransitionAnimation(
-                    this, Pair(
-                        title,
-                        TimeConfigActivity.VIEW_TITLE_NAME
-                    )
-                )*/
         } else {
             null
         }

@@ -18,6 +18,7 @@
  */
 package com.javinator9889.handwashingreminder.views.activities.config
 
+//import com.afollestad.materialdialogs.datetime.timePicker
 import android.app.Activity
 import android.app.TimePickerDialog
 import android.content.Intent
@@ -29,7 +30,6 @@ import android.widget.TextView
 import android.widget.TimePicker
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
-//import com.afollestad.materialdialogs.datetime.timePicker
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.utils.AndroidVersion
 import com.javinator9889.handwashingreminder.utils.TimeConfig
@@ -44,7 +44,10 @@ class TimeConfigActivity :
     companion object Transitions {
         const val VIEW_TITLE_NAME = "detail:header:title"
         const val INFO_IMAGE_NAME = "detail:header:image"
-        const val USER_TIME_NAME = "detail:body:time"
+        const val USER_TIME_ICON = "detail:body:time-icon"
+        const val USER_TIME_HOURS = "detail:body:time-hours"
+        const val USER_TIME_MINUTES = "detail:body:time-minutes"
+        const val USER_DDOT = "detail:body:time-ddot"
     }
 
     private lateinit var doneButton: Button
@@ -52,8 +55,10 @@ class TimeConfigActivity :
     private lateinit var image: ImageView
     private lateinit var setButton: Button
     private lateinit var timeContainer: ConstraintLayout
+    private lateinit var ddot: TextView
     private lateinit var hours: TextView
     private lateinit var minutes: TextView
+    private lateinit var clockIcon: ImageView
 //    private lateinit var timePicker: TimePicker
 
     data class Time(val hour: Int, val minute: Int)
@@ -67,16 +72,25 @@ class TimeConfigActivity :
         image = findViewById(R.id.infoImage)
         setButton = findViewById(R.id.setTimeButton)
         timeContainer = findViewById(R.id.timeContainer)
+        ddot = timeContainer.findViewById(R.id.ddot)
         hours = timeContainer.findViewById(R.id.hours)
         minutes = timeContainer.findViewById(R.id.minutes)
+        clockIcon = timeContainer.findViewById(R.id.clockIcon)
 //        timePicker = findViewById(R.id.timePicker)
 
 //        timePicker.setIs24HourView(true)
         doneButton.setOnClickListener(this)
         setButton.setOnClickListener(this)
+        hours.setOnClickListener(this)
+        ddot.setOnClickListener(this)
+        minutes.setOnClickListener(this)
+        clockIcon.setOnClickListener(this)
         ViewCompat.setTransitionName(title, VIEW_TITLE_NAME)
         ViewCompat.setTransitionName(image, INFO_IMAGE_NAME)
-        ViewCompat.setTransitionName(timeContainer, USER_TIME_NAME)
+        ViewCompat.setTransitionName(hours, USER_TIME_HOURS)
+        ViewCompat.setTransitionName(ddot, USER_DDOT)
+        ViewCompat.setTransitionName(minutes, USER_TIME_MINUTES)
+        ViewCompat.setTransitionName(clockIcon, USER_TIME_ICON)
 
         if (savedInstanceState != null || intent.extras != null) {
             val data = savedInstanceState ?: intent.extras
@@ -147,7 +161,7 @@ class TimeConfigActivity :
 
     override fun onClick(v: View?) {
         when (v) {
-            setButton -> {
+            setButton, hours, minutes, clockIcon, ddot -> {
                 val date = Calendar.getInstance()
                 val tpHour = date.get(Calendar.HOUR_OF_DAY)
                 val tpMinute = date.get(Calendar.MINUTE)
