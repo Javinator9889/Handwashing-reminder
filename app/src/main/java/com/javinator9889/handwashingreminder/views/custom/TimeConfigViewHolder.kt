@@ -20,11 +20,13 @@ package com.javinator9889.handwashingreminder.views.custom
 
 import android.view.View
 import android.widget.AdapterView
+import android.widget.ImageView
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.annotation.DrawableRes
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.javinator9889.handwashingreminder.R
+import com.javinator9889.handwashingreminder.utils.TimeConfig
 
 
 class TimeConfigViewHolder(val view: View) :
@@ -33,8 +35,8 @@ class TimeConfigViewHolder(val view: View) :
     val title: TextView = view.findViewById(R.id.title)
     val hours: TextView = view.findViewById(R.id.hours)
     val minutes: TextView = view.findViewById(R.id.minutes)
+    val image: ImageView = view.findViewById(R.id.infoImage)
     private val card = view.findViewById<MaterialCardView>(R.id.timeCard)
-    private val container = view.findViewById<ConstraintLayout>(R.id.cardCtr)
     private var listener: AdapterView.OnItemClickListener? = null
     private var height: Int? = null
     var id = 0L
@@ -44,11 +46,12 @@ class TimeConfigViewHolder(val view: View) :
         title.setOnClickListener(this)
         hours.setOnClickListener(this)
         minutes.setOnClickListener(this)
+        image.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
         when (v) {
-            card, title, hours, minutes -> this.listener?.onItemClick(
+            card, title, hours, minutes, image -> this.listener?.onItemClick(
                 null,
                 card,
                 adapterPosition,
@@ -67,12 +70,27 @@ class TimeConfigViewHolder(val view: View) :
         this.title.text = title
         this.listener = listener
         this.height = height
-        adaptCardHeight()
+        val imageRes = when (id) {
+            TimeConfig.BREAKFAST_ID -> R.drawable.ic_breakfast
+            TimeConfig.LUNCH_ID -> R.drawable.ic_lunch
+            TimeConfig.DINNER_ID -> R.drawable.ic_dinner
+            else -> null
+        }
+        loadImageView(imageRes)
+//        adaptCardHeight()
     }
 
     private fun adaptCardHeight() {
         if (height == null)
             return
-        card.minimumHeight = height!! / 3
+        card.minimumHeight = height as Int
+    }
+
+    private fun loadImageView(@DrawableRes imageRes: Int?) {
+        if (imageRes != null)
+            image.setImageResource(imageRes)
+//        Picasso.get()
+//            .load(imageRes)
+//            .into(image)
     }
 }

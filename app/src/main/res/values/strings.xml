@@ -23,4 +23,5 @@
         <item>third_card</item>
     </string-array>
     <string name="done">Done</string>
+    <string name="set_time">Set time</string>
 </resources>

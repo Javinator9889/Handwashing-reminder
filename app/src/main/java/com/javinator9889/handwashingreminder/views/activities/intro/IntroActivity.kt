@@ -25,7 +25,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
@@ -40,9 +42,11 @@ import com.javinator9889.handwashingreminder.utils.isAtLeast
 import com.javinator9889.handwashingreminder.views.activities.MainActivity
 import com.javinator9889.handwashingreminder.views.activities.config.TimeConfigActivity
 
+
 class IntroActivity : AppIntro2(), AdapterView.OnItemClickListener {
     private val views = HashMap<Int, View>(3)
     private lateinit var transitions: Array<String>
+    private lateinit var sliderPage4: TimeConfigIntroActivity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,7 +81,7 @@ class IntroActivity : AppIntro2(), AdapterView.OnItemClickListener {
         sliderPage3.descColor = Color.DKGRAY
         addSlide(AppIntro2Fragment.newInstance(sliderPage3))
 
-        val sliderPage4 = TimeConfigIntroActivity()
+        sliderPage4 = TimeConfigIntroActivity()
         val display = windowManager.defaultDisplay
         val size = Point()
         display.getSize(size)
@@ -120,6 +124,8 @@ class IntroActivity : AppIntro2(), AdapterView.OnItemClickListener {
         views[id.toInt()] = view
         val intent = Intent(this, TimeConfigActivity::class.java)
         val title = view.findViewById<TextView>(R.id.title)
+        val image = view.findViewById<ImageView>(R.id.infoImage)
+        val timeCtr = view.findViewById<ConstraintLayout>(R.id.timeCtr)
         Log.d("Intro", title.toString())
         Log.d("Intro", title.text.toString())
         val options = if (isAtLeast(AndroidVersion.LOLLIPOP)) {
@@ -129,7 +135,9 @@ class IntroActivity : AppIntro2(), AdapterView.OnItemClickListener {
 //            )
             ActivityOptionsCompat.makeSceneTransitionAnimation(
                 this,
-                Pair.create(title, TimeConfigActivity.VIEW_TITLE_NAME)
+                Pair.create(title, TimeConfigActivity.VIEW_TITLE_NAME),
+                Pair.create(image, TimeConfigActivity.INFO_IMAGE_NAME),
+                Pair.create(timeCtr, TimeConfigActivity.USER_TIME_NAME)
             )
             /*ActivityOptionsCompat
                 .makeSceneTransitionAnimation(
@@ -141,6 +149,7 @@ class IntroActivity : AppIntro2(), AdapterView.OnItemClickListener {
         } else {
             null
         }
+        Log.d("Intro", options?.toString())
         intent.putExtra(
             "title", view.findViewById<TextView>(R.id.title).text
         )

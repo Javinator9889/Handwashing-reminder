@@ -19,63 +19,85 @@
 package com.javinator9889.handwashingreminder.views.activities.config
 
 import android.app.Activity
+import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.TimePicker
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.ViewCompat
+//import com.afollestad.materialdialogs.datetime.timePicker
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.utils.AndroidVersion
+import com.javinator9889.handwashingreminder.utils.TimeConfig
 import com.javinator9889.handwashingreminder.utils.isAtLeast
 import com.javinator9889.handwashingreminder.views.activities.support.ActionBarBase
 import java.util.*
 
 class TimeConfigActivity :
     ActionBarBase(),
-    View.OnClickListener {
-    companion object {
+    View.OnClickListener,
+    TimePickerDialog.OnTimeSetListener {
+    companion object Transitions {
         const val VIEW_TITLE_NAME = "detail:header:title"
+        const val INFO_IMAGE_NAME = "detail:header:image"
+        const val USER_TIME_NAME = "detail:body:time"
     }
 
-    private lateinit var button: Button
+    private lateinit var doneButton: Button
     private lateinit var title: TextView
-    private lateinit var timePicker: TimePicker
+    private lateinit var image: ImageView
+    private lateinit var setButton: Button
+    private lateinit var timeContainer: ConstraintLayout
+    private lateinit var hours: TextView
+    private lateinit var minutes: TextView
+//    private lateinit var timePicker: TimePicker
 
     data class Time(val hour: Int, val minute: Int)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.time_card_view_expanded)
 
         title = findViewById(R.id.title)
-        button = findViewById(R.id.doneButton)
-        timePicker = findViewById(R.id.timePicker)
+//        image = findViewById(R.id.infoImage)
+        doneButton = findViewById(R.id.doneButton)
+        image = findViewById(R.id.infoImage)
+        setButton = findViewById(R.id.setTimeButton)
+        timeContainer = findViewById(R.id.timeContainer)
+        hours = timeContainer.findViewById(R.id.hours)
+        minutes = timeContainer.findViewById(R.id.minutes)
+//        timePicker = findViewById(R.id.timePicker)
 
-        timePicker.setIs24HourView(true)
-        button.setOnClickListener(this)
-        if (isAtLeast(AndroidVersion.LOLLIPOP))
-            title.transitionName = VIEW_TITLE_NAME
-//        ViewCompat.setTransitionName(title, VIEW_TITLE_NAME)
+//        timePicker.setIs24HourView(true)
+        doneButton.setOnClickListener(this)
+        setButton.setOnClickListener(this)
+        ViewCompat.setTransitionName(title, VIEW_TITLE_NAME)
+        ViewCompat.setTransitionName(image, INFO_IMAGE_NAME)
+        ViewCompat.setTransitionName(timeContainer, USER_TIME_NAME)
 
         if (savedInstanceState != null || intent.extras != null) {
             val data = savedInstanceState ?: intent.extras
             val sHours = data!!.getCharSequence("hours")
             val sMinutes = data.getCharSequence("minutes")
             title.text = data.getCharSequence("title")
-            setTimePickerHour(sHours.toString(), sMinutes.toString())
-            val id = data.getLong("id").toInt()
-            if (isAtLeast(AndroidVersion.LOLLIPOP)) {
-                val transitions = resources.getStringArray(R.array.transitions)
-                val transitionName = transitions[id]
-                title.transitionName = transitionName
+            val imageRes = when (data.getLong("id")) {
+                TimeConfig.BREAKFAST_ID -> R.drawable.ic_breakfast
+                TimeConfig.LUNCH_ID -> R.drawable.ic_lunch
+                TimeConfig.DINNER_ID -> R.drawable.ic_dinner
+                else -> null
             }
+            if (imageRes != null)
+                image.setImageResource(imageRes)
+            setHours(sHours.toString(), sMinutes.toString())
         }
     }
 
     override fun getLayoutId(): Int = R.layout.time_card_view_expanded
 
-    private fun setTimePickerHour(hours: String, minutes: String) {
+    private fun setHours(hours: String, minutes: String) {
         val tpHour: Int
         val tpMinute: Int
         if (hours == "" || minutes == "") {
@@ -86,25 +108,13 @@ class TimeConfigActivity :
             tpHour = Integer.parseInt(hours)
             tpMinute = Integer.parseInt(minutes)
         }
-        if (isAtLeast(AndroidVersion.M)) {
-            timePicker.hour = tpHour
-            timePicker.minute = tpMinute
-        } else {
-            timePicker.currentHour = tpHour
-            timePicker.currentMinute = tpMinute
-        }
+        this.hours.text = formatTime(tpHour)
+        this.minutes.text = formatTime(tpMinute)
     }
 
-    private fun getTimePickerHour(): Time {
-        val tpHour: Int
-        val tpMinute: Int
-        if (isAtLeast(AndroidVersion.M)) {
-            tpHour = timePicker.hour
-            tpMinute = timePicker.minute
-        } else {
-            tpHour = timePicker.currentHour
-            tpMinute = timePicker.currentMinute
-        }
+    private fun getHours(): Time {
+        val tpHour = Integer.parseInt(hours.text.toString())
+        val tpMinute = Integer.parseInt(minutes.text.toString())
         return Time(tpHour, tpMinute)
     }
 
@@ -114,7 +124,7 @@ class TimeConfigActivity :
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        val tpTime = getTimePickerHour()
+        val tpTime = getHours()
         val hour = formatTime(tpTime.hour)
         val minute = formatTime(tpTime.minute)
         outState.putCharSequence("hours", hour)
@@ -124,7 +134,7 @@ class TimeConfigActivity :
 
     override fun onBackPressed() {
         val intent = Intent()
-        val tpTime = getTimePickerHour()
+        val tpTime = getHours()
         intent.putExtra("hours", formatTime(tpTime.hour))
         intent.putExtra("minutes", formatTime(tpTime.minute))
         setResult(Activity.RESULT_OK, intent)
@@ -137,7 +147,21 @@ class TimeConfigActivity :
 
     override fun onClick(v: View?) {
         when (v) {
-            button -> this.onBackPressed()
+            setButton -> {
+                val date = Calendar.getInstance()
+                val tpHour = date.get(Calendar.HOUR_OF_DAY)
+                val tpMinute = date.get(Calendar.MINUTE)
+                val tpDialog = TimePickerDialog(
+                    this, this, tpHour, tpMinute, true
+                )
+                tpDialog.show()
+            }
+            doneButton -> this.onBackPressed()
         }
+    }
+
+    override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
+        hours.text = formatTime(hourOfDay)
+        minutes.text = formatTime(minute)
     }
 }

@@ -71,7 +71,7 @@ class MainActivity : BaseAppCompatActivity() {
         viewAdapter = TimeConfigAdapter(
             dataset,
             null,
-            size.y - (actionBar?.height ?: 0)
+            this
         )
 
         recyclerView = findViewById<RecyclerView>(R.id.cardsView).apply {

@@ -6,11 +6,13 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
 
+    android.defaultConfig.vectorDrawables.useSupportLibrary = true
+
     defaultConfig {
         applicationId "com.javinator9889.handwashingreminder"
         minSdkVersion 14
         targetSdkVersion 29
-        versionCode 1
+        versionCode 11
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -22,6 +24,13 @@ android {
             applicationIdSuffix ".debug"
             debuggable true
         }
+        beta {
+            minifyEnabled false
+            shrinkResources false
+            debuggable true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            applicationIdSuffix ".beta"
+        }
         release {
             minifyEnabled true
             shrinkResources true
@@ -30,6 +39,7 @@ android {
     }
     dexOptions {
         preDexLibraries true
+        javaMaxHeapSize "4G"
     }
 }
 
@@ -54,11 +64,18 @@ dependencies {
     // https://github.com/AppIntro/AppIntro
     implementation 'com.github.AppIntro:AppIntro:5.1.0'
     // https://github.com/andkulikov/Transitions-Everywhere
-    implementation "com.andkulikov:transitionseverywhere:2.1.0"
+    implementation 'com.andkulikov:transitionseverywhere:2.1.0'
     // https://developer.android.com/jetpack/androidx/releases/cardview
-    implementation "androidx.cardview:cardview:1.0.0"
+    implementation 'androidx.cardview:cardview:1.0.0'
     // https://developer.android.com/jetpack/androidx/releases/recyclerview
-    implementation "androidx.recyclerview:recyclerview:1.1.0"
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
     // https://developer.android.com/studio/build/multidex
     implementation 'androidx.multidex:multidex:2.0.1'
+    // https://github.com/square/picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    // https://github.com/afollestad/material-dialogs
+//    implementation 'com.afollestad.material-dialogs:core:3.3.0'
+//    implementation 'com.afollestad.material-dialogs:datetime:3.3.0'
+//    implementation 'com.afollestad.material-dialogs:lifecycle:3.3.0'
+//    implementation 'com.afollestad.material-dialogs:bottomsheets:3.3.0'
 }

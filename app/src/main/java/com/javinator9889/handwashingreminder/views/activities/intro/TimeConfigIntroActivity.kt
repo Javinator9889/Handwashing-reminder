@@ -59,7 +59,7 @@ class TimeConfigIntroActivity : AppIntroBaseFragment() {
                 TimeConfig.DINNER_ID
             )
         )
-        rvAdapter = TimeConfigAdapter(rvItems, listener, height)
+        rvAdapter = TimeConfigAdapter(rvItems, listener, fromActivity)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
