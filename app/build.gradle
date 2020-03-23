@@ -10,9 +10,9 @@ android {
 
     defaultConfig {
         applicationId "com.javinator9889.handwashingreminder"
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 29
-        versionCode 14
+        versionCode 15
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -79,8 +79,14 @@ dependencies {
     // https://github.com/square/picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
     // https://github.com/afollestad/material-dialogs
-//    implementation 'com.afollestad.material-dialogs:core:3.3.0'
-//    implementation 'com.afollestad.material-dialogs:datetime:3.3.0'
-//    implementation 'com.afollestad.material-dialogs:lifecycle:3.3.0'
-//    implementation 'com.afollestad.material-dialogs:bottomsheets:3.3.0'
+    implementation 'com.afollestad.material-dialogs:core:3.3.0'
+    implementation 'com.afollestad.material-dialogs:datetime:3.3.0'
+    implementation 'com.afollestad.material-dialogs:lifecycle:3.3.0'
+    implementation 'com.afollestad.material-dialogs:bottomsheets:3.3.0'
+    // https://github.com/mikepenz/Android-Iconics
+    implementation 'com.mikepenz:iconics-core:5.0.0'
+    implementation 'com.mikepenz:google-material-typeface:3.0.1.4.original-kotlin@aar'
+    implementation 'com.mikepenz:material-design-iconic-typeface:2.2.0.6-kotlin@aar'
+    implementation 'com.mikepenz:fontawesome-typeface:5.9.0.0-kotlin@aar'
+    implementation 'com.mikepenz:ionicons-typeface:2.0.1.5-kotlin@aar'
 }
