@@ -98,13 +98,16 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
+                <com.mikepenz.iconics.view.IconicsImageView
                     android:id="@+id/clockIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     android:tint="@color/dkgray"
+                    app:iiv_color="@color/dkgray"
+                    app:iiv_icon="faw_clock"
+                    app:iiv_size="28dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/hours"
                     app:layout_constraintStart_toStartOf="parent"

@@ -41,9 +41,10 @@ import com.javinator9889.handwashingreminder.utils.AndroidVersion
 import com.javinator9889.handwashingreminder.utils.TimeConfig
 import com.javinator9889.handwashingreminder.utils.getOnClickListener
 import com.javinator9889.handwashingreminder.utils.isAtLeast
-import com.javinator9889.handwashingreminder.views.activities.MainActivity
 import com.javinator9889.handwashingreminder.views.activities.config.TimeConfigActivity
 import com.javinator9889.handwashingreminder.views.custom.timeconfig.TimeConfigViewHolder
+import com.mikepenz.aboutlibraries.LibsBuilder
+import com.mikepenz.iconics.Iconics
 
 
 class IntroActivity : AppIntro2(),
@@ -56,6 +57,7 @@ class IntroActivity : AppIntro2(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Iconics.init()
 //        supportActionBar?.hide()
         transitions = resources.getStringArray(R.array.transitions)
 //        setSwipeLock(false)
@@ -124,8 +126,17 @@ class IntroActivity : AppIntro2(),
 
     override fun onDonePressed(currentFragment: Fragment?) {
         super.onDonePressed(currentFragment)
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
+//        val intent = Intent(this, MainActivity::class.java)
+//        startActivity(intent)
+        LibsBuilder()
+            .withAboutDescription("This is a test desc")
+            .withAboutIconShown(true)
+            .withAboutVersionShown(true)
+            .withAboutVersionShownCode(true)
+            .withSortEnabled(true)
+            .withCheckCachedDetection(true)
+            .withAutoDetect(true)
+            .start(this)
         this.finish()
     }
 
@@ -207,13 +218,9 @@ class IntroActivity : AppIntro2(),
     ) {
         when (newFragment) {
             timeConfigSlide -> {
-//                nextButton.isEnabled = false
                 setSwipeLock(true)
                 return
             }
-//            else -> {
-//                nextButton.isEnabled = true
-//            }
         }
         super.onSlideChanged(oldFragment, newFragment)
     }

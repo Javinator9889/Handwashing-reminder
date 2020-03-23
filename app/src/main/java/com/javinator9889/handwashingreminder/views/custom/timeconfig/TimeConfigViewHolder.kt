@@ -27,6 +27,7 @@ import com.google.android.material.card.MaterialCardView
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.listeners.ViewHolder
 import com.javinator9889.handwashingreminder.utils.TimeConfig
+import com.mikepenz.iconics.view.IconicsImageView
 
 
 class TimeConfigViewHolder(val view: View) :
@@ -37,7 +38,7 @@ class TimeConfigViewHolder(val view: View) :
     val hours: TextView = view.findViewById(R.id.hours)
     val minutes: TextView = view.findViewById(R.id.minutes)
     val image: ImageView = view.findViewById(R.id.infoImage)
-    val clockIcon: ImageView = view.findViewById(R.id.clockIcon)
+    val clockIcon: IconicsImageView = view.findViewById(R.id.clockIcon)
     private val card = view.findViewById<MaterialCardView>(R.id.timeCard)
     private var listener: ViewHolder.OnItemClickListener? = null
     private var height: Int? = null

@@ -21,6 +21,7 @@ package com.javinator9889.handwashingreminder.application
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.multidex.MultiDex
+import com.mikepenz.iconics.Iconics
 import javinator9889.localemanager.application.BaseApplication
 import javinator9889.localemanager.utils.languagesupport.LanguagesSupport.Language
 
@@ -37,8 +38,8 @@ class HandwashingApplication : BaseApplication() {
     }
 
     override fun attachBaseContext(base: Context?) {
+        MultiDex.install(base)
         super.attachBaseContext(base)
-        MultiDex.install(this)
     }
 
     /**
@@ -48,6 +49,11 @@ class HandwashingApplication : BaseApplication() {
         super.onCreate()
         instance = this
         sharedPreferences = getCustomSharedPreferences(this)!!
+        Iconics.init(this)
+//        Iconics.registerFont(FontAwesome)
+//        Iconics.registerFont(Ionicons)
+//        Iconics.registerFont(GoogleMaterial)
+//        Iconics.registerFont(MaterialDesignIconic)
     }
 
     /**

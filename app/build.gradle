@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.mikepenz.aboutlibraries.plugin'
 
 android {
     compileSdkVersion 29
@@ -14,6 +15,7 @@ android {
         targetSdkVersion 29
         versionCode 15
         versionName "1.0"
+        multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -41,11 +43,6 @@ android {
         preDexLibraries true
         javaMaxHeapSize "4G"
     }
-}
-
-buildScan {
-    termsOfServiceUrl = "https://gradle.com/terms-of-service"
-    termsOfServiceAgree = "yes"
 }
 
 dependencies {
@@ -85,8 +82,12 @@ dependencies {
     implementation 'com.afollestad.material-dialogs:bottomsheets:3.3.0'
     // https://github.com/mikepenz/Android-Iconics
     implementation 'com.mikepenz:iconics-core:5.0.0'
+    implementation 'com.mikepenz:iconics-views:5.0.0'
     implementation 'com.mikepenz:google-material-typeface:3.0.1.4.original-kotlin@aar'
     implementation 'com.mikepenz:material-design-iconic-typeface:2.2.0.6-kotlin@aar'
     implementation 'com.mikepenz:fontawesome-typeface:5.9.0.0-kotlin@aar'
     implementation 'com.mikepenz:ionicons-typeface:2.0.1.5-kotlin@aar'
+    // https://github.com/mikepenz/AboutLibraries
+    implementation "com.mikepenz:aboutlibraries-core:${latestAboutLibsRelease}"
+    implementation "com.mikepenz:aboutlibraries:${latestAboutLibsRelease}"
 }
