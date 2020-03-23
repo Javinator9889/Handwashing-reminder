@@ -23,24 +23,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.paolorotolo.appintro.AppIntroBaseFragment
 import com.javinator9889.handwashingreminder.R
+import com.javinator9889.handwashingreminder.listeners.ViewHolder
 import com.javinator9889.handwashingreminder.utils.TimeConfig
-import com.javinator9889.handwashingreminder.views.custom.TimeConfigAdapter
-import com.javinator9889.handwashingreminder.views.custom.TimeConfigContent
+import com.javinator9889.handwashingreminder.views.custom.timeconfig.TimeConfigAdapter
+import com.javinator9889.handwashingreminder.views.custom.timeconfig.TimeConfigContent
 
-class TimeConfigIntroActivity : AppIntroBaseFragment() {
+class TimeConfigIntroFragment : AppIntroBaseFragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var rvAdapter: TimeConfigAdapter
     private lateinit var rvItems: Array<TimeConfigContent>
     lateinit var fromActivity: AppCompatActivity
-    var bgColor: Int = Color.WHITE
-    var listener: AdapterView.OnItemClickListener? = null
     var height: Int = 0
+    var bgColor: Int = Color.WHITE
+    var listener: ViewHolder.OnItemClickListener? = null
+    val viewItems = HashMap<Int, RecyclerView.ViewHolder>(3)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,15 +52,23 @@ class TimeConfigIntroActivity : AppIntroBaseFragment() {
             TimeConfigContent(
                 getString(R.string.time_config_title_tpl, breakfast),
                 TimeConfig.BREAKFAST_ID
-            ), TimeConfigContent(
+            ),
+            TimeConfigContent(
                 getString(R.string.time_config_title_tpl, lunch),
                 TimeConfig.LUNCH_ID
-            ), TimeConfigContent(
+            ),
+            TimeConfigContent(
                 getString(R.string.time_config_title_tpl, dinner),
                 TimeConfig.DINNER_ID
             )
         )
-        rvAdapter = TimeConfigAdapter(rvItems, listener, fromActivity)
+        rvAdapter =
+            TimeConfigAdapter(
+                rvItems,
+                listener,
+                fromActivity,
+                viewItems
+            )
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

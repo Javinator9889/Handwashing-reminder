@@ -19,6 +19,8 @@
 package com.javinator9889.handwashingreminder.utils
 
 import android.os.Build
+import android.util.Log
+import android.view.View
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 
 const val TIME_CHANNEL_ID = "timeNotificationsChannel"
@@ -62,4 +64,18 @@ class TimeConfig {
         const val LUNCH_ID = 1L
         const val DINNER_ID = 2L
     }
+}
+
+fun getOnClickListener(view: View): View.OnClickListener? {
+    var retrievedListener: View.OnClickListener? = null
+    try {
+        val field = Class.forName(View::class.java.name)
+            .getDeclaredField("mOnClickListener")
+        retrievedListener = field.get(view) as View.OnClickListener?
+    } catch (e: IllegalAccessError) {
+        Log.e("Listener", "Cannot access view's listener")
+    } catch (e: NoSuchFieldException) {
+        Log.e("Listener", "Cannot access view's listener")
+    }
+    return retrievedListener
 }

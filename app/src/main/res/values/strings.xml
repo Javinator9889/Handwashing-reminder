@@ -24,4 +24,5 @@
     </string-array>
     <string name="done">Done</string>
     <string name="set_time">Set time</string>
+    <string name="fill_hours">Please, fill out all the hours</string>
 </resources>

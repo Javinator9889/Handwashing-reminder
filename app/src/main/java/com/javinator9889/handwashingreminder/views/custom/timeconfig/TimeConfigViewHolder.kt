@@ -16,28 +16,30 @@
  *
  * Created by Javinator9889 on 18/03/20 - Handwashing reminder.
  */
-package com.javinator9889.handwashingreminder.views.custom
+package com.javinator9889.handwashingreminder.views.custom.timeconfig
 
 import android.view.View
-import android.widget.AdapterView
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.javinator9889.handwashingreminder.R
+import com.javinator9889.handwashingreminder.listeners.ViewHolder
 import com.javinator9889.handwashingreminder.utils.TimeConfig
 
 
 class TimeConfigViewHolder(val view: View) :
     RecyclerView.ViewHolder(view),
     View.OnClickListener {
+    val ddot: TextView = view.findViewById(R.id.ddot)
     val title: TextView = view.findViewById(R.id.title)
     val hours: TextView = view.findViewById(R.id.hours)
     val minutes: TextView = view.findViewById(R.id.minutes)
     val image: ImageView = view.findViewById(R.id.infoImage)
+    val clockIcon: ImageView = view.findViewById(R.id.clockIcon)
     private val card = view.findViewById<MaterialCardView>(R.id.timeCard)
-    private var listener: AdapterView.OnItemClickListener? = null
+    private var listener: ViewHolder.OnItemClickListener? = null
     private var height: Int? = null
     var id = 0L
 
@@ -52,7 +54,7 @@ class TimeConfigViewHolder(val view: View) :
     override fun onClick(v: View?) {
         when (v) {
             card, title, hours, minutes, image -> this.listener?.onItemClick(
-                null,
+                this,
                 card,
                 adapterPosition,
                 id
@@ -63,7 +65,7 @@ class TimeConfigViewHolder(val view: View) :
     fun bind(
         title: CharSequence,
         id: Long,
-        listener: AdapterView.OnItemClickListener?,
+        listener: ViewHolder.OnItemClickListener?,
         height: Int?
     ) {
         this.id = id

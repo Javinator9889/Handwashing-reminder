@@ -24,29 +24,35 @@ import android.graphics.Point
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.widget.FrameLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import com.github.paolorotolo.appintro.AppIntro2
 import com.github.paolorotolo.appintro.AppIntro2Fragment
+import com.github.paolorotolo.appintro.AppIntroViewPager
 import com.github.paolorotolo.appintro.model.SliderPage
+import com.google.android.material.snackbar.Snackbar
 import com.javinator9889.handwashingreminder.R
+import com.javinator9889.handwashingreminder.listeners.ViewHolder
 import com.javinator9889.handwashingreminder.utils.AndroidVersion
 import com.javinator9889.handwashingreminder.utils.TimeConfig
+import com.javinator9889.handwashingreminder.utils.getOnClickListener
 import com.javinator9889.handwashingreminder.utils.isAtLeast
 import com.javinator9889.handwashingreminder.views.activities.MainActivity
 import com.javinator9889.handwashingreminder.views.activities.config.TimeConfigActivity
+import com.javinator9889.handwashingreminder.views.custom.timeconfig.TimeConfigViewHolder
 
 
-class IntroActivity : AppIntro2(), AdapterView.OnItemClickListener {
-    private val views = HashMap<Int, View>(3)
+class IntroActivity : AppIntro2(),
+    ViewHolder.OnItemClickListener,
+    AppIntroViewPager.OnNextPageRequestedListener,
+    View.OnClickListener {
     private lateinit var transitions: Array<String>
-    private lateinit var sliderPage4: TimeConfigIntroActivity
+    private lateinit var timeConfigSlide: TimeConfigIntroFragment
+    private var appIntroListener: View.OnClickListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,20 +87,31 @@ class IntroActivity : AppIntro2(), AdapterView.OnItemClickListener {
         sliderPage3.descColor = Color.DKGRAY
         addSlide(AppIntro2Fragment.newInstance(sliderPage3))
 
-        sliderPage4 = TimeConfigIntroActivity()
+        timeConfigSlide = TimeConfigIntroFragment()
         val display = windowManager.defaultDisplay
         val size = Point()
         display.getSize(size)
-        sliderPage4.height = size.y - 80
-        sliderPage4.bgColor = Color.WHITE
-        sliderPage4.listener = this
-        sliderPage4.fromActivity = this
-        addSlide(sliderPage4)
+        timeConfigSlide.height = size.y - 80
+        timeConfigSlide.bgColor = Color.WHITE
+        timeConfigSlide.listener = this
+        timeConfigSlide.fromActivity = this
+        addSlide(timeConfigSlide)
+
+        val sliderPage5 = SliderPage()
+        sliderPage5.title = "Fifth page"
+        sliderPage5.description = "Fifth page description"
+        sliderPage5.imageDrawable = R.drawable.ic_handwashing_icon
+        sliderPage5.bgColor = Color.WHITE
+        sliderPage5.titleColor = Color.DKGRAY
+        sliderPage5.descColor = Color.DKGRAY
+        addSlide(AppIntro2Fragment.newInstance(sliderPage5))
 
         showSkipButton(false)
         showStatusBar(true)
         backButtonVisibilityWithDone = true;
         setIndicatorColor(Color.DKGRAY, Color.GRAY);
+        appIntroListener = getOnClickListener(nextButton)
+        nextButton.setOnClickListener(this)
 //        setNavBarColor("#2196F3")
 //        setBarColor(getColor(R.color.colorPrimary));
 //        setNavBarColor(R.color.white)
@@ -113,47 +130,46 @@ class IntroActivity : AppIntro2(), AdapterView.OnItemClickListener {
     }
 
     override fun onItemClick(
-        parent: AdapterView<*>?,
+        viewHolder: RecyclerView.ViewHolder?,
         view: View?,
         position: Int,
         id: Long
     ) {
-        if (view == null)
+        if (viewHolder == null || viewHolder !is TimeConfigViewHolder)
             return
-        Log.d("Intro", view.toString())
-        views[id.toInt()] = view
         val intent = Intent(this, TimeConfigActivity::class.java)
-        val title = view.findViewById<TextView>(R.id.title)
-        val image = view.findViewById<ImageView>(R.id.infoImage)
-        val timeCtr = view.findViewById<ConstraintLayout>(R.id.timeCtr)
-        val clockIcon = timeCtr.findViewById<ImageView>(R.id.clockIcon)
-        val hours = timeCtr.findViewById<TextView>(R.id.hours)
-        val ddot = timeCtr.findViewById<TextView>(R.id.ddot)
-        val minutes = timeCtr.findViewById<TextView>(R.id.minutes)
-        Log.d("Intro", title.toString())
-        Log.d("Intro", title.text.toString())
         val options = if (isAtLeast(AndroidVersion.LOLLIPOP)) {
             ActivityOptionsCompat.makeSceneTransitionAnimation(
                 this,
-                Pair.create(title, TimeConfigActivity.VIEW_TITLE_NAME),
-                Pair.create(image, TimeConfigActivity.INFO_IMAGE_NAME),
-                Pair.create(clockIcon, TimeConfigActivity.USER_TIME_ICON),
-                Pair.create(hours, TimeConfigActivity.USER_TIME_HOURS),
-                Pair.create(ddot, TimeConfigActivity.USER_DDOT),
-                Pair.create(minutes, TimeConfigActivity.USER_TIME_MINUTES)
+                Pair.create(
+                    viewHolder.title, TimeConfigActivity.VIEW_TITLE_NAME
+                ),
+                Pair.create(
+                    viewHolder.image, TimeConfigActivity.INFO_IMAGE_NAME
+                ),
+                Pair.create(
+                    viewHolder.clockIcon, TimeConfigActivity.USER_TIME_ICON
+                ),
+                Pair.create(
+                    viewHolder.hours, TimeConfigActivity.USER_TIME_HOURS
+                ),
+                Pair.create(viewHolder.ddot, TimeConfigActivity.USER_DDOT),
+                Pair.create(
+                    viewHolder.minutes, TimeConfigActivity.USER_TIME_MINUTES
+                )
             )
         } else {
             null
         }
         Log.d("Intro", options?.toString())
         intent.putExtra(
-            "title", view.findViewById<TextView>(R.id.title).text
+            "title", viewHolder.title.text
         )
         intent.putExtra(
-            "hours", view.findViewById<TextView>(R.id.hours).text
+            "hours", viewHolder.hours.text
         )
         intent.putExtra(
-            "minutes", view.findViewById<TextView>(R.id.minutes).text
+            "minutes", viewHolder.minutes.text
         )
         intent.putExtra("id", id)
         ActivityCompat.startActivityForResult(
@@ -169,21 +185,105 @@ class IntroActivity : AppIntro2(), AdapterView.OnItemClickListener {
         super.onActivityResult(requestCode, resultCode, data)
         if (data == null)
             return
-        val view = when (requestCode.toLong()) {
+        val view: TimeConfigViewHolder = when (requestCode.toLong()) {
             TimeConfig.BREAKFAST_ID -> {
-                views[TimeConfig.BREAKFAST_ID.toInt()]
+                timeConfigSlide.viewItems[TimeConfig.BREAKFAST_ID.toInt()]
             }
             TimeConfig.LUNCH_ID -> {
-                views[TimeConfig.LUNCH_ID.toInt()]
+                timeConfigSlide.viewItems[TimeConfig.LUNCH_ID.toInt()]
             }
             TimeConfig.DINNER_ID -> {
-                views[TimeConfig.DINNER_ID.toInt()]
+                timeConfigSlide.viewItems[TimeConfig.DINNER_ID.toInt()]
             }
             else -> null
+        } as TimeConfigViewHolder
+        view.hours.text = data.getStringExtra("hours")
+        view.minutes.text = data.getStringExtra("minutes")
+    }
+
+    override fun onSlideChanged(
+        oldFragment: Fragment?,
+        newFragment: Fragment?
+    ) {
+        when (newFragment) {
+            timeConfigSlide -> {
+//                nextButton.isEnabled = false
+                setSwipeLock(true)
+                return
+            }
+//            else -> {
+//                nextButton.isEnabled = true
+//            }
         }
-        view?.findViewById<TextView>(R.id.hours)?.text =
-            data.getStringExtra("hours")
-        view?.findViewById<TextView>(R.id.minutes)?.text =
-            data.getStringExtra("minutes")
+        super.onSlideChanged(oldFragment, newFragment)
+    }
+
+    protected fun isTimeConfigValidState(
+        timeConfigIntroFragment: Fragment?
+    ): Boolean {
+        Log.d("Intro/fragment", timeConfigIntroFragment.toString())
+        Log.d("Intro/fragment", timeConfigSlide.toString())
+        Log.d(
+            "Intro/fragment",
+            (timeConfigIntroFragment == timeConfigSlide).toString()
+        )
+        return when (timeConfigIntroFragment) {
+            timeConfigSlide -> {
+                Log.d("Intro/fragment", "Inside when block for configSlide")
+                var isTimeSet = true
+                Log.d("Map size", timeConfigSlide.viewItems.size.toString())
+                for (view in timeConfigSlide.viewItems) {
+                    val viewHolder = view.value as TimeConfigViewHolder
+                    val hours = viewHolder.hours
+                    val minutes = viewHolder.minutes
+                    Log.d(
+                        "Intro/HHMM",
+                        "HH: ${hours.text} | MM: ${minutes.text}"
+                    )
+                    if (hours.text == "" || minutes.text == "") {
+                        isTimeSet = false
+                        break
+                    }
+                }
+                setSwipeLock(!isTimeSet)
+                if (!isTimeSet) {
+                    val background = findViewById<FrameLayout>(R.id.background)
+                    Snackbar.make(
+                        background, R.string.fill_hours,
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                }
+                isTimeSet
+            }
+            else -> true
+        }
+    }
+
+    override fun onCanRequestNextPage(): Boolean {
+        val ret = super.onCanRequestNextPage()
+        val currentFragment = mPagerAdapter.getItem(pager.currentItem)
+        Log.d(
+            "Intro", "Can go to next slide? " +
+                    "${ret && isTimeConfigValidState(currentFragment)}"
+        )
+        return ret && isTimeConfigValidState(currentFragment)
+    }
+
+    override fun onClick(v: View?) {
+        when (v) {
+            nextButton -> {
+                if (onCanRequestNextPage())
+                    changeSlide()
+            }
+        }
+    }
+
+    private fun changeSlide() {
+        val currentSlide =
+            mPagerAdapter.getItem(pager.currentItem)
+        val nextSlide =
+            mPagerAdapter.getItem(pager.currentItem + 1)
+        onSlideChanged(currentSlide, nextSlide)
+        pager.goToNextSlide()
     }
 }

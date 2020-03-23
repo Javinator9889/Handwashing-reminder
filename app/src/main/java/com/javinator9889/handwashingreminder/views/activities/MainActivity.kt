@@ -32,8 +32,8 @@ import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.utils.AndroidVersion
 import com.javinator9889.handwashingreminder.utils.isAtLeast
-import com.javinator9889.handwashingreminder.views.custom.TimeConfigAdapter
-import com.javinator9889.handwashingreminder.views.custom.TimeConfigContent
+import com.javinator9889.handwashingreminder.views.custom.timeconfig.TimeConfigAdapter
+import com.javinator9889.handwashingreminder.views.custom.timeconfig.TimeConfigContent
 import javinator9889.localemanager.activity.BaseAppCompatActivity
 import kotlin.concurrent.thread
 
@@ -61,18 +61,30 @@ class MainActivity : BaseAppCompatActivity() {
 
 //        val dataset = arrayOf("Desayuno", "Comida", "Cena")
         val dataset = arrayOf(
-            TimeConfigContent("Desayuno", 0L),
-            TimeConfigContent("Comida", 1L), TimeConfigContent("Cena", 2L)
+            TimeConfigContent(
+                "Desayuno",
+                0L
+            ),
+            TimeConfigContent(
+                "Comida",
+                1L
+            ),
+            TimeConfigContent(
+                "Cena",
+                2L
+            )
         )
         val display = windowManager.defaultDisplay
         val size = Point()
         display.getSize(size)
         viewManager = LinearLayoutManager(this)
-        viewAdapter = TimeConfigAdapter(
-            dataset,
-            null,
-            this
-        )
+        viewAdapter =
+            TimeConfigAdapter(
+                dataset,
+                null,
+                this,
+                null
+            )
 
         recyclerView = findViewById<RecyclerView>(R.id.cardsView).apply {
             setHasFixedSize(true)

@@ -16,7 +16,7 @@
  *
  * Created by Javinator9889 on 18/03/20 - Handwashing reminder.
  */
-package com.javinator9889.handwashingreminder.views.custom
+package com.javinator9889.handwashingreminder.views.custom.timeconfig
 
 import android.os.Parcel
 import android.os.Parcelable
@@ -37,7 +37,9 @@ class TimeConfigContent(val title: String, val id: Long) : Parcelable {
 
     companion object CREATOR : Parcelable.Creator<TimeConfigContent> {
         override fun createFromParcel(parcel: Parcel): TimeConfigContent {
-            return TimeConfigContent(parcel)
+            return TimeConfigContent(
+                parcel
+            )
         }
 
         override fun newArray(size: Int): Array<TimeConfigContent?> {

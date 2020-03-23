@@ -16,25 +16,26 @@
  *
  * Created by Javinator9889 on 18/03/20 - Handwashing reminder.
  */
-package com.javinator9889.handwashingreminder.views.custom
+package com.javinator9889.handwashingreminder.views.custom.timeconfig
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.AdapterView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.javinator9889.handwashingreminder.R
+import com.javinator9889.handwashingreminder.listeners.ViewHolder
 
 class TimeConfigAdapter(
     private val dataset: Array<TimeConfigContent>,
-    private val listener: AdapterView.OnItemClickListener?,
-    private val fromActivity: AppCompatActivity?
+    private val listener: ViewHolder.OnItemClickListener?,
+    private val fromActivity: AppCompatActivity?,
+    private val viewItems: HashMap<Int, RecyclerView.ViewHolder>?
 ) :
     RecyclerView.Adapter<TimeConfigViewHolder>() {
     private var height = 0
     private lateinit var context: Context
-    private val items: ArrayList<TimeConfigViewHolder> = ArrayList(3)
+//    private val items: ArrayList<TimeConfigViewHolder> = ArrayList(3)
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -43,12 +44,11 @@ class TimeConfigAdapter(
         context = parent.context
         val timeConfig = LayoutInflater.from(parent.context)
             .inflate(R.layout.time_card_view, parent, false)
-        val cHeight = parent.measuredHeight / 3
-        height = cHeight - navbarHeight() //frameLayoutHeight() - navbarHeight()
-        val viewHolder = TimeConfigViewHolder(timeConfig)
-        if (!items.contains(viewHolder))
-            items.add(viewHolder)
-        return viewHolder
+        height = parent.measuredHeight / 3
+//        height = cHeight - navbarHeight()
+        //        if (!items.contains(viewHolder))
+//            items.add(viewHolder)
+        return TimeConfigViewHolder(timeConfig)
     }
 
     override fun onBindViewHolder(holder: TimeConfigViewHolder, position: Int) {
@@ -58,6 +58,7 @@ class TimeConfigAdapter(
             listener,
             height
         )
+        viewItems?.set(dataset[position].id.toInt(), holder)
     }
 
     override fun getItemCount(): Int = dataset.size
