@@ -29,6 +29,7 @@ const val ACTIVITY_CHANNEL_ID = "activityNotificationsChannel"
 class Preferences {
     companion object {
         const val CREATE_CHANNEL_KEY = "create_channel_req"
+        const val APP_INIT_KEY = "application_initialized"
     }
 }
 

@@ -16,7 +16,7 @@
  *
  * Created by Javinator9889 on 16/03/20 - Handwashing reminder.
  */
-package com.javinator9889.handwashingreminder.views.activities.intro
+package com.javinator9889.handwashingreminder.appintro
 
 import android.content.Intent
 import android.graphics.Color
@@ -35,37 +35,39 @@ import com.github.paolorotolo.appintro.AppIntro2Fragment
 import com.github.paolorotolo.appintro.AppIntroViewPager
 import com.github.paolorotolo.appintro.model.SliderPage
 import com.google.android.material.snackbar.Snackbar
-import com.javinator9889.handwashingreminder.R
+import com.javinator9889.handwashingreminder.appintro.config.TimeConfigActivity
+import com.javinator9889.handwashingreminder.appintro.fragments.TimeConfigIntroFragment
+import com.javinator9889.handwashingreminder.appintro.timeconfig.TimeConfigViewHolder
 import com.javinator9889.handwashingreminder.listeners.ViewHolder
 import com.javinator9889.handwashingreminder.utils.AndroidVersion
 import com.javinator9889.handwashingreminder.utils.TimeConfig
 import com.javinator9889.handwashingreminder.utils.getOnClickListener
 import com.javinator9889.handwashingreminder.utils.isAtLeast
-import com.javinator9889.handwashingreminder.views.activities.config.TimeConfigActivity
-import com.javinator9889.handwashingreminder.views.custom.timeconfig.TimeConfigViewHolder
-import com.mikepenz.aboutlibraries.LibsBuilder
+import com.javinator9889.handwashingreminder.views.activities.MainActivity
 import com.mikepenz.iconics.Iconics
+import com.javinator9889.handwashingreminder.R as RBase
+import com.javinator9889.handwashingreminder.appintro.R as RIntro
 
 
 class IntroActivity : AppIntro2(),
     ViewHolder.OnItemClickListener,
     AppIntroViewPager.OnNextPageRequestedListener,
     View.OnClickListener {
-    private lateinit var transitions: Array<String>
     private lateinit var timeConfigSlide: TimeConfigIntroFragment
     private var appIntroListener: View.OnClickListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Iconics.init()
+        Log.d("Intro", "I'm an on-demand feature!")
 //        supportActionBar?.hide()
-        transitions = resources.getStringArray(R.array.transitions)
+//        transitions = resources.getStringArray(R.array.transitions)
 //        setSwipeLock(false)
 
         val sliderPage = SliderPage()
         sliderPage.title = "First page"
         sliderPage.description = "First page description"
-        sliderPage.imageDrawable = R.drawable.handwashing_app_logo
+        sliderPage.imageDrawable = RBase.drawable.handwashing_app_logo
         sliderPage.bgColor = Color.WHITE
         sliderPage.titleColor = Color.DKGRAY
         sliderPage.descColor = Color.DKGRAY
@@ -74,7 +76,7 @@ class IntroActivity : AppIntro2(),
         val sliderPage2 = SliderPage()
         sliderPage2.title = "Second page"
         sliderPage2.description = "Second page description"
-        sliderPage2.imageDrawable = R.drawable.handwashing_app_logo
+        sliderPage2.imageDrawable = RBase.drawable.handwashing_app_logo
         sliderPage2.bgColor = Color.WHITE
         sliderPage2.titleColor = Color.DKGRAY
         sliderPage2.descColor = Color.DKGRAY
@@ -83,13 +85,14 @@ class IntroActivity : AppIntro2(),
         val sliderPage3 = SliderPage()
         sliderPage3.title = "Third page"
         sliderPage3.description = "Third page description"
-        sliderPage3.imageDrawable = R.drawable.ic_handwashing_icon
+        sliderPage3.imageDrawable = RBase.drawable.ic_handwashing_icon
         sliderPage3.bgColor = Color.WHITE
         sliderPage3.titleColor = Color.DKGRAY
         sliderPage3.descColor = Color.DKGRAY
         addSlide(AppIntro2Fragment.newInstance(sliderPage3))
 
-        timeConfigSlide = TimeConfigIntroFragment()
+        timeConfigSlide =
+            TimeConfigIntroFragment()
         val display = windowManager.defaultDisplay
         val size = Point()
         display.getSize(size)
@@ -102,7 +105,7 @@ class IntroActivity : AppIntro2(),
         val sliderPage5 = SliderPage()
         sliderPage5.title = "Fifth page"
         sliderPage5.description = "Fifth page description"
-        sliderPage5.imageDrawable = R.drawable.ic_handwashing_icon
+        sliderPage5.imageDrawable = RBase.drawable.ic_activty
         sliderPage5.bgColor = Color.WHITE
         sliderPage5.titleColor = Color.DKGRAY
         sliderPage5.descColor = Color.DKGRAY
@@ -126,9 +129,9 @@ class IntroActivity : AppIntro2(),
 
     override fun onDonePressed(currentFragment: Fragment?) {
         super.onDonePressed(currentFragment)
-//        val intent = Intent(this, MainActivity::class.java)
-//        startActivity(intent)
-        LibsBuilder()
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        /*LibsBuilder()
             .withAboutDescription("This is a test desc")
             .withAboutIconShown(true)
             .withAboutVersionShown(true)
@@ -136,7 +139,7 @@ class IntroActivity : AppIntro2(),
             .withSortEnabled(true)
             .withCheckCachedDetection(true)
             .withAutoDetect(true)
-            .start(this)
+            .start(this)*/
         this.finish()
     }
 
@@ -254,9 +257,11 @@ class IntroActivity : AppIntro2(),
                 }
                 setSwipeLock(!isTimeSet)
                 if (!isTimeSet) {
-                    val background = findViewById<FrameLayout>(R.id.background)
+                    val background =
+                        findViewById<FrameLayout>(RIntro.id.background)
                     Snackbar.make(
-                        background, R.string.fill_hours,
+                        background,
+                        RIntro.string.fill_hours,
                         Snackbar.LENGTH_LONG
                     ).show()
                 }

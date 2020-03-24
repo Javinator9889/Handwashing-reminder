@@ -16,7 +16,7 @@
  *
  * Created by Javinator9889 on 19/03/20 - Handwashing reminder.
  */
-package com.javinator9889.handwashingreminder.views.activities.config
+package com.javinator9889.handwashingreminder.appintro.config
 
 //import com.afollestad.materialdialogs.datetime.timePicker
 import android.app.Activity
@@ -30,7 +30,7 @@ import android.widget.TextView
 import android.widget.TimePicker
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
-import com.javinator9889.handwashingreminder.R
+import com.javinator9889.handwashingreminder.appintro.R
 import com.javinator9889.handwashingreminder.utils.AndroidVersion
 import com.javinator9889.handwashingreminder.utils.TimeConfig
 import com.javinator9889.handwashingreminder.utils.isAtLeast
@@ -65,6 +65,7 @@ class TimeConfigActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         title = findViewById(R.id.title)
 //        image = findViewById(R.id.infoImage)

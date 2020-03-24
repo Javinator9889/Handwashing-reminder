@@ -16,14 +16,14 @@
  *
  * Created by Javinator9889 on 18/03/20 - Handwashing reminder.
  */
-package com.javinator9889.handwashingreminder.views.custom.timeconfig
+package com.javinator9889.handwashingreminder.appintro.timeconfig
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.javinator9889.handwashingreminder.R
+import com.javinator9889.handwashingreminder.appintro.R
 import com.javinator9889.handwashingreminder.listeners.ViewHolder
 
 class TimeConfigAdapter(

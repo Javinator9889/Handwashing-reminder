@@ -14,25 +14,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  *
- * Created by Javinator9889 on 20/03/20 - Handwashing reminder.
+ * Created by Javinator9889 on 24/03/20 - Handwashing reminder.
  */
-package com.javinator9889.handwashingreminder.views.activities.support
+package com.javinator9889.handwashingreminder.utils.base
 
+import android.content.Context
 import android.os.Bundle
-import com.javinator9889.handwashingreminder.R
+import com.google.android.play.core.splitcompat.SplitCompat
+import com.google.android.play.core.splitinstall.SplitInstallManager
+import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import javinator9889.localemanager.activity.BaseAppCompatActivity
 
-abstract class ActionBarBase : BaseAppCompatActivity() {
+abstract class SplitCompatBaseActivity : BaseAppCompatActivity() {
+    protected lateinit var splitInstallManager: SplitInstallManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(getLayoutId())
-        setSupportActionBar(findViewById(R.id.toolbar))
+        splitInstallManager = HandwashingApplication.getInstance().manager
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return true
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(base)
+        SplitCompat.install(this)
     }
-
-    abstract fun getLayoutId(): Int
 }

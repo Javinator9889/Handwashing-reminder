@@ -25,3 +25,5 @@
 -keep class **.R$* {
     <fields>;
 }
+
+-keep class com.javinator9889.appintro.*

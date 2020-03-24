@@ -16,7 +16,7 @@
  *
  * Created by Javinator9889 on 18/03/20 - Handwashing reminder.
  */
-package com.javinator9889.handwashingreminder.views.custom.timeconfig
+package com.javinator9889.handwashingreminder.appintro.timeconfig
 
 import android.os.Parcel
 import android.os.Parcelable

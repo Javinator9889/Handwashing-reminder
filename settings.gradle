@@ -1,2 +1,3 @@
 rootProject.name='Handwashing reminder'
 include ':app'
+include ':appintro'

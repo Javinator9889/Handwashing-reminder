@@ -22,22 +22,19 @@ import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.graphics.Point
 import android.os.Bundle
 import android.util.Log
 import android.widget.ProgressBar
-import androidx.recyclerview.widget.LinearLayoutManager
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.utils.AndroidVersion
+import com.javinator9889.handwashingreminder.utils.base.SplitCompatBaseActivity
 import com.javinator9889.handwashingreminder.utils.isAtLeast
-import com.javinator9889.handwashingreminder.views.custom.timeconfig.TimeConfigAdapter
-import com.javinator9889.handwashingreminder.views.custom.timeconfig.TimeConfigContent
-import javinator9889.localemanager.activity.BaseAppCompatActivity
 import kotlin.concurrent.thread
 
-class MainActivity : BaseAppCompatActivity() {
+class MainActivity : SplitCompatBaseActivity() {
     private lateinit var app: HandwashingApplication
 
     //    private lateinit var button: Button
@@ -56,11 +53,23 @@ class MainActivity : BaseAppCompatActivity() {
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.time_config)
-        app = HandwashingApplication.getInstance()
+        setContentView(R.layout.activity_main)
+        val isInstalled =
+            splitInstallManager.installedModules.contains("appintro")
+        if (isInstalled)
+            splitInstallManager.deferredUninstall(listOf("appintro"))
+                .addOnCompleteListener {
+                    Toast.makeText(
+                        this, "AppIntro module uninstalled", Toast
+                            .LENGTH_LONG
+                    ).show()
+                    Log.i("MainActivity", "AppIntro module uninstalled")
+                }
+
+//        app = HandwashingApplication.getInstance()
 
 //        val dataset = arrayOf("Desayuno", "Comida", "Cena")
-        val dataset = arrayOf(
+        /*val dataset = arrayOf(
             TimeConfigContent(
                 "Desayuno",
                 0L
@@ -90,7 +99,7 @@ class MainActivity : BaseAppCompatActivity() {
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = viewAdapter
-        }
+        }*/
 //        hours = findViewById(R.id.hours)
 //        minutes = findViewById(R.id.minutes)
 //        container = findViewById(R.id.timeCtr)

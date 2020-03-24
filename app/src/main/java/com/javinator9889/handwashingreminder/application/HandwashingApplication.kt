@@ -21,6 +21,9 @@ package com.javinator9889.handwashingreminder.application
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.multidex.MultiDex
+import com.google.android.play.core.splitcompat.SplitCompat
+import com.google.android.play.core.splitinstall.SplitInstallManager
+import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.mikepenz.iconics.Iconics
 import javinator9889.localemanager.application.BaseApplication
 import javinator9889.localemanager.utils.languagesupport.LanguagesSupport.Language
@@ -28,6 +31,9 @@ import javinator9889.localemanager.utils.languagesupport.LanguagesSupport.Langua
 
 class HandwashingApplication : BaseApplication() {
     private lateinit var sharedPreferences: SharedPreferences
+    val manager: SplitInstallManager by lazy {
+        SplitInstallManagerFactory.create(this)
+    }
 
     companion object {
         private lateinit var instance: HandwashingApplication
@@ -38,8 +44,9 @@ class HandwashingApplication : BaseApplication() {
     }
 
     override fun attachBaseContext(base: Context?) {
-        MultiDex.install(base)
         super.attachBaseContext(base)
+        MultiDex.install(base)
+        SplitCompat.install(this)
     }
 
     /**

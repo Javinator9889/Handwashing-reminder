@@ -16,7 +16,7 @@
  *
  * Created by Javinator9889 on 18/03/20 - Handwashing reminder.
  */
-package com.javinator9889.handwashingreminder.views.custom.timeconfig
+package com.javinator9889.handwashingreminder.appintro.timeconfig
 
 import android.view.View
 import android.widget.ImageView
@@ -24,7 +24,7 @@ import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
-import com.javinator9889.handwashingreminder.R
+import com.javinator9889.handwashingreminder.appintro.R
 import com.javinator9889.handwashingreminder.listeners.ViewHolder
 import com.javinator9889.handwashingreminder.utils.TimeConfig
 import com.mikepenz.iconics.view.IconicsImageView

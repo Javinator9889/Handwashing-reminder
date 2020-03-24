@@ -16,7 +16,7 @@
  *
  * Created by Javinator9889 on 19/03/20 - Handwashing reminder.
  */
-package com.javinator9889.handwashingreminder.views.activities.intro
+package com.javinator9889.handwashingreminder.appintro.fragments
 
 import android.graphics.Color
 import android.os.Bundle
@@ -27,11 +27,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.paolorotolo.appintro.AppIntroBaseFragment
-import com.javinator9889.handwashingreminder.R
+import com.javinator9889.handwashingreminder.appintro.R
+import com.javinator9889.handwashingreminder.appintro.timeconfig.TimeConfigAdapter
+import com.javinator9889.handwashingreminder.appintro.timeconfig.TimeConfigContent
 import com.javinator9889.handwashingreminder.listeners.ViewHolder
 import com.javinator9889.handwashingreminder.utils.TimeConfig
-import com.javinator9889.handwashingreminder.views.custom.timeconfig.TimeConfigAdapter
-import com.javinator9889.handwashingreminder.views.custom.timeconfig.TimeConfigContent
+import com.javinator9889.handwashingreminder.R as RBase
 
 class TimeConfigIntroFragment : AppIntroBaseFragment() {
     private lateinit var recyclerView: RecyclerView
@@ -90,7 +91,7 @@ class TimeConfigIntroFragment : AppIntroBaseFragment() {
     ): View? {
         val view = inflater.inflate(layoutId, container, false)
         val rvManager = LinearLayoutManager(context)
-        fromActivity.setSupportActionBar(view.findViewById(R.id.toolbar))
+        fromActivity.setSupportActionBar(view.findViewById(RBase.id.toolbar))
         recyclerView =
             view.findViewById<RecyclerView>(R.id.cardsView).apply {
                 setHasFixedSize(true)
