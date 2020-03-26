@@ -17,4 +17,23 @@
     <string name="done">Done</string>
     <string name="set_time">Set time</string>
     <string name="fill_hours">Please, fill out all the hours</string>
+    <string name="graphics">graphics</string>
+    <string name="slide_policy_text">By clicking here you accept the
+        terms and conditions of %1$s</string>
+    <string name="firebase_url">&lt;a href="https://firebase.google.com/support/privacy">Firebase&lt;/a></string>
+    <string name="accept_policy">You need to agree to the privacy
+        policy in order to continue using this application</string>
+    <string name="first_slide_title">Handwashing reminder</string>
+    <string name="first_slide_desc">Reminds you to keep your hands
+        clean at custom hours you define.</string>
+    <string name="second_slide_title">Custom hours</string>
+    <string name="second_slide_desc">Define custom hours you usually do
+        certain actions in order to get notified when you should wash your
+        hands</string>
+    <string name="fourth_slide_title">Get custom notifications</string>
+    <string name="fourth_slide_desc">If you allow access to user activity,
+        you will receive notifications when, for example, you get off from a
+        vehicle or after running. You can disable this option at any
+        moment</string>
+    <string name="privacy_policy_title">Privacy policy</string>
 </resources>

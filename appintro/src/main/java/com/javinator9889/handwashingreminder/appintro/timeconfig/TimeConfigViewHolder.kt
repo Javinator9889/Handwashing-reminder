@@ -30,7 +30,7 @@ import com.javinator9889.handwashingreminder.utils.TimeConfig
 import com.mikepenz.iconics.view.IconicsImageView
 
 
-class TimeConfigViewHolder(val view: View) :
+class TimeConfigViewHolder(view: View) :
     RecyclerView.ViewHolder(view),
     View.OnClickListener {
     val ddot: TextView = view.findViewById(R.id.ddot)
@@ -79,8 +79,8 @@ class TimeConfigViewHolder(val view: View) :
             TimeConfig.DINNER_ID -> R.drawable.ic_dinner
             else -> null
         }
+        adaptCardHeight()
         loadImageView(imageRes)
-//        adaptCardHeight()
     }
 
     private fun adaptCardHeight() {
@@ -92,8 +92,5 @@ class TimeConfigViewHolder(val view: View) :
     private fun loadImageView(@DrawableRes imageRes: Int?) {
         if (imageRes != null)
             image.setImageResource(imageRes)
-//        Picasso.get()
-//            .load(imageRes)
-//            .into(image)
     }
 }

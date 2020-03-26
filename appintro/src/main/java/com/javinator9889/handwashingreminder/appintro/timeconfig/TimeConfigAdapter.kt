@@ -21,7 +21,6 @@ package com.javinator9889.handwashingreminder.appintro.timeconfig
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.javinator9889.handwashingreminder.appintro.R
 import com.javinator9889.handwashingreminder.listeners.ViewHolder
@@ -29,13 +28,11 @@ import com.javinator9889.handwashingreminder.listeners.ViewHolder
 class TimeConfigAdapter(
     private val dataset: Array<TimeConfigContent>,
     private val listener: ViewHolder.OnItemClickListener?,
-    private val fromActivity: AppCompatActivity?,
     private val viewItems: HashMap<Int, RecyclerView.ViewHolder>?
 ) :
     RecyclerView.Adapter<TimeConfigViewHolder>() {
     private var height = 0
     private lateinit var context: Context
-//    private val items: ArrayList<TimeConfigViewHolder> = ArrayList(3)
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -45,9 +42,6 @@ class TimeConfigAdapter(
         val timeConfig = LayoutInflater.from(parent.context)
             .inflate(R.layout.time_card_view, parent, false)
         height = parent.measuredHeight / 3
-//        height = cHeight - navbarHeight()
-        //        if (!items.contains(viewHolder))
-//            items.add(viewHolder)
         return TimeConfigViewHolder(timeConfig)
     }
 
@@ -62,18 +56,4 @@ class TimeConfigAdapter(
     }
 
     override fun getItemCount(): Int = dataset.size
-
-    private fun frameLayoutHeight(): Int {
-        return fromActivity?.resources?.getDimensionPixelSize(
-            com.github.paolorotolo.appintro.R.dimen.appIntro2BottomBarHeight
-        ) ?: return 0
-    }
-
-    private fun navbarHeight(): Int {
-        val resources = fromActivity?.resources ?: return 0
-        val resId = resources.getIdentifier(
-            "navigation_bar_height", "dimen", "android"
-        )
-        return if (resId > 0) resources.getDimensionPixelSize(resId) else 0
-    }
 }

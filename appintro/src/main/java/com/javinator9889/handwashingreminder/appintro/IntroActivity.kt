@@ -18,9 +18,9 @@
  */
 package com.javinator9889.handwashingreminder.appintro
 
+import android.Manifest
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.Point
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -31,20 +31,18 @@ import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.github.paolorotolo.appintro.AppIntro2
-import com.github.paolorotolo.appintro.AppIntro2Fragment
 import com.github.paolorotolo.appintro.AppIntroViewPager
-import com.github.paolorotolo.appintro.model.SliderPage
+import com.google.android.gms.common.ConnectionResult.SUCCESS
+import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.material.snackbar.Snackbar
 import com.javinator9889.handwashingreminder.appintro.config.TimeConfigActivity
+import com.javinator9889.handwashingreminder.appintro.custom.SliderPageBuilder
+import com.javinator9889.handwashingreminder.appintro.fragments.SlidePolicyFragment
 import com.javinator9889.handwashingreminder.appintro.fragments.TimeConfigIntroFragment
 import com.javinator9889.handwashingreminder.appintro.timeconfig.TimeConfigViewHolder
 import com.javinator9889.handwashingreminder.listeners.ViewHolder
-import com.javinator9889.handwashingreminder.utils.AndroidVersion
-import com.javinator9889.handwashingreminder.utils.TimeConfig
-import com.javinator9889.handwashingreminder.utils.getOnClickListener
-import com.javinator9889.handwashingreminder.utils.isAtLeast
+import com.javinator9889.handwashingreminder.utils.*
 import com.javinator9889.handwashingreminder.views.activities.MainActivity
-import com.mikepenz.iconics.Iconics
 import com.javinator9889.handwashingreminder.R as RBase
 import com.javinator9889.handwashingreminder.appintro.R as RIntro
 
@@ -54,92 +52,62 @@ class IntroActivity : AppIntro2(),
     AppIntroViewPager.OnNextPageRequestedListener,
     View.OnClickListener {
     private lateinit var timeConfigSlide: TimeConfigIntroFragment
-    private var appIntroListener: View.OnClickListener? = null
+    private lateinit var fourthSlide: Fragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Iconics.init()
-        Log.d("Intro", "I'm an on-demand feature!")
-//        supportActionBar?.hide()
-//        transitions = resources.getStringArray(R.array.transitions)
-//        setSwipeLock(false)
 
-        val sliderPage = SliderPage()
-        sliderPage.title = "First page"
-        sliderPage.description = "First page description"
-        sliderPage.imageDrawable = RBase.drawable.handwashing_app_logo
-        sliderPage.bgColor = Color.WHITE
-        sliderPage.titleColor = Color.DKGRAY
-        sliderPage.descColor = Color.DKGRAY
-        addSlide(AppIntro2Fragment.newInstance(sliderPage))
+        val firstSlide = SliderPageBuilder.Builder()
+            .title(getString(RIntro.string.first_slide_title))
+            .description(getString(RIntro.string.first_slide_desc))
+            .imageDrawable(RBase.drawable.handwashing_app_logo)
+            .build()
+        addSlide(firstSlide)
 
-        val sliderPage2 = SliderPage()
-        sliderPage2.title = "Second page"
-        sliderPage2.description = "Second page description"
-        sliderPage2.imageDrawable = RBase.drawable.handwashing_app_logo
-        sliderPage2.bgColor = Color.WHITE
-        sliderPage2.titleColor = Color.DKGRAY
-        sliderPage2.descColor = Color.DKGRAY
-        addSlide(AppIntro2Fragment.newInstance(sliderPage2))
-
-        val sliderPage3 = SliderPage()
-        sliderPage3.title = "Third page"
-        sliderPage3.description = "Third page description"
-        sliderPage3.imageDrawable = RBase.drawable.ic_handwashing_icon
-        sliderPage3.bgColor = Color.WHITE
-        sliderPage3.titleColor = Color.DKGRAY
-        sliderPage3.descColor = Color.DKGRAY
-        addSlide(AppIntro2Fragment.newInstance(sliderPage3))
+        val secondSlide = SliderPageBuilder.Builder()
+            .title(getString(RIntro.string.second_slide_title))
+            .description(getString(RIntro.string.second_slide_desc))
+            .imageDrawable(RIntro.drawable.ic_clock)
+            .build()
+        addSlide(secondSlide)
 
         timeConfigSlide =
             TimeConfigIntroFragment()
-        val display = windowManager.defaultDisplay
-        val size = Point()
-        display.getSize(size)
-        timeConfigSlide.height = size.y - 80
         timeConfigSlide.bgColor = Color.WHITE
         timeConfigSlide.listener = this
         timeConfigSlide.fromActivity = this
         addSlide(timeConfigSlide)
 
-        val sliderPage5 = SliderPage()
-        sliderPage5.title = "Fifth page"
-        sliderPage5.description = "Fifth page description"
-        sliderPage5.imageDrawable = RBase.drawable.ic_activty
-        sliderPage5.bgColor = Color.WHITE
-        sliderPage5.titleColor = Color.DKGRAY
-        sliderPage5.descColor = Color.DKGRAY
-        addSlide(AppIntro2Fragment.newInstance(sliderPage5))
+        val gms = GoogleApiAvailability.getInstance()
+        if (gms.isGooglePlayServicesAvailable(this) == SUCCESS) {
+            fourthSlide = SliderPageBuilder.Builder()
+                .title(getString(RIntro.string.fourth_slide_title))
+                .description(getString(RIntro.string.fourth_slide_desc))
+                .imageDrawable(RIntro.drawable.ic_activty)
+                .build()
+            addSlide(fourthSlide)
+        }
+
+        val policySlide = SlidePolicyFragment().apply {
+            title = this@IntroActivity
+                .getString(RIntro.string.privacy_policy_title)
+            imageDrawable = RIntro.drawable.ic_privacy
+            titleColor = Color.DKGRAY
+            bgColor = Color.WHITE
+        }
+        addSlide(policySlide)
 
         showSkipButton(false)
         showStatusBar(true)
         backButtonVisibilityWithDone = true;
         setIndicatorColor(Color.DKGRAY, Color.GRAY);
-        appIntroListener = getOnClickListener(nextButton)
         nextButton.setOnClickListener(this)
-//        setNavBarColor("#2196F3")
-//        setBarColor(getColor(R.color.colorPrimary));
-//        setNavBarColor(R.color.white)
-//        val stackTransformer = StackTransformer()
-//        setCustomTransformer(stackTransformer)
-
-//        askForPermissions(arrayOf(Manifest.permission.ACTIVITY_RECOGNITION), 3)
-//        setDepthAnimation()
     }
 
     override fun onDonePressed(currentFragment: Fragment?) {
         super.onDonePressed(currentFragment)
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
-        /*LibsBuilder()
-            .withAboutDescription("This is a test desc")
-            .withAboutIconShown(true)
-            .withAboutVersionShown(true)
-            .withAboutVersionShownCode(true)
-            .withSortEnabled(true)
-            .withCheckCachedDetection(true)
-            .withAutoDetect(true)
-            .start(this)*/
         this.finish()
     }
 
@@ -224,6 +192,13 @@ class IntroActivity : AppIntro2(),
                 setSwipeLock(true)
                 return
             }
+            else -> setSwipeLock(false)
+        }
+        when (oldFragment) {
+            fourthSlide -> askForPermissions(
+                this,
+                Permission(Manifest.permission.ACTIVITY_RECOGNITION, 0)
+            )
         }
         super.onSlideChanged(oldFragment, newFragment)
     }
@@ -231,25 +206,13 @@ class IntroActivity : AppIntro2(),
     protected fun isTimeConfigValidState(
         timeConfigIntroFragment: Fragment?
     ): Boolean {
-        Log.d("Intro/fragment", timeConfigIntroFragment.toString())
-        Log.d("Intro/fragment", timeConfigSlide.toString())
-        Log.d(
-            "Intro/fragment",
-            (timeConfigIntroFragment == timeConfigSlide).toString()
-        )
         return when (timeConfigIntroFragment) {
             timeConfigSlide -> {
-                Log.d("Intro/fragment", "Inside when block for configSlide")
                 var isTimeSet = true
-                Log.d("Map size", timeConfigSlide.viewItems.size.toString())
                 for (view in timeConfigSlide.viewItems) {
                     val viewHolder = view.value as TimeConfigViewHolder
                     val hours = viewHolder.hours
                     val minutes = viewHolder.minutes
-                    Log.d(
-                        "Intro/HHMM",
-                        "HH: ${hours.text} | MM: ${minutes.text}"
-                    )
                     if (hours.text == "" || minutes.text == "") {
                         isTimeSet = false
                         break
@@ -274,10 +237,6 @@ class IntroActivity : AppIntro2(),
     override fun onCanRequestNextPage(): Boolean {
         val ret = super.onCanRequestNextPage()
         val currentFragment = mPagerAdapter.getItem(pager.currentItem)
-        Log.d(
-            "Intro", "Can go to next slide? " +
-                    "${ret && isTimeConfigValidState(currentFragment)}"
-        )
         return ret && isTimeConfigValidState(currentFragment)
     }
 

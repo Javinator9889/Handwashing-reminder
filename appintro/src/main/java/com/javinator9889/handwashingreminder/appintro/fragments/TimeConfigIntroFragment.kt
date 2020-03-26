@@ -39,7 +39,6 @@ class TimeConfigIntroFragment : AppIntroBaseFragment() {
     private lateinit var rvAdapter: TimeConfigAdapter
     private lateinit var rvItems: Array<TimeConfigContent>
     lateinit var fromActivity: AppCompatActivity
-    var height: Int = 0
     var bgColor: Int = Color.WHITE
     var listener: ViewHolder.OnItemClickListener? = null
     val viewItems = HashMap<Int, RecyclerView.ViewHolder>(3)
@@ -67,7 +66,6 @@ class TimeConfigIntroFragment : AppIntroBaseFragment() {
             TimeConfigAdapter(
                 rvItems,
                 listener,
-                fromActivity,
                 viewItems
             )
     }
