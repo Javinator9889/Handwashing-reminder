@@ -32,16 +32,17 @@ import com.javinator9889.handwashingreminder.utils.notNull
 class SliderPageBuilder private constructor() {
     data class Builder(
         var title: String? = null,
-        @FontRes var titleTypeface: Int? = R.font.raleway_bold,
-        @FontRes var descTypeface: Int? = R.font.roboto,
         var description: String? = null,
-        @DrawableRes var imageDrawable: Int? = null,
+        @FontRes var titleTypeface: Int? = R.font.raleway_medium,
+        @FontRes var descTypeface: Int? = R.font.roboto,
         @ColorInt var bgColor: Int? = Color.WHITE,
         @ColorInt var titleColor: Int? = Color.DKGRAY,
         @ColorInt var descColor: Int? = Color.DKGRAY,
+        @DrawableRes var imageDrawable: Int? = null,
         var customSlider: SliderPage? = null
     ) {
         fun title(title: String) = apply { this.title = title }
+
         fun titleTypeface(@FontRes typeface: Int) =
             apply { titleTypeface = typeface }
 
@@ -56,6 +57,7 @@ class SliderPageBuilder private constructor() {
         }
 
         fun bgColor(@ColorInt bgColor: Int) = apply { this.bgColor = bgColor }
+
         fun titleColor(@ColorRes titleColor: Int) =
             apply { this.titleColor = titleColor }
 

@@ -25,7 +25,7 @@ import javinator9889.localemanager.activity.BaseAppCompatActivity
 abstract class ActionBarBase : BaseAppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(getLayoutId())
+        setContentView(layoutId())
         setSupportActionBar(findViewById(R.id.toolbar))
     }
 
@@ -34,5 +34,5 @@ abstract class ActionBarBase : BaseAppCompatActivity() {
         return true
     }
 
-    abstract fun getLayoutId(): Int
+    abstract fun layoutId(): Int
 }

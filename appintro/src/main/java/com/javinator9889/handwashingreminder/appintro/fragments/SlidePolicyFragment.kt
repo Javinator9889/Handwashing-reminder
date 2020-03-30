@@ -18,6 +18,7 @@
  */
 package com.javinator9889.handwashingreminder.appintro.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -25,14 +26,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.text.HtmlCompat
-import androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY
 import com.github.paolorotolo.appintro.AppIntroBaseFragment
 import com.github.paolorotolo.appintro.ISlidePolicy
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.javinator9889.handwashingreminder.appintro.R
+import com.javinator9889.handwashingreminder.views.activities.PrivacyTermsActivity
+import com.javinator9889.handwashingreminder.R as RBase
 
 class SlidePolicyFragment : AppIntroBaseFragment(), ISlidePolicy {
     private lateinit var layout: ConstraintLayout
@@ -53,19 +54,25 @@ class SlidePolicyFragment : AppIntroBaseFragment(), ISlidePolicy {
         firebaseAnalytics = view.findViewById(R.id.firstSwitch)
         firebasePerformance = view.findViewById(R.id.secondSwitch)
         slidePolicyCheckBox = view.findViewById(R.id.policyCheckbox)
-        val title = view.findViewById<TextView>(R.id.title)
-        val image = view.findViewById<ImageView>(R.id.image)
         layout = view.findViewById(R.id.main)
 
+        val image = view.findViewById<ImageView>(R.id.image)
+        val title = view.findViewById<TextView>(R.id.title)
         this.title?.let { title.text = it }
         this.titleColor?.let { title.setTextColor(it) }
         bgColor?.let { layout.setBackgroundColor(it) }
         imageDrawable?.let { image.setImageResource(it) }
-        val text = getString(R.string.slide_policy_text, "Firebase")
-        slidePolicyCheckBox.text = HtmlCompat.fromHtml(
-            text,
-            FROM_HTML_MODE_LEGACY
-        )
+        slidePolicyCheckBox.text = getString(R.string.slide_policy_text)
+        slidePolicyCheckBox.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                val intent = Intent(context, PrivacyTermsActivity::class.java)
+                startActivity(intent)
+            }
+        }
+        firebaseAnalytics.text =
+            getString(RBase.string.firebase_analytics_policy)
+        firebasePerformance.text =
+            getString(RBase.string.firebase_performance_policy)
         return view
     }
 

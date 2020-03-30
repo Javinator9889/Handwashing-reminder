@@ -10,4 +10,12 @@
         notification</string>
     <string name="title_appintro">Handwashing reminder intro</string>
     <string name="title_appintro2">AppIntro2</string>
+    <string name="privacy_policy_title">Privacy policy</string>
+    <string name="tos_title">Terms and conditions</string>
+    <string name="firebase_analytics_policy">Allow the application to
+        collect and send anonymous data with data activity and
+        analytics information</string>
+    <string name="firebase_performance_policy">Allow the application to
+        track its performance and send anonymous data for improving
+        in-app experience</string>
 </resources>

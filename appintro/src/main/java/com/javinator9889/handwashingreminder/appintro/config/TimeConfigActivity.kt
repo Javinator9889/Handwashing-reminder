@@ -110,7 +110,7 @@ class TimeConfigActivity :
         }
     }
 
-    override fun getLayoutId(): Int = R.layout.time_card_view_expanded
+    override fun layoutId(): Int = R.layout.time_card_view_expanded
 
     private fun setHours(hours: String, minutes: String) {
         val tpHour: Int

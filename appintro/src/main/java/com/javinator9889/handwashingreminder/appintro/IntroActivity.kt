@@ -71,8 +71,7 @@ class IntroActivity : AppIntro2(),
             .build()
         addSlide(secondSlide)
 
-        timeConfigSlide =
-            TimeConfigIntroFragment()
+        timeConfigSlide = TimeConfigIntroFragment()
         timeConfigSlide.bgColor = Color.WHITE
         timeConfigSlide.listener = this
         timeConfigSlide.fromActivity = this

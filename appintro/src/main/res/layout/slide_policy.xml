@@ -27,8 +27,8 @@
 
     <ImageView
         android:id="@+id/image"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="380dp"
+        android:layout_height="260dp"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
         android:contentDescription="@string/graphics"
@@ -64,6 +64,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:checked="false"
+            android:padding="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -79,10 +80,26 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:checked="false"
+            android:padding="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/firstSwitch"
             tools:text="Policy switch" />
+
+        <com.mikepenz.iconics.view.IconicsTextView
+            android:id="@+id/materialTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            app:iiv_start_icon="faw_info_circle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/secondSwitch"
+            tools:text="Some data will be sent" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/policyCheckbox"
@@ -91,10 +108,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
             android:textColor="@color/dkgray"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/secondSwitch"
+            app:layout_constraintTop_toBottomOf="@+id/materialTextView"
             tools:text="This is a demo of the AppIntro Library" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
