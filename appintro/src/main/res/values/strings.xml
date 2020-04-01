@@ -37,4 +37,9 @@
         vehicle 🚇 or after running 🤼‍♂️. You can disable this option at any
         moment</string>
     <string name="privacy_policy_title">Privacy policy</string>
+    <string name="data_shared">{gmi_info_outline} Despite of the
+        configuration above, some data will still be shared. This data
+        contains information about possible application crashes or errors. It
+        is always anonymous and will help me update the app, include
+        new features and solve errors.</string>
 </resources>

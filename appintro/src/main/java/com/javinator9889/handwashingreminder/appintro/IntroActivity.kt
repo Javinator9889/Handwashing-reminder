@@ -29,6 +29,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.paolorotolo.appintro.AppIntro2
 import com.github.paolorotolo.appintro.AppIntroViewPager
@@ -120,24 +121,25 @@ class IntroActivity : AppIntro2(),
             return
         val intent = Intent(this, TimeConfigActivity::class.java)
         val options = if (isAtLeast(AndroidVersion.LOLLIPOP)) {
+            val pairs = mutableListOf<Pair<View, String>>()
+            val items = HashMap<String, View>(6).apply {
+                this[TimeConfigActivity.VIEW_TITLE_NAME] = viewHolder.title
+                this[TimeConfigActivity.INFO_IMAGE_NAME] = viewHolder.image
+                this[TimeConfigActivity.USER_TIME_ICON] = viewHolder.clockIcon
+                this[TimeConfigActivity.USER_TIME_HOURS] = viewHolder.hours
+                this[TimeConfigActivity.USER_DDOT] = viewHolder.ddot
+                this[TimeConfigActivity.USER_TIME_MINUTES] = viewHolder.minutes
+            }
+            val lm =
+                timeConfigSlide.recyclerView.layoutManager as LinearLayoutManager
+            if (position <= lm.findLastCompletelyVisibleItemPosition()) {
+                items.onEach {
+                    pairs.add(Pair.create(it.value, it.key))
+                }
+            }
             ActivityOptionsCompat.makeSceneTransitionAnimation(
                 this,
-                Pair.create(
-                    viewHolder.title, TimeConfigActivity.VIEW_TITLE_NAME
-                ),
-                Pair.create(
-                    viewHolder.image, TimeConfigActivity.INFO_IMAGE_NAME
-                ),
-                Pair.create(
-                    viewHolder.clockIcon, TimeConfigActivity.USER_TIME_ICON
-                ),
-                Pair.create(
-                    viewHolder.hours, TimeConfigActivity.USER_TIME_HOURS
-                ),
-                Pair.create(viewHolder.ddot, TimeConfigActivity.USER_DDOT),
-                Pair.create(
-                    viewHolder.minutes, TimeConfigActivity.USER_TIME_MINUTES
-                )
+                *pairs.toTypedArray()
             )
         } else {
             null

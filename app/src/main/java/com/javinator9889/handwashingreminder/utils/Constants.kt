@@ -20,11 +20,13 @@ package com.javinator9889.handwashingreminder.utils
 
 const val TIME_CHANNEL_ID = "timeNotificationsChannel"
 const val ACTIVITY_CHANNEL_ID = "activityNotificationsChannel"
+const val ADMOB_APP_ID = "ca-app-pub-5517327035817913~5915164054"
 
 class Preferences {
     companion object {
         const val CREATE_CHANNEL_KEY = "create_channel_req"
         const val APP_INIT_KEY = "application_initialized"
+        const val ADS_ENABLED = "app_admob_enabled"
     }
 }
 

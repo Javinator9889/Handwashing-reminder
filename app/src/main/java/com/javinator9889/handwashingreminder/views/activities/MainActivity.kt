@@ -24,6 +24,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
@@ -32,6 +33,7 @@ import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.utils.AndroidVersion
 import com.javinator9889.handwashingreminder.utils.base.SplitCompatBaseActivity
 import com.javinator9889.handwashingreminder.utils.isAtLeast
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.concurrent.thread
 
 class MainActivity : SplitCompatBaseActivity() {
@@ -65,6 +67,22 @@ class MainActivity : SplitCompatBaseActivity() {
                     ).show()
                     Log.i("MainActivity", "AppIntro module uninstalled")
                 }
+        val app = HandwashingApplication.getInstance()
+        val frameView = findViewById<FrameLayout>(R.id.ad_container)
+        frameView.removeAllViews()
+        if (app.adLoader != null) {
+            frameView.addView(app.adLoader!!.adView)
+            app.adLoader!!.loadAd()
+        }
+
+        button.setOnClickListener {
+            frameView.removeAllViews()
+            if (app.adLoader != null) {
+                frameView.addView(app.adLoader!!.adView)
+                app.adLoader!!.loadAd()
+            }
+        }
+//        app.adLoader?.
 
 //        app = HandwashingApplication.getInstance()
 

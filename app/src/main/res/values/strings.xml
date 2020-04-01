@@ -18,4 +18,6 @@
     <string name="firebase_performance_policy">Allow the application to
         track its performance and send anonymous data for improving
         in-app experience</string>
+    <string name="title_ads">Ads</string>
+    <string name="ad_attribution">Ad</string>
 </resources>

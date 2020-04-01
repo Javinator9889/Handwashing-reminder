@@ -24,6 +24,8 @@ import androidx.multidex.MultiDex
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.android.play.core.splitinstall.SplitInstallManager
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
+import com.javinator9889.handwashingreminder.utils.Preferences.Companion.ADS_ENABLED
+import com.javinator9889.handwashingreminder.views.custom.AdLoader
 import com.mikepenz.iconics.Iconics
 import javinator9889.localemanager.application.BaseApplication
 import javinator9889.localemanager.utils.languagesupport.LanguagesSupport.Language
@@ -31,6 +33,7 @@ import javinator9889.localemanager.utils.languagesupport.LanguagesSupport.Langua
 
 class HandwashingApplication : BaseApplication() {
     private lateinit var sharedPreferences: SharedPreferences
+    var adLoader: AdLoader? = null
     val manager: SplitInstallManager by lazy {
         SplitInstallManagerFactory.create(this)
     }
@@ -57,10 +60,14 @@ class HandwashingApplication : BaseApplication() {
         instance = this
         sharedPreferences = getCustomSharedPreferences(this)!!
         Iconics.init(this)
-//        Iconics.registerFont(FontAwesome)
+//        MaterialDesignIconic.Icon.gmi_info_outline
 //        Iconics.registerFont(Ionicons)
-//        Iconics.registerFont(GoogleMaterial)
-//        Iconics.registerFont(MaterialDesignIconic)
+        initAdMobs()
+    }
+
+    private fun initAdMobs() {
+        if (sharedPreferences.getBoolean(ADS_ENABLED, true))
+            adLoader = AdLoader.initialize(this)
     }
 
     /**
