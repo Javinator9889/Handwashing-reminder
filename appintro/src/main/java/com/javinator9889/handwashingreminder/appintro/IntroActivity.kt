@@ -36,6 +36,7 @@ import com.github.paolorotolo.appintro.AppIntroViewPager
 import com.google.android.gms.common.ConnectionResult.SUCCESS
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.material.snackbar.Snackbar
+import com.javinator9889.handwashingreminder.activities.MainActivity
 import com.javinator9889.handwashingreminder.appintro.config.TimeConfigActivity
 import com.javinator9889.handwashingreminder.appintro.custom.SliderPageBuilder
 import com.javinator9889.handwashingreminder.appintro.fragments.SlidePolicyFragment
@@ -43,7 +44,6 @@ import com.javinator9889.handwashingreminder.appintro.fragments.TimeConfigIntroF
 import com.javinator9889.handwashingreminder.appintro.timeconfig.TimeConfigViewHolder
 import com.javinator9889.handwashingreminder.listeners.ViewHolder
 import com.javinator9889.handwashingreminder.utils.*
-import com.javinator9889.handwashingreminder.views.activities.MainActivity
 import com.javinator9889.handwashingreminder.R as RBase
 import com.javinator9889.handwashingreminder.appintro.R as RIntro
 

@@ -20,4 +20,10 @@
         in-app experience</string>
     <string name="title_ads">Ads</string>
     <string name="ad_attribution">Ad</string>
+    <string name="dynamic_module_loading_title">Building your app…</string>
+    <string name="dynamic_module_loading_text">We are adding new
+        content to the app so it works correctly. Please, wait a minute
+    - this process should not last long.</string>
+    <string name="dynamic_module_loading_error">Oops! Something went
+        wrong 😥 - please retry the process</string>
 </resources>

@@ -31,8 +31,8 @@ import com.github.paolorotolo.appintro.ISlidePolicy
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.switchmaterial.SwitchMaterial
+import com.javinator9889.handwashingreminder.activities.PrivacyTermsActivity
 import com.javinator9889.handwashingreminder.appintro.R
-import com.javinator9889.handwashingreminder.views.activities.PrivacyTermsActivity
 import com.javinator9889.handwashingreminder.R as RBase
 
 class SlidePolicyFragment : AppIntroBaseFragment(), ISlidePolicy {

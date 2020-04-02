@@ -9,7 +9,7 @@ android {
     android.defaultConfig.vectorDrawables.useSupportLibrary = true
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -47,9 +47,6 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:17.0.0'
     // https://material.io/develop/android/docs/getting-started/
     implementation 'com.google.android.material:material:1.1.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    // https://developer.android.com/kotlin/ktx#lifecycle
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.2.0'
     // https://github.com/Javinator9889/LocaleManager
     implementation 'com.github.javinator9889:localemanager:1.1X'
     // https://github.com/AppIntro/AppIntro
@@ -67,6 +64,4 @@ dependencies {
     implementation 'com.mikepenz:material-design-iconic-typeface:2.2.0.6-kotlin@aar'
     implementation 'com.mikepenz:fontawesome-typeface:5.9.0.0-kotlin@aar'
     implementation 'com.mikepenz:ionicons-typeface:2.0.1.5-kotlin@aar'
-    // https://developer.android.com/kotlin/ktx#collection
-    implementation 'androidx.collection:collection-ktx:1.1.0'
 }

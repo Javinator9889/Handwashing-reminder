@@ -16,7 +16,7 @@
  *
  * Created by Javinator9889 on 15/03/20 - Handwashing reminder.
  */
-package com.javinator9889.handwashingreminder.views.activities
+package com.javinator9889.handwashingreminder.activities
 
 import android.annotation.SuppressLint
 import android.app.NotificationChannel
@@ -29,11 +29,10 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.javinator9889.handwashingreminder.R
+import com.javinator9889.handwashingreminder.activities.base.SplitCompatBaseActivity
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.utils.AndroidVersion
-import com.javinator9889.handwashingreminder.utils.base.SplitCompatBaseActivity
 import com.javinator9889.handwashingreminder.utils.isAtLeast
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.concurrent.thread
 
 class MainActivity : SplitCompatBaseActivity() {
@@ -69,19 +68,13 @@ class MainActivity : SplitCompatBaseActivity() {
                 }
         val app = HandwashingApplication.getInstance()
         val frameView = findViewById<FrameLayout>(R.id.ad_container)
-        frameView.removeAllViews()
-        if (app.adLoader != null) {
-            frameView.addView(app.adLoader!!.adView)
-            app.adLoader!!.loadAd()
-        }
+//        app.adLoader?.loadAdForViewGroup(frameView)
+//            frameView.addView(app.adLoader!!.adView)
+//            app.adLoader!!.loadAd()
 
-        button.setOnClickListener {
-            frameView.removeAllViews()
-            if (app.adLoader != null) {
-                frameView.addView(app.adLoader!!.adView)
-                app.adLoader!!.loadAd()
-            }
-        }
+//        button.setOnClickListener {
+//            app.adLoader?.loadAdForViewGroup(frameView)
+//        }
 //        app.adLoader?.
 
 //        app = HandwashingApplication.getInstance()

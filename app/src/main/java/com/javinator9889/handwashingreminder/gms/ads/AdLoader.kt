@@ -16,11 +16,12 @@
  *
  * Created by Javinator9889 on 1/04/20 - Handwashing reminder.
  */
-package com.javinator9889.handwashingreminder.views.custom
+package com.javinator9889.handwashingreminder.gms.ads
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
@@ -30,11 +31,10 @@ import com.google.android.gms.ads.formats.NativeAdOptions
 import com.google.android.gms.ads.formats.UnifiedNativeAd
 import com.google.android.gms.ads.formats.UnifiedNativeAdView
 import com.javinator9889.handwashingreminder.R
-import com.javinator9889.handwashingreminder.utils.ADMOB_APP_ID
+import com.javinator9889.handwashingreminder.utils.ADMOB_APP_NATIVE_ID
 import com.google.android.gms.ads.AdLoader as AdBase
 
 class AdLoader private constructor(context: Context) {
-    private val adLoader: AdBase
     private val adOptions: NativeAdOptions
     private var currentNativeAd: UnifiedNativeAd? = null
     var adView: UnifiedNativeAdView? = null
@@ -47,22 +47,6 @@ class AdLoader private constructor(context: Context) {
         adOptions = NativeAdOptions.Builder()
             .setVideoOptions(videoOptions)
             .build()
-        adLoader = AdBase.Builder(context, ADMOB_APP_ID)
-            .forUnifiedNativeAd { ad: UnifiedNativeAd ->
-                val adView = LayoutInflater.from(context)
-                    .inflate(R.layout.native_ad_view, null) as
-                        UnifiedNativeAdView
-                populateUnifiedNativeAdView(ad, adView)
-            }
-            .withNativeAdOptions(adOptions)
-            .withAdListener(object : AdListener() {
-                override fun onAdFailedToLoad(errorCode: Int) {
-                    Toast.makeText(
-                        context, "Failed to load native ad - err. " +
-                                "code: $errorCode", Toast.LENGTH_LONG
-                    ).show()
-                }
-            }).build()
     }
 
     private fun populateUnifiedNativeAdView(
@@ -149,12 +133,34 @@ class AdLoader private constructor(context: Context) {
     companion object {
         private var instance: AdLoader? = null
         fun initialize(context: Context): AdLoader {
-            instance = instance ?: AdLoader(context)
+            instance = instance
+                ?: AdLoader(
+                    context
+                )
             return instance!!
         }
     }
 
-    fun loadAd() {
+    fun loadAdForViewGroup(view: ViewGroup, removeAllViews: Boolean = true) {
+        val adLoader = AdBase.Builder(view.context, ADMOB_APP_NATIVE_ID)
+            .forUnifiedNativeAd { ad: UnifiedNativeAd ->
+                val adView = LayoutInflater.from(view.context)
+                    .inflate(R.layout.native_ad_view, view) as
+                        UnifiedNativeAdView
+                populateUnifiedNativeAdView(ad, adView)
+                if (removeAllViews)
+                    view.removeAllViews()
+                view.addView(adView)
+            }
+            .withNativeAdOptions(adOptions)
+            .withAdListener(object : AdListener() {
+                override fun onAdFailedToLoad(errorCode: Int) {
+                    Toast.makeText(
+                        view.context, "Failed to load native ad - err. " +
+                                "code: $errorCode", Toast.LENGTH_LONG
+                    ).show()
+                }
+            }).build()
         adLoader.loadAd(AdRequest.Builder().build())
     }
 

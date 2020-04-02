@@ -22,21 +22,16 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.multidex.MultiDex
 import com.google.android.play.core.splitcompat.SplitCompat
-import com.google.android.play.core.splitinstall.SplitInstallManager
-import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
+import com.javinator9889.handwashingreminder.gms.ads.AdLoader
 import com.javinator9889.handwashingreminder.utils.Preferences.Companion.ADS_ENABLED
-import com.javinator9889.handwashingreminder.views.custom.AdLoader
 import com.mikepenz.iconics.Iconics
 import javinator9889.localemanager.application.BaseApplication
 import javinator9889.localemanager.utils.languagesupport.LanguagesSupport.Language
 
 
 class HandwashingApplication : BaseApplication() {
-    private lateinit var sharedPreferences: SharedPreferences
+    lateinit var sharedPreferences: SharedPreferences
     var adLoader: AdLoader? = null
-    val manager: SplitInstallManager by lazy {
-        SplitInstallManagerFactory.create(this)
-    }
 
     companion object {
         private lateinit var instance: HandwashingApplication
@@ -68,13 +63,6 @@ class HandwashingApplication : BaseApplication() {
     private fun initAdMobs() {
         if (sharedPreferences.getBoolean(ADS_ENABLED, true))
             adLoader = AdLoader.initialize(this)
-    }
-
-    /**
-     * Obtains the initialized shared preferences.
-     */
-    fun getSharedPreferences(): SharedPreferences {
-        return sharedPreferences
     }
 
     /**

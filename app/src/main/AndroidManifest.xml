@@ -21,15 +21,16 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-5517327035817913~5915164054" />
 
-        <activity android:name=".views.activities.LauncherActivity">
+        <activity android:name="com.javinator9889.handwashingreminder.activities.LauncherActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".views.activities.MainActivity" />
-        <activity android:name=".views.activities.PrivacyTermsActivity" />
+        <activity android:name="com.javinator9889.handwashingreminder.activities.MainActivity" />
+        <activity android:name="com.javinator9889.handwashingreminder.activities.PrivacyTermsActivity" />
+        <activity android:name=".activities.DynamicFeatureProgress" />
 
         <meta-data
             android:name="preloaded_fonts"

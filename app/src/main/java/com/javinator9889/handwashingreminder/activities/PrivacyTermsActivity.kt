@@ -16,7 +16,7 @@
  *
  * Created by Javinator9889 on 30/03/20 - Handwashing reminder.
  */
-package com.javinator9889.handwashingreminder.views.activities
+package com.javinator9889.handwashingreminder.activities
 
 import android.graphics.Color
 import android.os.Bundle
@@ -25,8 +25,8 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.javinator9889.handwashingreminder.R
+import com.javinator9889.handwashingreminder.activities.support.ActionBarBase
 import com.javinator9889.handwashingreminder.collections.PrivacyTermsCollectionAdapter
-import com.javinator9889.handwashingreminder.views.activities.support.ActionBarBase
 
 class PrivacyTermsActivity : ActionBarBase() {
     private lateinit var tabLayout: TabLayout

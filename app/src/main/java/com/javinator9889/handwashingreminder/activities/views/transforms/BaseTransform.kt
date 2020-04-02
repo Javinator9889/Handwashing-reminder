@@ -16,7 +16,7 @@
  *
  * Created by Javinator9889 on 16/03/20 - Handwashing reminder.
  */
-package com.javinator9889.handwashingreminder.views.transforms
+package com.javinator9889.handwashingreminder.activities.views.transforms
 
 import android.view.View
 import androidx.viewpager.widget.ViewPager

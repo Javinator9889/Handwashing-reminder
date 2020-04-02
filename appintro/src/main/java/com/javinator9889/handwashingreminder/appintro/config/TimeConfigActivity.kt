@@ -30,11 +30,11 @@ import android.widget.TextView
 import android.widget.TimePicker
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
+import com.javinator9889.handwashingreminder.activities.support.ActionBarBase
 import com.javinator9889.handwashingreminder.appintro.R
 import com.javinator9889.handwashingreminder.utils.AndroidVersion
 import com.javinator9889.handwashingreminder.utils.TimeConfig
 import com.javinator9889.handwashingreminder.utils.isAtLeast
-import com.javinator9889.handwashingreminder.views.activities.support.ActionBarBase
 import java.util.*
 
 class TimeConfigActivity :

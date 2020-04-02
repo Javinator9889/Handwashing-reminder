@@ -24,9 +24,9 @@ android {
 
     defaultConfig {
         applicationId "com.javinator9889.handwashingreminder"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 29
-        versionCode 20
+        versionCode 30
         versionName "1.0"
         multiDexEnabled true
 
@@ -48,7 +48,7 @@ android {
             multiDexEnabled = true
         }
         release {
-            minifyEnabled false
+            minifyEnabled true
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             multiDexEnabled = true
@@ -95,8 +95,6 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     // https://developer.android.com/studio/build/multidex
     implementation 'androidx.multidex:multidex:2.0.1'
-    // https://github.com/square/picasso
-    implementation 'com.squareup.picasso:picasso:2.71828'
     // https://github.com/afollestad/material-dialogs
     implementation 'com.afollestad.material-dialogs:core:3.3.0'
     implementation 'com.afollestad.material-dialogs:datetime:3.3.0'
@@ -118,8 +116,8 @@ dependencies {
     implementation 'com.google.android.play:core-ktx:1.7.0'
     // https://developer.android.com/kotlin/ktx#collection
     implementation 'androidx.collection:collection-ktx:1.1.0'
-    // https://developer.android.com/kotlin/ktx#lifecycle
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.2.0'
     // https://firebase.google.com/docs/admob/android/quick-start#import_the_mobile_ads_sdk
     implementation 'com.google.firebase:firebase-ads:19.0.1'
+    // https://github.com/koral--/android-gif-drawable/
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
 }

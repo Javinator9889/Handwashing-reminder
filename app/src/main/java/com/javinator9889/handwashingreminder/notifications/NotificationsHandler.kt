@@ -40,7 +40,7 @@ class NotificationsHandler(
     private val channelDesc: String = ""
 ) {
     private val preferences: SharedPreferences =
-        HandwashingApplication.getInstance().getSharedPreferences()
+        HandwashingApplication.getInstance().sharedPreferences
     private val notificationId = 1
 
     init {

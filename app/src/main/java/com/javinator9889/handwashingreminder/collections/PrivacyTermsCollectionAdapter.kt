@@ -69,8 +69,6 @@ class TextViewContainer : BaseFragment() {
                     HtmlCompat.FROM_HTML_MODE_LEGACY
                 )
             }
-//            if (isAtLeast(AndroidVersion.O))
-//                textView.justificationMode = JUSTIFICATION_MODE_INTER_WORD
             textView.movementMethod = LinkMovementMethod.getInstance()
         }
     }
