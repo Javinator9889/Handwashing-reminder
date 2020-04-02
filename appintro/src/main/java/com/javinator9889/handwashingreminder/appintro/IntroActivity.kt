@@ -19,6 +19,7 @@
 package com.javinator9889.handwashingreminder.appintro
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -36,6 +37,7 @@ import com.github.paolorotolo.appintro.AppIntroViewPager
 import com.google.android.gms.common.ConnectionResult.SUCCESS
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.play.core.splitcompat.SplitCompat
 import com.javinator9889.handwashingreminder.activities.MainActivity
 import com.javinator9889.handwashingreminder.appintro.config.TimeConfigActivity
 import com.javinator9889.handwashingreminder.appintro.custom.SliderPageBuilder
@@ -54,6 +56,11 @@ class IntroActivity : AppIntro2(),
     View.OnClickListener {
     private lateinit var timeConfigSlide: TimeConfigIntroFragment
     private lateinit var fourthSlide: Fragment
+
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base)
+        SplitCompat.install(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

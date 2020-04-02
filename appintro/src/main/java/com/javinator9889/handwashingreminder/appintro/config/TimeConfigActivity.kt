@@ -18,9 +18,9 @@
  */
 package com.javinator9889.handwashingreminder.appintro.config
 
-//import com.afollestad.materialdialogs.datetime.timePicker
 import android.app.Activity
 import android.app.TimePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -30,6 +30,7 @@ import android.widget.TextView
 import android.widget.TimePicker
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
+import com.google.android.play.core.splitcompat.SplitCompat
 import com.javinator9889.handwashingreminder.activities.support.ActionBarBase
 import com.javinator9889.handwashingreminder.appintro.R
 import com.javinator9889.handwashingreminder.utils.AndroidVersion
@@ -59,16 +60,19 @@ class TimeConfigActivity :
     private lateinit var hours: TextView
     private lateinit var minutes: TextView
     private lateinit var clockIcon: ImageView
-//    private lateinit var timePicker: TimePicker
 
     data class Time(val hour: Int, val minute: Int)
+
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(base)
+        SplitCompat.install(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         title = findViewById(R.id.title)
-//        image = findViewById(R.id.infoImage)
         doneButton = findViewById(R.id.doneButton)
         image = findViewById(R.id.infoImage)
         setButton = findViewById(R.id.setTimeButton)
@@ -77,9 +81,7 @@ class TimeConfigActivity :
         hours = timeContainer.findViewById(R.id.hours)
         minutes = timeContainer.findViewById(R.id.minutes)
         clockIcon = timeContainer.findViewById(R.id.clockIcon)
-//        timePicker = findViewById(R.id.timePicker)
 
-//        timePicker.setIs24HourView(true)
         doneButton.setOnClickListener(this)
         setButton.setOnClickListener(this)
         hours.setOnClickListener(this)

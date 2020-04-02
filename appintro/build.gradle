@@ -64,4 +64,6 @@ dependencies {
     implementation 'com.mikepenz:material-design-iconic-typeface:2.2.0.6-kotlin@aar'
     implementation 'com.mikepenz:fontawesome-typeface:5.9.0.0-kotlin@aar'
     implementation 'com.mikepenz:ionicons-typeface:2.0.1.5-kotlin@aar'
+    // https://developer.android.com/kotlin/ktx#play-core
+    implementation 'com.google.android.play:core-ktx:1.7.0'
 }
