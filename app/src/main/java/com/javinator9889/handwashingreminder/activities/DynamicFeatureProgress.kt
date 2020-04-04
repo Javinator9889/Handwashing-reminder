@@ -18,8 +18,10 @@
  */
 package com.javinator9889.handwashingreminder.activities
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.text.format.Formatter
 import android.widget.Toast
 import com.google.android.play.core.ktx.bytesDownloaded
 import com.google.android.play.core.ktx.totalBytesToDownload
@@ -78,6 +80,7 @@ class DynamicFeatureProgress : SplitCompatBaseActivity(),
         super.finish()
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onStateUpdate(state: SplitInstallSessionState?) {
         when (state?.status()) {
             SplitInstallSessionStatus.FAILED -> {
@@ -88,17 +91,33 @@ class DynamicFeatureProgress : SplitCompatBaseActivity(),
                     ), Toast.LENGTH_LONG
                 ).show()
             }
+            SplitInstallSessionStatus.PENDING ->
+                install_progress.isIndeterminate = true
             SplitInstallSessionStatus.DOWNLOADING -> {
+                val downloadedBytes =
+                    Formatter.formatFileSize(this, state.bytesDownloaded)
+                val bytesToDownload =
+                    Formatter.formatFileSize(this, state.totalBytesToDownload)
+                bytesInfo.text = "$downloadedBytes / $bytesToDownload"
+                install_progress.isIndeterminate = false
                 install_progress.max = state.totalBytesToDownload.toInt()
                 val progress = state.bytesDownloaded.toInt()
                 if (isAtLeast(AndroidVersion.N))
                     install_progress.setProgress(progress, true)
                 else
                     install_progress.progress = progress
+                percentage.text = (
+                        (state.bytesDownloaded / state.totalBytesToDownload)
+                                * 100
+                        ).toString()
             }
-            SplitInstallSessionStatus.INSTALLING ->
+            SplitInstallSessionStatus.INSTALLING -> {
                 install_progress.isIndeterminate = true
+                bytesInfo.text = ""
+                percentage.text = getString(R.string.installing)
+            }
             SplitInstallSessionStatus.INSTALLED -> {
+                dynamic_content_title.text = getString(R.string.done)
                 if (launchOnInstall)
                     launchActivity()
             }
@@ -110,6 +129,9 @@ class DynamicFeatureProgress : SplitCompatBaseActivity(),
         Intent().setClassName(BuildConfig.APPLICATION_ID, launchActivityName)
             .also {
                 startActivity(it)
+                overridePendingTransition(
+                    android.R.anim.fade_in, android.R.anim.fade_out
+                )
                 finish()
             }
     }
