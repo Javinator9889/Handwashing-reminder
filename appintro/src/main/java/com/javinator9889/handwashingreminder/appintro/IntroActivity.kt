@@ -23,7 +23,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
 import androidx.core.app.ActivityCompat
@@ -151,7 +150,6 @@ class IntroActivity : AppIntro2(),
         } else {
             null
         }
-        Log.d("Intro", options?.toString())
         intent.putExtra(
             "title", viewHolder.title.text
         )
@@ -189,6 +187,7 @@ class IntroActivity : AppIntro2(),
         } as TimeConfigViewHolder
         view.hours.text = data.getStringExtra("hours")
         view.minutes.text = data.getStringExtra("minutes")
+        view.saveContentToTextViews()
     }
 
     override fun onSlideChanged(

@@ -89,8 +89,8 @@ class DynamicFeatureProgress : SplitCompatBaseActivity(),
                 ).show()
             }
             SplitInstallSessionStatus.DOWNLOADING -> {
-                val progress =
-                    (state.bytesDownloaded / state.totalBytesToDownload).toInt()
+                install_progress.max = state.totalBytesToDownload.toInt()
+                val progress = state.bytesDownloaded.toInt()
                 if (isAtLeast(AndroidVersion.N))
                     install_progress.setProgress(progress, true)
                 else

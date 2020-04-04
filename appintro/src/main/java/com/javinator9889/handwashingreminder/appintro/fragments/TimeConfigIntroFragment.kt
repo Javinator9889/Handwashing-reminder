@@ -30,8 +30,11 @@ import com.github.paolorotolo.appintro.AppIntroBaseFragment
 import com.javinator9889.handwashingreminder.appintro.R
 import com.javinator9889.handwashingreminder.appintro.timeconfig.TimeConfigAdapter
 import com.javinator9889.handwashingreminder.appintro.timeconfig.TimeConfigContent
+import com.javinator9889.handwashingreminder.appintro.timeconfig.TimeConfigViewHolder
 import com.javinator9889.handwashingreminder.listeners.ViewHolder
 import com.javinator9889.handwashingreminder.utils.TimeConfig
+import com.javinator9889.handwashingreminder.utils.notNull
+import kotlinx.android.synthetic.main.time_config.view.*
 import com.javinator9889.handwashingreminder.R as RBase
 
 class TimeConfigIntroFragment : AppIntroBaseFragment() {
@@ -41,7 +44,7 @@ class TimeConfigIntroFragment : AppIntroBaseFragment() {
     lateinit var fromActivity: AppCompatActivity
     var bgColor: Int = Color.WHITE
     var listener: ViewHolder.OnItemClickListener? = null
-    val viewItems = HashMap<Int, RecyclerView.ViewHolder>(3)
+    val viewItems = HashMap<Int, TimeConfigViewHolder>(3)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,9 +75,14 @@ class TimeConfigIntroFragment : AppIntroBaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        savedInstanceState?.let {
-            rvItems = it.getParcelableArray("rvItems")
+        savedInstanceState.notNull {
+            val restoredItems = it.getParcelableArray("rvItems")
                     as Array<TimeConfigContent>
+            restoredItems.forEachIndexed { i, timeConfigContent ->
+                rvItems[i].hours = timeConfigContent.hours
+                rvItems[i].minutes = timeConfigContent.minutes
+            }
+            viewItems.forEach { item -> item.value.loadContentToTextViews() }
         }
     }
 
@@ -91,7 +99,7 @@ class TimeConfigIntroFragment : AppIntroBaseFragment() {
         val rvManager = LinearLayoutManager(context)
         fromActivity.setSupportActionBar(view.findViewById(RBase.id.toolbar))
         recyclerView =
-            view.findViewById<RecyclerView>(R.id.cardsView).apply {
+            view.cardsView.apply {
                 setHasFixedSize(true)
                 layoutManager = rvManager
                 adapter = rvAdapter

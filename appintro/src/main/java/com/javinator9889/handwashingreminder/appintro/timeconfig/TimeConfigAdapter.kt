@@ -28,7 +28,7 @@ import com.javinator9889.handwashingreminder.listeners.ViewHolder
 class TimeConfigAdapter(
     private val dataset: Array<TimeConfigContent>,
     private val listener: ViewHolder.OnItemClickListener?,
-    private val viewItems: HashMap<Int, RecyclerView.ViewHolder>?
+    private val viewItems: HashMap<Int, TimeConfigViewHolder>
 ) :
     RecyclerView.Adapter<TimeConfigViewHolder>() {
     private var height = 0
@@ -50,7 +50,8 @@ class TimeConfigAdapter(
             dataset[position].title,
             dataset[position].id,
             listener,
-            height
+            height,
+            dataset[position]
         )
         viewItems?.set(dataset[position].id.toInt(), holder)
     }

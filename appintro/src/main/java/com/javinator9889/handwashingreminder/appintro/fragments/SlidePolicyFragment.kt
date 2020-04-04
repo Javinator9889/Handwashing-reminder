@@ -23,8 +23,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.github.paolorotolo.appintro.AppIntroBaseFragment
 import com.github.paolorotolo.appintro.ISlidePolicy
@@ -33,9 +31,17 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.javinator9889.handwashingreminder.activities.PrivacyTermsActivity
 import com.javinator9889.handwashingreminder.appintro.R
+import com.javinator9889.handwashingreminder.utils.notNull
+import kotlinx.android.synthetic.main.slide_policy.view.*
 import com.javinator9889.handwashingreminder.R as RBase
 
 class SlidePolicyFragment : AppIntroBaseFragment(), ISlidePolicy {
+    companion object {
+        const val FIREBASE_ANALYTICS_CHECKED = "switch:fa:status"
+        const val FIREBASE_PERFORMANCE_CHECKED = "switch:fp:status"
+        const val PRIVACY_TERMS_CHECKED = "checkbox:pr_tos:status"
+    }
+
     private lateinit var layout: ConstraintLayout
     private lateinit var firebaseAnalytics: SwitchMaterial
     private lateinit var firebasePerformance: SwitchMaterial
@@ -51,13 +57,13 @@ class SlidePolicyFragment : AppIntroBaseFragment(), ISlidePolicy {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(layoutId, container, false)
-        firebaseAnalytics = view.findViewById(R.id.firstSwitch)
-        firebasePerformance = view.findViewById(R.id.secondSwitch)
-        slidePolicyCheckBox = view.findViewById(R.id.policyCheckbox)
-        layout = view.findViewById(R.id.main)
+        firebaseAnalytics = view.firstSwitch
+        firebasePerformance = view.secondSwitch
+        slidePolicyCheckBox = view.policyCheckbox
+        layout = view.main
 
-        val image = view.findViewById<ImageView>(R.id.image)
-        val title = view.findViewById<TextView>(R.id.title)
+        val image = view.image
+        val title = view.title
         this.title?.let { title.text = it }
         this.titleColor?.let { title.setTextColor(it) }
         bgColor?.let { layout.setBackgroundColor(it) }
@@ -74,6 +80,34 @@ class SlidePolicyFragment : AppIntroBaseFragment(), ISlidePolicy {
         firebasePerformance.text =
             getString(RBase.string.firebase_performance_policy)
         return view
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.apply {
+            putBoolean(FIREBASE_ANALYTICS_CHECKED, firebaseAnalytics.isChecked)
+            putBoolean(
+                FIREBASE_PERFORMANCE_CHECKED,
+                firebasePerformance.isChecked
+            )
+            putBoolean(PRIVACY_TERMS_CHECKED, slidePolicyCheckBox.isChecked)
+        }
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        savedInstanceState.notNull {
+            firebaseAnalytics.isChecked = it.getBoolean(
+                FIREBASE_ANALYTICS_CHECKED, false
+            )
+            firebasePerformance.isChecked = it.getBoolean(
+                FIREBASE_PERFORMANCE_CHECKED, false
+            )
+            slidePolicyCheckBox.isChecked = it.getBoolean(
+                PRIVACY_TERMS_CHECKED, false
+            )
+        }
     }
 
     override fun getLayoutId(): Int = R.layout.slide_policy

@@ -33,15 +33,16 @@ import com.mikepenz.iconics.view.IconicsImageView
 class TimeConfigViewHolder(view: View) :
     RecyclerView.ViewHolder(view),
     View.OnClickListener {
-    val ddot: TextView = view.findViewById(R.id.ddot)
     val title: TextView = view.findViewById(R.id.title)
     val hours: TextView = view.findViewById(R.id.hours)
+    val ddot: TextView = view.findViewById(R.id.ddot)
     val minutes: TextView = view.findViewById(R.id.minutes)
     val image: ImageView = view.findViewById(R.id.infoImage)
     val clockIcon: IconicsImageView = view.findViewById(R.id.clockIcon)
     private val card = view.findViewById<MaterialCardView>(R.id.timeCard)
     private var listener: ViewHolder.OnItemClickListener? = null
     private var height: Int? = null
+    private lateinit var content: TimeConfigContent
     var id = 0L
 
     init {
@@ -54,25 +55,31 @@ class TimeConfigViewHolder(view: View) :
 
     override fun onClick(v: View?) {
         when (v) {
-            card, title, hours, minutes, image -> this.listener?.onItemClick(
-                this,
-                card,
-                adapterPosition,
-                id
-            )
+            card, title, hours, minutes, image -> {
+                saveContentToTextViews()
+                this.listener?.onItemClick(
+                    this,
+                    card,
+                    adapterPosition,
+                    id
+                )
+            }
         }
     }
+
 
     fun bind(
         title: CharSequence,
         id: Long,
         listener: ViewHolder.OnItemClickListener?,
-        height: Int?
+        height: Int?,
+        content: TimeConfigContent
     ) {
         this.id = id
         this.title.text = title
         this.listener = listener
         this.height = height
+        this.content = content
         val imageRes = when (id) {
             TimeConfig.BREAKFAST_ID -> R.drawable.ic_breakfast
             TimeConfig.LUNCH_ID -> R.drawable.ic_lunch
@@ -81,6 +88,17 @@ class TimeConfigViewHolder(view: View) :
         }
         adaptCardHeight()
         loadImageView(imageRes)
+        loadContentToTextViews()
+    }
+
+    fun loadContentToTextViews() {
+        hours.text = content.hours
+        minutes.text = content.minutes
+    }
+
+    fun saveContentToTextViews() {
+        content.hours = hours.text.toString()
+        content.minutes = minutes.text.toString()
     }
 
     private fun adaptCardHeight() {

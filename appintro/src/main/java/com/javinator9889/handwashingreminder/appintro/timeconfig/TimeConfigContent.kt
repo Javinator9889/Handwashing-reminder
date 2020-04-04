@@ -22,18 +22,24 @@ import android.os.Parcel
 import android.os.Parcelable
 
 class TimeConfigContent(val title: String, val id: Long) : Parcelable {
+    var hours: String = ""
+    var minutes: String = ""
+
     constructor(parcel: Parcel) : this(
         parcel.readString()!!, parcel.readLong()
-    )
+    ) {
+        hours = parcel.readString() ?: ""
+        minutes = parcel.readString() ?: ""
+    }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(title)
         parcel.writeLong(id)
+        parcel.writeString(hours)
+        parcel.writeString(minutes)
     }
 
-    override fun describeContents(): Int {
-        return 0
-    }
+    override fun describeContents(): Int = 0
 
     companion object CREATOR : Parcelable.Creator<TimeConfigContent> {
         override fun createFromParcel(parcel: Parcel): TimeConfigContent {
