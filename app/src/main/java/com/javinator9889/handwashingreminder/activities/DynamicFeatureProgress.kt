@@ -19,6 +19,7 @@
 package com.javinator9889.handwashingreminder.activities
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.format.Formatter
@@ -45,9 +46,9 @@ class DynamicFeatureProgress : SplitCompatBaseActivity(),
         const val CLASS_NAME = "modules:class_name"
     }
 
+    private var launchOnInstall = false
     private lateinit var module: String
     private lateinit var launchActivityName: String
-    private var launchOnInstall = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,18 +66,25 @@ class DynamicFeatureProgress : SplitCompatBaseActivity(),
         }
         if (!splitInstallManager.installedModules.contains(module)) {
             setContentView(R.layout.dynamic_content_pb)
+            overridePendingTransition(android.R.anim.fade_in, 0)
             val installRequest = SplitInstallRequest.newBuilder()
                 .addModule(module)
                 .build()
             splitInstallManager.startInstall(installRequest)
         } else {
+            setResult(Activity.RESULT_OK)
             if (launchOnInstall)
                 launchActivity()
+            else
+                finish()
         }
     }
 
     override fun finish() {
         splitInstallManager.unregisterListener(this)
+//        overridePendingTransition(
+//            android.R.anim.fade_in, android.R.anim.fade_out
+//        )
         super.finish()
     }
 
@@ -91,8 +99,14 @@ class DynamicFeatureProgress : SplitCompatBaseActivity(),
                     ), Toast.LENGTH_LONG
                 ).show()
             }
-            SplitInstallSessionStatus.PENDING ->
+            SplitInstallSessionStatus.CANCELED -> {
+                setResult(Activity.RESULT_CANCELED)
+                finish()
+            }
+            SplitInstallSessionStatus.PENDING -> {
                 install_progress.isIndeterminate = true
+                percentage.text = getString(R.string.preparing)
+            }
             SplitInstallSessionStatus.DOWNLOADING -> {
                 val downloadedBytes =
                     Formatter.formatFileSize(this, state.bytesDownloaded)
@@ -106,10 +120,10 @@ class DynamicFeatureProgress : SplitCompatBaseActivity(),
                     install_progress.setProgress(progress, true)
                 else
                     install_progress.progress = progress
-                percentage.text = (
-                        (state.bytesDownloaded / state.totalBytesToDownload)
-                                * 100
-                        ).toString()
+                val currentPercentage =
+                    (state.bytesDownloaded * 100 / state.totalBytesToDownload)
+                        .toInt()
+                percentage.text = "$currentPercentage %"
             }
             SplitInstallSessionStatus.INSTALLING -> {
                 install_progress.isIndeterminate = true
@@ -118,8 +132,11 @@ class DynamicFeatureProgress : SplitCompatBaseActivity(),
             }
             SplitInstallSessionStatus.INSTALLED -> {
                 dynamic_content_title.text = getString(R.string.done)
+                setResult(Activity.RESULT_OK)
                 if (launchOnInstall)
                     launchActivity()
+                else
+                    finish()
             }
             else -> return
         }
@@ -129,9 +146,6 @@ class DynamicFeatureProgress : SplitCompatBaseActivity(),
         Intent().setClassName(BuildConfig.APPLICATION_ID, launchActivityName)
             .also {
                 startActivity(it)
-                overridePendingTransition(
-                    android.R.anim.fade_in, android.R.anim.fade_out
-                )
                 finish()
             }
     }

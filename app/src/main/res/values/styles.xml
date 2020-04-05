@@ -23,4 +23,8 @@
         <item name="android:height">15dp</item>
     </style>
 
+    <style name="AppTheme.Launcher" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/launch_screen</item>
+    </style>
+
 </resources>

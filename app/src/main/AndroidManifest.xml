@@ -21,7 +21,9 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-5517327035817913~5915164054" />
 
-        <activity android:name="com.javinator9889.handwashingreminder.activities.LauncherActivity">
+        <activity
+            android:name="com.javinator9889.handwashingreminder.activities.LauncherActivity"
+            android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

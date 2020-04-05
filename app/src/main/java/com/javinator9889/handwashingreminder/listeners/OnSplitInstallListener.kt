@@ -14,13 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  *
- * Created by Javinator9889 on 2/04/20 - Handwashing reminder.
+ * Created by Javinator9889 on 5/04/20 - Handwashing reminder.
  */
 package com.javinator9889.handwashingreminder.listeners
 
-class SplitInstall private constructor() {
-    interface OnSplitInstall {
-        fun onInstallSuccessful(moduleName: String)
-        fun onInstallFailure(moduleName: String, errorCode: Int)
-    }
+import java.io.Serializable
+
+interface OnSplitInstallListener : Serializable {
+    fun onInstall(module: String)
+    fun onFailure(module: String)
 }

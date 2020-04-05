@@ -24,15 +24,16 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.SplitCompatBaseActivity
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
+import com.javinator9889.handwashingreminder.utils.Ads
 import com.javinator9889.handwashingreminder.utils.AndroidVersion
 import com.javinator9889.handwashingreminder.utils.isAtLeast
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.concurrent.thread
 
 class MainActivity : SplitCompatBaseActivity() {
@@ -66,15 +67,22 @@ class MainActivity : SplitCompatBaseActivity() {
                     ).show()
                     Log.i("MainActivity", "AppIntro module uninstalled")
                 }
-        val app = HandwashingApplication.getInstance()
-        val frameView = findViewById<FrameLayout>(R.id.ad_container)
+        app = HandwashingApplication.getInstance()
+        app.adLoader?.loadAdForViewGroup(ad_container)
 //        app.adLoader?.loadAdForViewGroup(frameView)
 //            frameView.addView(app.adLoader!!.adView)
 //            app.adLoader!!.loadAd()
 
-//        button.setOnClickListener {
-//            app.adLoader?.loadAdForViewGroup(frameView)
-//        }
+        button.setOnClickListener {
+            app.adLoader?.loadAdForViewGroup(ad_container)
+        }
+        ads_remove.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                ads_remove.isEnabled = false
+                ads_remove.text = "Ads will be uninstalled"
+                splitInstallManager.deferredUninstall(mutableListOf(Ads.MODULE_NAME))
+            }
+        }
 //        app.adLoader?.
 
 //        app = HandwashingApplication.getInstance()
@@ -145,6 +153,11 @@ class MainActivity : SplitCompatBaseActivity() {
         loc.lat
         loc.lon*/
 //        button.setOnClickListener(this)
+    }
+
+    override fun onDestroy() {
+        app.adLoader?.destroy()
+        super.onDestroy()
     }
 
     private fun runProgressBar() {

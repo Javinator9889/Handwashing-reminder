@@ -188,6 +188,7 @@ class IntroActivity : AppIntro2(),
         view.hours.text = data.getStringExtra("hours")
         view.minutes.text = data.getStringExtra("minutes")
         view.saveContentToTextViews()
+        setSwipeLock()
     }
 
     override fun onSlideChanged(
@@ -196,7 +197,7 @@ class IntroActivity : AppIntro2(),
     ) {
         when (newFragment) {
             timeConfigSlide -> {
-                setSwipeLock(true)
+                setSwipeLock()
                 return
             }
             else -> setSwipeLock(false)
@@ -210,7 +211,18 @@ class IntroActivity : AppIntro2(),
         super.onSlideChanged(oldFragment, newFragment)
     }
 
-    protected fun isTimeConfigValidState(
+    private fun setSwipeLock() {
+        var swipeLock = false
+        timeConfigSlide.viewItems.forEach { item ->
+            if (item.value.hours.text == "" && item.value.minutes.text == "") {
+                swipeLock = true
+                return@forEach
+            }
+        }
+        setSwipeLock(swipeLock)
+    }
+
+    private fun isTimeConfigValidState(
         timeConfigIntroFragment: Fragment?
     ): Boolean {
         return when (timeConfigIntroFragment) {

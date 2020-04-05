@@ -46,6 +46,7 @@ class SlidePolicyFragment : AppIntroBaseFragment(), ISlidePolicy {
     private lateinit var firebaseAnalytics: SwitchMaterial
     private lateinit var firebasePerformance: SwitchMaterial
     private lateinit var slidePolicyCheckBox: MaterialCheckBox
+    private var wasPolicyActivityLaunched = false
     var title: String? = null
     var titleColor: Int? = null
     var imageDrawable: Int? = null
@@ -70,9 +71,10 @@ class SlidePolicyFragment : AppIntroBaseFragment(), ISlidePolicy {
         imageDrawable?.let { image.setImageResource(it) }
         slidePolicyCheckBox.text = getString(R.string.slide_policy_text)
         slidePolicyCheckBox.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
+            if (isChecked && !wasPolicyActivityLaunched) {
                 val intent = Intent(context, PrivacyTermsActivity::class.java)
                 startActivity(intent)
+                wasPolicyActivityLaunched = true
             }
         }
         firebaseAnalytics.text =
@@ -104,9 +106,10 @@ class SlidePolicyFragment : AppIntroBaseFragment(), ISlidePolicy {
             firebasePerformance.isChecked = it.getBoolean(
                 FIREBASE_PERFORMANCE_CHECKED, false
             )
-            slidePolicyCheckBox.isChecked = it.getBoolean(
+            wasPolicyActivityLaunched = it.getBoolean(
                 PRIVACY_TERMS_CHECKED, false
             )
+            slidePolicyCheckBox.isChecked = wasPolicyActivityLaunched
         }
     }
 

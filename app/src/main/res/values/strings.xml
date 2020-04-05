@@ -27,5 +27,6 @@
     <string name="dynamic_module_loading_error">Oops! Something went
         wrong 😥 - please retry the process</string>
     <string name="done">Done</string>
+    <string name="preparing">Preparing…</string>
     <string name="installing">Installing…</string>
 </resources>

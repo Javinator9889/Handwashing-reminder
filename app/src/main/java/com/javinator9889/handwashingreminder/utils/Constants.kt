@@ -20,10 +20,10 @@ package com.javinator9889.handwashingreminder.utils
 
 const val TIME_CHANNEL_ID = "timeNotificationsChannel"
 const val ACTIVITY_CHANNEL_ID = "activityNotificationsChannel"
-const val ADMOB_APP_NATIVE_ID = "ca-app-pub-5517327035817913/5656089851"
 
 class Preferences {
     companion object {
+        const val NAME = "handwasingreminder:prefs"
         const val CREATE_CHANNEL_KEY = "create_channel_req"
         const val APP_INIT_KEY = "application_initialized"
         const val ADS_ENABLED = "app_admob_enabled"
@@ -38,11 +38,22 @@ class TimeConfig {
     }
 }
 
-class Modules {
-    companion object AppIntro {
+class AppIntro {
+    companion object Modules {
         const val MODULE_NAME = "appintro"
         const val PACKAGE_NAME =
             "com.javinator9889.handwashingreminder.appintro"
         const val MAIN_ACTIVITY_NAME = "IntroActivity"
     }
 }
+
+class Ads {
+    companion object Modules {
+        const val MODULE_NAME = "ads"
+        const val PACKAGE_NAME = "com.javinator9889.handwashingreminder.ads"
+        const val CLASS_NAME = "AdLoaderImpl"
+        const val PROVIDER_NAME = "Provider"
+    }
+}
+
+const val ADS_DYNAMIC_FEATURE_CODE = 512

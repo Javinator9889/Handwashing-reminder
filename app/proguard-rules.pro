@@ -27,3 +27,4 @@
 }
 
 -keep class com.javinator9889.appintro.*
+-keep class com.javinator9889.ads.*

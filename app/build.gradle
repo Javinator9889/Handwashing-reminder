@@ -59,7 +59,7 @@ android {
         preDexLibraries true
         javaMaxHeapSize "1G"
     }
-    dynamicFeatures = [":appintro"]
+    dynamicFeatures = [":appintro", ":ads"]
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -69,6 +69,8 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
+
+
 }
 
 dependencies {
@@ -116,8 +118,8 @@ dependencies {
     implementation 'com.google.android.play:core-ktx:1.7.0'
     // https://developer.android.com/kotlin/ktx#collection
     implementation 'androidx.collection:collection-ktx:1.1.0'
-    // https://firebase.google.com/docs/admob/android/quick-start#import_the_mobile_ads_sdk
-    implementation 'com.google.firebase:firebase-ads:19.0.1'
     // https://github.com/koral--/android-gif-drawable/
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
+    // https://kotlinlang.org/docs/reference/reflection.html
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 }
