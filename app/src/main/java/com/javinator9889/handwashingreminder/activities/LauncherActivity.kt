@@ -23,30 +23,24 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
-import com.javinator9889.handwashingreminder.utils.ADS_DYNAMIC_FEATURE_CODE
-import com.javinator9889.handwashingreminder.utils.Ads
-import com.javinator9889.handwashingreminder.utils.AppIntro
+import com.javinator9889.handwashingreminder.utils.*
 import com.javinator9889.handwashingreminder.utils.Preferences.Companion.ADS_ENABLED
 import com.javinator9889.handwashingreminder.utils.Preferences.Companion.APP_INIT_KEY
-import java.util.concurrent.CyclicBarrier
-import kotlin.concurrent.thread
 
 class LauncherActivity : AppCompatActivity() {
-    private val barrier = CyclicBarrier(2)
-    private lateinit var sharedPreferences: SharedPreferences
+    private var launchOnInstall = false
     private lateinit var app: HandwashingApplication
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.splash_screen)
         app = HandwashingApplication.getInstance()
         sharedPreferences = app.sharedPreferences
         installRequiredModules()
-        thread(start = true) {
-            barrier.await()
-            launchActivity()
-        }
     }
 
     override fun onActivityResult(
@@ -56,62 +50,62 @@ class LauncherActivity : AppCompatActivity() {
     ) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            ADS_DYNAMIC_FEATURE_CODE -> {
-                when (resultCode) {
-                    Activity.RESULT_OK -> {
-                        val className = "${Ads.PACKAGE_NAME}.${Ads
-                            .CLASS_NAME}\$${Ads.PROVIDER_NAME}"
-                        val adProvider = Class.forName(className).kotlin
-                            .objectInstance as AdLoader.Provider
-                        app.adLoader = adProvider.instance(app)
+            DYNAMIC_FEATURE_INSTALL_RESULT_CODE -> {
+                if (sharedPreferences.getBoolean(ADS_ENABLED, true)) {
+                    when (resultCode) {
+                        Activity.RESULT_OK -> {
+                            val className = "${Ads.PACKAGE_NAME}.${Ads
+                                .CLASS_NAME}\$${Ads.PROVIDER_NAME}"
+                            val adProvider = Class.forName(className).kotlin
+                                .objectInstance as AdLoader.Provider
+                            app.adLoader = adProvider.instance(app)
+                            data.notNull {
+                                startActivity(data)
+                                finish()
+                            }
+                        }
+                        Activity.RESULT_CANCELED -> app.adLoader = null
                     }
-                    Activity.RESULT_CANCELED -> app.adLoader = null
                 }
+                if (!launchOnInstall) {
+                    Intent(this, MainActivity::class.java).also {
+                        startActivity(it)
+                        overridePendingTransition(0, android.R.anim.fade_out)
+                    }
+                }
+                finish()
             }
-        }
-        thread(start = true) {
-            barrier.await()
-        }
-    }
-
-    private fun launchActivity() {
-        runOnUiThread {
-            val launchIntent =
-                if (sharedPreferences.getBoolean(APP_INIT_KEY, true)) {
-                    createDynamicFeatureActivityIntent(
-                        AppIntro.MODULE_NAME, true,
-                        AppIntro.MAIN_ACTIVITY_NAME, AppIntro.PACKAGE_NAME
-                    )
-                } else {
-                    Intent(this, MainActivity::class.java)
-                }
-            startActivity(launchIntent)
-            /*overridePendingTransition(
-                android.R.anim.fade_in, android.R.anim.fade_out
-            )*/
-            finish()
-            overridePendingTransition(0, android.R.anim.fade_out)
         }
     }
 
     private fun installRequiredModules() {
-        if (sharedPreferences.getBoolean(ADS_ENABLED, true)) {
-            createDynamicFeatureActivityIntent(
-                Ads.MODULE_NAME,
-                false
-            ).also {
-                startActivityForResult(it, ADS_DYNAMIC_FEATURE_CODE)
-            }
+        val modules = ArrayList<String>(MODULE_COUNT)
+        if (sharedPreferences.getBoolean(ADS_ENABLED, true))
+            modules.add(Ads.MODULE_NAME)
+        if (sharedPreferences.getBoolean(APP_INIT_KEY, true)) {
+            modules.add(AppIntro.MODULE_NAME)
+            launchOnInstall = true
         }
+        val intent = if (launchOnInstall) {
+            createDynamicFeatureActivityIntent(
+                modules.toTypedArray(),
+                launchOnInstall,
+                AppIntro.MAIN_ACTIVITY_NAME,
+                AppIntro.PACKAGE_NAME
+            )
+        } else {
+            createDynamicFeatureActivityIntent(modules.toTypedArray())
+        }
+        startActivityForResult(intent, DYNAMIC_FEATURE_INSTALL_RESULT_CODE)
     }
 
     private fun createDynamicFeatureActivityIntent(
-        moduleName: String,
+        modules: Array<String>,
         launchOnInstall: Boolean = false,
         className: String = "",
         packageName: String = ""
     ): Intent = Intent(this, DynamicFeatureProgress::class.java).also {
-        it.putExtra(DynamicFeatureProgress.MODULES, moduleName)
+        it.putExtra(DynamicFeatureProgress.MODULES, modules)
         it.putExtra(DynamicFeatureProgress.LAUNCH_ON_INSTALL, launchOnInstall)
         it.putExtra(DynamicFeatureProgress.CLASS_NAME, className)
         it.putExtra(DynamicFeatureProgress.PACKAGE_NAME, packageName)

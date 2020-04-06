@@ -56,4 +56,6 @@ class Ads {
     }
 }
 
-const val ADS_DYNAMIC_FEATURE_CODE = 512
+const val MODULE_COUNT = 2
+
+const val DYNAMIC_FEATURE_INSTALL_RESULT_CODE = 32

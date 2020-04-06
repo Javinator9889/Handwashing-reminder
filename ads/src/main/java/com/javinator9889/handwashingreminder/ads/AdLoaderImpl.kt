@@ -19,6 +19,7 @@
 package com.javinator9889.handwashingreminder.ads
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +35,7 @@ import com.javinator9889.handwashingreminder.gms.ads.AdLoader
 import com.google.android.gms.ads.AdLoader as AdBase
 
 
+const val ADMOB_APP_ID = "ca-app-pub-5517327035817913~5915164054"
 const val ADMOB_APP_NATIVE_ID = "ca-app-pub-5517327035817913/5656089851"
 const val ADMOB_APP_NATIVE_TEST_ID = "ca-app-pub-3940256099942544/2247696110"
 
@@ -47,7 +49,7 @@ class AdLoaderImpl private constructor(context: Context?) : AdLoader {
                 "Context cannot be null when creating " +
                         "the first instance"
             )
-        MobileAds.initialize(context)
+        MobileAds.initialize(context, ADMOB_APP_ID)
         val videoOptions = VideoOptions.Builder()
             .setStartMuted(true)
             .build()
@@ -60,6 +62,10 @@ class AdLoaderImpl private constructor(context: Context?) : AdLoader {
         private var instance: AdLoaderImpl? = null
 
         override fun instance(context: Context?): AdLoader {
+            Log.i(
+                "AdLoaderImpl", "Instance called - context null? ${context
+                        == null}"
+            )
             this.instance = instance ?: AdLoaderImpl(context)
             return instance!!
         }

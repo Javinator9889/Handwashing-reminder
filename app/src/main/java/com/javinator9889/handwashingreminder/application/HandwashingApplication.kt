@@ -19,14 +19,10 @@
 package com.javinator9889.handwashingreminder.application
 
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import androidx.multidex.MultiDex
 import com.google.android.play.core.splitcompat.SplitCompat
-import com.javinator9889.handwashingreminder.activities.DynamicFeatureProgress
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
-import com.javinator9889.handwashingreminder.utils.Ads.Modules.MODULE_NAME
-import com.javinator9889.handwashingreminder.utils.Preferences.Companion.ADS_ENABLED
 import com.javinator9889.handwashingreminder.utils.Preferences.Companion.NAME
 import com.mikepenz.iconics.Iconics
 import javinator9889.localemanager.application.BaseApplication
@@ -59,17 +55,6 @@ class HandwashingApplication : BaseApplication() {
         instance = this
         sharedPreferences = getCustomSharedPreferences(this)!!
         Iconics.init(this)
-//        initAdMobs()
-    }
-
-    private fun initAdMobs() {
-        if (sharedPreferences.getBoolean(ADS_ENABLED, true)) {
-            Intent(this, DynamicFeatureProgress::class.java).also {
-                it.putExtra(DynamicFeatureProgress.MODULES, MODULE_NAME)
-                it.putExtra(DynamicFeatureProgress.LAUNCH_ON_INSTALL, false)
-                startActivity(it)
-            }
-        }
     }
 
     /**

@@ -46,15 +46,17 @@ class DynamicFeatureProgress : SplitCompatBaseActivity(),
         const val CLASS_NAME = "modules:class_name"
     }
 
+    private var moduleCount = 0
+    private var currentModule = 1
     private var launchOnInstall = false
-    private lateinit var module: String
+    private lateinit var modules: Array<String>
     private lateinit var launchActivityName: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         splitInstallManager.registerListener(this)
-        module =
-            intent.getStringExtra(MODULES) ?: throw NullPointerException(
+        modules =
+            intent.getStringArrayExtra(MODULES) ?: throw NullPointerException(
                 "An array of modules must be provided for " +
                         "instantiating this class"
             )
@@ -64,27 +66,37 @@ class DynamicFeatureProgress : SplitCompatBaseActivity(),
             val className = intent.getStringExtra(CLASS_NAME)
             launchActivityName = "$packageName.$className"
         }
-        if (!splitInstallManager.installedModules.contains(module)) {
+        val installRequestBuilder = SplitInstallRequest.newBuilder()
+        modules.forEach { module ->
+            if (!splitInstallManager.installedModules.contains(module)) {
+                installRequestBuilder.addModule(module)
+                ++moduleCount
+            }
+        }
+        if (moduleCount > 0) {
             setContentView(R.layout.dynamic_content_pb)
             overridePendingTransition(android.R.anim.fade_in, 0)
-            val installRequest = SplitInstallRequest.newBuilder()
-                .addModule(module)
-                .build()
+            val installRequest = installRequestBuilder.build()
             splitInstallManager.startInstall(installRequest)
         } else {
-            setResult(Activity.RESULT_OK)
-            if (launchOnInstall)
-                launchActivity()
-            else
-                finish()
+            setResultWithIntent(Activity.RESULT_OK)
+            finish()
         }
+    }
+
+    private fun setResultWithIntent(resultCode: Int) {
+        val intent = if (launchOnInstall)
+            Intent().setClassName(
+                BuildConfig.APPLICATION_ID,
+                launchActivityName
+            )
+        else
+            null
+        setResult(resultCode, intent)
     }
 
     override fun finish() {
         splitInstallManager.unregisterListener(this)
-//        overridePendingTransition(
-//            android.R.anim.fade_in, android.R.anim.fade_out
-//        )
         super.finish()
     }
 
@@ -100,7 +112,7 @@ class DynamicFeatureProgress : SplitCompatBaseActivity(),
                 ).show()
             }
             SplitInstallSessionStatus.CANCELED -> {
-                setResult(Activity.RESULT_CANCELED)
+                setResultWithIntent(Activity.RESULT_CANCELED)
                 finish()
             }
             SplitInstallSessionStatus.PENDING -> {
@@ -131,22 +143,14 @@ class DynamicFeatureProgress : SplitCompatBaseActivity(),
                 percentage.text = getString(R.string.installing)
             }
             SplitInstallSessionStatus.INSTALLED -> {
-                dynamic_content_title.text = getString(R.string.done)
-                setResult(Activity.RESULT_OK)
-                if (launchOnInstall)
-                    launchActivity()
-                else
+                ++currentModule
+                if (currentModule >= moduleCount) {
+                    dynamic_content_title.text = getString(R.string.done)
+                    setResultWithIntent(Activity.RESULT_OK)
                     finish()
+                }
             }
             else -> return
         }
-    }
-
-    private fun launchActivity() {
-        Intent().setClassName(BuildConfig.APPLICATION_ID, launchActivityName)
-            .also {
-                startActivity(it)
-                finish()
-            }
     }
 }
