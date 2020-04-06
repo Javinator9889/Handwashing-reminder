@@ -108,8 +108,8 @@ class IntroActivity : AppIntro2(),
 
         showSkipButton(false)
         showStatusBar(true)
-        backButtonVisibilityWithDone = true;
-        setIndicatorColor(Color.DKGRAY, Color.GRAY);
+        backButtonVisibilityWithDone = true
+        setIndicatorColor(Color.DKGRAY, Color.GRAY)
         nextButton.setOnClickListener(this)
     }
 
@@ -260,7 +260,7 @@ class IntroActivity : AppIntro2(),
             timeConfigSlide -> {
                 var isTimeSet = true
                 for (view in timeConfigSlide.viewItems) {
-                    val viewHolder = view.value as TimeConfigViewHolder
+                    val viewHolder = view.value
                     val hours = viewHolder.hours
                     val minutes = viewHolder.minutes
                     if (hours.text == "" || minutes.text == "") {
