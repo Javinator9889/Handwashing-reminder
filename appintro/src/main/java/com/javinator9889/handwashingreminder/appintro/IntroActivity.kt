@@ -25,6 +25,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
+import androidx.annotation.Keep
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.edit
@@ -51,6 +52,7 @@ import com.javinator9889.handwashingreminder.R as RBase
 import com.javinator9889.handwashingreminder.appintro.R as RIntro
 
 
+@Keep
 class IntroActivity : AppIntro2(),
     ViewHolder.OnItemClickListener,
     AppIntroViewPager.OnNextPageRequestedListener,

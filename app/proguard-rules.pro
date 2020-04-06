@@ -14,11 +14,13 @@
 
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+-keepattributes SourceFile,LineNumberTable
 
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
-#-renamesourcefileattribute SourceFile
+-renamesourcefileattribute SourceFile
+
+-optimizationpasses 4
 
 # https://github.com/mikepenz/Android-Iconics#proguard
 -keep class .R
@@ -26,5 +28,20 @@
     <fields>;
 }
 
--keep class com.javinator9889.handwashingreminder.appintro.*
--keep class com.javinator9889.handwashingreminder.ads.*
+-keep class com.javinator9889.handwashingreminder.ads.AdLoaderImpl {
+    com.javinator9889.handwashingreminder.ads.AdLoaderImpl$Provider Provider;
+}
+
+-keep class com.javinator9889.handwashingreminder.ads.AdLoaderImpl$Provider {
+    *;
+}
+
+-keep class kotlin.Metadata {
+    *;
+}
+
+# keep everything in this package from being removed or renamed
+#-keep class com.javinator9889.handwashingreminder.appintro.** { *; }
+
+# keep everything in this package from being removed or renamed
+#-keep class com.javinator9889.handwashingreminder.ads.** { *; }

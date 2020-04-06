@@ -1,6 +1,6 @@
 apply plugin: 'com.android.dynamic-feature'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 29
@@ -11,6 +11,16 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
+    }
+
+    buildTypes {
+        beta {
+            initWith(debug)
+            proguardFiles 'proguard-rules.pro'
+        }
+        release {
+            proguardFiles 'proguard-rules.pro'
+        }
     }
 }
 

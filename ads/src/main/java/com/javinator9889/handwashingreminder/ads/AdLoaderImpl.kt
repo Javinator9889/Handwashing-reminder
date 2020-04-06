@@ -24,6 +24,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.annotation.Keep
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
@@ -39,6 +40,7 @@ const val ADMOB_APP_ID = "ca-app-pub-5517327035817913~5915164054"
 const val ADMOB_APP_NATIVE_ID = "ca-app-pub-5517327035817913/5656089851"
 const val ADMOB_APP_NATIVE_TEST_ID = "ca-app-pub-3940256099942544/2247696110"
 
+@Keep
 class AdLoaderImpl private constructor(context: Context?) : AdLoader {
     private val adOptions: NativeAdOptions
     private var currentNativeAd: UnifiedNativeAd? = null
@@ -58,7 +60,8 @@ class AdLoaderImpl private constructor(context: Context?) : AdLoader {
             .build()
     }
 
-    object Provider : AdLoader.Provider {
+    @Keep
+    companion object Provider : AdLoader.Provider {
         private var instance: AdLoaderImpl? = null
 
         override fun instance(context: Context?): AdLoader {
