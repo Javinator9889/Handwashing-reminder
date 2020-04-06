@@ -82,7 +82,7 @@ class LauncherActivity : AppCompatActivity() {
         val modules = ArrayList<String>(MODULE_COUNT)
         if (sharedPreferences.getBoolean(ADS_ENABLED, true))
             modules.add(Ads.MODULE_NAME)
-        if (sharedPreferences.getBoolean(APP_INIT_KEY, true)) {
+        if (!sharedPreferences.getBoolean(APP_INIT_KEY, false)) {
             modules.add(AppIntro.MODULE_NAME)
             launchOnInstall = true
         }

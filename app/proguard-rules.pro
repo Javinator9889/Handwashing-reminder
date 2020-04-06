@@ -26,5 +26,5 @@
     <fields>;
 }
 
--keep class com.javinator9889.appintro.*
--keep class com.javinator9889.ads.*
+-keep class com.javinator9889.handwashingreminder.appintro.*
+-keep class com.javinator9889.handwashingreminder.ads.*
