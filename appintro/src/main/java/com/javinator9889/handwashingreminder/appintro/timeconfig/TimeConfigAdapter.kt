@@ -53,7 +53,7 @@ class TimeConfigAdapter(
             height,
             dataset[position]
         )
-        viewItems?.set(dataset[position].id.toInt(), holder)
+        viewItems[dataset[position].id.toInt()] = holder
     }
 
     override fun getItemCount(): Int = dataset.size

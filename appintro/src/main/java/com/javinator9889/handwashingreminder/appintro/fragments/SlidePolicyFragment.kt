@@ -43,8 +43,8 @@ class SlidePolicyFragment : AppIntroBaseFragment(), ISlidePolicy {
     }
 
     private lateinit var layout: ConstraintLayout
-    private lateinit var firebaseAnalytics: SwitchMaterial
-    private lateinit var firebasePerformance: SwitchMaterial
+    lateinit var firebaseAnalytics: SwitchMaterial
+    lateinit var firebasePerformance: SwitchMaterial
     private lateinit var slidePolicyCheckBox: MaterialCheckBox
     private var wasPolicyActivityLaunched = false
     var title: String? = null

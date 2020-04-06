@@ -27,6 +27,11 @@ class Preferences {
         const val CREATE_CHANNEL_KEY = "create_channel_req"
         const val APP_INIT_KEY = "application_initialized"
         const val ADS_ENABLED = "app_admob_enabled"
+        const val BREAKFAST_TIME = "app:breakfast"
+        const val LUNCH_TIME = "app:lunch"
+        const val DINNER_TIME = "app:dinner"
+        const val ANALYTICS_ENABLED = "firebase:analytics"
+        const val PERFORMANCE_ENABLED = "firebase:performance"
     }
 }
 

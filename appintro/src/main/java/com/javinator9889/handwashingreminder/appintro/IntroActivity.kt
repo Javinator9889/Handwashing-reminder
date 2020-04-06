@@ -27,6 +27,7 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
+import androidx.core.content.edit
 import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,6 +44,7 @@ import com.javinator9889.handwashingreminder.appintro.custom.SliderPageBuilder
 import com.javinator9889.handwashingreminder.appintro.fragments.SlidePolicyFragment
 import com.javinator9889.handwashingreminder.appintro.fragments.TimeConfigIntroFragment
 import com.javinator9889.handwashingreminder.appintro.timeconfig.TimeConfigViewHolder
+import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.listeners.ViewHolder
 import com.javinator9889.handwashingreminder.utils.*
 import com.javinator9889.handwashingreminder.R as RBase
@@ -53,8 +55,9 @@ class IntroActivity : AppIntro2(),
     ViewHolder.OnItemClickListener,
     AppIntroViewPager.OnNextPageRequestedListener,
     View.OnClickListener {
-    private lateinit var timeConfigSlide: TimeConfigIntroFragment
     private lateinit var fourthSlide: Fragment
+    private lateinit var policySlide: SlidePolicyFragment
+    private lateinit var timeConfigSlide: TimeConfigIntroFragment
 
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
@@ -94,7 +97,7 @@ class IntroActivity : AppIntro2(),
             addSlide(fourthSlide)
         }
 
-        val policySlide = SlidePolicyFragment().apply {
+        policySlide = SlidePolicyFragment().apply {
             title = this@IntroActivity
                 .getString(RIntro.string.privacy_policy_title)
             imageDrawable = RIntro.drawable.ic_privacy
@@ -112,6 +115,34 @@ class IntroActivity : AppIntro2(),
 
     override fun onDonePressed(currentFragment: Fragment?) {
         super.onDonePressed(currentFragment)
+        val sharedPreferences =
+            HandwashingApplication.getInstance().sharedPreferences
+        sharedPreferences.edit {
+            timeConfigSlide.viewItems.forEach { entry ->
+                val time = "${entry.value.hours.text}:${entry.value.minutes}"
+                when (entry.key) {
+                    TimeConfig.BREAKFAST_ID.toInt() ->
+                        putString(Preferences.BREAKFAST_TIME, time)
+                    TimeConfig.LUNCH_ID.toInt() ->
+                        putString(Preferences.LUNCH_TIME, time)
+                    TimeConfig.DINNER_ID.toInt() ->
+                        putString(Preferences.DINNER_TIME, time)
+                }
+            }
+            putBoolean(
+                Preferences.ANALYTICS_ENABLED,
+                policySlide.firebaseAnalytics.isChecked
+            )
+            putBoolean(
+                Preferences.PERFORMANCE_ENABLED,
+                policySlide.firebasePerformance.isChecked
+            )
+            putBoolean(
+                Preferences.ADS_ENABLED,
+                sharedPreferences.getBoolean(Preferences.ADS_ENABLED, true)
+            )
+            putBoolean(Preferences.APP_INIT_KEY, true)
+        }
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         this.finish()
