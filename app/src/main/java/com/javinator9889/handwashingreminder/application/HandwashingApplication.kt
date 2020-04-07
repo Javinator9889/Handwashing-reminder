@@ -23,6 +23,8 @@ import android.content.SharedPreferences
 import androidx.multidex.MultiDex
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
+import com.javinator9889.handwashingreminder.graphics.ImageCache
+import com.javinator9889.handwashingreminder.utils.IMAGE_CACHE_DIR
 import com.javinator9889.handwashingreminder.utils.Preferences.Companion.NAME
 import com.mikepenz.iconics.Iconics
 import javinator9889.localemanager.application.BaseApplication
@@ -32,6 +34,7 @@ import javinator9889.localemanager.utils.languagesupport.LanguagesSupport.Langua
 class HandwashingApplication : BaseApplication() {
     lateinit var sharedPreferences: SharedPreferences
     var adLoader: AdLoader? = null
+    lateinit var imageCacheParams: ImageCache.ImageCacheParams
 
     companion object {
         private lateinit var instance: HandwashingApplication
@@ -55,6 +58,8 @@ class HandwashingApplication : BaseApplication() {
         instance = this
         sharedPreferences = getCustomSharedPreferences(this)!!
         Iconics.init(this)
+        imageCacheParams = ImageCache.ImageCacheParams(this, IMAGE_CACHE_DIR)
+        imageCacheParams.setMemCacheSizePercent(0.25f)
     }
 
     /**

@@ -11,18 +11,15 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-        multiDexEnabled = true
     }
 
     buildTypes {
         beta {
             initWith(debug)
             proguardFiles 'proguard-rules.pro'
-            multiDexEnabled = true
         }
         release {
             proguardFiles 'proguard-rules.pro'
-            multiDexEnabled = true
         }
     }
 }

@@ -26,7 +26,7 @@ android {
         applicationId "com.javinator9889.handwashingreminder"
         minSdkVersion 17
         targetSdkVersion 29
-        versionCode 44
+        versionCode 45
         versionName "1.0"
         multiDexEnabled true
 
@@ -124,5 +124,6 @@ dependencies {
     // https://kotlinlang.org/docs/reference/reflection.html
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     // https://firebase.google.com/docs/android/setup#add-sdks
-    implementation 'com.google.firebase:firebase-core:17.3.0'
+    implementation 'com.google.firebase:firebase-core:17.1.0'
+    implementation 'com.google.firebase:firebase-common-ktx:18.0.0'
 }

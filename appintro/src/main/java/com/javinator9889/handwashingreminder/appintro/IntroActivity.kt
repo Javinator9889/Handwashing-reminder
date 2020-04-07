@@ -19,6 +19,7 @@
 package com.javinator9889.handwashingreminder.appintro
 
 import android.Manifest
+import android.content.ComponentCallbacks2
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -30,6 +31,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.edit
 import androidx.core.util.Pair
+import androidx.core.util.forEach
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -56,7 +58,8 @@ import com.javinator9889.handwashingreminder.appintro.R as RIntro
 class IntroActivity : AppIntro2(),
     ViewHolder.OnItemClickListener,
     AppIntroViewPager.OnNextPageRequestedListener,
-    View.OnClickListener {
+    View.OnClickListener,
+    ComponentCallbacks2 {
     private lateinit var fourthSlide: Fragment
     private lateinit var policySlide: SlidePolicyFragment
     private lateinit var timeConfigSlide: TimeConfigIntroFragment
@@ -120,9 +123,9 @@ class IntroActivity : AppIntro2(),
         val sharedPreferences =
             HandwashingApplication.getInstance().sharedPreferences
         sharedPreferences.edit {
-            timeConfigSlide.viewItems.forEach { entry ->
-                val time = "${entry.value.hours.text}:${entry.value.minutes}"
-                when (entry.key) {
+            timeConfigSlide.viewItems.forEach { key, value ->
+                val time = "${value.hours.text}:${value.minutes}"
+                when (key) {
                     TimeConfig.BREAKFAST_ID.toInt() ->
                         putString(Preferences.BREAKFAST_TIME, time)
                     TimeConfig.LUNCH_ID.toInt() ->
@@ -246,8 +249,8 @@ class IntroActivity : AppIntro2(),
 
     private fun setSwipeLock() {
         var swipeLock = false
-        timeConfigSlide.viewItems.forEach { item ->
-            if (item.value.hours.text == "" && item.value.minutes.text == "") {
+        timeConfigSlide.viewItems.forEach { _, value ->
+            if (value.hours.text == "" && value.minutes.text == "") {
                 swipeLock = true
                 return@forEach
             }
@@ -261,13 +264,12 @@ class IntroActivity : AppIntro2(),
         return when (timeConfigIntroFragment) {
             timeConfigSlide -> {
                 var isTimeSet = true
-                for (view in timeConfigSlide.viewItems) {
-                    val viewHolder = view.value
-                    val hours = viewHolder.hours
-                    val minutes = viewHolder.minutes
+                timeConfigSlide.viewItems.forEach { _, value ->
+                    val hours = value.hours
+                    val minutes = value.minutes
                     if (hours.text == "" || minutes.text == "") {
                         isTimeSet = false
-                        break
+                        return@forEach
                     }
                 }
                 setSwipeLock(!isTimeSet)
@@ -297,6 +299,15 @@ class IntroActivity : AppIntro2(),
             nextButton -> {
                 if (onCanRequestNextPage())
                     changeSlide()
+            }
+        }
+    }
+
+    override fun onTrimMemory(level: Int) {
+        super.onTrimMemory(level)
+        when (level) {
+            ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN -> {
+
             }
         }
     }

@@ -19,7 +19,6 @@
 package com.javinator9889.handwashingreminder.ads
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -65,10 +64,6 @@ class AdLoaderImpl private constructor(context: Context?) : AdLoader {
         private var instance: AdLoaderImpl? = null
 
         override fun instance(context: Context?): AdLoader {
-            Log.i(
-                "AdLoaderImpl", "Instance called - context null? ${context
-                        == null}"
-            )
             this.instance = instance ?: AdLoaderImpl(context)
             return instance!!
         }

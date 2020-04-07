@@ -19,8 +19,10 @@
 package com.javinator9889.handwashingreminder.appintro.timeconfig
 
 import android.content.Context
+import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.util.set
 import androidx.recyclerview.widget.RecyclerView
 import com.javinator9889.handwashingreminder.appintro.R
 import com.javinator9889.handwashingreminder.listeners.ViewHolder
@@ -28,7 +30,7 @@ import com.javinator9889.handwashingreminder.listeners.ViewHolder
 class TimeConfigAdapter(
     private val dataset: Array<TimeConfigContent>,
     private val listener: ViewHolder.OnItemClickListener?,
-    private val viewItems: HashMap<Int, TimeConfigViewHolder>
+    private val viewItems: SparseArray<TimeConfigViewHolder>
 ) :
     RecyclerView.Adapter<TimeConfigViewHolder>() {
     private var height = 0

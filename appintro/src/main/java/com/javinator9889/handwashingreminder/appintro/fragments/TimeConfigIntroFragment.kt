@@ -20,10 +20,12 @@ package com.javinator9889.handwashingreminder.appintro.fragments
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.util.forEach
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.paolorotolo.appintro.AppIntroBaseFragment
@@ -44,7 +46,7 @@ class TimeConfigIntroFragment : AppIntroBaseFragment() {
     lateinit var fromActivity: AppCompatActivity
     var bgColor: Int = Color.WHITE
     var listener: ViewHolder.OnItemClickListener? = null
-    val viewItems = HashMap<Int, TimeConfigViewHolder>(3)
+    val viewItems = SparseArray<TimeConfigViewHolder>(3)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,7 +84,7 @@ class TimeConfigIntroFragment : AppIntroBaseFragment() {
                 rvItems[i].hours = timeConfigContent.hours
                 rvItems[i].minutes = timeConfigContent.minutes
             }
-            viewItems.forEach { item -> item.value.loadContentToTextViews() }
+            viewItems.forEach { _, value -> value.loadContentToTextViews() }
         }
     }
 

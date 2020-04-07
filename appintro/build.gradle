@@ -13,7 +13,6 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-        multiDexEnabled = true
     }
 
     buildTypes {
@@ -21,13 +20,11 @@ android {
             ext.enableCrashliytics = false
             versionNameSuffix "-debug"
             debuggable true
-            multiDexEnabled = true
         }
         beta {
             initWith(debug)
             versionNameSuffix "-beta"
             debuggable true
-            multiDexEnabled = true
         }
     }
     compileOptions {
