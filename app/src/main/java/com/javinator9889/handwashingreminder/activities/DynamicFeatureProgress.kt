@@ -23,8 +23,10 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.format.Formatter
+import android.util.Log
 import android.widget.Toast
 import com.google.android.play.core.ktx.bytesDownloaded
+import com.google.android.play.core.ktx.errorCode
 import com.google.android.play.core.ktx.totalBytesToDownload
 import com.google.android.play.core.splitinstall.SplitInstallRequest
 import com.google.android.play.core.splitinstall.SplitInstallSessionState
@@ -34,12 +36,14 @@ import com.javinator9889.handwashingreminder.BuildConfig
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.SplitCompatBaseActivity
 import com.javinator9889.handwashingreminder.utils.AndroidVersion
+import com.javinator9889.handwashingreminder.utils.filterNotEmpty
 import com.javinator9889.handwashingreminder.utils.isAtLeast
 import kotlinx.android.synthetic.main.dynamic_content_pb.*
 
 class DynamicFeatureProgress : SplitCompatBaseActivity(),
     SplitInstallStateUpdatedListener {
     companion object {
+        const val TAG = "DynamicFeatureInstaller"
         const val MODULES = "modules"
         const val LAUNCH_ON_INSTALL = "modules:launch_on_install"
         const val PACKAGE_NAME = "modules:package_name"
@@ -67,13 +71,13 @@ class DynamicFeatureProgress : SplitCompatBaseActivity(),
             launchActivityName = "$packageName.$className"
         }
         val installRequestBuilder = SplitInstallRequest.newBuilder()
-        modules.forEach { module ->
+        modules.filterNotEmpty().forEach { module ->
             if (!splitInstallManager.installedModules.contains(module)) {
                 installRequestBuilder.addModule(module)
                 ++moduleCount
             }
         }
-        if (moduleCount > 0) {
+        if (moduleCount > 0 && modules.isNotEmpty()) {
             setContentView(R.layout.dynamic_content_pb)
             overridePendingTransition(android.R.anim.fade_in, 0)
             val installRequest = installRequestBuilder.build()
@@ -110,6 +114,10 @@ class DynamicFeatureProgress : SplitCompatBaseActivity(),
                             .dynamic_module_loading_error
                     ), Toast.LENGTH_LONG
                 ).show()
+                Log.e(
+                    TAG,
+                    "Installation failed - error code: ${state.errorCode}"
+                )
             }
             SplitInstallSessionStatus.CANCELED -> {
                 setResultWithIntent(Activity.RESULT_CANCELED)

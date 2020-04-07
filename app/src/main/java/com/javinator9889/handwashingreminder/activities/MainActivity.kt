@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.SplitCompatBaseActivity
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
+import com.javinator9889.handwashingreminder.gms.ads.AdsEnabler
 import com.javinator9889.handwashingreminder.utils.Ads
 import com.javinator9889.handwashingreminder.utils.AndroidVersion
 import com.javinator9889.handwashingreminder.utils.isAtLeast
@@ -81,6 +82,9 @@ class MainActivity : SplitCompatBaseActivity() {
                 ads_remove.isEnabled = false
                 ads_remove.text = "Ads will be uninstalled"
                 splitInstallManager.deferredUninstall(mutableListOf(Ads.MODULE_NAME))
+                val adsRemover =
+                    AdsEnabler(HandwashingApplication.getInstance())
+                adsRemover.disableAds()
             }
         }
 //        app.adLoader?.

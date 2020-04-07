@@ -26,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
+import com.javinator9889.handwashingreminder.gms.ads.AdsEnabler
 import com.javinator9889.handwashingreminder.utils.*
 import com.javinator9889.handwashingreminder.utils.Preferences.Companion.ADS_ENABLED
 import com.javinator9889.handwashingreminder.utils.Preferences.Companion.APP_INIT_KEY
@@ -59,6 +60,8 @@ class LauncherActivity : AppCompatActivity() {
                             val adProvider = Class.forName(className).kotlin
                                 .objectInstance as AdLoader.Provider
                             app.adLoader = adProvider.instance(app)
+                            val adsEnabler = AdsEnabler(app)
+                            adsEnabler.enableAds()
                             data.notNull {
                                 startActivity(data)
                                 finish()
@@ -86,6 +89,8 @@ class LauncherActivity : AppCompatActivity() {
             modules.add(AppIntro.MODULE_NAME)
             launchOnInstall = true
         }
+        modules.removeAll { module -> module == "" }
+        modules.trimToSize()
         val intent = if (launchOnInstall) {
             createDynamicFeatureActivityIntent(
                 modules.toTypedArray(),

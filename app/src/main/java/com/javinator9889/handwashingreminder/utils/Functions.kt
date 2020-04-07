@@ -71,3 +71,16 @@ fun askForPermissions(
         }
     }
 }
+
+fun <T> Array<T>?.notEmpty(f: (it: Array<T>) -> Unit) {
+    if (!this.isNullOrEmpty()) f(this)
+}
+
+inline fun <reified T : CharSequence?> Array<T>?.filterNotEmpty(): Array<T> {
+    if (this.isNullOrEmpty()) return emptyArray()
+    val notEmptyItems = ArrayList<T>()
+    for (element in this)
+        if (element != null && element != "") notEmptyItems.add(element)
+    notEmptyItems.trimToSize()
+    return notEmptyItems.toTypedArray()
+}

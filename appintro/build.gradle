@@ -13,6 +13,7 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
+        multiDexEnabled = true
     }
 
     buildTypes {
@@ -20,10 +21,13 @@ android {
             ext.enableCrashliytics = false
             versionNameSuffix "-debug"
             debuggable true
+            multiDexEnabled = true
         }
         beta {
+            initWith(debug)
             versionNameSuffix "-beta"
             debuggable true
+            multiDexEnabled = true
         }
     }
     compileOptions {
@@ -66,4 +70,6 @@ dependencies {
     implementation 'com.mikepenz:ionicons-typeface:2.0.1.5-kotlin@aar'
     // https://developer.android.com/kotlin/ktx#play-core
     implementation 'com.google.android.play:core-ktx:1.7.0'
+    // https://developer.android.com/studio/build/multidex
+    implementation 'androidx.multidex:multidex:2.0.1'
 }

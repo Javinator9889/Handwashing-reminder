@@ -26,7 +26,7 @@ android {
         applicationId "com.javinator9889.handwashingreminder"
         minSdkVersion 17
         targetSdkVersion 29
-        versionCode 42
+        versionCode 44
         versionName "1.0"
         multiDexEnabled true
 
@@ -123,6 +123,6 @@ dependencies {
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
     // https://kotlinlang.org/docs/reference/reflection.html
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    // https://firebase.google.com/docs/admob/android/quick-start#import_the_mobile_ads_sdk
-    implementation 'com.google.firebase:firebase-ads:19.0.1'
+    // https://firebase.google.com/docs/android/setup#add-sdks
+    implementation 'com.google.firebase:firebase-core:17.3.0'
 }
