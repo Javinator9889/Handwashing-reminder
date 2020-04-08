@@ -5,18 +5,24 @@
         android:id="@+id/diseases"
         android:enabled="true"
         android:icon="@drawable/ic_feedback_black"
-        android:title="Diseases"
+        android:title="@string/diseases"
         android:visible="true" />
     <item
-        android:id="@+id/diseases2"
+        android:id="@+id/handwashing"
         android:enabled="true"
-        android:icon="@drawable/ic_feedback_black"
-        android:title="Diseases"
+        android:icon="@drawable/ic_handwashing_icon"
+        android:title="@string/handwashing"
         android:visible="true" />
     <item
-        android:id="@+id/diseases3"
+        android:id="@+id/news"
         android:enabled="true"
         android:icon="@drawable/ic_feedback_black"
-        android:title="Diseases"
+        android:title="@string/news"
+        android:visible="true" />
+    <item
+        android:id="@+id/settings"
+        android:enabled="true"
+        android:icon="@drawable/ic_feedback_black"
+        android:title="@string/settings"
         android:visible="true" />
 </menu>

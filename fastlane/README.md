@@ -16,21 +16,41 @@ or alternatively using `brew cask install fastlane`
 
 # Available Actions
 ## Android
+### android buildDebug
+```
+fastlane android buildDebug
+```
+Builds the debug code
+### android buildRelease
+```
+fastlane android buildRelease
+```
+Builds the release code
 ### android test
 ```
 fastlane android test
 ```
 Runs all the tests
-### android beta
+### android internal
 ```
-fastlane android beta
+fastlane android internal
 ```
-Submit a new Beta Build to Crashlytics Beta
-### android deploy
+Submit a new Internal Build to Play Store
+### android promote_internal_to_alpha
 ```
-fastlane android deploy
+fastlane android promote_internal_to_alpha
 ```
-Deploy a new version to the Google Play
+Promote Internal to Alpha
+### android promote_alpha_to_beta
+```
+fastlane android promote_alpha_to_beta
+```
+Promote Alpha to Beta
+### android promote_beta_to_production
+```
+fastlane android promote_beta_to_production
+```
+Promote Beta to Production
 
 ----
 

@@ -19,7 +19,6 @@
 package com.javinator9889.handwashingreminder.appintro
 
 import android.Manifest
-import android.content.ComponentCallbacks2
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -41,6 +40,7 @@ import com.google.android.gms.common.ConnectionResult.SUCCESS
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.splitcompat.SplitCompat
+import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.javinator9889.handwashingreminder.activities.MainActivity
 import com.javinator9889.handwashingreminder.appintro.config.TimeConfigActivity
 import com.javinator9889.handwashingreminder.appintro.custom.SliderPageBuilder
@@ -58,8 +58,7 @@ import com.javinator9889.handwashingreminder.appintro.R as RIntro
 class IntroActivity : AppIntro2(),
     ViewHolder.OnItemClickListener,
     AppIntroViewPager.OnNextPageRequestedListener,
-    View.OnClickListener,
-    ComponentCallbacks2 {
+    View.OnClickListener {
     private lateinit var fourthSlide: Fragment
     private lateinit var policySlide: SlidePolicyFragment
     private lateinit var timeConfigSlide: TimeConfigIntroFragment
@@ -148,6 +147,8 @@ class IntroActivity : AppIntro2(),
             )
             putBoolean(Preferences.APP_INIT_KEY, true)
         }
+        val splitInstallManager = SplitInstallManagerFactory.create(this)
+        splitInstallManager.deferredUninstall(listOf(AppIntro.MODULE_NAME))
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         this.finish()
@@ -299,15 +300,6 @@ class IntroActivity : AppIntro2(),
             nextButton -> {
                 if (onCanRequestNextPage())
                     changeSlide()
-            }
-        }
-    }
-
-    override fun onTrimMemory(level: Int) {
-        super.onTrimMemory(level)
-        when (level) {
-            ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN -> {
-
             }
         }
     }

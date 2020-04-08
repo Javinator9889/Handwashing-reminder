@@ -29,4 +29,8 @@
     <string name="done">Done</string>
     <string name="preparing">Preparing…</string>
     <string name="installing">Installing…</string>
+    <string name="diseases">Diseases</string>
+    <string name="handwashing">Washing your hands</string>
+    <string name="news">News</string>
+    <string name="settings">Settings</string>
 </resources>

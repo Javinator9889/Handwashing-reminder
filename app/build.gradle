@@ -15,6 +15,18 @@ else {
     secretProperties.setProperty("signing_key_alias", "${System.getenv('signing_key_alias')}")
 }
 
+/*
+ * Gets the version name from the latest Git tag
+ */
+def getGitHash = { ->
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'rev-parse', 'HEAD'
+        standardOutput = stdout
+    }
+    return stdout.toString().substring(0, 8).trim()
+}
+
 android {
     viewBinding.enabled = true
     compileSdkVersion 29
@@ -26,8 +38,8 @@ android {
         applicationId "com.javinator9889.handwashingreminder"
         minSdkVersion 17
         targetSdkVersion 29
-        versionCode Integer.valueOf(System.env.VERSION_CODE ?: 50)
-        versionName "1.0-${System.env.VERSION_SHA}"
+        versionCode 50
+        versionName "1.0-${getGitHash}"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -133,4 +145,6 @@ dependencies {
     // https://firebase.google.com/docs/android/setup#add-sdks
     implementation 'com.google.firebase:firebase-core:17.1.0'
     implementation 'com.google.firebase:firebase-common-ktx:18.0.0'
+    // http://airbnb.io/lottie/#/android?id=getting-started
+    implementation "com.airbnb.android:lottie:3.4.0"
 }
