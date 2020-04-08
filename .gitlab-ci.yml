@@ -15,10 +15,13 @@ stages:
 
 
 .updateContainerJob:
-  image: docker:stable
+  image: docker:19.03.0
+  variables:
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""
   stage: environment
   services:
-    - docker:dind
+    - docker:19.03.0-dind
   script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG || true
