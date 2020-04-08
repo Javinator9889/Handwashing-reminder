@@ -10,6 +10,7 @@
         </dist:delivery>
         <dist:fusing dist:include="true" />
     </dist:module>
+
     <application>
         <activity android:name=".IntroActivity" />
         <activity android:name=".config.TimeConfigActivity" />

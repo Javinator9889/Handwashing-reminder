@@ -64,3 +64,4 @@ class Ads {
 const val MODULE_COUNT = 2
 const val DYNAMIC_FEATURE_INSTALL_RESULT_CODE = 32
 const val IMAGE_CACHE_DIR = "images"
+const val CONFIRMATION_REQUEST_CODE = 128

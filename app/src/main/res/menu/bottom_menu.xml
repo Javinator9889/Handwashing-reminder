@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/diseases"
+        android:enabled="true"
+        android:icon="@drawable/ic_feedback_black"
+        android:title="Diseases"
+        android:visible="true" />
+    <item
+        android:id="@+id/diseases2"
+        android:enabled="true"
+        android:icon="@drawable/ic_feedback_black"
+        android:title="Diseases"
+        android:visible="true" />
+    <item
+        android:id="@+id/diseases3"
+        android:enabled="true"
+        android:icon="@drawable/ic_feedback_black"
+        android:title="Diseases"
+        android:visible="true" />
+</menu>

@@ -36,6 +36,7 @@ import com.javinator9889.handwashingreminder.BuildConfig
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.SplitCompatBaseActivity
 import com.javinator9889.handwashingreminder.utils.AndroidVersion
+import com.javinator9889.handwashingreminder.utils.CONFIRMATION_REQUEST_CODE
 import com.javinator9889.handwashingreminder.utils.filterNotEmpty
 import com.javinator9889.handwashingreminder.utils.isAtLeast
 import kotlinx.android.synthetic.main.dynamic_content_pb.*
@@ -119,6 +120,14 @@ class DynamicFeatureProgress : SplitCompatBaseActivity(),
                     "Installation failed - error code: ${state.errorCode}"
                 )
             }
+            SplitInstallSessionStatus.REQUIRES_USER_CONFIRMATION -> {
+                splitInstallManager
+                    .startConfirmationDialogForResult(
+                        state,
+                        this,
+                        CONFIRMATION_REQUEST_CODE
+                    )
+            }
             SplitInstallSessionStatus.CANCELED -> {
                 setResultWithIntent(Activity.RESULT_CANCELED)
                 finish()
@@ -159,6 +168,18 @@ class DynamicFeatureProgress : SplitCompatBaseActivity(),
                 }
             }
             else -> return
+        }
+    }
+
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?
+    ) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == CONFIRMATION_REQUEST_CODE) {
+            setResultWithIntent(Activity.RESULT_CANCELED)
+            finish()
         }
     }
 }

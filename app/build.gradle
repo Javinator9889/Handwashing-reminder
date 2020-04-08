@@ -3,20 +3,20 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.mikepenz.aboutlibraries.plugin'
 
-def keystorePropertiesFile = rootProject.file("keystore.properties")
-def keystoreProperties = new Properties()
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+def secretsPropertiesFile = rootProject.file("secrets.properties")
+def secretProperties = new Properties()
+
+if (secretsPropertiesFile.exists())
+    secretProperties.load(new FileInputStream(secretsPropertiesFile))
+else {
+    secretProperties.setProperty("google_project_id", "\"${System.getenv('google_project_id') ?: "null"}\"")
+    secretProperties.setProperty("signing_keystore_password", "${System.getenv('signing_keystore_password')}")
+    secretProperties.setProperty("signing_key_password", "${System.getenv('signing_key_password')}")
+    secretProperties.setProperty("signing_key_alias", "${System.getenv('signing_key_alias')}")
+}
 
 android {
     viewBinding.enabled = true
-    signingConfigs {
-        release {
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-        }
-    }
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
 
@@ -26,13 +26,20 @@ android {
         applicationId "com.javinator9889.handwashingreminder"
         minSdkVersion 17
         targetSdkVersion 29
-        versionCode 45
-        versionName "1.0"
+        versionCode Integer.valueOf(System.env.VERSION_CODE ?: 0)
+        versionName "1.0-${System.env.VERSION_SHA}"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
+    signingConfigs {
+        release {
+            storeFile file("../android-signing-keystore.jks")
+            storePassword "${secretProperties['signing_keystore_password']}"
+            keyAlias "${secretProperties['signing_key_alias']}"
+            keyPassword "${secretProperties['signing_key_password']}"
+        }
+    }
     buildTypes {
         debug {
             ext.enableCrashliytics = false
@@ -45,7 +52,7 @@ android {
             versionNameSuffix "-beta"
             minifyEnabled true
             debuggable true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
             multiDexEnabled = true
         }
@@ -104,8 +111,8 @@ dependencies {
     implementation 'com.afollestad.material-dialogs:lifecycle:3.3.0'
     implementation 'com.afollestad.material-dialogs:bottomsheets:3.3.0'
     // https://github.com/mikepenz/Android-Iconics
-    implementation 'com.mikepenz:iconics-core:5.0.0'
-    implementation 'com.mikepenz:iconics-views:5.0.0'
+    implementation 'com.mikepenz:iconics-core:5.0.1'
+    implementation 'com.mikepenz:iconics-views:5.0.1'
     //noinspection GradleDependency
     implementation 'com.mikepenz:google-material-typeface:3.0.1.4.original-kotlin@aar'
     //noinspection GradleDependency

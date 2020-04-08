@@ -50,34 +50,32 @@ class LauncherActivity : AppCompatActivity() {
         data: Intent?
     ) {
         super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            DYNAMIC_FEATURE_INSTALL_RESULT_CODE -> {
-                if (sharedPreferences.getBoolean(ADS_ENABLED, true)) {
-                    when (resultCode) {
-                        Activity.RESULT_OK -> {
-                            val className = "${Ads.PACKAGE_NAME}.${Ads
-                                .CLASS_NAME}\$${Ads.PROVIDER_NAME}"
-                            val adProvider = Class.forName(className).kotlin
-                                .objectInstance as AdLoader.Provider
-                            app.adLoader = adProvider.instance(app)
-                            val adsEnabler = AdsEnabler(app)
-                            adsEnabler.enableAds()
-                            data.notNull {
-                                startActivity(data)
-                                finish()
-                            }
+        if (requestCode == DYNAMIC_FEATURE_INSTALL_RESULT_CODE) {
+            if (sharedPreferences.getBoolean(ADS_ENABLED, true)) {
+                when (resultCode) {
+                    Activity.RESULT_OK -> {
+                        val className = "${Ads.PACKAGE_NAME}.${Ads
+                            .CLASS_NAME}\$${Ads.PROVIDER_NAME}"
+                        val adProvider = Class.forName(className).kotlin
+                            .objectInstance as AdLoader.Provider
+                        app.adLoader = adProvider.instance(app)
+                        val adsEnabler = AdsEnabler(app)
+                        adsEnabler.enableAds()
+                        data.notNull {
+                            startActivity(data)
+                            finish()
                         }
-                        Activity.RESULT_CANCELED -> app.adLoader = null
                     }
+                    Activity.RESULT_CANCELED -> app.adLoader = null
                 }
-                if (!launchOnInstall) {
-                    Intent(this, MainActivity::class.java).also {
-                        startActivity(it)
-                        overridePendingTransition(0, android.R.anim.fade_out)
-                    }
-                }
-                finish()
             }
+            if (!launchOnInstall) {
+                Intent(this, MainActivity::class.java).also {
+                    startActivity(it)
+                    overridePendingTransition(0, android.R.anim.fade_out)
+                }
+            }
+            finish()
         }
     }
 

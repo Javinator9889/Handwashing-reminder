@@ -13,3 +13,6 @@
 .externalNativeBuild
 .cxx
 keystore.properties
+secrets.properties
+api-5245190277294621651-718463-f914fb7573c6.json
+*.jks
