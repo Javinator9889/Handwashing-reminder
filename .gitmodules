@@ -1,0 +1,3 @@
+[submodule "tgs"]
+	path = tgs
+	url = https://gitlab.com/mattia.basaglia/tgs.git
