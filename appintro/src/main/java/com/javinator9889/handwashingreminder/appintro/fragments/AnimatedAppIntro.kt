@@ -18,6 +18,7 @@
  */
 package com.javinator9889.handwashingreminder.appintro.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -33,6 +34,7 @@ import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder
 import com.github.paolorotolo.appintro.ISlideSelectionListener
 import com.github.paolorotolo.appintro.util.LogHelper
 import com.github.paolorotolo.appintro.util.TypefaceContainer
+import com.google.android.play.core.splitcompat.SplitCompat
 import com.javinator9889.handwashingreminder.appintro.R
 import com.javinator9889.handwashingreminder.appintro.custom.*
 
@@ -52,6 +54,13 @@ class AnimatedAppIntro : Fragment(),
     private var titleTypeface: TypefaceContainer? = null
     private var descTypeface: TypefaceContainer? = null
     private var mainLayout: ConstraintLayout? = null
+
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        SplitCompat.installActivity(activity)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
@@ -105,7 +114,8 @@ class AnimatedAppIntro : Fragment(),
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(layoutId, container, false)

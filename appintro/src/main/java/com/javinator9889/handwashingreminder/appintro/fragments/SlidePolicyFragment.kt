@@ -18,6 +18,7 @@
  */
 package com.javinator9889.handwashingreminder.appintro.fragments
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -29,6 +30,7 @@ import com.github.paolorotolo.appintro.ISlidePolicy
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.switchmaterial.SwitchMaterial
+import com.google.android.play.core.splitcompat.SplitCompat
 import com.javinator9889.handwashingreminder.activities.PrivacyTermsActivity
 import com.javinator9889.handwashingreminder.appintro.R
 import com.javinator9889.handwashingreminder.appintro.custom.ARG_ANIM_DRAWABLE
@@ -54,6 +56,12 @@ class SlidePolicyFragment : AppIntroBaseFragment(), ISlidePolicy {
     var imageDrawable: Int? = null
     var animatedDrawable: AnimatedResources? = null
     var bgColor: Int? = null
+
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        SplitCompat.installActivity(activity)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

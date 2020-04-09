@@ -18,6 +18,7 @@
  */
 package com.javinator9889.handwashingreminder.appintro.fragments
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.util.SparseArray
@@ -29,6 +30,7 @@ import androidx.core.util.forEach
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.paolorotolo.appintro.AppIntroBaseFragment
+import com.google.android.play.core.splitcompat.SplitCompat
 import com.javinator9889.handwashingreminder.appintro.R
 import com.javinator9889.handwashingreminder.appintro.timeconfig.TimeConfigAdapter
 import com.javinator9889.handwashingreminder.appintro.timeconfig.TimeConfigContent
@@ -47,6 +49,12 @@ class TimeConfigIntroFragment : AppIntroBaseFragment() {
     var bgColor: Int = Color.WHITE
     var listener: ViewHolder.OnItemClickListener? = null
     val viewItems = SparseArray<TimeConfigViewHolder>(3)
+
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        SplitCompat.installActivity(activity)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

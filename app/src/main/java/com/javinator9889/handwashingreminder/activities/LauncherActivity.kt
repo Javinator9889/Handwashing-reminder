@@ -25,6 +25,7 @@ import android.os.Bundle
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.play.core.splitcompat.SplitCompat
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
@@ -105,6 +106,9 @@ class LauncherActivity : AppCompatActivity() {
                         val adsEnabler = AdsEnabler(app)
                         adsEnabler.enableAds()
                         data.notNull {
+                            createPackageContext(packageName, 0).also {
+                                SplitCompat.install(it)
+                            }
                             startActivity(data)
                             finish()
                         }
