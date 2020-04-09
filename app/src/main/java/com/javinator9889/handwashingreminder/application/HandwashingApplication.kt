@@ -22,6 +22,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.multidex.MultiDex
 import com.google.android.play.core.splitcompat.SplitCompat
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
+import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
 import com.javinator9889.handwashingreminder.graphics.ImageCache
 import com.javinator9889.handwashingreminder.utils.IMAGE_CACHE_DIR
@@ -32,8 +35,9 @@ import javinator9889.localemanager.utils.languagesupport.LanguagesSupport.Langua
 
 
 class HandwashingApplication : BaseApplication() {
-    lateinit var sharedPreferences: SharedPreferences
     var adLoader: AdLoader? = null
+    lateinit var remoteConfig: FirebaseRemoteConfig
+    lateinit var sharedPreferences: SharedPreferences
     lateinit var imageCacheParams: ImageCache.ImageCacheParams
 
     companion object {
@@ -60,6 +64,14 @@ class HandwashingApplication : BaseApplication() {
         Iconics.init(this)
         imageCacheParams = ImageCache.ImageCacheParams(this, IMAGE_CACHE_DIR)
         imageCacheParams.setMemCacheSizePercent(0.25f)
+        remoteConfig = FirebaseRemoteConfig.getInstance()
+        val configSettings = FirebaseRemoteConfigSettings.Builder().apply {
+            minimumFetchIntervalInSeconds = 3600
+            fetchTimeoutInSeconds = 3
+        }.build()
+        remoteConfig.setConfigSettingsAsync(configSettings)
+        remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)
+        remoteConfig.fetchAndActivate()
     }
 
     /**

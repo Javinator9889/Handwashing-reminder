@@ -22,6 +22,8 @@ import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
@@ -30,6 +32,10 @@ import com.javinator9889.handwashingreminder.gms.ads.AdsEnabler
 import com.javinator9889.handwashingreminder.utils.*
 import com.javinator9889.handwashingreminder.utils.Preferences.Companion.ADS_ENABLED
 import com.javinator9889.handwashingreminder.utils.Preferences.Companion.APP_INIT_KEY
+import com.javinator9889.handwashingreminder.utils.RemoteConfig.Keys.ANIMATION_NAME
+import com.javinator9889.handwashingreminder.utils.RemoteConfig.Keys.SPECIAL_EVENT
+import kotlinx.android.synthetic.main.splash_screen.*
+import kotlin.concurrent.thread
 
 class LauncherActivity : AppCompatActivity() {
     private var launchOnInstall = false
@@ -38,10 +44,47 @@ class LauncherActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.splash_screen)
         app = HandwashingApplication.getInstance()
         sharedPreferences = app.sharedPreferences
-        installRequiredModules()
+        val displayThread = displayWelcomeScreen()
+        installRequiredModules(displayThread)
+    }
+
+    private fun displayWelcomeScreen(): Thread {
+        setContentView(R.layout.splash_screen)
+        return thread(start = true) {
+            val isThereAnySpecialEvent =
+                app.remoteConfig.getBoolean(SPECIAL_EVENT)
+            var sleepDuration = 0L
+            var animationLoaded = false
+            val fadeInAnimation =
+                AnimationUtils.loadAnimation(this, android.R.anim.fade_in)
+            fadeInAnimation.duration = 300L
+            fadeInAnimation.setAnimationListener(object :
+                Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation?) {}
+
+                override fun onAnimationRepeat(animation: Animation?) {}
+
+                override fun onAnimationEnd(animation: Animation?) {
+                    logo.playAnimation()
+                    animationLoaded = true
+                }
+            })
+            if (isThereAnySpecialEvent) {
+                logo.setAnimation(app.remoteConfig.getString(ANIMATION_NAME))
+                logo.addLottieOnCompositionLoadedListener {
+                    logo.startAnimation(fadeInAnimation)
+                    sleepDuration = it.duration.toLong()
+                }
+                while (!animationLoaded)
+                    Thread.sleep(10)
+                Thread.sleep(sleepDuration)
+            } else {
+                logo.setImageResource(R.drawable.handwashing_app_logo)
+                logo.startAnimation(fadeInAnimation)
+            }
+        }
     }
 
     override fun onActivityResult(
@@ -79,27 +122,36 @@ class LauncherActivity : AppCompatActivity() {
         }
     }
 
-    private fun installRequiredModules() {
-        val modules = ArrayList<String>(MODULE_COUNT)
-        if (sharedPreferences.getBoolean(ADS_ENABLED, true))
-            modules.add(Ads.MODULE_NAME)
-        if (!sharedPreferences.getBoolean(APP_INIT_KEY, false)) {
-            modules.add(AppIntro.MODULE_NAME)
-            launchOnInstall = true
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(0, android.R.anim.fade_out)
+    }
+
+    private fun installRequiredModules(waitingThread: Thread) {
+        thread(start = true) {
+            if (waitingThread.isAlive)
+                waitingThread.join()
+            val modules = ArrayList<String>(MODULE_COUNT)
+            if (sharedPreferences.getBoolean(ADS_ENABLED, true))
+                modules.add(Ads.MODULE_NAME)
+            if (!sharedPreferences.getBoolean(APP_INIT_KEY, false)) {
+                modules.add(AppIntro.MODULE_NAME)
+                launchOnInstall = true
+            }
+            modules.removeAll { module -> module == "" }
+            modules.trimToSize()
+            val intent = if (launchOnInstall) {
+                createDynamicFeatureActivityIntent(
+                    modules.toTypedArray(),
+                    launchOnInstall,
+                    AppIntro.MAIN_ACTIVITY_NAME,
+                    AppIntro.PACKAGE_NAME
+                )
+            } else {
+                createDynamicFeatureActivityIntent(modules.toTypedArray())
+            }
+            startActivityForResult(intent, DYNAMIC_FEATURE_INSTALL_RESULT_CODE)
         }
-        modules.removeAll { module -> module == "" }
-        modules.trimToSize()
-        val intent = if (launchOnInstall) {
-            createDynamicFeatureActivityIntent(
-                modules.toTypedArray(),
-                launchOnInstall,
-                AppIntro.MAIN_ACTIVITY_NAME,
-                AppIntro.PACKAGE_NAME
-            )
-        } else {
-            createDynamicFeatureActivityIntent(modules.toTypedArray())
-        }
-        startActivityForResult(intent, DYNAMIC_FEATURE_INSTALL_RESULT_CODE)
     }
 
     private fun createDynamicFeatureActivityIntent(

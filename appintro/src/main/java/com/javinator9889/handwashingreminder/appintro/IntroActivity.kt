@@ -44,13 +44,15 @@ import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.javinator9889.handwashingreminder.activities.MainActivity
 import com.javinator9889.handwashingreminder.appintro.config.TimeConfigActivity
 import com.javinator9889.handwashingreminder.appintro.custom.SliderPageBuilder
+import com.javinator9889.handwashingreminder.appintro.fragments.AnimatedAppIntro
 import com.javinator9889.handwashingreminder.appintro.fragments.SlidePolicyFragment
 import com.javinator9889.handwashingreminder.appintro.fragments.TimeConfigIntroFragment
 import com.javinator9889.handwashingreminder.appintro.timeconfig.TimeConfigViewHolder
+import com.javinator9889.handwashingreminder.appintro.utils.AnimatedResources
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.listeners.ViewHolder
 import com.javinator9889.handwashingreminder.utils.*
-import com.javinator9889.handwashingreminder.R as RBase
+import kotlinx.android.synthetic.main.animated_intro.*
 import com.javinator9889.handwashingreminder.appintro.R as RIntro
 
 
@@ -74,14 +76,16 @@ class IntroActivity : AppIntro2(),
         val firstSlide = SliderPageBuilder.Builder()
             .title(getString(RIntro.string.first_slide_title))
             .description(getString(RIntro.string.first_slide_desc))
-            .imageDrawable(RBase.drawable.handwashing_app_logo)
+            .animationResource(AnimatedResources.WASH_HANDS)
+            .loopAnimation(true)
             .build()
         addSlide(firstSlide)
 
         val secondSlide = SliderPageBuilder.Builder()
             .title(getString(RIntro.string.second_slide_title))
             .description(getString(RIntro.string.second_slide_desc))
-            .imageDrawable(RIntro.drawable.ic_clock)
+            .animationResource(AnimatedResources.TIMER)
+            .loopAnimation(false)
             .build()
         addSlide(secondSlide)
 
@@ -96,7 +100,8 @@ class IntroActivity : AppIntro2(),
             fourthSlide = SliderPageBuilder.Builder()
                 .title(getString(RIntro.string.fourth_slide_title))
                 .description(getString(RIntro.string.fourth_slide_desc))
-                .imageDrawable(RIntro.drawable.ic_activty)
+                .animationResource(AnimatedResources.ACTIVITY)
+                .loopAnimation(true)
                 .build()
             addSlide(fourthSlide)
         }
@@ -104,7 +109,7 @@ class IntroActivity : AppIntro2(),
         policySlide = SlidePolicyFragment().apply {
             title = this@IntroActivity
                 .getString(RIntro.string.privacy_policy_title)
-            imageDrawable = RIntro.drawable.ic_privacy
+            animatedDrawable = AnimatedResources.PRIVACY
             titleColor = Color.DKGRAY
             bgColor = Color.WHITE
         }
@@ -232,19 +237,21 @@ class IntroActivity : AppIntro2(),
         oldFragment: Fragment?,
         newFragment: Fragment?
     ) {
-        when (newFragment) {
-            timeConfigSlide -> {
-                setSwipeLock()
-                return
-            }
-            else -> setSwipeLock(false)
+        if (newFragment == timeConfigSlide) {
+            setSwipeLock()
+            return
+        } else {
+            setSwipeLock(false)
         }
-        when (oldFragment) {
-            fourthSlide -> askForPermissions(
+        if (oldFragment == fourthSlide)
+            askForPermissions(
                 this,
                 Permission(Manifest.permission.ACTIVITY_RECOGNITION, 0)
             )
-        }
+        if (newFragment is AnimatedAppIntro ||
+            newFragment is SlidePolicyFragment
+        )
+            newFragment.image.playAnimation()
         super.onSlideChanged(oldFragment, newFragment)
     }
 

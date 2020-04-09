@@ -31,6 +31,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.javinator9889.handwashingreminder.activities.PrivacyTermsActivity
 import com.javinator9889.handwashingreminder.appintro.R
+import com.javinator9889.handwashingreminder.appintro.custom.ARG_ANIM_DRAWABLE
+import com.javinator9889.handwashingreminder.appintro.utils.AnimatedResources
 import com.javinator9889.handwashingreminder.utils.notNull
 import kotlinx.android.synthetic.main.slide_policy.view.*
 import com.javinator9889.handwashingreminder.R as RBase
@@ -50,6 +52,7 @@ class SlidePolicyFragment : AppIntroBaseFragment(), ISlidePolicy {
     var title: String? = null
     var titleColor: Int? = null
     var imageDrawable: Int? = null
+    var animatedDrawable: AnimatedResources? = null
     var bgColor: Int? = null
 
     override fun onCreateView(
@@ -68,7 +71,10 @@ class SlidePolicyFragment : AppIntroBaseFragment(), ISlidePolicy {
         this.title?.let { title.text = it }
         this.titleColor?.let { title.setTextColor(it) }
         bgColor?.let { layout.setBackgroundColor(it) }
-        imageDrawable?.let { image.setImageResource(it) }
+        if (animatedDrawable != null)
+            image.setAnimation(animatedDrawable!!.filename)
+        else
+            imageDrawable?.let { image.setImageResource(it) }
         slidePolicyCheckBox.text = getString(R.string.slide_policy_text)
         slidePolicyCheckBox.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked && !wasPolicyActivityLaunched) {
@@ -93,6 +99,7 @@ class SlidePolicyFragment : AppIntroBaseFragment(), ISlidePolicy {
                 firebasePerformance.isChecked
             )
             putBoolean(PRIVACY_TERMS_CHECKED, slidePolicyCheckBox.isChecked)
+            animatedDrawable?.let { putString(ARG_ANIM_DRAWABLE, it.filename) }
         }
     }
 
@@ -110,6 +117,10 @@ class SlidePolicyFragment : AppIntroBaseFragment(), ISlidePolicy {
                 PRIVACY_TERMS_CHECKED, false
             )
             slidePolicyCheckBox.isChecked = wasPolicyActivityLaunched
+
+            animatedDrawable = if (it.getString(ARG_ANIM_DRAWABLE) != null)
+                AnimatedResources.valueOf(it.getString(ARG_ANIM_DRAWABLE)!!)
+            else null
         }
     }
 

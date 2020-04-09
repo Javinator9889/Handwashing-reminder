@@ -17,14 +17,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
+        <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/logo"
-            android:layout_width="203dp"
-            android:layout_height="189dp"
+            android:layout_width="wrap_content"
+            android:layout_height="300dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/handwashing_app_logo" />
+            app:lottie_autoPlay="false"
+            app:lottie_loop="false" />
 
         <TextView
             android:id="@+id/app_name"

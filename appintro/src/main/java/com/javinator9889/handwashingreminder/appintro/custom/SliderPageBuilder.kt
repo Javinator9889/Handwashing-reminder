@@ -24,9 +24,9 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.FontRes
 import androidx.fragment.app.Fragment
-import com.github.paolorotolo.appintro.AppIntro2Fragment
-import com.github.paolorotolo.appintro.model.SliderPage
 import com.javinator9889.handwashingreminder.R
+import com.javinator9889.handwashingreminder.appintro.fragments.AnimatedAppIntro
+import com.javinator9889.handwashingreminder.appintro.utils.AnimatedResources
 import com.javinator9889.handwashingreminder.utils.notNull
 
 class SliderPageBuilder private constructor() {
@@ -34,12 +34,13 @@ class SliderPageBuilder private constructor() {
         var title: String? = null,
         var description: String? = null,
         @FontRes var titleTypeface: Int? = R.font.raleway_medium,
-        @FontRes var descTypeface: Int? = R.font.roboto,
+        @FontRes var descTypeface: Int? = R.font.raleway_medium,
         @ColorInt var bgColor: Int? = Color.WHITE,
         @ColorInt var titleColor: Int? = Color.DKGRAY,
         @ColorInt var descColor: Int? = Color.DKGRAY,
         @DrawableRes var imageDrawable: Int? = null,
-        var customSlider: SliderPage? = null
+        var animationRes: String? = null,
+        var animationLoop: Boolean? = null
     ) {
         fun title(title: String) = apply { this.title = title }
 
@@ -56,6 +57,12 @@ class SliderPageBuilder private constructor() {
             this.imageDrawable = imageDrawable
         }
 
+        fun animationResource(resource: AnimatedResources) = apply {
+            this.animationRes = resource.filename
+        }
+
+        fun loopAnimation(loop: Boolean) = apply { this.animationLoop = loop }
+
         fun bgColor(@ColorInt bgColor: Int) = apply { this.bgColor = bgColor }
 
         fun titleColor(@ColorRes titleColor: Int) =
@@ -64,20 +71,19 @@ class SliderPageBuilder private constructor() {
         fun descColor(@ColorRes descColor: Int) =
             apply { this.descColor = descColor }
 
-        fun withCustomFragment(slider: SliderPage) =
-            apply { this.customSlider = slider }
-
         fun build(): Fragment {
-            val sliderPage = (customSlider ?: SliderPage())
+            val sliderPage = AnimatedSliderPage()
             title.notNull { sliderPage.title = it }
             titleTypeface.notNull { sliderPage.titleTypefaceFontRes = it }
             descTypeface.notNull { sliderPage.descTypefaceFontRes = it }
             description.notNull { sliderPage.description = it }
             imageDrawable.notNull { sliderPage.imageDrawable = it }
+            animationRes.notNull { sliderPage.animatedDrawable = it }
+            animationLoop.notNull { sliderPage.animationLoop = it }
             bgColor.notNull { sliderPage.bgColor = it }
             titleColor.notNull { sliderPage.titleColor = it }
             descColor.notNull { sliderPage.descColor = it }
-            return AppIntro2Fragment.newInstance(sliderPage)
+            return AnimatedAppIntro.newInstance(sliderPage)
         }
     }
 }
