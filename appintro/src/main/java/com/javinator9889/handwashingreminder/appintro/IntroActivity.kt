@@ -67,11 +67,7 @@ class IntroActivity : AppIntro2(),
 
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
-//        SplitCompat.install(this)
         SplitCompat.installActivity(base)
-        createPackageContext(packageName, 0).also {
-            SplitCompat.install(it)
-        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
