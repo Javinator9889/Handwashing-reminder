@@ -86,9 +86,4 @@ class MainActivity : SplitCompatBaseActivity() {
         app.adLoader?.destroy()
         super.onDestroy()
     }
-
-    override fun onResume() {
-        super.onResume()
-        app.adLoader?.destroy()
-    }
 }

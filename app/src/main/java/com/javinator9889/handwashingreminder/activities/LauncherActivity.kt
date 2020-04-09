@@ -33,7 +33,6 @@ import com.javinator9889.handwashingreminder.gms.ads.AdsEnabler
 import com.javinator9889.handwashingreminder.utils.*
 import com.javinator9889.handwashingreminder.utils.Preferences.Companion.ADS_ENABLED
 import com.javinator9889.handwashingreminder.utils.Preferences.Companion.APP_INIT_KEY
-import com.javinator9889.handwashingreminder.utils.RemoteConfig.Keys.ANIMATION_NAME
 import com.javinator9889.handwashingreminder.utils.RemoteConfig.Keys.SPECIAL_EVENT
 import kotlinx.android.synthetic.main.splash_screen.*
 import kotlin.concurrent.thread
@@ -73,17 +72,23 @@ class LauncherActivity : AppCompatActivity() {
                 }
             })
             if (isThereAnySpecialEvent) {
-                logo.setAnimation(app.remoteConfig.getString(ANIMATION_NAME))
+                runOnUiThread {
+                    logo.setAnimation(AnimatedResources.STAY_SAFE_STAY_HOME.res)
+                }
                 logo.addLottieOnCompositionLoadedListener {
-                    logo.startAnimation(fadeInAnimation)
+                    runOnUiThread {
+                        logo.startAnimation(fadeInAnimation)
+                    }
                     sleepDuration = it.duration.toLong()
                 }
                 while (!animationLoaded)
                     Thread.sleep(10)
                 Thread.sleep(sleepDuration)
             } else {
-                logo.setImageResource(R.drawable.handwashing_app_logo)
-                logo.startAnimation(fadeInAnimation)
+                runOnUiThread {
+                    logo.setImageResource(R.drawable.handwashing_app_logo)
+                    logo.startAnimation(fadeInAnimation)
+                }
             }
         }
     }
