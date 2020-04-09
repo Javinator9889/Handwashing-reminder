@@ -1,5 +1,8 @@
 package com.javinator9889.handwashingreminder.appintro.utils
 
+import androidx.annotation.RawRes
+import com.javinator9889.handwashingreminder.appintro.R
+
 /*
  * Copyright © 2020 - present | Handwashing reminder by Javinator9889
  *
@@ -18,9 +21,9 @@ package com.javinator9889.handwashingreminder.appintro.utils
  *
  * Created by Javinator9889 on 9/04/20 - Handwashing reminder.
  */
-enum class AnimatedResources(val filename: String) {
-    WASH_HANDS("wash-your-hands.json"),
-    TIMER("pending-timer.json"),
-    ACTIVITY("travelers-walking.json"),
-    PRIVACY("padlock-animation.json")
+enum class AnimatedResources(@RawRes val res: Int) {
+    WASH_HANDS(R.raw.wash_your_hands),
+    TIMER(R.raw.pending_timer),
+    ACTIVITY(R.raw.travelers_walking),
+    PRIVACY(R.raw.wash_your_hands)
 }

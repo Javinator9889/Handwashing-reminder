@@ -22,6 +22,7 @@ import android.os.Bundle
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.FontRes
+import androidx.annotation.RawRes
 
 internal const val ARG_TITLE = "title"
 internal const val ARG_TITLE_TYPEFACE = "title_typeface"
@@ -41,7 +42,7 @@ data class AnimatedSliderPage @JvmOverloads constructor(
     var title: CharSequence? = null,
     var description: CharSequence? = null,
     @DrawableRes var imageDrawable: Int = 0,
-    var animatedDrawable: String? = null,
+    @RawRes var animatedDrawable: Int? = null,
     var animationLoop: Boolean = false,
     @ColorInt var bgColor: Int = 0,
     @ColorInt var titleColor: Int = 0,
@@ -72,7 +73,7 @@ data class AnimatedSliderPage @JvmOverloads constructor(
         newBundle.putInt(ARG_DRAWABLE, this.imageDrawable)
         newBundle.putInt(ARG_BG_COLOR, this.bgColor)
         newBundle.putInt(ARG_DRAWABLE, this.bgDrawable)
-        newBundle.putString(ARG_ANIM_DRAWABLE, this.animatedDrawable)
+        this.animatedDrawable?.let { newBundle.putInt(ARG_ANIM_DRAWABLE, it) }
         newBundle.putBoolean(ARG_ANIM_LOOP, this.animationLoop)
         return newBundle
     }

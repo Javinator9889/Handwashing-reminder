@@ -80,7 +80,7 @@ class SlidePolicyFragment : AppIntroBaseFragment(), ISlidePolicy {
         this.titleColor?.let { title.setTextColor(it) }
         bgColor?.let { layout.setBackgroundColor(it) }
         if (animatedDrawable != null)
-            image.setAnimation(animatedDrawable!!.filename)
+            image.setAnimation(animatedDrawable!!.res)
         else
             imageDrawable?.let { image.setImageResource(it) }
         slidePolicyCheckBox.text = getString(R.string.slide_policy_text)
@@ -107,7 +107,7 @@ class SlidePolicyFragment : AppIntroBaseFragment(), ISlidePolicy {
                 firebasePerformance.isChecked
             )
             putBoolean(PRIVACY_TERMS_CHECKED, slidePolicyCheckBox.isChecked)
-            animatedDrawable?.let { putString(ARG_ANIM_DRAWABLE, it.filename) }
+            animatedDrawable?.let { putInt(ARG_ANIM_DRAWABLE, it.res) }
         }
     }
 
@@ -126,9 +126,13 @@ class SlidePolicyFragment : AppIntroBaseFragment(), ISlidePolicy {
             )
             slidePolicyCheckBox.isChecked = wasPolicyActivityLaunched
 
-            animatedDrawable = if (it.getString(ARG_ANIM_DRAWABLE) != null)
-                AnimatedResources.valueOf(it.getString(ARG_ANIM_DRAWABLE)!!)
-            else null
+            animatedDrawable = when (it.getInt(ARG_ANIM_DRAWABLE, -1)) {
+                AnimatedResources.WASH_HANDS.res -> AnimatedResources.WASH_HANDS
+                AnimatedResources.TIMER.res -> AnimatedResources.TIMER
+                AnimatedResources.ACTIVITY.res -> AnimatedResources.ACTIVITY
+                AnimatedResources.PRIVACY.res -> AnimatedResources.PRIVACY
+                else -> null
+            }
         }
     }
 

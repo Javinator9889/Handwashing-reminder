@@ -19,10 +19,7 @@
 package com.javinator9889.handwashingreminder.appintro.custom
 
 import android.graphics.Color
-import androidx.annotation.ColorInt
-import androidx.annotation.ColorRes
-import androidx.annotation.DrawableRes
-import androidx.annotation.FontRes
+import androidx.annotation.*
 import androidx.fragment.app.Fragment
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.appintro.fragments.AnimatedAppIntro
@@ -39,7 +36,7 @@ class SliderPageBuilder private constructor() {
         @ColorInt var titleColor: Int? = Color.DKGRAY,
         @ColorInt var descColor: Int? = Color.DKGRAY,
         @DrawableRes var imageDrawable: Int? = null,
-        var animationRes: String? = null,
+        @RawRes var animationRes: Int? = null,
         var animationLoop: Boolean? = null
     ) {
         fun title(title: String) = apply { this.title = title }
@@ -58,7 +55,7 @@ class SliderPageBuilder private constructor() {
         }
 
         fun animationResource(resource: AnimatedResources) = apply {
-            this.animationRes = resource.filename
+            this.animationRes = resource.res
         }
 
         fun loopAnimation(loop: Boolean) = apply { this.animationLoop = loop }

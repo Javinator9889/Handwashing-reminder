@@ -26,6 +26,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.annotation.LayoutRes
+import androidx.annotation.RawRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.airbnb.lottie.LottieAnimationView
@@ -48,7 +49,7 @@ class AnimatedAppIntro : Fragment(),
     @get:LayoutRes
     protected val layoutId: Int = R.layout.animated_intro
     private var title: String? = null
-    private var animatedDrawable: String? = null
+    @RawRes private var animatedDrawable: Int? = null
     private var animationLoop: Boolean = false
     private var description: String? = null
     private var titleTypeface: TypefaceContainer? = null
@@ -71,7 +72,7 @@ class AnimatedAppIntro : Fragment(),
                 arguments!!.getInt(ARG_TITLE_TYPEFACE_RES)
             val argsDescTypefaceRes = arguments!!.getInt(ARG_DESC_TYPEFACE_RES)
             drawable = arguments!!.getInt(ARG_DRAWABLE)
-            animatedDrawable = arguments!!.getString(ARG_ANIM_DRAWABLE)
+            animatedDrawable = arguments!!.getInt(ARG_ANIM_DRAWABLE)
             animationLoop = arguments!!.getBoolean(ARG_ANIM_LOOP)
             title = arguments!!.getString(ARG_TITLE)
             description = arguments!!.getString(ARG_DESC)
@@ -95,7 +96,7 @@ class AnimatedAppIntro : Fragment(),
         super.onActivityCreated(savedInstanceState)
         if (savedInstanceState != null) {
             drawable = savedInstanceState.getInt(ARG_DRAWABLE)
-            animatedDrawable = savedInstanceState.getString(ARG_ANIM_DRAWABLE)
+            animatedDrawable = savedInstanceState.getInt(ARG_ANIM_DRAWABLE)
             animationLoop = savedInstanceState.getBoolean(ARG_ANIM_LOOP)
             title = savedInstanceState.getString(ARG_TITLE)
             description = savedInstanceState.getString(ARG_DESC)
@@ -134,7 +135,7 @@ class AnimatedAppIntro : Fragment(),
             descriptionText.setTextColor(descColor)
         }
         if (animatedDrawable != null)
-            slideImage.setAnimation(animatedDrawable)
+            slideImage.setAnimation(animatedDrawable!!)
         else
             slideImage.setImageResource(drawable)
         slideImage.repeatCount =
@@ -150,7 +151,7 @@ class AnimatedAppIntro : Fragment(),
         outState.putInt(ARG_BG_COLOR, bgColor)
         outState.putInt(ARG_TITLE_COLOR, titleColor)
         outState.putInt(ARG_DESC_COLOR, descColor)
-        outState.putString(ARG_ANIM_DRAWABLE, animatedDrawable)
+        animatedDrawable?.let { outState.putInt(ARG_ANIM_DRAWABLE, it) }
         outState.putBoolean(ARG_ANIM_LOOP, animationLoop)
         saveTypefacesInstanceState(outState)
         super.onSaveInstanceState(outState)
