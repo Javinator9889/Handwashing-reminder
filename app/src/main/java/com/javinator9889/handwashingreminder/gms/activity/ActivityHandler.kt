@@ -19,21 +19,19 @@
 package com.javinator9889.handwashingreminder.gms.activity
 
 import android.app.PendingIntent
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import com.google.android.gms.location.*
+import com.google.android.gms.location.ActivityRecognition
+import com.google.android.gms.location.ActivityTransition
+import com.google.android.gms.location.ActivityTransitionRequest
+import com.google.android.gms.location.DetectedActivity
 import com.google.android.gms.tasks.Task
-import com.javinator9889.handwashingreminder.R
-import com.javinator9889.handwashingreminder.application.HandwashingApplication
-import com.javinator9889.handwashingreminder.notifications.NotificationsHandler
-import com.javinator9889.handwashingreminder.utils.ACTIVITY_CHANNEL_ID
-import com.javinator9889.handwashingreminder.utils.Preferences.Companion.ACTIVITY_TRACKING_ENABLED
 
-class ActivityHandler(private val context: Context) : BroadcastReceiver() {
+
+class ActivityHandler(private val context: Context) {
     private val requestCode = 51824210
-    private val tag = "ActivityHandler"
+    private val tag = ActivityHandler::class.simpleName
     private val transitions: MutableList<ActivityTransition> = mutableListOf()
     private var task: Task<Void>? = null
     private val pendingIntent: PendingIntent
@@ -47,7 +45,7 @@ class ActivityHandler(private val context: Context) : BroadcastReceiver() {
             DetectedActivity.WALKING
         )
         addTransitions(activitiesSet, transitions)
-        with(Intent(context, this::class.java)) {
+        with(Intent(context, ActivityReceiver::class.java)) {
             pendingIntent = PendingIntent.getBroadcast(
                 context, requestCode, this, PendingIntent.FLAG_UPDATE_CURRENT
             )
@@ -55,6 +53,7 @@ class ActivityHandler(private val context: Context) : BroadcastReceiver() {
     }
 
     fun startTrackingActivity() {
+        Log.i(tag, "Starting activity recognition")
         with(ActivityTransitionRequest(transitions)) {
             task = ActivityRecognition.getClient(context)
                 .requestActivityTransitionUpdates(this, pendingIntent).apply {
@@ -62,6 +61,19 @@ class ActivityHandler(private val context: Context) : BroadcastReceiver() {
                     addOnFailureListener { activityRegistered = false }
                 }
         }
+    }
+
+    fun disableActivityTracker() {
+        Log.i(tag, "Stopping activity recognition")
+        if (!activityRegistered)
+            return
+        task = ActivityRecognition.getClient(context)
+            .removeActivityTransitionUpdates(pendingIntent).apply {
+                addOnSuccessListener { pendingIntent.cancel() }
+                addOnFailureListener { e: Exception ->
+                    Log.e(tag, e.message, e)
+                }
+            }
     }
 
     private fun addTransitions(
@@ -76,61 +88,4 @@ class ActivityHandler(private val context: Context) : BroadcastReceiver() {
                 .build()
         }
     }
-
-    fun disableActivityTracker() {
-        if (!activityRegistered)
-            return
-        task = ActivityRecognition.getClient(context)
-            .removeActivityTransitionUpdates(pendingIntent).apply {
-                addOnSuccessListener { pendingIntent.cancel() }
-                addOnFailureListener { e: Exception ->
-                    Log.e(tag, e.message, e)
-                }
-            }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    override fun onReceive(context: Context?, intent: Intent?) {
-        if (intent?.action == Intent.ACTION_BOOT_COMPLETED) {
-            val app = HandwashingApplication.getInstance()
-            val sharedPreferences = app.sharedPreferences
-            if (sharedPreferences.getBoolean(ACTIVITY_TRACKING_ENABLED, false))
-                startTrackingActivity()
-            else
-                disableActivityTracker()
-            return
-        }
-        if (ActivityTransitionResult.hasResult(intent)) {
-            val result = ActivityTransitionResult.extractResult(intent)!!
-            for (event in result.transitionEvents) {
-                if (event.transitionType !=
-                    ActivityTransition.ACTIVITY_TRANSITION_EXIT ||
-                    event.activityType == DetectedActivity.UNKNOWN
-                )
-                    continue
-                val notificationHandler = NotificationsHandler(
-                    this.context,
-                    ACTIVITY_CHANNEL_ID,
-                    this.context.getString(
-                        R.string
-                            .activity_notification_channel_name
-                    ),
-                    this.context.getString(
-                        R.string
-                            .activity_notification_channel_desc
-                    )
-                )
-                notificationHandler.createNotification(
-                    R.drawable.ic_handwashing_icon,
-                    R.drawable.handwashing_app_logo,
-                    R.string.test_notification,
-                    R.string.test_content
-                )
-                break
-            }
-        }
-    }
-
 }

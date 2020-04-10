@@ -33,7 +33,14 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <receiver android:name=".gms.activity.ActivityHandler">
+        <receiver
+            android:name=".gms.activity.ActivityReceiver"
+            android:enabled="true"
+            android:exported="true">
+        </receiver>
+
+        <receiver android:name=".jobs.BootCompletedJob"
+            android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>

@@ -29,6 +29,7 @@ import com.javinator9889.handwashingreminder.gms.activity.ActivityHandler
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
 import com.javinator9889.handwashingreminder.graphics.ImageCache
 import com.javinator9889.handwashingreminder.utils.IMAGE_CACHE_DIR
+import com.javinator9889.handwashingreminder.utils.Preferences
 import com.javinator9889.handwashingreminder.utils.Preferences.Companion.NAME
 import com.mikepenz.iconics.Iconics
 import javinator9889.localemanager.application.BaseApplication
@@ -67,7 +68,14 @@ class HandwashingApplication : BaseApplication() {
         imageCacheParams = ImageCache.ImageCacheParams(this, IMAGE_CACHE_DIR)
         imageCacheParams.setMemCacheSizePercent(0.25f)
         activityHandler = ActivityHandler(this)
-        remoteConfig = FirebaseRemoteConfig.getInstance()
+        if (sharedPreferences.getBoolean(
+                Preferences.ACTIVITY_TRACKING_ENABLED, false
+            )
+        )
+            activityHandler.startTrackingActivity()
+        else
+            activityHandler.disableActivityTracker()
+            remoteConfig = FirebaseRemoteConfig.getInstance()
         val configSettings = FirebaseRemoteConfigSettings.Builder().apply {
             minimumFetchIntervalInSeconds = 3600
             fetchTimeoutInSeconds = 3
