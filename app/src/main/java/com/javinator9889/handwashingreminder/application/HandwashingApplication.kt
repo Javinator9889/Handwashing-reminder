@@ -20,6 +20,8 @@ package com.javinator9889.handwashingreminder.application
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.emoji.bundled.BundledEmojiCompatConfig
+import androidx.emoji.text.EmojiCompat
 import androidx.multidex.MultiDex
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -75,7 +77,8 @@ class HandwashingApplication : BaseApplication() {
             activityHandler.startTrackingActivity()
         else
             activityHandler.disableActivityTracker()
-            remoteConfig = FirebaseRemoteConfig.getInstance()
+
+        remoteConfig = FirebaseRemoteConfig.getInstance()
         val configSettings = FirebaseRemoteConfigSettings.Builder().apply {
             minimumFetchIntervalInSeconds = 3600
             fetchTimeoutInSeconds = 3
@@ -83,6 +86,11 @@ class HandwashingApplication : BaseApplication() {
         remoteConfig.setConfigSettingsAsync(configSettings)
         remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)
         remoteConfig.fetchAndActivate()
+
+        with(BundledEmojiCompatConfig(this)) {
+            setReplaceAll(true)
+            EmojiCompat.init(this)
+        }
     }
 
     /**

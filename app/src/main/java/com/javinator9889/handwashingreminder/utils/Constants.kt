@@ -70,6 +70,16 @@ class RemoteConfig {
     }
 }
 
+class Workers {
+    companion object Keys {
+        const val WHO = "workers:key_id"
+        const val BREAKFAST = 0
+        const val LUNCH = 1
+        const val DINNER = 2
+        const val UNIQUE_WORK_NAME = "workers:time-sched_job"
+    }
+}
+
 const val MODULE_COUNT = 2
 const val DYNAMIC_FEATURE_INSTALL_RESULT_CODE = 32
 const val IMAGE_CACHE_DIR = "images"

@@ -22,6 +22,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import androidx.annotation.DrawableRes
@@ -32,6 +33,7 @@ import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.utils.AndroidVersion
 import com.javinator9889.handwashingreminder.utils.Preferences
 import com.javinator9889.handwashingreminder.utils.isAtLeast
+import com.javinator9889.handwashingreminder.utils.notNull
 
 class NotificationsHandler(
     private val context: Context,
@@ -60,6 +62,26 @@ class NotificationsHandler(
         priority: Int = NotificationCompat.PRIORITY_DEFAULT,
         @StringRes longContent: Int = -1
     ) {
+        val longContentProcessed =
+            if (longContent != -1) context.getText(longContent) else null
+        createNotification(
+            iconDrawable,
+            largeIcon,
+            context.getText(title),
+            context.getText(content),
+            priority,
+            longContentProcessed
+        )
+    }
+
+    fun createNotification(
+        @DrawableRes iconDrawable: Int,
+        @DrawableRes largeIcon: Int,
+        title: CharSequence,
+        content: CharSequence,
+        priority: Int = NotificationCompat.PRIORITY_DEFAULT,
+        longContent: CharSequence? = null
+    ) {
         val bitmapIcon = if (isAtLeast(AndroidVersion.JELLY_BEAN_MR2)) {
             if (isAtLeast(AndroidVersion.P)) {
                 val source =
@@ -74,16 +96,34 @@ class NotificationsHandler(
         } else {
             null
         }
+        createNotification(
+            iconDrawable,
+            bitmapIcon,
+            title,
+            content,
+            priority,
+            longContent
+        )
+    }
+
+    fun createNotification(
+        @DrawableRes iconDrawable: Int,
+        largeIcon: Bitmap?,
+        title: CharSequence,
+        content: CharSequence,
+        priority: Int = NotificationCompat.PRIORITY_DEFAULT,
+        longContent: CharSequence? = null
+    ) {
         val builder = NotificationCompat.Builder(context, channelId)
             .setSmallIcon(iconDrawable)
-            .setLargeIcon(bitmapIcon)
-            .setContentTitle(context.getText(title))
-            .setContentText(context.getText(content))
+            .setLargeIcon(largeIcon)
+            .setContentTitle(title)
+            .setContentText(content)
             .setPriority(priority)
-        if (longContent != -1) {
+        longContent.notNull {
             builder.setStyle(
                 NotificationCompat.BigTextStyle()
-                    .bigText(context.getText(longContent))
+                    .bigText(longContent)
             )
         }
 

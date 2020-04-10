@@ -5,6 +5,10 @@
     <string name="activity_notification_channel_desc">Get a
         notification when you get out of a vehicle to remind you to
         wash your hands</string>
+    <string name="time_notification_channel_name">Scheduled
+        notifications</string>
+    <string name="time_notification_channel_desc">Get a notification at
+        scheduled times you have indicated in the application</string>
     <string name="test_notification">This is a test notification</string>
     <string name="test_content">This is the content for a test
         notification</string>
@@ -33,4 +37,21 @@
     <string name="handwashing">Washing your hands</string>
     <string name="news">News</string>
     <string name="settings">Settings</string>
+    <string name="breakfast_title">Breakfast time!</string>
+    <string-array name="breakfast_comments">
+        <item>During sleep your hands get dirty, it's important to wash
+            them before having breakfast \u1F634</item>
+        <item>Washing your hands before breakfast will ensure you a good
+            day \u1F609</item>
+        <item>30 seconds for good health? Where do I sign! Just wash your
+        hands \u1F609\u1F44F\u1F4A6</item>
+    </string-array>
+    <string name="lunch_title">Time to lunch and washing your hands!</string>
+    <string-array name="lunch_comments">
+
+    </string-array>
+    <string name="dinner_title">Let\'s have a clean dinner</string>
+    <string-array name="dinner_comments">
+
+    </string-array>
 </resources>
