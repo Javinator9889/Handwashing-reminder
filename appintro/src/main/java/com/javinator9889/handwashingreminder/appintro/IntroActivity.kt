@@ -21,6 +21,7 @@ package com.javinator9889.handwashingreminder.appintro
 import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -61,9 +62,10 @@ class IntroActivity : AppIntro2(),
     ViewHolder.OnItemClickListener,
     AppIntroViewPager.OnNextPageRequestedListener,
     View.OnClickListener {
-    private lateinit var fourthSlide: Fragment
+    private lateinit var activitySlide: Fragment
     private lateinit var policySlide: SlidePolicyFragment
     private lateinit var timeConfigSlide: TimeConfigIntroFragment
+    private var activityRecognitionPermissionGranted: Boolean = false
 
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
@@ -97,13 +99,13 @@ class IntroActivity : AppIntro2(),
 
         val gms = GoogleApiAvailability.getInstance()
         if (gms.isGooglePlayServicesAvailable(this) == SUCCESS) {
-            fourthSlide = SliderPageBuilder.Builder()
+            activitySlide = SliderPageBuilder.Builder()
                 .title(getString(RIntro.string.fourth_slide_title))
                 .description(getString(RIntro.string.fourth_slide_desc))
                 .animationResource(AnimatedResources.ACTIVITY)
                 .loopAnimation(true)
                 .build()
-            addSlide(fourthSlide)
+            addSlide(activitySlide)
         }
 
         policySlide = SlidePolicyFragment().apply {
@@ -124,8 +126,8 @@ class IntroActivity : AppIntro2(),
 
     override fun onDonePressed(currentFragment: Fragment?) {
         super.onDonePressed(currentFragment)
-        val sharedPreferences =
-            HandwashingApplication.getInstance().sharedPreferences
+        val app = HandwashingApplication.getInstance()
+        val sharedPreferences = app.sharedPreferences
         sharedPreferences.edit {
             timeConfigSlide.viewItems.forEach { key, value ->
                 val time = "${value.hours.text}:${value.minutes}"
@@ -150,10 +152,18 @@ class IntroActivity : AppIntro2(),
                 Preferences.ADS_ENABLED,
                 sharedPreferences.getBoolean(Preferences.ADS_ENABLED, true)
             )
+            putBoolean(
+                Preferences.ACTIVITY_TRACKING_ENABLED,
+                activityRecognitionPermissionGranted
+            )
             putBoolean(Preferences.APP_INIT_KEY, true)
         }
         val splitInstallManager = SplitInstallManagerFactory.create(this)
         splitInstallManager.deferredUninstall(listOf(AppIntro.MODULE_NAME))
+        if (activityRecognitionPermissionGranted)
+            app.activityHandler.startTrackingActivity()
+        else
+            app.activityHandler.disableActivityTracker()
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         this.finish()
@@ -243,10 +253,13 @@ class IntroActivity : AppIntro2(),
         } else {
             setSwipeLock(false)
         }
-        if (oldFragment == fourthSlide)
+        if (oldFragment == activitySlide)
             askForPermissions(
                 this,
-                Permission(Manifest.permission.ACTIVITY_RECOGNITION, 0)
+                Permission(
+                    Manifest.permission.ACTIVITY_RECOGNITION,
+                    PERMISSIONS_REQUEST_CODE
+                )
             )
         if (newFragment is AnimatedAppIntro ||
             newFragment is SlidePolicyFragment
@@ -294,6 +307,18 @@ class IntroActivity : AppIntro2(),
             }
             else -> true
         }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == PERMISSIONS_REQUEST_CODE) {
+            activityRecognitionPermissionGranted =
+                grantResults.isNotEmpty() && grantResults[0] == PERMISSION_GRANTED
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     override fun onCanRequestNextPage(): Boolean {

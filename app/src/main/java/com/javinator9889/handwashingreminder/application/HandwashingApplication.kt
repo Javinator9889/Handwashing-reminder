@@ -25,6 +25,7 @@ import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.javinator9889.handwashingreminder.R
+import com.javinator9889.handwashingreminder.gms.activity.ActivityHandler
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
 import com.javinator9889.handwashingreminder.graphics.ImageCache
 import com.javinator9889.handwashingreminder.utils.IMAGE_CACHE_DIR
@@ -39,6 +40,7 @@ class HandwashingApplication : BaseApplication() {
     lateinit var remoteConfig: FirebaseRemoteConfig
     lateinit var sharedPreferences: SharedPreferences
     lateinit var imageCacheParams: ImageCache.ImageCacheParams
+    lateinit var activityHandler: ActivityHandler
 
     companion object {
         private lateinit var instance: HandwashingApplication
@@ -64,6 +66,7 @@ class HandwashingApplication : BaseApplication() {
         Iconics.init(this)
         imageCacheParams = ImageCache.ImageCacheParams(this, IMAGE_CACHE_DIR)
         imageCacheParams.setMemCacheSizePercent(0.25f)
+        activityHandler = ActivityHandler(this)
         remoteConfig = FirebaseRemoteConfig.getInstance()
         val configSettings = FirebaseRemoteConfigSettings.Builder().apply {
             minimumFetchIntervalInSeconds = 3600

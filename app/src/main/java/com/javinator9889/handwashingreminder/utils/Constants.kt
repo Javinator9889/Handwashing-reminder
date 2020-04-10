@@ -32,6 +32,7 @@ class Preferences {
         const val DINNER_TIME = "app:dinner"
         const val ANALYTICS_ENABLED = "firebase:analytics"
         const val PERFORMANCE_ENABLED = "firebase:performance"
+        const val ACTIVITY_TRACKING_ENABLED = "activity:gms:tracking"
     }
 }
 
@@ -73,3 +74,4 @@ const val MODULE_COUNT = 2
 const val DYNAMIC_FEATURE_INSTALL_RESULT_CODE = 32
 const val IMAGE_CACHE_DIR = "images"
 const val CONFIRMATION_REQUEST_CODE = 128
+const val PERMISSIONS_REQUEST_CODE = 10
