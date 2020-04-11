@@ -48,10 +48,19 @@
     </string-array>
     <string name="lunch_title">Time to lunch and washing your hands!</string>
     <string-array name="lunch_comments">
-
+        <item>Having a good day? Let's continue with it having your hands
+        clean \u1F601</item>
+        <item>After a busy morning it's time to eat and do it clean \u1F609</item>
+        <item>If you have gone to the street is even more important to
+            wash your hands before having lunch \u1F44F\u1F4A6</item>
     </string-array>
     <string name="dinner_title">Let\'s have a clean dinner</string>
     <string-array name="dinner_comments">
-
+        <item>The day is finishing and you can do it fully by
+            \u1F44F\u1F4A6</item>
+        <item>Remember before having dinner and going to sleep to wash
+            your hands and count sheeps \u1F411</item>
+        <item>Do you know that washing your hands can keep you safe from
+            more than 15 diseases? That's a lot \u1F62E</item>
     </string-array>
 </resources>

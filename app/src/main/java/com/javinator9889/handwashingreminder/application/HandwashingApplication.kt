@@ -30,6 +30,7 @@ import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.gms.activity.ActivityHandler
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
 import com.javinator9889.handwashingreminder.graphics.ImageCache
+import com.javinator9889.handwashingreminder.jobs.workers.WorkHandler
 import com.javinator9889.handwashingreminder.utils.IMAGE_CACHE_DIR
 import com.javinator9889.handwashingreminder.utils.Preferences
 import com.javinator9889.handwashingreminder.utils.Preferences.Companion.NAME
@@ -40,10 +41,11 @@ import javinator9889.localemanager.utils.languagesupport.LanguagesSupport.Langua
 
 class HandwashingApplication : BaseApplication() {
     var adLoader: AdLoader? = null
+    lateinit var workHandler: WorkHandler
+    lateinit var activityHandler: ActivityHandler
     lateinit var remoteConfig: FirebaseRemoteConfig
     lateinit var sharedPreferences: SharedPreferences
     lateinit var imageCacheParams: ImageCache.ImageCacheParams
-    lateinit var activityHandler: ActivityHandler
 
     companion object {
         private lateinit var instance: HandwashingApplication
@@ -86,6 +88,8 @@ class HandwashingApplication : BaseApplication() {
         remoteConfig.setConfigSettingsAsync(configSettings)
         remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)
         remoteConfig.fetchAndActivate()
+
+        workHandler = WorkHandler.getInstance(this)
 
         with(BundledEmojiCompatConfig(this)) {
             setReplaceAll(true)

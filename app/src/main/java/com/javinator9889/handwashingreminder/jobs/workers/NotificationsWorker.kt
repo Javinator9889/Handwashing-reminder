@@ -18,19 +18,24 @@
  */
 package com.javinator9889.handwashingreminder.jobs.workers
 
-import android.annotation.SuppressLint
 import android.content.Context
 import androidx.emoji.text.EmojiCompat
-import androidx.work.*
+import androidx.work.Data
+import androidx.work.Worker
+import androidx.work.WorkerParameters
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.notifications.NotificationsHandler
 import com.javinator9889.handwashingreminder.utils.Preferences
 import com.javinator9889.handwashingreminder.utils.TIME_CHANNEL_ID
 import com.javinator9889.handwashingreminder.utils.Workers
-import java.text.SimpleDateFormat
-import java.util.*
-import java.util.concurrent.TimeUnit
+import com.javinator9889.handwashingreminder.utils.timeDifferenceSecs
+
+
+data class NotificationStructure(
+    val title: CharSequence,
+    val content: CharSequence
+)
 
 class NotificationsWorker(
     private val context: Context,
@@ -46,6 +51,7 @@ class NotificationsWorker(
         val sharedPreferences =
             HandwashingApplication.getInstance().sharedPreferences
         val emojiCompat = EmojiCompat.get()
+        val workHandler = WorkHandler.getInstance()
         val notificationData = when (params.inputData.getInt(Workers.WHO, -1)) {
             Workers.BREAKFAST -> {
                 val savedTime =
@@ -53,7 +59,9 @@ class NotificationsWorker(
                 val data = Data.Builder()
                     .putInt(Workers.WHO, Workers.LUNCH)
                     .build()
-                enqueue(timeDifferenceSecs(savedTime), data)
+                workHandler.enqueueNotificationsWorker(
+                    timeDifferenceSecs(savedTime), data
+                )
                 val comments =
                     context.resources.getStringArray(R.array.breakfast_comments)
                 val title = context.getText(R.string.breakfast_title)
@@ -66,7 +74,9 @@ class NotificationsWorker(
                 val data = Data.Builder()
                     .putInt(Workers.WHO, Workers.DINNER)
                     .build()
-                enqueue(timeDifferenceSecs(savedTime), data)
+                workHandler.enqueueNotificationsWorker(
+                    timeDifferenceSecs(savedTime), data
+                )
                 val comments =
                     context.resources.getStringArray(R.array.lunch_comments)
                 val title = context.getText(R.string.lunch_title)
@@ -82,7 +92,9 @@ class NotificationsWorker(
                 val data = Data.Builder()
                     .putInt(Workers.WHO, Workers.BREAKFAST)
                     .build()
-                enqueue(timeDifferenceSecs(savedTime), data)
+                workHandler.enqueueNotificationsWorker(
+                    timeDifferenceSecs(savedTime), data
+                )
                 val comments =
                     context.resources.getStringArray(R.array.dinner_comments)
                 val title = context.getText(R.string.dinner_title)
@@ -99,35 +111,4 @@ class NotificationsWorker(
         )
         return Result.success()
     }
-
-    @SuppressLint("SimpleDateFormat")
-    private fun timeDifferenceSecs(to: String): Long {
-        if (to == "") return 0L
-        val dateFormat = SimpleDateFormat("HH:mm")
-        val fromDate = dateFormat.parse(to) ?: return 0L
-        val cTime = Calendar.getInstance().time
-        val diff = fromDate.time - cTime.time
-        dateFormat.parse(dateFormat.format(diff))?.let { return it.time / 1000 }
-        return 0L
-    }
-
-    private fun enqueue(delay: Long, data: Data) {
-        val jobRequest = OneTimeWorkRequest.Builder(this::class.java)
-            .setInitialDelay(delay, TimeUnit.SECONDS)
-            .setInputData(data)
-            .build()
-        with(WorkManager.getInstance(context)) {
-            enqueueUniqueWork(
-                Workers.UNIQUE_WORK_NAME,
-                ExistingWorkPolicy.REPLACE,
-                jobRequest
-            )
-        }
-    }
-
 }
-
-data class NotificationStructure(
-    val title: CharSequence,
-    val content: CharSequence
-)
