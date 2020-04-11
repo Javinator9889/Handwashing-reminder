@@ -130,7 +130,7 @@ class IntroActivity : AppIntro2(),
         val sharedPreferences = app.sharedPreferences
         sharedPreferences.edit {
             timeConfigSlide.viewItems.forEach { key, value ->
-                val time = "${value.hours.text}:${value.minutes}"
+                val time = "${value.hours.text}:${value.minutes.text}"
                 when (key) {
                     TimeConfig.BREAKFAST_ID.toInt() ->
                         putString(Preferences.BREAKFAST_TIME, time)
@@ -164,7 +164,7 @@ class IntroActivity : AppIntro2(),
             app.activityHandler.startTrackingActivity()
         else
             app.activityHandler.disableActivityTracker()
-        workManagerEnqueuer()
+        app.workHandler.enqueuePeriodicNotificationsWorker()
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         this.finish()

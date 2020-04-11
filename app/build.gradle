@@ -39,7 +39,7 @@ android {
         applicationId "com.javinator9889.handwashingreminder"
         minSdkVersion 17
         targetSdkVersion 29
-        versionCode 57
+        versionCode 60
         versionName "1.0-${gitCommitHash}"
         multiDexEnabled true
 
@@ -146,6 +146,7 @@ dependencies {
     // https://firebase.google.com/docs/android/setup#add-sdks
     implementation 'com.google.firebase:firebase-core:17.1.0'
     implementation 'com.google.firebase:firebase-common-ktx:18.0.0'
+    implementation 'com.google.firebase:firebase-analytics:17.1.0'
     // http://airbnb.io/lottie/#/android?id=getting-started
     implementation "com.airbnb.android:lottie:3.4.0"
     // https://firebase.google.com/docs/remote-config/use-config-android
@@ -155,5 +156,4 @@ dependencies {
     // https://mvnrepository.com/artifact/androidx.emoji/emoji/1.0.0
     implementation 'androidx.emoji:emoji:1.0.0'
     implementation 'androidx.emoji:emoji-appcompat:1.0.0'
-    implementation 'androidx.emoji:emoji-bundled:1.0.0'
 }

@@ -20,8 +20,10 @@ package com.javinator9889.handwashingreminder.application
 
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.emoji.bundled.BundledEmojiCompatConfig
+import android.util.Log
+import androidx.core.provider.FontRequest
 import androidx.emoji.text.EmojiCompat
+import androidx.emoji.text.FontRequestEmojiCompatConfig
 import androidx.multidex.MultiDex
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -40,11 +42,15 @@ import javinator9889.localemanager.utils.languagesupport.LanguagesSupport.Langua
 
 
 class HandwashingApplication : BaseApplication() {
+    private val tag = HandwashingApplication::class.simpleName
+
     var adLoader: AdLoader? = null
     lateinit var workHandler: WorkHandler
     lateinit var activityHandler: ActivityHandler
     lateinit var remoteConfig: FirebaseRemoteConfig
     lateinit var sharedPreferences: SharedPreferences
+    // lateinit var firebaseAnalytics #TODO
+    // lateinit var firebasePerformance #TODO
     lateinit var imageCacheParams: ImageCache.ImageCacheParams
 
     companion object {
@@ -89,11 +95,28 @@ class HandwashingApplication : BaseApplication() {
         remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)
         remoteConfig.fetchAndActivate()
 
-        workHandler = WorkHandler.getInstance(this)
+        FontRequest(
+            "com.google.android.gms.fonts",
+            "com.google.android.gms",
+            "Noto Color Emoji Compat",
+            R.array.com_google_android_gms_fonts_certs
+        ).let {
+            with(FontRequestEmojiCompatConfig(this, it)) {
+                setReplaceAll(true)
+                EmojiCompat.init(this)
+            }
+        }
+//
+//        with(BundledEmojiCompatConfig(this)) {
+//            setReplaceAll(true)
+//            EmojiCompat.init(this)
+//        }
 
-        with(BundledEmojiCompatConfig(this)) {
-            setReplaceAll(true)
-            EmojiCompat.init(this)
+        workHandler = WorkHandler.getInstance(this)
+        try {
+            workHandler.enqueuePeriodicNotificationsWorker()
+        } catch (_: UninitializedPropertyAccessException) {
+            Log.i(tag, "Scheduler times have not been initialized")
         }
     }
 

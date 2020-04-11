@@ -44,6 +44,7 @@ class NotificationsHandler(
     private val preferences: SharedPreferences =
         HandwashingApplication.getInstance().sharedPreferences
     private val notificationId = 1
+    private val vibrationPattern = longArrayOf(300L, 300L, 300L, 300L)
 
     init {
         if (isNotificationChannelCreated() || createChannelRequired()) {
@@ -60,7 +61,8 @@ class NotificationsHandler(
         @StringRes title: Int,
         @StringRes content: Int,
         priority: Int = NotificationCompat.PRIORITY_DEFAULT,
-        @StringRes longContent: Int = -1
+        @StringRes longContent: Int = -1,
+        autoCancel: Boolean = true
     ) {
         val longContentProcessed =
             if (longContent != -1) context.getText(longContent) else null
@@ -70,7 +72,8 @@ class NotificationsHandler(
             context.getText(title),
             context.getText(content),
             priority,
-            longContentProcessed
+            longContentProcessed,
+            autoCancel
         )
     }
 
@@ -80,7 +83,8 @@ class NotificationsHandler(
         title: CharSequence,
         content: CharSequence,
         priority: Int = NotificationCompat.PRIORITY_DEFAULT,
-        longContent: CharSequence? = null
+        longContent: CharSequence? = null,
+        autoCancel: Boolean = true
     ) {
         val bitmapIcon = if (isAtLeast(AndroidVersion.JELLY_BEAN_MR2)) {
             if (isAtLeast(AndroidVersion.P)) {
@@ -102,7 +106,8 @@ class NotificationsHandler(
             title,
             content,
             priority,
-            longContent
+            longContent,
+            autoCancel
         )
     }
 
@@ -112,32 +117,45 @@ class NotificationsHandler(
         title: CharSequence,
         content: CharSequence,
         priority: Int = NotificationCompat.PRIORITY_DEFAULT,
-        longContent: CharSequence? = null
+        longContent: CharSequence? = null,
+        autoCancel: Boolean = true
     ) {
-        val builder = NotificationCompat.Builder(context, channelId)
-            .setSmallIcon(iconDrawable)
-            .setLargeIcon(largeIcon)
-            .setContentTitle(title)
-            .setContentText(content)
-            .setPriority(priority)
-        longContent.notNull {
-            builder.setStyle(
-                NotificationCompat.BigTextStyle()
-                    .bigText(longContent)
-            )
-        }
-
-        with(NotificationManagerCompat.from(context)) {
-            notify(notificationId, builder.build())
+//        val resultIntent = Intent(context, LauncherActivity::class.java)
+//        val resultPendingIntent = TaskStackBuilder.create(context).run {
+//            addNextIntentWithParentStack(resultIntent)
+//            getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+//        }
+        with(NotificationCompat.Builder(context, channelId)) {
+            setSmallIcon(iconDrawable)
+            setLargeIcon(largeIcon)
+            setContentTitle(title)
+            setContentText(content)
+            setPriority(priority)
+            setVibrate(vibrationPattern)
+            setAutoCancel(autoCancel)
+//            setContentIntent(resultPendingIntent)
+            longContent.notNull {
+                setStyle(NotificationCompat.BigTextStyle().bigText(longContent))
+            }
+            build()
+        }.let {
+            with(NotificationManagerCompat.from(context)) {
+                notify(notificationId, it)
+            }
         }
     }
 
     private fun createNotificationChannel() {
         if (isAtLeast(AndroidVersion.O)) {
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val that = this
             val channel =
                 NotificationChannel(channelId, channelName, importance)
-                    .apply { description = channelDesc }
+                    .apply {
+                        description = channelDesc
+                        vibrationPattern = that.vibrationPattern
+                        enableVibration(true)
+                    }
             val notificationManager: NotificationManager =
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as
                         NotificationManager

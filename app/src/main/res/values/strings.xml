@@ -37,30 +37,31 @@
     <string name="handwashing">Washing your hands</string>
     <string name="news">News</string>
     <string name="settings">Settings</string>
-    <string name="breakfast_title">Breakfast time!</string>
+    <string name="breakfast_title">Breakfast time! &#9749;</string>
     <string-array name="breakfast_comments">
-        <item>During sleep your hands get dirty, it's important to wash
-            them before having breakfast \u1F634</item>
+        <item>During sleep your hands get dirty, it\'s important to wash
+            them before having breakfast &#128564;</item>
         <item>Washing your hands before breakfast will ensure you a good
-            day \u1F609</item>
+            day &#128521;</item>
         <item>30 seconds for good health? Where do I sign! Just wash your
-        hands \u1F609\u1F44F\u1F4A6</item>
+        hands &#128521;&#128079;&#128166;</item>
     </string-array>
-    <string name="lunch_title">Time to lunch and washing your hands!</string>
+    <string name="lunch_title">Time to lunch and washing your hands! &#127857;</string>
     <string-array name="lunch_comments">
-        <item>Having a good day? Let's continue with it having your hands
-        clean \u1F601</item>
-        <item>After a busy morning it's time to eat and do it clean \u1F609</item>
+        <item>Having a good day? Let\'s continue with it having your hands
+        clean \uF601</item>
+        <item>After a busy morning it\'s time to eat and do it clean
+            &#128521;</item>
         <item>If you have gone to the street is even more important to
-            wash your hands before having lunch \u1F44F\u1F4A6</item>
+            wash your hands before having lunch &#128079;&#128166;</item>
     </string-array>
-    <string name="dinner_title">Let\'s have a clean dinner</string>
+    <string name="dinner_title">Let\'s have a clean dinner &#129367;</string>
     <string-array name="dinner_comments">
         <item>The day is finishing and you can do it fully by
-            \u1F44F\u1F4A6</item>
+            &#128079;&#128166;</item>
         <item>Remember before having dinner and going to sleep to wash
-            your hands and count sheeps \u1F411</item>
+            your hands and count sheeps &#128017;</item>
         <item>Do you know that washing your hands can keep you safe from
-            more than 15 diseases? That's a lot \u1F62E</item>
+            more than 15 diseases? That\'s a lot &#128558;</item>
     </string-array>
 </resources>

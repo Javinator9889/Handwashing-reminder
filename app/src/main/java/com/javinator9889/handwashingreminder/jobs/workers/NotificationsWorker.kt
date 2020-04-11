@@ -19,28 +19,31 @@
 package com.javinator9889.handwashingreminder.jobs.workers
 
 import android.content.Context
+import android.util.Log
+import androidx.annotation.ArrayRes
+import androidx.annotation.StringRes
 import androidx.emoji.text.EmojiCompat
 import androidx.work.Data
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.javinator9889.handwashingreminder.R
-import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.notifications.NotificationsHandler
-import com.javinator9889.handwashingreminder.utils.Preferences
 import com.javinator9889.handwashingreminder.utils.TIME_CHANNEL_ID
 import com.javinator9889.handwashingreminder.utils.Workers
-import com.javinator9889.handwashingreminder.utils.timeDifferenceSecs
+import java.util.*
 
 
 data class NotificationStructure(
-    val title: CharSequence,
-    val content: CharSequence
+    @StringRes val title: Int,
+    @ArrayRes val content: Int
 )
 
 class NotificationsWorker(
     private val context: Context,
     private val params: WorkerParameters
 ) : Worker(context, params) {
+    private val tag = NotificationsWorker::class.simpleName
+
     override fun doWork(): Result {
         val notificationsHandler = NotificationsHandler(
             context,
@@ -48,67 +51,70 @@ class NotificationsWorker(
             context.getString(R.string.time_notification_channel_name),
             context.getString(R.string.time_notification_channel_desc)
         )
-        val sharedPreferences =
-            HandwashingApplication.getInstance().sharedPreferences
         val emojiCompat = EmojiCompat.get()
         val workHandler = WorkHandler.getInstance()
-        val notificationData = when (params.inputData.getInt(Workers.WHO, -1)) {
-            Workers.BREAKFAST -> {
-                val savedTime =
-                    sharedPreferences.getString(Preferences.LUNCH_TIME, "")!!
-                val data = Data.Builder()
-                    .putInt(Workers.WHO, Workers.LUNCH)
-                    .build()
-                workHandler.enqueueNotificationsWorker(
-                    timeDifferenceSecs(savedTime), data
-                )
-                val comments =
-                    context.resources.getStringArray(R.array.breakfast_comments)
-                val title = context.getText(R.string.breakfast_title)
-                val comment = emojiCompat.process(comments.asList().random())
-                NotificationStructure(title, comment)
-            }
-            Workers.LUNCH -> {
-                val savedTime =
-                    sharedPreferences.getString(Preferences.DINNER_TIME, "")!!
-                val data = Data.Builder()
-                    .putInt(Workers.WHO, Workers.DINNER)
-                    .build()
-                workHandler.enqueueNotificationsWorker(
-                    timeDifferenceSecs(savedTime), data
-                )
-                val comments =
-                    context.resources.getStringArray(R.array.lunch_comments)
-                val title = context.getText(R.string.lunch_title)
-                val comment = emojiCompat.process(comments.asList().random())
-                NotificationStructure(title, comment)
-            }
-            Workers.DINNER -> {
-                val savedTime =
-                    sharedPreferences.getString(
-                        Preferences.BREAKFAST_TIME,
-                        ""
-                    )!!
-                val data = Data.Builder()
-                    .putInt(Workers.WHO, Workers.BREAKFAST)
-                    .build()
-                workHandler.enqueueNotificationsWorker(
-                    timeDifferenceSecs(savedTime), data
-                )
-                val comments =
-                    context.resources.getStringArray(R.array.dinner_comments)
-                val title = context.getText(R.string.dinner_title)
-                val comment = emojiCompat.process(comments.asList().random())
-                NotificationStructure(title, comment)
-            }
-            else -> return Result.failure()
-        }
+
+        val notificationData =
+            setNotificationData(params.inputData.getInt(Workers.WHO, -1))
+        val delay = nextExecutionDelay(params.inputData)
+        if (delay == -1L)
+            return Result.failure()
+
+        val title = emojiCompat.process(context.getString(notificationData.title))
+        val comments =
+            context.resources.getStringArray(notificationData.content)
+        val comment = emojiCompat.process(comments.asList().random())
         notificationsHandler.createNotification(
             R.drawable.ic_handwashing_icon,
             R.drawable.handwashing_app_logo,
-            notificationData.title,
-            notificationData.content
+            title,
+            comment,
+            longContent = comment
         )
+
+        with(Data.Builder()) {
+            putAll(params.inputData)
+            build()
+        }.let { workHandler.enqueueNotificationsWorker(delay, it) }
         return Result.success()
+    }
+
+    private fun setNotificationData(who: Int): NotificationStructure =
+        when (who) {
+            Workers.BREAKFAST ->
+                NotificationStructure(
+                    R.string.breakfast_title,
+                    R.array.breakfast_comments
+                )
+            Workers.LUNCH ->
+                NotificationStructure(
+                    R.string.lunch_title,
+                    R.array.lunch_comments
+                )
+            Workers.DINNER ->
+                NotificationStructure(
+                    R.string.dinner_title,
+                    R.array.dinner_comments
+                )
+            else -> throw IllegalArgumentException("Worker $who not found")
+        }
+
+    private fun nextExecutionDelay(data: Data): Long {
+        val currentDate = Calendar.getInstance()
+        val dueDate = Calendar.getInstance()
+
+        val hour = data.getInt(Workers.HOUR, -1)
+        val minute = data.getInt(Workers.MINUTE, -1)
+        if (hour == -1 || hour == -1) {
+            Log.e(tag, "Hour or minute not provided")
+            return -1L
+        }
+
+        dueDate.set(Calendar.HOUR_OF_DAY, hour)
+        dueDate.set(Calendar.MINUTE, minute)
+        dueDate.set(Calendar.SECOND, 0)
+        if (dueDate.before(currentDate))
+            dueDate.add(Calendar.HOUR_OF_DAY, 24)
+        return dueDate.timeInMillis - currentDate.timeInMillis
     }
 }

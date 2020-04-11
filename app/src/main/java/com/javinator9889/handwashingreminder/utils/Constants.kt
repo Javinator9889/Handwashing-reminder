@@ -76,7 +76,12 @@ class Workers {
         const val BREAKFAST = 0
         const val LUNCH = 1
         const val DINNER = 2
+        const val BREAKFAST_UUID = "workers:breakfast"
+        const val LUNCH_UUID = "workers:lunch"
+        const val DINNER_UUID = "workers:dinner"
         const val UNIQUE_WORK_NAME = "workers:time-sched_job"
+        const val HOUR = "worker:hour"
+        const val MINUTE = "worker:minute"
     }
 }
 

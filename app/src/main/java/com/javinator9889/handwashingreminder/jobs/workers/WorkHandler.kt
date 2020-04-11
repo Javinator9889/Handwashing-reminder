@@ -21,12 +21,17 @@ package com.javinator9889.handwashingreminder.jobs.workers
 import android.content.Context
 import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
-import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import com.javinator9889.handwashingreminder.application.HandwashingApplication
+import com.javinator9889.handwashingreminder.utils.Preferences
 import com.javinator9889.handwashingreminder.utils.Workers
+import java.util.*
 import java.util.concurrent.TimeUnit
 
-class WorkHandler private constructor(private val context: Context?) {
+data class Who(val uuid: String, val id: Int)
+
+class WorkHandler private constructor(context: Context?) {
     private val workManager: WorkManager
 
     init {
@@ -46,15 +51,77 @@ class WorkHandler private constructor(private val context: Context?) {
         }
     }
 
-    fun enqueueNotificationsWorker(delaySeconds: Long, data: Data) {
+    fun enqueuePeriodicNotificationsWorker() {
+        val currentDate = Calendar.getInstance()
+        val app = HandwashingApplication.getInstance()
+        val preferences = app.sharedPreferences
+
+        val breakfastTime =
+            preferences.getString(Preferences.BREAKFAST_TIME, "")!!
+        val lunchTime = preferences.getString(Preferences.LUNCH_TIME, "")!!
+        val dinnerTime = preferences.getString(Preferences.DINNER_TIME, "")!!
+        if (breakfastTime == "" || lunchTime == "" || dinnerTime == "")
+            throw UninitializedPropertyAccessException(
+                "The scheduled time values are not initialized"
+            )
+        val times = listOf(breakfastTime, lunchTime, dinnerTime)
+        times.forEach { time ->
+            val dueDate = Calendar.getInstance()
+            val splittedTime = time.split(":", limit = 2)
+            val hour = Integer.parseInt(splittedTime[0])
+            val minute = Integer.parseInt(splittedTime[1])
+
+            dueDate.set(Calendar.HOUR_OF_DAY, hour)
+            dueDate.set(Calendar.MINUTE, minute)
+            dueDate.set(Calendar.SECOND, 0)
+            if (dueDate.before(currentDate))
+                dueDate.add(Calendar.HOUR_OF_DAY, 24)
+            val timeDiff = dueDate.timeInMillis - currentDate.timeInMillis
+
+            val who = when (time) {
+                breakfastTime -> Who(Workers.BREAKFAST_UUID, Workers.BREAKFAST)
+                lunchTime -> Who(Workers.LUNCH_UUID, Workers.LUNCH)
+                dinnerTime -> Who(Workers.DINNER_UUID, Workers.DINNER)
+                else -> return  // This should never happen
+            }
+
+            val data = with(Data.Builder()) {
+                putInt(Workers.WHO, who.id)
+                putInt(Workers.HOUR, hour)
+                putInt(Workers.MINUTE, minute)
+                build()
+            }
+            val jobRequest =
+                OneTimeWorkRequestBuilder<NotificationsWorker>()
+                    .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
+                    .setInputData(data)
+                    .build()
+
+            with(workManager) {
+                enqueueUniqueWork(
+                    who.uuid,
+                    ExistingWorkPolicy.REPLACE,
+                    jobRequest
+                )
+            }
+        }
+    }
+
+    fun enqueueNotificationsWorker(delay: Long, data: Data) {
         val jobRequest =
-            OneTimeWorkRequest.Builder(NotificationsWorker::class.java)
-                .setInitialDelay(delaySeconds, TimeUnit.SECONDS)
+            OneTimeWorkRequestBuilder<NotificationsWorker>()
+                .setInitialDelay(delay, TimeUnit.MILLISECONDS)
                 .setInputData(data)
                 .build()
+        val who = when (data.getInt(Workers.WHO, -1)) {
+            Workers.BREAKFAST -> Workers.BREAKFAST_UUID
+            Workers.LUNCH -> Workers.LUNCH_UUID
+            Workers.DINNER -> Workers.DINNER_UUID
+            else -> return
+        }
         with(workManager) {
             enqueueUniqueWork(
-                Workers.UNIQUE_WORK_NAME,
+                who,
                 ExistingWorkPolicy.REPLACE,
                 jobRequest
             )

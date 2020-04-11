@@ -24,7 +24,6 @@ import android.content.Intent
 import android.util.Log
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.utils.Preferences
-import com.javinator9889.handwashingreminder.utils.workManagerEnqueuer
 
 class BootCompletedJob : BroadcastReceiver() {
     private val tag = BootCompletedJob::class.simpleName
@@ -42,9 +41,9 @@ class BootCompletedJob : BroadcastReceiver() {
             else
                 app.activityHandler.disableActivityTracker()
             try {
-                workManagerEnqueuer()
-            } catch (_: UninitializedPropertyAccessException) {
-                Log.e(tag, "Schedule times have not been initialized yet")
+                app.workHandler.enqueuePeriodicNotificationsWorker()
+            } catch (e: UninitializedPropertyAccessException) {
+                Log.e(tag, "Schedule times have not been initialized yet", e)
             }
         }
     }
