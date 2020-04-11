@@ -164,6 +164,7 @@ class IntroActivity : AppIntro2(),
             app.activityHandler.startTrackingActivity()
         else
             app.activityHandler.disableActivityTracker()
+        workManagerEnqueuer()
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         this.finish()

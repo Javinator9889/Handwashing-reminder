@@ -14,20 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  *
- * Created by Javinator9889 on 26/03/20 - Handwashing reminder.
+ * Created by Javinator9889 on 11/04/20 - Handwashing reminder.
  */
 package com.javinator9889.handwashingreminder.utils
 
-import android.app.Activity
-import android.content.pm.PackageManager
-import android.os.Build
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
-
-fun isAtLeast(version: AndroidVersion): Boolean {
-    return Build.VERSION.SDK_INT >= version.code
-}
 
 /**
  * This method converts dp unit to equivalent pixels, depending on device density.
@@ -49,38 +40,4 @@ fun dpToPx(dp: Float): Float {
 fun pxToDp(px: Float): Float {
     val context = HandwashingApplication.getInstance().applicationContext
     return px / context.resources.displayMetrics.density
-}
-
-fun <T : Any> T?.notNull(f: (it: T) -> Unit) {
-    if (this != null) f(this)
-}
-
-data class Permission(val name: String, val requestCode: Int)
-
-fun askForPermissions(
-    activity: Activity,
-    vararg permissions: Permission
-) {
-    for (permission in permissions) {
-        if (ContextCompat.checkSelfPermission(activity, permission.name) !=
-            PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                activity, arrayOf(permission.name), permission.requestCode
-            )
-        }
-    }
-}
-
-fun <T> Array<T>?.notEmpty(f: (it: Array<T>) -> Unit) {
-    if (!this.isNullOrEmpty()) f(this)
-}
-
-inline fun <reified T : CharSequence?> Array<T>?.filterNotEmpty(): Array<T> {
-    if (this.isNullOrEmpty()) return emptyArray()
-    val notEmptyItems = ArrayList<T>()
-    for (element in this)
-        if (element != null && element != "") notEmptyItems.add(element)
-    notEmptyItems.trimToSize()
-    return notEmptyItems.toTypedArray()
 }

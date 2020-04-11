@@ -23,6 +23,7 @@ import android.content.Context
 import android.content.Intent
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.utils.Preferences
+import com.javinator9889.handwashingreminder.utils.workManagerEnqueuer
 
 class BootCompletedJob : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
@@ -37,6 +38,7 @@ class BootCompletedJob : BroadcastReceiver() {
                 app.activityHandler.startTrackingActivity()
             else
                 app.activityHandler.disableActivityTracker()
+            workManagerEnqueuer()
         }
     }
 }
