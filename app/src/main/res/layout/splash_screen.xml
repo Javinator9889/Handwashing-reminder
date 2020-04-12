@@ -17,7 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.airbnb.lottie.LottieAnimationView
+        <com.javinator9889.handwashingreminder.graphics.LottieAdaptedPerformanceAnimationView
             android:id="@+id/logo"
             android:layout_width="wrap_content"
             android:layout_height="300dp"

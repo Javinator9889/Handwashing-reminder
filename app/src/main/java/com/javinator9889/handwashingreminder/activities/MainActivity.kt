@@ -26,6 +26,7 @@ import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.SplitCompatBaseActivity
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.gms.ads.AdsEnabler
+import com.javinator9889.handwashingreminder.notifications.NotificationsHandler
 import com.javinator9889.handwashingreminder.utils.Ads
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
@@ -45,6 +46,19 @@ class MainActivity : SplitCompatBaseActivity() {
 
         button.setOnClickListener {
             app.adLoader?.loadAdForViewGroup(ad_container)
+            val notificationsHandler =
+                NotificationsHandler(
+                    this,
+                    "test_notification_channel",
+                    "Test notification channel",
+                    "A channel for test notifications"
+                )
+            notificationsHandler.createNotification(
+                R.drawable.ic_stat_handwashing,
+                R.drawable.handwashing_app_logo,
+                "Test notification",
+                "Test description with new icon"
+            )
         }
         ads_remove.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {

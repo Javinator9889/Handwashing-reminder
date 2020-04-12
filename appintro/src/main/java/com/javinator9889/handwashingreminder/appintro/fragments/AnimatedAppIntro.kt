@@ -39,8 +39,11 @@ import com.google.android.play.core.splitcompat.SplitCompat
 import com.javinator9889.handwashingreminder.appintro.R
 import com.javinator9889.handwashingreminder.appintro.custom.*
 
-class AnimatedAppIntro : Fragment(),
-    ISlideSelectionListener, ISlideBackgroundColorHolder {
+class AnimatedAppIntro :
+    Fragment(),
+    ISlideSelectionListener,
+    ISlideBackgroundColorHolder/*,
+    LottieOnCompositionLoadedListener*/ {
     private var drawable = 0
     private var bgColor = 0
     private var titleColor = 0
@@ -49,7 +52,9 @@ class AnimatedAppIntro : Fragment(),
     @get:LayoutRes
     protected val layoutId: Int = R.layout.animated_intro
     private var title: String? = null
-    @RawRes private var animatedDrawable: Int? = null
+
+    @RawRes
+    private var animatedDrawable: Int? = null
     private var animationLoop: Boolean = false
     private var description: String? = null
     private var titleTypeface: TypefaceContainer? = null
@@ -124,6 +129,8 @@ class AnimatedAppIntro : Fragment(),
         val descriptionText = view.findViewById<TextView>(R.id.description)
         val slideImage = view.findViewById<LottieAnimationView>(R.id.image)
         mainLayout = view.findViewById(R.id.main)
+//        slideImage.addLottieOnCompositionLoadedListener(this)
+//        slideImage.enableMergePathsForKitKatAndAbove(true)
         titleText.text = title
         if (titleColor != 0) {
             titleText.setTextColor(titleColor)
@@ -206,4 +213,9 @@ class AnimatedAppIntro : Fragment(),
             AnimatedAppIntro::class.java
         )
     }
+//
+//    override fun onCompositionLoaded(composition: LottieComposition?) {
+//        if (!isHighPerformingDevice() || true)
+//            image?.let { it.setMinFrame(it.maxFrame.toInt()) }
+//    }
 }
