@@ -156,4 +156,6 @@ dependencies {
     // https://mvnrepository.com/artifact/androidx.emoji/emoji/1.0.0
     implementation 'androidx.emoji:emoji:1.0.0'
     implementation 'androidx.emoji:emoji-appcompat:1.0.0'
+    // https://github.com/mikepenz/FastAdapter
+    implementation "com.mikepenz:fastadapter:${latestFastAdapterRelease}"
 }

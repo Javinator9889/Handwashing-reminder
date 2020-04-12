@@ -18,86 +18,85 @@
  */
 package com.javinator9889.handwashingreminder.activities
 
-import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
+import android.util.SparseArray
+import android.view.MenuItem
+import androidx.annotation.IdRes
 import androidx.core.view.forEach
+import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.javinator9889.handwashingreminder.R
-import com.javinator9889.handwashingreminder.activities.base.SplitCompatBaseActivity
+import com.javinator9889.handwashingreminder.activities.views.fragments.diseases.DiseasesFragment
+import com.javinator9889.handwashingreminder.activities.views.fragments.news.NewsFragment
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
-import com.javinator9889.handwashingreminder.gms.ads.AdsEnabler
-import com.javinator9889.handwashingreminder.notifications.NotificationsHandler
-import com.javinator9889.handwashingreminder.utils.Ads
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
+import javinator9889.localemanager.activity.BaseAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.concurrent.thread
 
-class MainActivity : SplitCompatBaseActivity() {
+class MainActivity : BaseAppCompatActivity(),
+    BottomNavigationView.OnNavigationItemSelectedListener {
+    private val fragments: SparseArray<Fragment> = SparseArray(4)
     private lateinit var app: HandwashingApplication
 
-    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         app = HandwashingApplication.getInstance()
         delegateMenuIcons(menu)
-        app.adLoader?.loadAdForViewGroup(ad_container)
-
-        button.setOnClickListener {
-            app.adLoader?.loadAdForViewGroup(ad_container)
-            val notificationsHandler =
-                NotificationsHandler(
-                    this,
-                    "test_notification_channel",
-                    "Test notification channel",
-                    "A channel for test notifications"
-                )
-            notificationsHandler.createNotification(
-                R.drawable.ic_stat_handwashing,
-                R.drawable.handwashing_app_logo,
-                "Test notification",
-                "Test description with new icon"
-            )
+        fragments.apply {
+            put(R.id.diseases, DiseasesFragment())
+            put(R.id.handwashing, NewsFragment())
+            put(R.id.news, NewsFragment())
+            put(R.id.settings, DiseasesFragment())
         }
-        ads_remove.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                ads_remove.isEnabled = false
-                ads_remove.text = "Ads will be uninstalled"
-                splitInstallManager.deferredUninstall(mutableListOf(Ads.MODULE_NAME))
-                val adsRemover =
-                    AdsEnabler(HandwashingApplication.getInstance())
-                adsRemover.disableAds()
-            }
-        }
+        fragments.put(R.id.diseases, DiseasesFragment())
+        menu.setOnNavigationItemSelectedListener(this)
+        onItemSelected(menu.selectedItemId)
     }
 
     protected fun delegateMenuIcons(menu: BottomNavigationView) {
         thread(start = true) {
             menu.menu.forEach { item ->
-                when (item.itemId) {
+                val icon = when (item.itemId) {
                     R.id.diseases ->
                         IconicsDrawable(
-                            this, GoogleMaterial.Icon
-                                .gmd_feedback
-                        ).apply { item.icon = this }
+                            this, GoogleMaterial.Icon.gmd_feedback
+                        )
                     R.id.news ->
                         IconicsDrawable(
-                            this, GoogleMaterial.Icon
-                                .gmd_chrome_reader_mode
-                        ).apply { item.icon = this }
+                            this, GoogleMaterial.Icon.gmd_chrome_reader_mode
+                        )
                     R.id.settings ->
                         IconicsDrawable(
-                            this, GoogleMaterial.Icon
-                                .gmd_settings
-                        ).apply { item.icon = this }
+                            this, GoogleMaterial.Icon.gmd_settings
+                        )
+                    else -> null
                 }
+                icon?.let { runOnUiThread { item.icon = it } }
             }
         }
     }
 
-    override fun onDestroy() {
-        app.adLoader?.destroy()
-        super.onDestroy()
+    override fun onNavigationItemSelected(item: MenuItem): Boolean =
+        onItemSelected(item.itemId)
+
+    protected fun onItemSelected(@IdRes id: Int): Boolean {
+        return try {
+            loadFragment(fragments[id])
+            true
+        } catch (e: Exception) {
+            Log.e("Main", "Unexpected exception", e)
+            false
+        }
+    }
+
+    private fun loadFragment(fragment: Fragment) {
+        with(supportFragmentManager.beginTransaction()) {
+            replace(R.id.mainContent, fragment)
+            addToBackStack(null)
+        }.commit()
     }
 }

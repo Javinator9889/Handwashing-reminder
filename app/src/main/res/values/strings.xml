@@ -64,4 +64,6 @@
         <item>Do you know that washing your hands can keep you safe from
             more than 15 diseases? That\'s a lot &#128558;</item>
     </string-array>
+    <string name="disease">COVID-19</string>
+    <string name="disease_desc">A virus that kills people</string>
 </resources>
