@@ -16,7 +16,7 @@
  *
  * Created by Javinator9889 on 12/04/20 - Handwashing reminder.
  */
-package com.javinator9889.handwashingreminder.activities.views.fragments.diseases
+package com.javinator9889.handwashingreminder.activities.views.fragments.diseases.adapter
 
 import android.view.View
 import android.widget.TextView

@@ -26,17 +26,23 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.BaseFragmentView
+import com.javinator9889.handwashingreminder.activities.views.fragments.diseases.adapter.Ads
+import com.javinator9889.handwashingreminder.activities.views.fragments.diseases.adapter.Disease
 import com.mikepenz.fastadapter.FastAdapter
+import com.mikepenz.fastadapter.GenericItem
+import com.mikepenz.fastadapter.IAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
 
 class DiseasesFragment : BaseFragmentView() {
     override val layoutId: Int = R.layout.diseases_list
-    private lateinit var adapter: ItemAdapter<Disease>
+    private lateinit var adapters: Collection<IAdapter<out GenericItem>>
 //    private lateinit var items: List<Disease>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        adapter = ItemAdapter()
+        val adapter = ItemAdapter<Disease>()
+        val ads1 = ItemAdapter<Ads>()
+        val ads2 = ItemAdapter<Ads>()
         val items = listOf(
             Disease(
                 R.raw.corona_virus,
@@ -60,7 +66,13 @@ class DiseasesFragment : BaseFragmentView() {
                 2
             )
         )
+        val adsItems = listOf(Ads())
+        val ads2Items = listOf(Ads())
         adapter.add(items)
+        ads1.add(adsItems)
+        ads2.add(ads2Items)
+
+        adapters = listOf(ads1, adapter, ads2)
     }
 
     override fun onCreateView(
@@ -69,7 +81,7 @@ class DiseasesFragment : BaseFragmentView() {
         savedInstanceState: Bundle?
     ): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
-        val fastAdapter = FastAdapter.with(adapter)
+        val fastAdapter = FastAdapter.with(adapters)
         val rvManager = LinearLayoutManager(context)
         with(view!!.findViewById<RecyclerView>(R.id.diseasesContainer)) {
             layoutManager = rvManager

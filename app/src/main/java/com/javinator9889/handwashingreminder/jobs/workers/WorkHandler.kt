@@ -19,6 +19,7 @@
 package com.javinator9889.handwashingreminder.jobs.workers
 
 import android.content.Context
+import android.util.Log
 import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
@@ -84,6 +85,7 @@ class WorkHandler private constructor(private val context: Context?) {
                 dinnerTime -> Who(Workers.DINNER_UUID, Workers.DINNER)
                 else -> return  // This should never happen
             }
+            Log.i("WorkHandler", "Scheduled activity ${who.uuid} at ${dueDate.time}")
 
             val data = with(Data.Builder()) {
                 putInt(Workers.WHO, who.id)
