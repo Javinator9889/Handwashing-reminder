@@ -22,6 +22,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
@@ -75,11 +76,14 @@ class LauncherActivity : AppCompatActivity() {
                 runOnUiThread {
                     logo.setAnimation(AnimatedResources.STAY_SAFE_STAY_HOME.res)
                 }
+                logo.enableMergePathsForKitKatAndAbove(true)
                 logo.addLottieOnCompositionLoadedListener {
                     runOnUiThread {
                         logo.startAnimation(fadeInAnimation)
                     }
-                    sleepDuration = it.duration.toLong()
+                    Log.i("Launcher", "Duration: ${it.duration}")
+                    Log.i("Launcher", "Duration2: ${logo.duration}")
+                    sleepDuration = logo.duration
                 }
                 while (!animationLoaded)
                     Thread.sleep(10)

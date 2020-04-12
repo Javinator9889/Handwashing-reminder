@@ -18,7 +18,24 @@
  */
 package com.javinator9889.handwashingreminder.utils
 
+import android.app.ActivityManager
+import android.content.Context
 import android.os.Build
+import com.javinator9889.handwashingreminder.application.HandwashingApplication
 
 fun isAtLeast(version: AndroidVersion): Boolean =
     Build.VERSION.SDK_INT >= version.code
+
+fun isHighPerformingDevice(): Boolean {
+    with(HandwashingApplication.getInstance()) {
+        val activityManager =
+            getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        val isLowRamDevice =
+            if (isAtLeast(AndroidVersion.KITKAT_WATCH))
+                !activityManager.isLowRamDevice
+            else true
+        return isLowRamDevice &&
+                Runtime.getRuntime().availableProcessors() >= 4 &&
+                activityManager.memoryClass >= 128
+    }
+}
