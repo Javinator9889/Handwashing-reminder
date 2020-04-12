@@ -45,38 +45,44 @@ class NotificationsWorker(
     private val tag = NotificationsWorker::class.simpleName
 
     override fun doWork(): Result {
-        val notificationsHandler = NotificationsHandler(
-            context,
-            TIME_CHANNEL_ID,
-            context.getString(R.string.time_notification_channel_name),
-            context.getString(R.string.time_notification_channel_desc)
-        )
-        val emojiCompat = EmojiCompat.get()
-        val workHandler = WorkHandler.getInstance()
+        return try {
+            val notificationsHandler = NotificationsHandler(
+                context,
+                TIME_CHANNEL_ID,
+                context.getString(R.string.time_notification_channel_name),
+                context.getString(R.string.time_notification_channel_desc)
+            )
+            val emojiCompat = EmojiCompat.get()
+            val workHandler = WorkHandler.getInstance(context)
 
-        val notificationData =
-            setNotificationData(params.inputData.getInt(Workers.WHO, -1))
-        val delay = nextExecutionDelay(params.inputData)
-        if (delay == -1L)
-            return Result.failure()
+            val notificationData =
+                setNotificationData(params.inputData.getInt(Workers.WHO, -1))
+            val delay = nextExecutionDelay(params.inputData)
+            if (delay == -1L)
+                return Result.failure()
 
-        val title = emojiCompat.process(context.getString(notificationData.title))
-        val comments =
-            context.resources.getStringArray(notificationData.content)
-        val comment = emojiCompat.process(comments.asList().random())
-        notificationsHandler.createNotification(
-            R.drawable.ic_handwashing_icon,
-            R.drawable.handwashing_app_logo,
-            title,
-            comment,
-            longContent = comment
-        )
+            val title =
+                emojiCompat.process(context.getString(notificationData.title))
+            val comments =
+                context.resources.getStringArray(notificationData.content)
+            val comment = emojiCompat.process(comments.asList().random())
+            notificationsHandler.createNotification(
+                R.drawable.ic_handwashing_icon,
+                R.drawable.handwashing_app_logo,
+                title,
+                comment,
+                longContent = comment
+            )
 
-        with(Data.Builder()) {
-            putAll(params.inputData)
-            build()
-        }.let { workHandler.enqueueNotificationsWorker(delay, it) }
-        return Result.success()
+            with(Data.Builder()) {
+                putAll(params.inputData)
+                build()
+            }.let { workHandler.enqueueNotificationsWorker(delay, it) }
+            Result.success()
+        } catch (e: Exception) {
+            Log.e(tag, "Uncaught exception on worker class", e)
+            Result.failure()
+        }
     }
 
     private fun setNotificationData(who: Int): NotificationStructure =
@@ -115,6 +121,7 @@ class NotificationsWorker(
         dueDate.set(Calendar.SECOND, 0)
         if (dueDate.before(currentDate))
             dueDate.add(Calendar.HOUR_OF_DAY, 24)
+        Log.i(tag, "Next execution scheduled at: ${dueDate.time}")
         return dueDate.timeInMillis - currentDate.timeInMillis
     }
 }

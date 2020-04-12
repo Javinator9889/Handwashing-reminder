@@ -21,7 +21,6 @@ package com.javinator9889.handwashingreminder.jobs
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.utils.Preferences
 
@@ -40,11 +39,11 @@ class BootCompletedJob : BroadcastReceiver() {
                 app.activityHandler.startTrackingActivity()
             else
                 app.activityHandler.disableActivityTracker()
-            try {
+            /*try {
                 app.workHandler.enqueuePeriodicNotificationsWorker()
             } catch (e: UninitializedPropertyAccessException) {
                 Log.e(tag, "Schedule times have not been initialized yet", e)
-            }
+            }*/
         }
     }
 }

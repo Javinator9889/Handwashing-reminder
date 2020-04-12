@@ -31,15 +31,15 @@ import java.util.concurrent.TimeUnit
 
 data class Who(val uuid: String, val id: Int)
 
-class WorkHandler private constructor(context: Context?) {
+class WorkHandler private constructor(private val context: Context?) {
     private val workManager: WorkManager
+        get() = WorkManager.getInstance(context!!)
 
     init {
         if (context == null)
             throw IllegalStateException(
                 "Context cannot be null on class creation"
             )
-        workManager = WorkManager.getInstance(context)
     }
 
     companion object {
@@ -51,7 +51,7 @@ class WorkHandler private constructor(context: Context?) {
         }
     }
 
-    fun enqueuePeriodicNotificationsWorker() {
+    fun enqueuePeriodicNotificationsWorker(forceUpdate: Boolean = false) {
         val currentDate = Calendar.getInstance()
         val app = HandwashingApplication.getInstance()
         val preferences = app.sharedPreferences
@@ -67,9 +67,9 @@ class WorkHandler private constructor(context: Context?) {
         val times = listOf(breakfastTime, lunchTime, dinnerTime)
         times.forEach { time ->
             val dueDate = Calendar.getInstance()
-            val splittedTime = time.split(":", limit = 2)
-            val hour = Integer.parseInt(splittedTime[0])
-            val minute = Integer.parseInt(splittedTime[1])
+            val splittedTime = time.split(":")
+            val hour = Integer.parseInt(splittedTime[0].trim())
+            val minute = Integer.parseInt(splittedTime[1].trim())
 
             dueDate.set(Calendar.HOUR_OF_DAY, hour)
             dueDate.set(Calendar.MINUTE, minute)
@@ -97,10 +97,15 @@ class WorkHandler private constructor(context: Context?) {
                     .setInputData(data)
                     .build()
 
+            val policy = if (forceUpdate)
+                ExistingWorkPolicy.REPLACE
+            else
+                ExistingWorkPolicy.KEEP
+
             with(workManager) {
                 enqueueUniqueWork(
                     who.uuid,
-                    ExistingWorkPolicy.REPLACE,
+                    policy,
                     jobRequest
                 )
             }
@@ -122,7 +127,7 @@ class WorkHandler private constructor(context: Context?) {
         with(workManager) {
             enqueueUniqueWork(
                 who,
-                ExistingWorkPolicy.REPLACE,
+                ExistingWorkPolicy.APPEND,
                 jobRequest
             )
         }
