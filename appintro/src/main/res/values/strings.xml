@@ -42,4 +42,11 @@
         contains information about possible application crashes or errors. It
         is always anonymous and will help me update the app, include
         new features and solve errors.</string>
+    <string name="autostart_permission_title">Autostart permission
+        required</string>
+    <string name="autostart_permission">We have detected you are
+        running a customized UI. For getting notifications on time,
+        please gran the app to autostart automatically (this option
+        will not waste your battery)</string>
+    <string name="accept">Accept</string>
 </resources>

@@ -53,7 +53,7 @@ class NotificationsWorker(
                 context.getString(R.string.time_notification_channel_desc)
             )
             val emojiCompat = EmojiCompat.get()
-            val workHandler = WorkHandler.getInstance(context)
+            val workHandler = WorkHandler(context)
 
             val notificationData =
                 setNotificationData(params.inputData.getInt(Workers.WHO, -1))

@@ -29,7 +29,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.javinator9889.handwashingreminder.application.HandwashingApplication
+import androidx.core.content.edit
 import com.javinator9889.handwashingreminder.utils.AndroidVersion
 import com.javinator9889.handwashingreminder.utils.Preferences
 import com.javinator9889.handwashingreminder.utils.isAtLeast
@@ -42,16 +42,16 @@ class NotificationsHandler(
     private val channelDesc: String = ""
 ) {
     private val preferences: SharedPreferences =
-        HandwashingApplication.getInstance().sharedPreferences
+        context.getSharedPreferences(Preferences.NAME, Context.MODE_PRIVATE)
     private val notificationId = 1
     private val vibrationPattern = longArrayOf(300L, 300L, 300L, 300L)
 
     init {
         if (isNotificationChannelCreated() || createChannelRequired()) {
             createNotificationChannel()
-            val editor = preferences.edit()
-            editor.putBoolean(Preferences.CREATE_CHANNEL_KEY, false)
-            editor.apply()
+            preferences.edit {
+                putBoolean(Preferences.CREATE_CHANNEL_KEY, false)
+            }
         }
     }
 
@@ -120,11 +120,6 @@ class NotificationsHandler(
         longContent: CharSequence? = null,
         autoCancel: Boolean = true
     ) {
-//        val resultIntent = Intent(context, LauncherActivity::class.java)
-//        val resultPendingIntent = TaskStackBuilder.create(context).run {
-//            addNextIntentWithParentStack(resultIntent)
-//            getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
-//        }
         with(NotificationCompat.Builder(context, channelId)) {
             setSmallIcon(iconDrawable)
             setLargeIcon(largeIcon)
@@ -133,7 +128,6 @@ class NotificationsHandler(
             setPriority(priority)
             setVibrate(vibrationPattern)
             setAutoCancel(autoCancel)
-//            setContentIntent(resultPendingIntent)
             longContent.notNull {
                 setStyle(NotificationCompat.BigTextStyle().bigText(longContent))
             }

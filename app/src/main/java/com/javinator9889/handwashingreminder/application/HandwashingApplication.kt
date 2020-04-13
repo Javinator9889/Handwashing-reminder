@@ -112,7 +112,7 @@ class HandwashingApplication : BaseApplication() {
 //            EmojiCompat.init(this)
 //        }
 
-        workHandler = WorkHandler.getInstance(this)
+        workHandler = WorkHandler(this)
         try {
             workHandler.enqueuePeriodicNotificationsWorker()
         } catch (_: UninitializedPropertyAccessException) {

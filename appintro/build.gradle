@@ -71,4 +71,6 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
     // http://airbnb.io/lottie/#/android?id=getting-started
     implementation "com.airbnb.android:lottie:3.4.0"
+    // https://github.com/judemanutd/AutoStarter
+    implementation 'com.github.judemanutd:autostarter:1.0.8'
 }

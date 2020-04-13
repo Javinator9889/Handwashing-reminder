@@ -11,6 +11,13 @@
         </item>
     </style>
 
+    <style name="AppTheme.MaterialDialogs" parent="AppTheme">
+        <item name="md_corner_radius">16dp</item>
+        <item name="md_font_title">@font/raleway_bold</item>
+        <item name="md_font_body">@font/raleway_medium</item>
+        <item name="md_font_button">@font/raleway_medium</item>
+    </style>
+
     <style name="AppTheme.AdAttribution">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>

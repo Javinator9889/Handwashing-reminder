@@ -20,11 +20,7 @@ package com.javinator9889.handwashingreminder.jobs.workers
 
 import android.content.Context
 import android.util.Log
-import androidx.work.Data
-import androidx.work.ExistingWorkPolicy
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
-import com.javinator9889.handwashingreminder.application.HandwashingApplication
+import androidx.work.*
 import com.javinator9889.handwashingreminder.utils.Preferences
 import com.javinator9889.handwashingreminder.utils.Workers
 import java.util.*
@@ -32,30 +28,14 @@ import java.util.concurrent.TimeUnit
 
 data class Who(val uuid: String, val id: Int)
 
-class WorkHandler private constructor(private val context: Context?) {
+class WorkHandler(private val context: Context) {
     private val workManager: WorkManager
-        get() = WorkManager.getInstance(context!!)
-
-    init {
-        if (context == null)
-            throw IllegalStateException(
-                "Context cannot be null on class creation"
-            )
-    }
-
-    companion object {
-        private var instance: WorkHandler? = null
-
-        fun getInstance(context: Context? = null): WorkHandler {
-            instance = instance ?: WorkHandler(context)
-            return instance!!
-        }
-    }
+        get() = WorkManager.getInstance(context)
 
     fun enqueuePeriodicNotificationsWorker(forceUpdate: Boolean = false) {
         val currentDate = Calendar.getInstance()
-        val app = HandwashingApplication.getInstance()
-        val preferences = app.sharedPreferences
+        val preferences =
+            context.getSharedPreferences(Preferences.NAME, Context.MODE_PRIVATE)
 
         val breakfastTime =
             preferences.getString(Preferences.BREAKFAST_TIME, "")!!
@@ -65,7 +45,7 @@ class WorkHandler private constructor(private val context: Context?) {
             throw UninitializedPropertyAccessException(
                 "The scheduled time values are not initialized"
             )
-        val times = listOf(breakfastTime, lunchTime, dinnerTime)
+        val times = arrayOf(breakfastTime, lunchTime, dinnerTime)
         times.forEach { time ->
             val dueDate = Calendar.getInstance()
             val splittedTime = time.split(":")
@@ -85,7 +65,10 @@ class WorkHandler private constructor(private val context: Context?) {
                 dinnerTime -> Who(Workers.DINNER_UUID, Workers.DINNER)
                 else -> return  // This should never happen
             }
-            Log.i("WorkHandler", "Scheduled activity ${who.uuid} at ${dueDate.time}")
+            Log.i(
+                "WorkHandler",
+                "Scheduled activity ${who.uuid} at ${dueDate.time}"
+            )
 
             val data = with(Data.Builder()) {
                 putInt(Workers.WHO, who.id)
@@ -93,11 +76,15 @@ class WorkHandler private constructor(private val context: Context?) {
                 putInt(Workers.MINUTE, minute)
                 build()
             }
-            val jobRequest =
-                OneTimeWorkRequestBuilder<NotificationsWorker>()
-                    .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
-                    .setInputData(data)
-                    .build()
+            val jobRequest = OneTimeWorkRequestBuilder<NotificationsWorker>()
+                .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
+                .setInputData(data)
+                .setBackoffCriteria(
+                    BackoffPolicy.LINEAR,
+                    30000L,
+                    TimeUnit.MILLISECONDS
+                )
+                .build()
 
             val policy = if (forceUpdate)
                 ExistingWorkPolicy.REPLACE
