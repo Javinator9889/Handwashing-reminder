@@ -21,14 +21,12 @@ package com.javinator9889.handwashingreminder.application
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
-import androidx.core.provider.FontRequest
-import androidx.emoji.text.EmojiCompat
-import androidx.emoji.text.FontRequestEmojiCompatConfig
 import androidx.multidex.MultiDex
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.javinator9889.handwashingreminder.R
+import com.javinator9889.handwashingreminder.emoji.EmojiCompat
 import com.javinator9889.handwashingreminder.gms.activity.ActivityHandler
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
 import com.javinator9889.handwashingreminder.graphics.ImageCache
@@ -95,17 +93,18 @@ class HandwashingApplication : BaseApplication() {
         remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)
         remoteConfig.fetchAndActivate()
 
-        FontRequest(
-            "com.google.android.gms.fonts",
-            "com.google.android.gms",
-            "Noto Color Emoji Compat",
-            R.array.com_google_android_gms_fonts_certs
-        ).let {
-            with(FontRequestEmojiCompatConfig(this, it)) {
-                setReplaceAll(true)
-                EmojiCompat.init(this)
-            }
-        }
+        EmojiCompat.get(this)
+//        FontRequest(
+//            "com.google.android.gms.fonts",
+//            "com.google.android.gms",
+//            "Noto Color Emoji Compat",
+//            R.array.com_google_android_gms_fonts_certs
+//        ).let {
+//            with(FontRequestEmojiCompatConfig(this, it)) {
+//                setReplaceAll(true)
+//                EmojiCompat.init(this)
+//            }
+//        }
 //
 //        with(BundledEmojiCompatConfig(this)) {
 //            setReplaceAll(true)

@@ -22,11 +22,11 @@ import android.content.Context
 import android.util.Log
 import androidx.annotation.ArrayRes
 import androidx.annotation.StringRes
-import androidx.emoji.text.EmojiCompat
 import androidx.work.Data
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.javinator9889.handwashingreminder.R
+import com.javinator9889.handwashingreminder.emoji.EmojiCompat
 import com.javinator9889.handwashingreminder.notifications.NotificationsHandler
 import com.javinator9889.handwashingreminder.utils.TIME_CHANNEL_ID
 import com.javinator9889.handwashingreminder.utils.Workers
@@ -52,7 +52,7 @@ class NotificationsWorker(
                 context.getString(R.string.time_notification_channel_name),
                 context.getString(R.string.time_notification_channel_desc)
             )
-            val emojiCompat = EmojiCompat.get()
+            val emojiCompat = EmojiCompat.get(context)
             val workHandler = WorkHandler(context)
 
             val notificationData =

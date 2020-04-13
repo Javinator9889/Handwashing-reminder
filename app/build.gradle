@@ -158,4 +158,12 @@ dependencies {
     implementation 'androidx.emoji:emoji-appcompat:1.0.0'
     // https://github.com/mikepenz/FastAdapter
     implementation "com.mikepenz:fastadapter:${latestFastAdapterRelease}"
+    // https://developer.android.com/kotlin/ktx#lifecycle
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.2.0'
+    // https://developer.android.com/kotlin/ktx#viewmodel
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    // https://developer.android.com/kotlin/ktx#fragment
+    implementation 'androidx.fragment:fragment-ktx:1.2.4'
+    // https://developer.android.com/kotlin/ktx#livedata
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
 }

@@ -29,6 +29,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.views.fragments.diseases.DiseasesFragment
 import com.javinator9889.handwashingreminder.activities.views.fragments.news.NewsFragment
+import com.javinator9889.handwashingreminder.activities.views.fragments.washinghands.WashingHandsFragment
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
@@ -48,11 +49,10 @@ class MainActivity : BaseAppCompatActivity(),
         delegateMenuIcons(menu)
         fragments.apply {
             put(R.id.diseases, DiseasesFragment())
-            put(R.id.handwashing, NewsFragment())
+            put(R.id.handwashing, WashingHandsFragment())
             put(R.id.news, NewsFragment())
             put(R.id.settings, DiseasesFragment())
         }
-        fragments.put(R.id.diseases, DiseasesFragment())
         menu.setOnNavigationItemSelectedListener(this)
         onItemSelected(menu.selectedItemId)
     }

@@ -79,9 +79,53 @@ class Workers {
         const val BREAKFAST_UUID = "workers:breakfast"
         const val LUNCH_UUID = "workers:lunch"
         const val DINNER_UUID = "workers:dinner"
-        const val UNIQUE_WORK_NAME = "workers:time-sched_job"
         const val HOUR = "worker:hour"
         const val MINUTE = "worker:minute"
+    }
+}
+
+class Videos {
+    companion object URI {
+        const val URL = "video:url"
+        const val HASH = "video:hash"
+        const val FILENAME = "video:name"
+        val VideoList = arrayOf(
+            hashMapOf(
+                URL to "https://cloud.javinator9889.com/s/j4tAXFpNmcZ7WRG/download",
+                HASH to "4bab6874bf8b091accaaf01b07cbc16cbba661411b4dbdb4b2a9f4c033ce8889",
+                FILENAME to "first-step.mp4"
+            ),
+            hashMapOf(
+                URL to "https://cloud.javinator9889.com/s/XRDj6LBwb92mSNc/download",
+                HASH to "dc42473a8150d1f258d26e22d455500dcef9ee3c13122e183d712f8b5b8ecf0d",
+                FILENAME to "second-step.mp4"
+            ),
+            hashMapOf(
+                URL to "https://cloud.javinator9889.com/s/bQNtM9LPsfLYqjy/download",
+                HASH to "d8c83722a72466780ba00a6df3cf5fec30f662d538041c49e5cd1f6228d9a009",
+                FILENAME to "third-step.mp4"
+            ),
+            hashMapOf(
+                URL to "https://cloud.javinator9889.com/s/3G4npX58tkqXxx9/download",
+                HASH to "2e1ce76a465be9a0c4de53d607d4a6285c393094e88d63673571ab9355e09825",
+                FILENAME to "fourth-step.mp4"
+            ),
+            hashMapOf(
+                URL to "https://cloud.javinator9889.com/s/D9CPyBWQ5MbEsbE/download",
+                HASH to "e2b8893019af37a59b7dc3f9dfdf1788d781498ed8c67fa50997d26cc3beb27b",
+                FILENAME to "fifth-step.mp4"
+            ),
+            hashMapOf(
+                URL to "https://cloud.javinator9889.com/s/NZ23LBigk5pAXqR/download",
+                HASH to "b8831875e52841dd9d1bb3bb575fc1759cf69f93af868c3bb9098d7483be30f9",
+                FILENAME to "sixth-step.mp4"
+            ),
+            hashMapOf(
+                URL to "https://cloud.javinator9889.com/s/zMRz6nWqi6rsNen/download",
+                HASH to "d414da0b1cdc818bea8028b7ac1f4e9702fcad6546cae83575b3dd908caa0f3d",
+                FILENAME to "seventh-step.mp4"
+            )
+        )
     }
 }
 

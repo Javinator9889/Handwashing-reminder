@@ -29,6 +29,7 @@
         <activity android:name="com.javinator9889.handwashingreminder.activities.MainActivity" />
         <activity android:name="com.javinator9889.handwashingreminder.activities.PrivacyTermsActivity" />
         <activity android:name=".activities.DynamicFeatureProgress" />
+        <activity android:name=".activities.views.fragments.washinghands.WashingHandsFragment" />
 
         <meta-data
             android:name="preloaded_fonts"
