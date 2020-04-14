@@ -171,4 +171,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
     // https://github.com/JakeWharton/timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
+    // https://developer.android.com/jetpack/androidx/releases/lifecycle#declaring_dependencies
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.2.0'
+//    implementation 'androidx.lifecycle:lifecycle-common-java8:2.2.0'
 }

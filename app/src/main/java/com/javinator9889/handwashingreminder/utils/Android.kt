@@ -20,6 +20,8 @@ package com.javinator9889.handwashingreminder.utils
 
 import android.app.ActivityManager
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities.*
 import android.os.Build
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 
@@ -37,5 +39,25 @@ fun isHighPerformingDevice(): Boolean {
         return isLowRamDevice &&
                 Runtime.getRuntime().availableProcessors() >= 4 &&
                 activityManager.memoryClass >= 128
+    }
+}
+
+fun isConnected(): Boolean {
+    val connectivityManager = HandwashingApplication.getInstance()
+        .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    if (isAtLeast(AndroidVersion.M)) {
+        val network = connectivityManager.activeNetwork ?: return false
+        val actNet =
+            connectivityManager.getNetworkCapabilities(network) ?: return false
+        return when {
+            actNet.hasTransport(TRANSPORT_WIFI) ||
+                    actNet.hasTransport(TRANSPORT_CELLULAR) ||
+                    actNet.hasTransport(TRANSPORT_ETHERNET) -> true
+            else -> false
+        }
+    } else {
+        with(connectivityManager.activeNetworkInfo) {
+            return this?.isConnected ?: false
+        }
     }
 }

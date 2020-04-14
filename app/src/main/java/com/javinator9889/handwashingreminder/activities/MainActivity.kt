@@ -22,6 +22,7 @@ import android.os.Bundle
 import android.util.SparseArray
 import android.view.MenuItem
 import androidx.annotation.IdRes
+import androidx.core.util.forEach
 import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -40,6 +41,7 @@ import kotlin.concurrent.thread
 class MainActivity : BaseAppCompatActivity(),
     BottomNavigationView.OnNavigationItemSelectedListener {
     private val fragments: SparseArray<Fragment> = SparseArray(4)
+    private lateinit var activeFragment: Fragment
     private lateinit var app: HandwashingApplication
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,8 +55,10 @@ class MainActivity : BaseAppCompatActivity(),
             put(R.id.news, NewsFragment())
             put(R.id.settings, DiseasesFragment())
         }
+        activeFragment = fragments[R.id.diseases]
         menu.setOnNavigationItemSelectedListener(this)
-        onItemSelected(menu.selectedItemId)
+//        menu.setOnNavigationItemReselectedListener { onItemSelected(it.itemId) }
+        initFragmentView()
     }
 
     protected fun delegateMenuIcons(menu: BottomNavigationView) {
@@ -93,10 +97,26 @@ class MainActivity : BaseAppCompatActivity(),
         }
     }
 
-    private fun loadFragment(fragment: Fragment) {
+    private fun initFragmentView() {
         with(supportFragmentManager.beginTransaction()) {
-            replace(R.id.mainContent, fragment)
-            addToBackStack(null)
+            fragments.forEach { _, fragment ->
+                add(R.id.mainContent, fragment)
+                hide(fragment)
+            }
+            show(activeFragment)
+            commit()
+        }
+    }
+
+    private fun loadFragment(fragment: Fragment) {
+        if (fragment == activeFragment)
+            return
+        with(supportFragmentManager.beginTransaction()) {
+            show(fragment)
+            hide(activeFragment)
+            activeFragment = fragment
+            setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+            disallowAddToBackStack()
         }.commit()
     }
 }

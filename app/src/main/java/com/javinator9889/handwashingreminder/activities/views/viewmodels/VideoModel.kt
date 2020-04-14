@@ -16,10 +16,10 @@
  *
  * Created by Javinator9889 on 13/04/20 - Handwashing reminder.
  */
-package com.javinator9889.handwashingreminder.activities.views.fragments.washinghands
+package com.javinator9889.handwashingreminder.activities.views.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
@@ -27,34 +27,46 @@ import com.javinator9889.handwashingreminder.utils.Videos.URI.FILENAME
 import com.javinator9889.handwashingreminder.utils.Videos.URI.HASH
 import com.javinator9889.handwashingreminder.utils.Videos.URI.URL
 import com.javinator9889.handwashingreminder.utils.Videos.URI.VideoList
-import kotlinx.coroutines.*
+import com.javinator9889.handwashingreminder.utils.isConnected
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.io.*
+import java.math.BigInteger
 import java.net.URL
 import java.security.MessageDigest
+import javax.inject.Inject
 
-class VideoModel : ViewModel() {
+private const val LIVEDATA_KEY = "videomodel:livedata"
+
+class VideoModel(
+    private val state: SavedStateHandle, private val position: Int
+) : ViewModel() {
     private val cachePath: File =
         HandwashingApplication.getInstance().applicationContext.cacheDir
-    private val tag = VideoModel::class.simpleName
-    val videos: LiveData<List<File>> = liveData {
-        emit(loadVideos())
+    val videos: LiveData<String> = liveData {
+        emitSource(state.getLiveData(LIVEDATA_KEY, loadVideo()))
     }
 
-    private suspend fun loadVideos(): List<File> {
-        var files: List<File> = emptyList()
+    private suspend fun loadVideo(): String {
+        var file = File("nonexistent")
+        Timber.d("Creating a new instance")
         coroutineScope {
-            val deferreds = arrayListOf<Deferred<File>>()
-            for (video in VideoList) {
-                val url = video[URL]
-                val hash = video[HASH]
-                val filename = video[FILENAME]
-                if (url == null || hash == null || filename == null)
-                    continue
-                deferreds.add(async { downloadVideo(url, hash, filename) })
+            val video = VideoList[position]
+            val url = video[URL]
+            val hash = video[HASH]
+            val filename = video[FILENAME]
+            if (url != null && hash != null && filename != null) {
+                file = downloadVideo(url, hash, filename)
             }
-            files = deferreds.awaitAll().toList()
         }
-        return files
+        var isVideoDownloaded = true
+        if (!file.exists())
+            isVideoDownloaded = false
+        if (isVideoDownloaded)
+            state.set(LIVEDATA_KEY, file.name)
+        return file.name
     }
 
     private suspend fun downloadVideo(
@@ -64,35 +76,32 @@ class VideoModel : ViewModel() {
     ): File {
         val file = File(cachePath, name)
         withContext(Dispatchers.IO) {
-            val fileData = ByteArrayOutputStream()
             val digest = MessageDigest.getInstance("SHA-256")
-            /*do {*/
-                if (!needsToDownloadFile(file, hash))
+            do {
+                if (!isConnected() || !needsToDownloadFile(file, hash))
                     return@withContext
                 else
                     file.createNewFile()
                 val stream = with(URL(url)) {
                     openStream()
                 }.let { BufferedInputStream(it, 8192) }
-                val data = ByteArray(1024)
+                val data = ByteArray(8192)
                 val output = FileOutputStream(file)
                 try {
                     var count = stream.read(data)
-                    while (count != -1) {
+                    while (count > 0) {
                         output.write(data, 0, count)
-                        fileData.write(data, 0, count)
+                        digest.update(data, 0, count)
                         count = stream.read(data)
                     }
                     output.flush()
                 } catch (e: IOException) {
-                    Log.e(tag, "Unable to download video $name", e)
+                    Timber.e(e, "Unable to download video $name")
                 } finally {
                     output.close()
                     stream.close()
                 }
-            /*} while (!digest.digest(fileData.toByteArray())
-                    .contentEquals(hash.toByteArray())
-            )*/
+            } while (!sameSHA2Hash(hash, digest))
         }
         return file
     }
@@ -101,12 +110,30 @@ class VideoModel : ViewModel() {
         if (!file.exists())
             return true
         val digest = MessageDigest.getInstance("SHA-256")
+        val reader: InputStream = FileInputStream(file)
         return try {
-            val reader = FileInputStream(file)
             val bytes = reader.readBytes()
-            !digest.digest(bytes).contentEquals(hash.toByteArray())
+            digest.update(bytes)
+            sameSHA2Hash(hash, digest)
         } catch (_: Exception) {
             false
+        } finally {
+            reader.close()
         }
     }
+
+    private fun sameSHA2Hash(
+        hash: String,
+        messageDigest: MessageDigest
+    ): Boolean {
+        val sha2sum = messageDigest.digest()
+        val bigInt = BigInteger(1, sha2sum)
+        val obtainedHash = String.format("%064x", bigInt)
+        return obtainedHash.equals(hash, true)
+    }
+}
+
+class VideoModelFactory @Inject constructor(private val position: Int) :
+    ViewModelAssistedFactory<VideoModel> {
+    override fun create(handle: SavedStateHandle) = VideoModel(handle, position)
 }

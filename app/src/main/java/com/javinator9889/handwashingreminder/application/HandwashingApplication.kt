@@ -20,12 +20,12 @@ package com.javinator9889.handwashingreminder.application
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.ApplicationInfo
 import androidx.multidex.MultiDex
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import com.javinator9889.handwashingreminder.BuildConfig
 import com.javinator9889.handwashingreminder.gms.activity.ActivityHandler
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
 import com.javinator9889.handwashingreminder.jobs.workers.WorkHandler
@@ -67,7 +67,7 @@ class HandwashingApplication : BaseApplication() {
         super.onCreate()
         instance = this
         sharedPreferences = getCustomSharedPreferences(this)!!
-        if (BuildConfig.DEBUG)
+        if (isDebuggable())
             Timber.plant(Timber.DebugTree())
         else
             Timber.plant(LogReportTree())
@@ -106,4 +106,7 @@ class HandwashingApplication : BaseApplication() {
      */
     override fun getCustomSharedPreferences(base: Context): SharedPreferences? =
         base.getSharedPreferences(NAME, Context.MODE_PRIVATE)
+
+    private fun isDebuggable(): Boolean =
+        (0 != applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE)
 }
