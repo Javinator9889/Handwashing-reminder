@@ -23,7 +23,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.format.Formatter
-import android.util.Log
 import android.widget.Toast
 import com.google.android.play.core.ktx.bytesDownloaded
 import com.google.android.play.core.ktx.errorCode
@@ -40,6 +39,7 @@ import com.javinator9889.handwashingreminder.utils.CONFIRMATION_REQUEST_CODE
 import com.javinator9889.handwashingreminder.utils.filterNotEmpty
 import com.javinator9889.handwashingreminder.utils.isAtLeast
 import kotlinx.android.synthetic.main.dynamic_content_pb.*
+import timber.log.Timber
 
 class DynamicFeatureProgress : SplitCompatBaseActivity(),
     SplitInstallStateUpdatedListener {
@@ -115,8 +115,7 @@ class DynamicFeatureProgress : SplitCompatBaseActivity(),
                             .dynamic_module_loading_error
                     ), Toast.LENGTH_LONG
                 ).show()
-                Log.e(
-                    TAG,
+                Timber.e(
                     "Installation failed - error code: ${state.errorCode}"
                 )
             }

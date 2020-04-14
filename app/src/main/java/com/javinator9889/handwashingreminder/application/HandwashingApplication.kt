@@ -20,36 +20,31 @@ package com.javinator9889.handwashingreminder.application
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.multidex.MultiDex
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
-import com.javinator9889.handwashingreminder.R
-import com.javinator9889.handwashingreminder.emoji.EmojiCompat
+import com.javinator9889.handwashingreminder.BuildConfig
 import com.javinator9889.handwashingreminder.gms.activity.ActivityHandler
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
-import com.javinator9889.handwashingreminder.graphics.ImageCache
 import com.javinator9889.handwashingreminder.jobs.workers.WorkHandler
-import com.javinator9889.handwashingreminder.utils.IMAGE_CACHE_DIR
+import com.javinator9889.handwashingreminder.utils.LogReportTree
 import com.javinator9889.handwashingreminder.utils.Preferences
 import com.javinator9889.handwashingreminder.utils.Preferences.Companion.NAME
-import com.mikepenz.iconics.Iconics
 import javinator9889.localemanager.application.BaseApplication
 import javinator9889.localemanager.utils.languagesupport.LanguagesSupport.Language
+import timber.log.Timber
 
 
 class HandwashingApplication : BaseApplication() {
-    private val tag = HandwashingApplication::class.simpleName
-
     var adLoader: AdLoader? = null
     lateinit var workHandler: WorkHandler
     lateinit var activityHandler: ActivityHandler
     lateinit var remoteConfig: FirebaseRemoteConfig
     lateinit var sharedPreferences: SharedPreferences
-    // lateinit var firebaseAnalytics #TODO
-    // lateinit var firebasePerformance #TODO
-    lateinit var imageCacheParams: ImageCache.ImageCacheParams
+    //TODO lateinit var firebaseAnalytics
+    //TODO lateinit var firebasePerformance
 
     companion object {
         private lateinit var instance: HandwashingApplication
@@ -72,50 +67,28 @@ class HandwashingApplication : BaseApplication() {
         super.onCreate()
         instance = this
         sharedPreferences = getCustomSharedPreferences(this)!!
-        Iconics.init(this)
-        imageCacheParams = ImageCache.ImageCacheParams(this, IMAGE_CACHE_DIR)
-        imageCacheParams.setMemCacheSizePercent(0.25f)
+        if (BuildConfig.DEBUG)
+            Timber.plant(Timber.DebugTree())
+        else
+            Timber.plant(LogReportTree())
         activityHandler = ActivityHandler(this)
         if (sharedPreferences.getBoolean(
                 Preferences.ACTIVITY_TRACKING_ENABLED, false
-            )
+            ) && with(GoogleApiAvailability.getInstance()) {
+                isGooglePlayServicesAvailable(this@HandwashingApplication) ==
+                        ConnectionResult.SUCCESS
+            }
         )
             activityHandler.startTrackingActivity()
         else
             activityHandler.disableActivityTracker()
 
         remoteConfig = FirebaseRemoteConfig.getInstance()
-        val configSettings = FirebaseRemoteConfigSettings.Builder().apply {
-            minimumFetchIntervalInSeconds = 3600
-            fetchTimeoutInSeconds = 3
-        }.build()
-        remoteConfig.setConfigSettingsAsync(configSettings)
-        remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)
-        remoteConfig.fetchAndActivate()
-
-        EmojiCompat.get(this)
-//        FontRequest(
-//            "com.google.android.gms.fonts",
-//            "com.google.android.gms",
-//            "Noto Color Emoji Compat",
-//            R.array.com_google_android_gms_fonts_certs
-//        ).let {
-//            with(FontRequestEmojiCompatConfig(this, it)) {
-//                setReplaceAll(true)
-//                EmojiCompat.init(this)
-//            }
-//        }
-//
-//        with(BundledEmojiCompatConfig(this)) {
-//            setReplaceAll(true)
-//            EmojiCompat.init(this)
-//        }
-
         workHandler = WorkHandler(this)
         try {
             workHandler.enqueuePeriodicNotificationsWorker()
         } catch (_: UninitializedPropertyAccessException) {
-            Log.i(tag, "Scheduler times have not been initialized")
+            Timber.i("Scheduler times have not been initialized")
         }
     }
 

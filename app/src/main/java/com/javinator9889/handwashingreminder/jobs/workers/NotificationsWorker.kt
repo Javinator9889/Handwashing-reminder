@@ -19,7 +19,6 @@
 package com.javinator9889.handwashingreminder.jobs.workers
 
 import android.content.Context
-import android.util.Log
 import androidx.annotation.ArrayRes
 import androidx.annotation.StringRes
 import androidx.work.Data
@@ -30,6 +29,7 @@ import com.javinator9889.handwashingreminder.emoji.EmojiCompat
 import com.javinator9889.handwashingreminder.notifications.NotificationsHandler
 import com.javinator9889.handwashingreminder.utils.TIME_CHANNEL_ID
 import com.javinator9889.handwashingreminder.utils.Workers
+import timber.log.Timber
 import java.util.*
 
 
@@ -52,7 +52,7 @@ class NotificationsWorker(
                 context.getString(R.string.time_notification_channel_name),
                 context.getString(R.string.time_notification_channel_desc)
             )
-            val emojiCompat = EmojiCompat.get(context)
+            val emojiCompat = EmojiCompat.get(context, false)
             val workHandler = WorkHandler(context)
 
             val notificationData =
@@ -80,7 +80,7 @@ class NotificationsWorker(
             }.let { workHandler.enqueueNotificationsWorker(delay, it) }
             Result.success()
         } catch (e: Exception) {
-            Log.e(tag, "Uncaught exception on worker class", e)
+            Timber.e(e, "Uncaught exception on worker class")
             Result.failure()
         }
     }
@@ -112,7 +112,7 @@ class NotificationsWorker(
         val hour = data.getInt(Workers.HOUR, -1)
         val minute = data.getInt(Workers.MINUTE, -1)
         if (hour == -1 || hour == -1) {
-            Log.e(tag, "Hour or minute not provided")
+            Timber.e("Hour or minute not provided")
             return -1L
         }
 
@@ -121,7 +121,7 @@ class NotificationsWorker(
         dueDate.set(Calendar.SECOND, 0)
         if (dueDate.before(currentDate))
             dueDate.add(Calendar.HOUR_OF_DAY, 24)
-        Log.i(tag, "Next execution scheduled at: ${dueDate.time}")
+        Timber.i("Next execution scheduled at: ${dueDate.time}")
         return dueDate.timeInMillis - currentDate.timeInMillis
     }
 }

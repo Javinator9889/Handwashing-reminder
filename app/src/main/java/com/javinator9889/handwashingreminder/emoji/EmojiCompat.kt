@@ -23,22 +23,55 @@ import androidx.core.provider.FontRequest
 import androidx.emoji.text.EmojiCompat
 import androidx.emoji.text.FontRequestEmojiCompatConfig
 import com.javinator9889.handwashingreminder.R
+import timber.log.Timber
 
 object EmojiCompat {
-    fun get(context: Context): EmojiCompat {
+    fun get(context: Context, async: Boolean = false): EmojiCompat {
         return try {
-            EmojiCompat.get()
+            val emojiCompat = EmojiCompat.get()
+            var instance: EmojiCompat? = null
+            emojiCompat.registerInitCallback(
+                object : EmojiCompat.InitCallback() {
+                    override fun onInitialized() {
+                        super.onInitialized()
+                        instance = EmojiCompat.get()
+                    }
+                })
+            while (instance == null && !async) {
+                Thread.sleep(100L)
+            }
+            if (async)
+                emojiCompat
+            else
+                instance!!
         } catch (_: IllegalStateException) {
+            Timber.d("Class not initialized yet")
             FontRequest(
                 "com.google.android.gms.fonts",
                 "com.google.android.gms",
                 "Noto Color Emoji Compat",
                 R.array.com_google_android_gms_fonts_certs
             ).let {
-                with(FontRequestEmojiCompatConfig(context, it)) {
-                    setReplaceAll(true)
-                    EmojiCompat.init(this)
+                var instance: EmojiCompat? = null
+                val emojiCompat =
+                    with(FontRequestEmojiCompatConfig(context, it)) {
+                        setReplaceAll(true)
+                        EmojiCompat.init(this)
+                    }
+                emojiCompat.registerInitCallback(
+                    object : EmojiCompat.InitCallback() {
+                        override fun onInitialized() {
+                            super.onInitialized()
+                            instance = EmojiCompat.get()
+                        }
+                    })
+                while (instance == null && !async) {
+                    Thread.sleep(100L)
                 }
+                if (async)
+                    emojiCompat
+                else
+                    instance!!
             }
         }
     }

@@ -19,10 +19,10 @@
 package com.javinator9889.handwashingreminder.jobs.workers
 
 import android.content.Context
-import android.util.Log
 import androidx.work.*
 import com.javinator9889.handwashingreminder.utils.Preferences
 import com.javinator9889.handwashingreminder.utils.Workers
+import timber.log.Timber
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -65,8 +65,7 @@ class WorkHandler(private val context: Context) {
                 dinnerTime -> Who(Workers.DINNER_UUID, Workers.DINNER)
                 else -> return  // This should never happen
             }
-            Log.i(
-                "WorkHandler",
+            Timber.i(
                 "Scheduled activity ${who.uuid} at ${dueDate.time}"
             )
 

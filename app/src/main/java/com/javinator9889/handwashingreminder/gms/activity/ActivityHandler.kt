@@ -21,12 +21,12 @@ package com.javinator9889.handwashingreminder.gms.activity
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import com.google.android.gms.location.ActivityRecognition
 import com.google.android.gms.location.ActivityTransition
 import com.google.android.gms.location.ActivityTransitionRequest
 import com.google.android.gms.location.DetectedActivity
 import com.google.android.gms.tasks.Task
+import timber.log.Timber
 
 
 class ActivityHandler(private val context: Context) {
@@ -53,7 +53,7 @@ class ActivityHandler(private val context: Context) {
     }
 
     fun startTrackingActivity() {
-        Log.i(tag, "Starting activity recognition")
+        Timber.d("Starting activity recognition")
         with(ActivityTransitionRequest(transitions)) {
             task = ActivityRecognition.getClient(context)
                 .requestActivityTransitionUpdates(this, pendingIntent).apply {
@@ -64,14 +64,14 @@ class ActivityHandler(private val context: Context) {
     }
 
     fun disableActivityTracker() {
-        Log.i(tag, "Stopping activity recognition")
+        Timber.d("Stopping activity recognition")
         if (!activityRegistered)
             return
         task = ActivityRecognition.getClient(context)
             .removeActivityTransitionUpdates(pendingIntent).apply {
                 addOnSuccessListener { pendingIntent.cancel() }
                 addOnFailureListener { e: Exception ->
-                    Log.e(tag, e.message, e)
+                    Timber.e(e)
                 }
             }
     }

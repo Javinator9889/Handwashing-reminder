@@ -26,6 +26,8 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.play.core.splitcompat.SplitCompat
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
@@ -34,6 +36,7 @@ import com.javinator9889.handwashingreminder.utils.*
 import com.javinator9889.handwashingreminder.utils.Preferences.Companion.ADS_ENABLED
 import com.javinator9889.handwashingreminder.utils.Preferences.Companion.APP_INIT_KEY
 import com.javinator9889.handwashingreminder.utils.RemoteConfig.Keys.SPECIAL_EVENT
+import com.mikepenz.iconics.Iconics
 import kotlinx.android.synthetic.main.splash_screen.*
 import kotlin.concurrent.thread
 
@@ -47,6 +50,7 @@ class LauncherActivity : AppCompatActivity() {
         app = HandwashingApplication.getInstance()
         sharedPreferences = app.sharedPreferences
         val displayThread = displayWelcomeScreen()
+        initVariables()
         installRequiredModules(displayThread)
     }
 
@@ -174,5 +178,19 @@ class LauncherActivity : AppCompatActivity() {
         it.putExtra(DynamicFeatureProgress.LAUNCH_ON_INSTALL, launchOnInstall)
         it.putExtra(DynamicFeatureProgress.CLASS_NAME, className)
         it.putExtra(DynamicFeatureProgress.PACKAGE_NAME, packageName)
+    }
+
+    private fun initVariables() {
+        val config = with(FirebaseRemoteConfigSettings.Builder()) {
+            minimumFetchIntervalInSeconds = 3600
+            fetchTimeoutInSeconds = 3
+            build()
+        }
+        with(FirebaseRemoteConfig.getInstance()) {
+            setConfigSettingsAsync(config)
+            setDefaultsAsync(R.xml.remote_config_defaults)
+            fetchAndActivate()
+        }
+        Iconics.init(this)
     }
 }

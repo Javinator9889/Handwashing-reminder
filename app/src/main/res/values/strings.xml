@@ -44,7 +44,7 @@
         <item>Washing your hands before breakfast will ensure you a good
             day &#128521;</item>
         <item>30 seconds for good health? Where do I sign! Just wash your
-        hands &#128521;&#128079;&#128166;</item>
+        hands &#128521;&#128166;&#128079;</item>
     </string-array>
     <string name="lunch_title">Time to lunch and washing your hands! &#127857;</string>
     <string-array name="lunch_comments">
@@ -53,12 +53,12 @@
         <item>After a busy morning it\'s time to eat and do it clean
             &#128521;</item>
         <item>If you have gone to the street is even more important to
-            wash your hands before having lunch &#128079;&#128166;</item>
+            wash your hands before having lunch &#128166;&#128079;</item>
     </string-array>
     <string name="dinner_title">Let\'s have a clean dinner &#129367;</string>
     <string-array name="dinner_comments">
         <item>The day is finishing and you can do it fully by
-            &#128079;&#128166;</item>
+            &#128166;&#128079;</item>
         <item>Remember before having dinner and going to sleep to wash
             your hands and count sheeps &#128017;</item>
         <item>Do you know that washing your hands can keep you safe from

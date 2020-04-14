@@ -19,7 +19,6 @@
 package com.javinator9889.handwashingreminder.activities
 
 import android.os.Bundle
-import android.util.Log
 import android.util.SparseArray
 import android.view.MenuItem
 import androidx.annotation.IdRes
@@ -35,6 +34,7 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
 import javinator9889.localemanager.activity.BaseAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import timber.log.Timber
 import kotlin.concurrent.thread
 
 class MainActivity : BaseAppCompatActivity(),
@@ -88,7 +88,7 @@ class MainActivity : BaseAppCompatActivity(),
             loadFragment(fragments[id])
             true
         } catch (e: Exception) {
-            Log.e("Main", "Unexpected exception", e)
+            Timber.e(e, "Unexpected exception")
             false
         }
     }
