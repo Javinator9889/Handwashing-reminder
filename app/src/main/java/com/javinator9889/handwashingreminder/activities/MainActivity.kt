@@ -57,7 +57,6 @@ class MainActivity : BaseAppCompatActivity(),
         }
         activeFragment = fragments[R.id.diseases]
         menu.setOnNavigationItemSelectedListener(this)
-//        menu.setOnNavigationItemReselectedListener { onItemSelected(it.itemId) }
         initFragmentView()
     }
 

@@ -42,7 +42,6 @@ class NotificationsWorker(
     private val context: Context,
     private val params: WorkerParameters
 ) : Worker(context, params) {
-    private val tag = NotificationsWorker::class.simpleName
 
     override fun doWork(): Result {
         return try {

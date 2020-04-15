@@ -41,8 +41,12 @@ import com.mikepenz.iconics.Iconics
 import kotlinx.android.synthetic.main.splash_screen.*
 import kotlin.concurrent.thread
 
+internal const val FAST_START_KEY = "intent:fast_start"
+internal const val PENDING_INTENT_CODE = 201
+
 class LauncherActivity : AppCompatActivity() {
     private var launchOnInstall = false
+    private var launchFromNotification = false
     private lateinit var app: HandwashingApplication
     private lateinit var sharedPreferences: SharedPreferences
 
@@ -50,6 +54,12 @@ class LauncherActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         app = HandwashingApplication.getInstance()
         sharedPreferences = app.sharedPreferences
+        with(intent) {
+            notNull {
+                launchFromNotification =
+                    it.getBooleanExtra(FAST_START_KEY, false)
+            }
+        }
         val displayThread = displayWelcomeScreen()
         initVariables()
         installRequiredModules(displayThread)
@@ -59,7 +69,8 @@ class LauncherActivity : AppCompatActivity() {
         setContentView(R.layout.splash_screen)
         return thread(start = true) {
             val isThereAnySpecialEvent =
-                app.remoteConfig.getBoolean(SPECIAL_EVENT)
+                app.remoteConfig.getBoolean(SPECIAL_EVENT) &&
+                        !launchFromNotification
             var sleepDuration = 0L
             var animationLoaded = false
             val fadeInAnimation =
@@ -120,6 +131,9 @@ class LauncherActivity : AppCompatActivity() {
                             createPackageContext(packageName, 0).also {
                                 SplitCompat.install(it)
                             }
+                            if (launchFromNotification)
+                                data!!.flags = Intent.FLAG_ACTIVITY_NEW_TASK or
+                                        Intent.FLAG_ACTIVITY_CLEAR_TASK
                             startActivity(data)
                             finish()
                         }
@@ -129,6 +143,9 @@ class LauncherActivity : AppCompatActivity() {
             }
             if (!launchOnInstall) {
                 Intent(this, MainActivity::class.java).also {
+                    if (launchFromNotification)
+                        it.flags = Intent.FLAG_ACTIVITY_NEW_TASK or
+                                Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(it)
                     overridePendingTransition(0, android.R.anim.fade_out)
                 }
