@@ -20,6 +20,7 @@ package com.javinator9889.handwashingreminder.utils
 
 import android.app.ActivityManager
 import android.content.Context
+import android.content.pm.ApplicationInfo
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities.*
 import android.os.Build
@@ -61,3 +62,7 @@ fun isConnected(): Boolean {
         }
     }
 }
+
+fun isDebuggable(): Boolean =
+    (0 != HandwashingApplication.getInstance().applicationInfo.flags and
+            ApplicationInfo.FLAG_DEBUGGABLE)

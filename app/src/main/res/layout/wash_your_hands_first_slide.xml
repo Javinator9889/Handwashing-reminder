@@ -17,78 +17,64 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ProgressBar
-                android:id="@+id/loading"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="32dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="32dp"
                 android:fontFamily="@font/raleway_medium"
+                android:text="@string/washing_hands_first_title"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                android:textSize="28sp"
-                android:visibility="invisible"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Heading title" />
+                tools:text="Slide title" />
 
-            <VideoView
-                android:id="@+id/video"
-                android:layout_width="175dp"
-                android:layout_height="225dp"
-                android:layout_marginTop="24dp"
-                android:visibility="invisible"
+            <com.javinator9889.handwashingreminder.graphics.RecyclingImageView
+                android:id="@+id/image"
+                android:layout_width="195dp"
+                android:layout_height="195dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="32dp"
+                android:src="@drawable/handwashing_app_logo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/title" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/description"
-                android:layout_width="0dp"
+                android:id="@+id/shortDescription"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="24dp"
-                android:fontFamily="sans-serif-light"
-                android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textSize="18sp"
-                android:visibility="invisible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/video"
-                tools:text="Short description text" />
-
-            <com.javinator9889.handwashingreminder.graphics.RecyclingImageView
-                android:id="@+id/image"
-                android:layout_width="315dp"
-                android:layout_height="238dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="32dp"
-                android:layout_marginBottom="32dp"
-                android:contentDescription="Handwashing description"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:fontFamily="@font/roboto"
+                android:text="@string/washing_hands_first_description"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/description"
-                tools:srcCompat="@tools:sample/backgrounds/scenic" />
+                app:layout_constraintTop_toBottomOf="@+id/image"
+                tools:text="Slide short description" />
+
+            <com.javinator9889.handwashingreminder.graphics.LottieAdaptedPerformanceAnimationView
+                android:id="@+id/animation"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="32dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/shortDescription"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/keep_them_safe" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

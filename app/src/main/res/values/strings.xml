@@ -13,7 +13,6 @@
     <string name="test_content">This is the content for a test
         notification</string>
     <string name="title_appintro">Handwashing reminder intro</string>
-    <string name="title_appintro2">AppIntro2</string>
     <string name="privacy_policy_title">Privacy policy</string>
     <string name="tos_title">Terms and conditions</string>
     <string name="firebase_analytics_policy">Allow the application to
@@ -67,4 +66,45 @@
     </string-array>
     <string name="disease">COVID-19</string>
     <string name="disease_desc">A virus that kills people</string>
+    <string name="washing_hands_first_title">Let\'s learn how to wash
+        our hands</string>
+    <string name="washing_hands_first_description">Join me in this trip
+    in which we will learn how to completely wash our hands
+        &#128166;&#128079;. This is very important not only for you but
+    for everyone who is around you: from a baby &#128118; to your
+        grandparents &#128116;&#128117;. It\'s a small responsibility
+        act that only lasts 30 seconds.
+
+    Remember, it\'s not only for you but for them.</string>
+    <string-array name="washing_hands_titles">
+        <item>1. Rub your hands</item>
+        <item>2. Clean in between your fingers</item>
+        <item>3. Back-clean in between the fingers</item>
+        <item>4. Back-clean of the fingers</item>
+        <item>5. Cleaning the thumbs</item>
+        <item>6. Cleaning the tips and nails of your fingers</item>
+        <item>7. Finish cleaning</item>
+    </string-array>
+    <string-array name="washing_hands_descriptions">
+        <item>By wetting your hands and applying enough soap, rub your
+            hands together for spreading the soap &#129532;.</item>
+        <item>Now, using the spread soap, clean in between your fingers
+            &#128400; (as shown in the video).</item>
+        <item>By putting one hand on the back of the other one, clean it
+            and in between the fingers &#129306;. Do the same with the other
+            hand.</item>
+        <item>As you can see, your fingers are not clean yet &#128064;, so
+            put the back of your fingers against your palms.</item>
+        <item>We almost forget them &#128556;! Clean both your thumbs
+            using the other hand &#128077;.</item>
+        <item>No it\'s time to clean both your tips and nails. Put them
+            against your palm and clean them. Wow &#128561;! Such a
+            beautiful nails! &#128133;</item>
+        <item>Finally, clean the top of your hand (near your wrist).
+            Then, rinse your hands in water and dry them with a
+            disposable towel &#129531;. And finally, use it for turning off the
+            tap. And it\'s done, you have finished! &#127882;&#127881;</item>
+    </string-array>
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
 </resources>

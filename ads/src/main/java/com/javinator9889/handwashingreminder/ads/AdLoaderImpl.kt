@@ -18,31 +18,36 @@
  */
 package com.javinator9889.handwashingreminder.ads
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.RatingBar
+import android.widget.TextView
 import androidx.annotation.Keep
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.ads.VideoOptions
+import com.google.android.gms.ads.*
 import com.google.android.gms.ads.formats.NativeAdOptions
 import com.google.android.gms.ads.formats.UnifiedNativeAd
 import com.google.android.gms.ads.formats.UnifiedNativeAdView
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
+import com.javinator9889.handwashingreminder.utils.isDebuggable
+import timber.log.Timber
 import com.google.android.gms.ads.AdLoader as AdBase
 
 
 const val ADMOB_APP_ID = "ca-app-pub-5517327035817913~5915164054"
-const val ADMOB_APP_NATIVE_ID = "ca-app-pub-5517327035817913/5656089851"
-const val ADMOB_APP_NATIVE_TEST_ID = "ca-app-pub-3940256099942544/2247696110"
+val ADMOB_APP_NATIVE_ID =
+    if (isDebuggable()) "ca-app-pub-3940256099942544/2247696110"
+    else "ca-app-pub-5517327035817913/5656089851"
 
 @Keep
 class AdLoaderImpl private constructor(context: Context?) : AdLoader {
     private val adOptions: NativeAdOptions
     private var currentNativeAd: UnifiedNativeAd? = null
+    private var isVideoEnded = true
 
     init {
         if (context == null)
@@ -69,8 +74,11 @@ class AdLoaderImpl private constructor(context: Context?) : AdLoader {
         }
     }
 
+    @SuppressLint("InflateParams")
     override fun loadAdForViewGroup(view: ViewGroup, removeAllViews: Boolean) {
-        val adLoader = AdBase.Builder(view.context, ADMOB_APP_NATIVE_TEST_ID)
+        if (!isVideoEnded)
+            return
+        val adLoader = AdBase.Builder(view.context, ADMOB_APP_NATIVE_ID)
             .forUnifiedNativeAd { ad: UnifiedNativeAd ->
                 val adView = LayoutInflater.from(view.context)
                     .inflate(R.layout.native_ad_view, null) as
@@ -83,10 +91,12 @@ class AdLoaderImpl private constructor(context: Context?) : AdLoader {
             .withNativeAdOptions(adOptions)
             .withAdListener(object : AdListener() {
                 override fun onAdFailedToLoad(errorCode: Int) {
-                    Toast.makeText(
-                        view.context, "Failed to load native ad - err. " +
-                                "code: $errorCode", Toast.LENGTH_LONG
-                    ).show()
+                    when (errorCode) {
+                        AdRequest.ERROR_CODE_INVALID_REQUEST,
+                        AdRequest.ERROR_CODE_NO_FILL ->
+                            Timber.e("Error while loading the ad: $errorCode")
+                        else -> return
+                    }
                 }
             }).build()
         adLoader.loadAd(AdRequest.Builder().build())
@@ -174,5 +184,21 @@ class AdLoaderImpl private constructor(context: Context?) : AdLoader {
         // This method tells the Google Mobile Ads SDK that you have finished populating your
         // native ad view with this native ad.
         adView.setNativeAd(nativeAd)
+
+        try {
+            val vc = nativeAd.mediaContent.videoController
+            if (vc.hasVideoContent()) {
+                isVideoEnded = false
+                vc.videoLifecycleCallbacks =
+                    object : VideoController.VideoLifecycleCallbacks() {
+                        override fun onVideoEnd() {
+                            isVideoEnded = true
+                            super.onVideoEnd()
+                        }
+                    }
+            } else isVideoEnded = true
+        } catch (_: IllegalStateException) {
+            isVideoEnded = true
+        }
     }
 }

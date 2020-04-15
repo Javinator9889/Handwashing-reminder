@@ -36,6 +36,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-ads:19.0.1'
     // https://developer.android.com/studio/build/multidex
     implementation 'androidx.multidex:multidex:2.0.1'
+    // https://github.com/JakeWharton/timber
+    implementation 'com.jakewharton.timber:timber:4.7.1'
 }
 repositories {
     mavenCentral()

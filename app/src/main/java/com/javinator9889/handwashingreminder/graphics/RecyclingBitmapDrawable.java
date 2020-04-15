@@ -18,9 +18,10 @@ package com.javinator9889.handwashingreminder.graphics;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.util.Log;
 
 import com.javinator9889.handwashingreminder.BuildConfig;
+
+import timber.log.Timber;
 
 
 /**
@@ -29,9 +30,6 @@ import com.javinator9889.handwashingreminder.BuildConfig;
  * {@link android.graphics.Bitmap#recycle() recycle()} will be called on this drawable's bitmap.
  */
 public class RecyclingBitmapDrawable extends BitmapDrawable {
-
-    private static final String TAG = "CountingBitmapDrawable";
-
     private int mCacheRefCount = 0;
     private int mDisplayRefCount = 0;
 
@@ -92,8 +90,7 @@ public class RecyclingBitmapDrawable extends BitmapDrawable {
         if (mCacheRefCount <= 0 && mDisplayRefCount <= 0 && mHasBeenDisplayed
                 && hasValidBitmap()) {
             if (BuildConfig.DEBUG) {
-                Log.d(TAG, "No longer being used or cached so recycling. "
-                        + toString());
+                Timber.d("No longer being used or cached so recycling. %s", toString());
             }
 
             getBitmap().recycle();

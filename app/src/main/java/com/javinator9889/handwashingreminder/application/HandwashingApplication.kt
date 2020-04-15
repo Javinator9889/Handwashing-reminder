@@ -20,7 +20,6 @@ package com.javinator9889.handwashingreminder.application
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.pm.ApplicationInfo
 import androidx.multidex.MultiDex
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
@@ -32,6 +31,7 @@ import com.javinator9889.handwashingreminder.jobs.workers.WorkHandler
 import com.javinator9889.handwashingreminder.utils.LogReportTree
 import com.javinator9889.handwashingreminder.utils.Preferences
 import com.javinator9889.handwashingreminder.utils.Preferences.Companion.NAME
+import com.javinator9889.handwashingreminder.utils.isDebuggable
 import javinator9889.localemanager.application.BaseApplication
 import javinator9889.localemanager.utils.languagesupport.LanguagesSupport.Language
 import timber.log.Timber
@@ -106,7 +106,4 @@ class HandwashingApplication : BaseApplication() {
      */
     override fun getCustomSharedPreferences(base: Context): SharedPreferences? =
         base.getSharedPreferences(NAME, Context.MODE_PRIVATE)
-
-    private fun isDebuggable(): Boolean =
-        (0 != applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE)
 }

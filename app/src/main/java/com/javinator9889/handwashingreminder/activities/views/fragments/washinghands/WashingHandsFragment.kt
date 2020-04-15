@@ -23,38 +23,63 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayoutMediator
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.BaseFragmentView
+import com.javinator9889.handwashingreminder.cache.ImageCacheHandler
+import com.javinator9889.handwashingreminder.graphics.ImageCache
 import kotlinx.android.synthetic.main.how_to_wash_hands_layout.view.*
 import kotlinx.android.synthetic.main.privacy_terms.*
 import timber.log.Timber
+import java.lang.ref.WeakReference
 
-internal const val NUM_PAGES = 7
+internal const val NUM_PAGES = 8
 
 class WashingHandsFragment : BaseFragmentView() {
     override val layoutId: Int = R.layout.how_to_wash_hands_layout
-    private val items = arrayOfNulls<Fragment>(NUM_PAGES)
-//    private val viewModel: VideoModel by viewModels()
-//    private var files: List<File> = emptyList()
+    private val items = arrayOfNulls<WeakReference<Fragment>>(NUM_PAGES)
+    private lateinit var imageCache: ImageCache
 
-//
-//    override fun onBackPressed() {
-//        if (pager.currentItem == 0)
-//            super.onBackPressed()
-//        else
-//            --pager.currentItem
-//    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        imageCache = ImageCacheHandler.getInstance(parentFragmentManager)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val adapter = FragmentAdapter(requireActivity())
         view.pager.adapter = adapter
+        TabLayoutMediator(view.tabPager, view.pager) { _, _ -> }.attach()
+        view.pager.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                Timber.d("Current position: $position")
+                when (position) {
+                    0 -> {
+                        view.previousButton.visibility = View.INVISIBLE
+                        view.nextButton.visibility = View.VISIBLE
+                    }
+                    NUM_PAGES - 1 -> {
+                        view.nextButton.visibility = View.INVISIBLE
+                        view.previousButton.visibility = View.VISIBLE
+                    }
+                    else -> {
+                        view.previousButton.visibility = View.VISIBLE
+                        view.nextButton.visibility = View.VISIBLE
+                    }
+                }
+            }
+        })
+        view.previousButton.setOnClickListener { view.pager.currentItem-- }
+        view.nextButton.setOnClickListener { view.pager.currentItem++ }
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
         Timber.d("Visibility changed: $hidden")
-        items[pager.currentItem]?.onHiddenChanged(hidden)
+        items[pager.currentItem]?.get()?.onHiddenChanged(hidden)
     }
 
     private inner class FragmentAdapter(fa: FragmentActivity) :
@@ -62,8 +87,11 @@ class WashingHandsFragment : BaseFragmentView() {
         override fun getItemCount(): Int = NUM_PAGES
 
         override fun createFragment(position: Int): Fragment {
-            with(SliderView(position)) {
-                items[position] = this
+            if (position == 0) {
+                return FirstSlide()
+            }
+            with(SliderView(position - 1, imageCache)) {
+                items[position] = WeakReference(this)
                 return this
             }
         }

@@ -30,6 +30,7 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
+import com.javinator9889.handwashingreminder.emoji.EmojiCompat
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
 import com.javinator9889.handwashingreminder.gms.ads.AdsEnabler
 import com.javinator9889.handwashingreminder.utils.*
@@ -192,5 +193,6 @@ class LauncherActivity : AppCompatActivity() {
             fetchAndActivate()
         }
         Iconics.init(this)
+        EmojiCompat.get(this, true)
     }
 }
