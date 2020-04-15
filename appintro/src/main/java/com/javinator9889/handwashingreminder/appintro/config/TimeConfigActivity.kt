@@ -166,8 +166,8 @@ class TimeConfigActivity :
         when (v) {
             setButton, hours, minutes, clockIcon, ddot -> {
                 val date = Calendar.getInstance()
-                val tpHour = date.get(Calendar.HOUR_OF_DAY)
-                val tpMinute = date.get(Calendar.MINUTE)
+                val tpHour = Integer.parseInt(hours.text as String)
+                val tpMinute = Integer.parseInt(minutes.text as String)
                 val tpDialog = TimePickerDialog(
                     this, this, tpHour, tpMinute, true
                 )
