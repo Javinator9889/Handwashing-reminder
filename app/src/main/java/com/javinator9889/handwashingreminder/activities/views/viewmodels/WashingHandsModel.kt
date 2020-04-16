@@ -27,7 +27,6 @@ import androidx.lifecycle.liveData
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.emoji.EmojiLoader
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 internal data class Measurements(var width: Int, var height: Int)
@@ -60,7 +59,7 @@ class WashingHandsModel(
         return drawableId
     }
 
-    private fun loadTitle(): CharSequence {
+    private suspend fun loadTitle(): CharSequence {
         var titleText = state.get<CharSequence>(TITLE_STRING)
         if (titleText == null)
             titleText = processStringArray(R.array.washing_hands_titles)
@@ -68,7 +67,7 @@ class WashingHandsModel(
         return titleText
     }
 
-    private fun loadDescription(): CharSequence {
+    private suspend fun loadDescription(): CharSequence {
         var descriptionText = state.get<CharSequence>(DESCRIPTION_STRING)
         if (descriptionText == null)
             descriptionText =
@@ -77,10 +76,10 @@ class WashingHandsModel(
         return descriptionText
     }
 
-    private fun processStringArray(@ArrayRes array: Int): CharSequence =
+    private suspend fun processStringArray(@ArrayRes array: Int): CharSequence =
         with(HandwashingApplication.getInstance()) {
             val emojiCompat = with(EmojiLoader.get(this)) {
-                runBlocking { await() }
+                this.await()
             }
             emojiCompat.process(
                 resources.getStringArray(array)[position]

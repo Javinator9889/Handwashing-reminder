@@ -16,7 +16,7 @@
  *
  * Created by Javinator9889 on 15/04/20 - Handwashing reminder.
  */
-package com.javinator9889.handwashingreminder.application;
+package com.javinator9889.handwashingreminder.graphics;
 
 import android.content.Context;
 
@@ -29,7 +29,7 @@ import com.bumptech.glide.module.AppGlideModule;
 import com.bumptech.glide.request.RequestOptions;
 
 @GlideModule
-public final class HandwashingAppGlideModule extends AppGlideModule {
+public final class CustomGraphicsModule extends AppGlideModule {
     @Override
     public void applyOptions(@NonNull Context context, @NonNull GlideBuilder builder) {
         builder.setDefaultRequestOptions(

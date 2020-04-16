@@ -51,6 +51,7 @@ class TimeConfigActivity :
         const val USER_DDOT = "detail:body:time-ddot"
     }
 
+    override val layoutId: Int = R.layout.time_card_view_expanded
     private lateinit var doneButton: Button
     private lateinit var title: TextView
     private lateinit var image: ImageView
@@ -111,8 +112,6 @@ class TimeConfigActivity :
             setHours(sHours.toString(), sMinutes.toString())
         }
     }
-
-    override fun layoutId(): Int = R.layout.time_card_view_expanded
 
     private fun setHours(hours: String, minutes: String) {
         val tpHour: Int

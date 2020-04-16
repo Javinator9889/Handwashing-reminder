@@ -29,6 +29,7 @@ import com.javinator9889.handwashingreminder.activities.support.ActionBarBase
 import com.javinator9889.handwashingreminder.collections.PrivacyTermsCollectionAdapter
 
 class PrivacyTermsActivity : ActionBarBase() {
+    override val layoutId: Int = R.layout.privacy_terms
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager2
 
@@ -50,8 +51,6 @@ class PrivacyTermsActivity : ActionBarBase() {
             }
         }.attach()
     }
-
-    override fun layoutId(): Int = R.layout.privacy_terms
 
     override fun onBackPressed() {
         super.onBackPressed()

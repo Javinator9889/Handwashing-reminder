@@ -45,7 +45,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/title" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <androidx.emoji.widget.EmojiTextView
                 android:id="@+id/shortDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

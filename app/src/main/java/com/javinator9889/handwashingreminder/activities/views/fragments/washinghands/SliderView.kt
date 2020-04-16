@@ -30,7 +30,7 @@ import androidx.lifecycle.whenStarted
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.BaseFragmentView
 import com.javinator9889.handwashingreminder.activities.views.viewmodels.*
-import com.javinator9889.handwashingreminder.application.GlideApp
+import com.javinator9889.handwashingreminder.graphics.GlideApp
 import kotlinx.android.synthetic.main.wash_your_hands_demo.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -43,7 +43,6 @@ private const val WAITING_ITEMS_COUNT = 4
 class SliderView(position: Int) : BaseFragmentView() {
     override val layoutId: Int = R.layout.wash_your_hands_demo
     private lateinit var videoURI: Uri
-//    private lateinit var drawable: Drawable
     private var drawableId by Delegates.notNull<Int>()
     private val counter = AtomicInteger(0)
     private val videoModelFactory = VideoModelFactory(position)
@@ -67,8 +66,6 @@ class SliderView(position: Int) : BaseFragmentView() {
                     Timber.d("Video finished loading")
                 })
                 washingHandsModel.image.observe(viewLifecycleOwner, Observer {
-//                    image.setImageDrawable(it)
-//                    drawable = it
                     GlideApp.with(this@SliderView)
                         .load(it)
                         .into(image)
@@ -113,8 +110,6 @@ class SliderView(position: Int) : BaseFragmentView() {
         GlideApp.with(this)
             .load(drawableId)
             .into(image)
-//        if (::drawable.isInitialized)
-//            image.setImageDrawable(drawable)
         super.onResume()
     }
 

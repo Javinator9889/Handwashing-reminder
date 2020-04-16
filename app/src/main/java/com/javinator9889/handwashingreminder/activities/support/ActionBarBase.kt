@@ -19,13 +19,17 @@
 package com.javinator9889.handwashingreminder.activities.support
 
 import android.os.Bundle
+import androidx.annotation.LayoutRes
 import com.javinator9889.handwashingreminder.R
 import javinator9889.localemanager.activity.BaseAppCompatActivity
 
 abstract class ActionBarBase : BaseAppCompatActivity() {
+    @get:LayoutRes
+    protected abstract val layoutId: Int
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(layoutId())
+        setContentView(layoutId)
         setSupportActionBar(findViewById(R.id.toolbar))
     }
 
@@ -33,6 +37,4 @@ abstract class ActionBarBase : BaseAppCompatActivity() {
         onBackPressed()
         return true
     }
-
-    abstract fun layoutId(): Int
 }

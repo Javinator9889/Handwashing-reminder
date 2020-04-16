@@ -36,7 +36,6 @@ import com.mikepenz.fastadapter.adapters.ItemAdapter
 class DiseasesFragment : BaseFragmentView() {
     override val layoutId: Int = R.layout.diseases_list
     private lateinit var adapters: Collection<IAdapter<out GenericItem>>
-//    private lateinit var items: List<Disease>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,11 +82,10 @@ class DiseasesFragment : BaseFragmentView() {
         val view = super.onCreateView(inflater, container, savedInstanceState)
         val fastAdapter = FastAdapter.with(adapters)
         val rvManager = LinearLayoutManager(context)
-        with(view!!.findViewById<RecyclerView>(R.id.diseasesContainer)) {
+        with(requireView().findViewById<RecyclerView>(R.id.diseasesContainer)) {
             layoutManager = rvManager
             adapter = fastAdapter
         }
-//        adapter.add(items)
         return view
     }
 }

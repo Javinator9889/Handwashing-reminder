@@ -67,8 +67,10 @@ class HandwashingApplication : BaseApplication() {
         super.onCreate()
         instance = this
         sharedPreferences = getCustomSharedPreferences(this)!!
-        if (isDebuggable())
+        if (isDebuggable()) {
             Timber.plant(Timber.DebugTree())
+            Timber.d("Application is in DEBUG mode")
+        }
         else
             Timber.plant(LogReportTree())
         activityHandler = ActivityHandler(this)
