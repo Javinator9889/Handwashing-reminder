@@ -18,7 +18,6 @@
  */
 package com.javinator9889.handwashingreminder.activities.views.fragments.washinghands
 
-import android.graphics.drawable.BitmapDrawable
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
@@ -31,22 +30,24 @@ import androidx.lifecycle.whenStarted
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.BaseFragmentView
 import com.javinator9889.handwashingreminder.activities.views.viewmodels.*
-import com.javinator9889.handwashingreminder.graphics.ImageCache
+import com.javinator9889.handwashingreminder.application.GlideApp
 import kotlinx.android.synthetic.main.wash_your_hands_demo.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
 import java.util.concurrent.atomic.AtomicInteger
+import kotlin.properties.Delegates
 
 private const val WAITING_ITEMS_COUNT = 4
 
-class SliderView(position: Int, imageCache: ImageCache) : BaseFragmentView() {
+class SliderView(position: Int) : BaseFragmentView() {
     override val layoutId: Int = R.layout.wash_your_hands_demo
     private lateinit var videoURI: Uri
-    private lateinit var drawable: BitmapDrawable
+//    private lateinit var drawable: Drawable
+    private var drawableId by Delegates.notNull<Int>()
     private val counter = AtomicInteger(0)
     private val videoModelFactory = VideoModelFactory(position)
-    private val handsFactory = WashingHandsModelFactory(position, imageCache)
+    private val handsFactory = WashingHandsModelFactory(position)
     private val viewModel: VideoModel by viewModels {
         SavedViewModelFactory(videoModelFactory, this)
     }
@@ -66,8 +67,12 @@ class SliderView(position: Int, imageCache: ImageCache) : BaseFragmentView() {
                     Timber.d("Video finished loading")
                 })
                 washingHandsModel.image.observe(viewLifecycleOwner, Observer {
-                    image.setImageDrawable(it)
-                    drawable = it
+//                    image.setImageDrawable(it)
+//                    drawable = it
+                    GlideApp.with(this@SliderView)
+                        .load(it)
+                        .into(image)
+                    drawableId = it
                     Timber.d("Image finished loading")
                     incrementCounter()
                 })
@@ -105,8 +110,11 @@ class SliderView(position: Int, imageCache: ImageCache) : BaseFragmentView() {
         Timber.d("Slide resumed")
         video.requestFocus()
         video.start()
-        if (::drawable.isInitialized)
-            image.setImageDrawable(drawable)
+        GlideApp.with(this)
+            .load(drawableId)
+            .into(image)
+//        if (::drawable.isInitialized)
+//            image.setImageDrawable(drawable)
         super.onResume()
     }
 

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreference
+        android:clickable="true"
+        android:defaultValue="false"
+        android:key="switch_preference_1"
+        android:persistent="true"
+        android:showDividers="middle"
+        android:summaryOff="This is the summary text when off"
+        android:summaryOn="This is a summary text"
+        android:title="Switch preference" />
+
+    <Preference
+        android:visibility="visible"
+        android:key="feedback"
+        android:summary="Report technical issues or suggest new features"
+        android:title="Send feedback" />
+    <MultiSelectListPreference
+        android:defaultValue="@array/breakfast_comments"
+        android:entries="@array/breakfast_comments"
+        android:entryValues="@array/breakfast_comments"
+        android:key="multi_select_list_preference_1"
+        android:title="Multi select list preference" />
+</PreferenceScreen>

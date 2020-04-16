@@ -129,14 +129,14 @@ class IntroActivity : AppIntro2(),
         val app = HandwashingApplication.getInstance()
         val sharedPreferences = app.sharedPreferences
         sharedPreferences.edit {
-            timeConfigSlide.viewItems.forEach { key, value ->
-                val time = "${value.hours.text}:${value.minutes.text}"
-                when (key) {
-                    TimeConfig.BREAKFAST_ID.toInt() ->
+            timeConfigSlide.rvItems.forEach { item ->
+                val time = "${item.hours}:${item.minutes}"
+                when (item.id) {
+                    TimeConfig.BREAKFAST_ID ->
                         putString(Preferences.BREAKFAST_TIME, time)
-                    TimeConfig.LUNCH_ID.toInt() ->
+                    TimeConfig.LUNCH_ID ->
                         putString(Preferences.LUNCH_TIME, time)
-                    TimeConfig.DINNER_ID.toInt() ->
+                    TimeConfig.DINNER_ID ->
                         putString(Preferences.DINNER_TIME, time)
                 }
             }
@@ -286,10 +286,12 @@ class IntroActivity : AppIntro2(),
         return when (timeConfigIntroFragment) {
             timeConfigSlide -> {
                 var isTimeSet = true
-                timeConfigSlide.viewItems.forEach { _, value ->
-                    val hours = value.hours
-                    val minutes = value.minutes
-                    if (hours.text == "" || minutes.text == "") {
+                if (timeConfigSlide.rvItems.size != 3)
+                    return false
+                timeConfigSlide.rvItems.forEach { item ->
+                    val hours = item.hours
+                    val minutes = item.minutes
+                    if (hours == "" || minutes == "") {
                         isTimeSet = false
                         return@forEach
                     }

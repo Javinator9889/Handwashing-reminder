@@ -1,10 +1,3 @@
-package com.javinator9889.handwashingreminder.cache
-
-import androidx.fragment.app.FragmentManager
-import com.javinator9889.handwashingreminder.application.HandwashingApplication
-import com.javinator9889.handwashingreminder.graphics.ImageCache
-import com.javinator9889.handwashingreminder.utils.IMAGE_CACHE_DIR
-
 /*
  * Copyright © 2020 - present | Handwashing reminder by Javinator9889
  *
@@ -23,11 +16,25 @@ import com.javinator9889.handwashingreminder.utils.IMAGE_CACHE_DIR
  *
  * Created by Javinator9889 on 15/04/20 - Handwashing reminder.
  */
-object ImageCacheHandler {
-    fun getInstance(fragmentManager: FragmentManager): ImageCache {
-        val context = HandwashingApplication.getInstance().applicationContext
-        val params = ImageCache.ImageCacheParams(context, IMAGE_CACHE_DIR)
-        params.setMemCacheSizePercent(.25f)
-        return ImageCache.getInstance(fragmentManager, params)
+package com.javinator9889.handwashingreminder.application;
+
+import android.content.Context;
+
+import androidx.annotation.NonNull;
+
+import com.bumptech.glide.GlideBuilder;
+import com.bumptech.glide.annotation.GlideModule;
+import com.bumptech.glide.load.DecodeFormat;
+import com.bumptech.glide.module.AppGlideModule;
+import com.bumptech.glide.request.RequestOptions;
+
+@GlideModule
+public final class HandwashingAppGlideModule extends AppGlideModule {
+    @Override
+    public void applyOptions(@NonNull Context context, @NonNull GlideBuilder builder) {
+        builder.setDefaultRequestOptions(
+                new RequestOptions()
+                        .format(DecodeFormat.PREFER_ARGB_8888)
+        );
     }
 }

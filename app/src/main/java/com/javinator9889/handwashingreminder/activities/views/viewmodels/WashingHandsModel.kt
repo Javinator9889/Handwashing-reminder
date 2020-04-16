@@ -18,7 +18,6 @@
  */
 package com.javinator9889.handwashingreminder.activities.views.viewmodels
 
-import android.graphics.drawable.BitmapDrawable
 import androidx.annotation.ArrayRes
 import androidx.annotation.RawRes
 import androidx.lifecycle.LiveData
@@ -27,13 +26,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
-import com.javinator9889.handwashingreminder.emoji.EmojiCompat
-import com.javinator9889.handwashingreminder.graphics.ImageCache
-import com.javinator9889.handwashingreminder.graphics.ImageResizer
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
-import timber.log.Timber
+import com.javinator9889.handwashingreminder.emoji.EmojiLoader
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 internal data class Measurements(var width: Int, var height: Int)
@@ -44,12 +38,11 @@ private const val DESCRIPTION_STRING = "state:description"
 
 class WashingHandsModel(
     private val state: SavedStateHandle,
-    private val position: Int,
-    private val imageCache: ImageCache
+    private val position: Int
 ) : ViewModel() {
     private val measurements = Measurements(0, 0)
     private var isViewMeasured = false
-    val image: LiveData<BitmapDrawable> = liveData { emit(loadBitmap()) }
+    val image: LiveData<Int> = liveData { emit(loadBitmap()) }
     val title: LiveData<CharSequence> = liveData { emit(loadTitle()) }
     val description: LiveData<CharSequence> = liveData {
         emit(loadDescription())
@@ -61,26 +54,10 @@ class WashingHandsModel(
         isViewMeasured = true
     }
 
-    private suspend fun loadBitmap(): BitmapDrawable {
-        val resources = HandwashingApplication.getInstance().resources
-        return withContext(Dispatchers.IO) {
-            Timber.d("Waiting for view measured")
-            while (!isViewMeasured)
-                delay(10L)
-            Timber.d("View measured")
-            Timber.d(measurements.toString())
-            val drawable = getBitmapId()
-//            BitmapDrawable(resources, BitmapFactory.decodeResource(resources,
-//                drawable))
-            state.set(IMAGE_DRAWABLE, drawable)
-            BitmapDrawable(
-                resources,
-                ImageResizer.decodeSampledBitmapFromResource(
-                    resources, drawable,
-                    measurements.width, measurements.height, imageCache
-                )
-            )
-        }
+    private fun loadBitmap(): Int {
+        val drawableId = getBitmapId()
+        state.set(IMAGE_DRAWABLE, drawableId)
+        return drawableId
     }
 
     private fun loadTitle(): CharSequence {
@@ -102,8 +79,9 @@ class WashingHandsModel(
 
     private fun processStringArray(@ArrayRes array: Int): CharSequence =
         with(HandwashingApplication.getInstance()) {
-            val emojiCompat = EmojiCompat.get(this, true)
-            Timber.d("EmojiCompat initialized")
+            val emojiCompat = with(EmojiLoader.get(this)) {
+                runBlocking { await() }
+            }
             emojiCompat.process(
                 resources.getStringArray(array)[position]
             )
@@ -124,9 +102,8 @@ class WashingHandsModel(
 }
 
 class WashingHandsModelFactory @Inject constructor(
-    private val position: Int,
-    private val imageCache: ImageCache
+    private val position: Int
 ) : ViewModelAssistedFactory<WashingHandsModel> {
     override fun create(handle: SavedStateHandle) =
-        WashingHandsModel(handle, position, imageCache)
+        WashingHandsModel(handle, position)
 }

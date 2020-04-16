@@ -81,7 +81,7 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="32dp"
-                android:layout_marginBottom="32dp"
+                android:layout_marginBottom="8dp"
                 android:contentDescription="Handwashing description"
                 android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"

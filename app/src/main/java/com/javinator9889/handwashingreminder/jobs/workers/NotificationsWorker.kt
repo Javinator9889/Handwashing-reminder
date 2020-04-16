@@ -25,10 +25,11 @@ import androidx.work.Data
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.javinator9889.handwashingreminder.R
-import com.javinator9889.handwashingreminder.emoji.EmojiCompat
+import com.javinator9889.handwashingreminder.emoji.EmojiLoader
 import com.javinator9889.handwashingreminder.notifications.NotificationsHandler
 import com.javinator9889.handwashingreminder.utils.TIME_CHANNEL_ID
 import com.javinator9889.handwashingreminder.utils.Workers
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import java.util.*
 
@@ -45,13 +46,13 @@ class NotificationsWorker(
 
     override fun doWork(): Result {
         return try {
+            val emojiLoader = EmojiLoader.get(context)
             val notificationsHandler = NotificationsHandler(
                 context,
                 TIME_CHANNEL_ID,
                 context.getString(R.string.time_notification_channel_name),
                 context.getString(R.string.time_notification_channel_desc)
             )
-            val emojiCompat = EmojiCompat.get(context, false)
             val workHandler = WorkHandler(context)
 
             val notificationData =
@@ -60,6 +61,9 @@ class NotificationsWorker(
             if (delay == -1L)
                 return Result.failure()
 
+            val emojiCompat = runBlocking {
+                emojiLoader.await()
+            }
             val title =
                 emojiCompat.process(context.getString(notificationData.title))
             val comments =

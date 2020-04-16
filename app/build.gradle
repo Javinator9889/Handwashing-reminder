@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.mikepenz.aboutlibraries.plugin'
 apply plugin: 'com.google.gms.google-services'
@@ -141,8 +142,6 @@ dependencies {
     implementation 'com.google.android.play:core-ktx:1.7.0'
     // https://developer.android.com/kotlin/ktx#collection
     implementation 'androidx.collection:collection-ktx:1.1.0'
-    // https://github.com/koral--/android-gif-drawable/
-    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
     // https://kotlinlang.org/docs/reference/reflection.html
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     // https://firebase.google.com/docs/android/setup#add-sdks
@@ -173,4 +172,12 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
     // https://developer.android.com/jetpack/androidx/releases/lifecycle#declaring_dependencies
     implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.2.0'
+    // https://developer.android.com/reference/kotlin/androidx/preference/package-summary
+    implementation 'androidx.preference:preference:1.1.0'
+    // https://github.com/bumptech/glide
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    kapt 'com.github.bumptech.glide:compiler:4.11.0'
+    // https://developer.android.com/jetpack/androidx/releases/concurrent
+    implementation 'androidx.concurrent:concurrent-futures:1.0.0'
+    implementation 'androidx.concurrent:concurrent-futures-ktx:1.1.0-alpha01'
 }

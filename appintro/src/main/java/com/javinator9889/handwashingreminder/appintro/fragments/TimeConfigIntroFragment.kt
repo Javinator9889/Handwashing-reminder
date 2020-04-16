@@ -43,7 +43,7 @@ import com.javinator9889.handwashingreminder.R as RBase
 
 class TimeConfigIntroFragment : AppIntroBaseFragment() {
     private lateinit var rvAdapter: TimeConfigAdapter
-    private lateinit var rvItems: Array<TimeConfigContent>
+    lateinit var rvItems: Array<TimeConfigContent>
     lateinit var recyclerView: RecyclerView
     lateinit var fromActivity: AppCompatActivity
     var bgColor: Int = Color.WHITE

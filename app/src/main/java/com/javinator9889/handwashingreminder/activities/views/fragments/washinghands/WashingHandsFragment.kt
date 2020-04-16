@@ -27,8 +27,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.BaseFragmentView
-import com.javinator9889.handwashingreminder.cache.ImageCacheHandler
-import com.javinator9889.handwashingreminder.graphics.ImageCache
 import kotlinx.android.synthetic.main.how_to_wash_hands_layout.view.*
 import kotlinx.android.synthetic.main.privacy_terms.*
 import timber.log.Timber
@@ -39,12 +37,6 @@ internal const val NUM_PAGES = 8
 class WashingHandsFragment : BaseFragmentView() {
     override val layoutId: Int = R.layout.how_to_wash_hands_layout
     private val items = arrayOfNulls<WeakReference<Fragment>>(NUM_PAGES)
-    private lateinit var imageCache: ImageCache
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        imageCache = ImageCacheHandler.getInstance(parentFragmentManager)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -90,7 +82,7 @@ class WashingHandsFragment : BaseFragmentView() {
             if (position == 0) {
                 return FirstSlide()
             }
-            with(SliderView(position - 1, imageCache)) {
+            with(SliderView(position - 1)) {
                 items[position] = WeakReference(this)
                 return this
             }

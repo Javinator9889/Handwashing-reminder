@@ -19,8 +19,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 
-import com.javinator9889.handwashingreminder.BuildConfig;
-
 import timber.log.Timber;
 
 
@@ -89,9 +87,7 @@ public class RecyclingBitmapDrawable extends BitmapDrawable {
         // has been displayed, then recycle
         if (mCacheRefCount <= 0 && mDisplayRefCount <= 0 && mHasBeenDisplayed
                 && hasValidBitmap()) {
-            if (BuildConfig.DEBUG) {
-                Timber.d("No longer being used or cached so recycling. %s", toString());
-            }
+            Timber.d("No longer being used or cached so recycling. %s", toString());
 
             getBitmap().recycle();
         }
