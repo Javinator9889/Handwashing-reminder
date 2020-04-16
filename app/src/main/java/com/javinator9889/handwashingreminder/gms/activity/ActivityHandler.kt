@@ -21,29 +21,31 @@ package com.javinator9889.handwashingreminder.gms.activity
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import androidx.preference.PreferenceManager
 import com.google.android.gms.location.ActivityRecognition
 import com.google.android.gms.location.ActivityTransition
 import com.google.android.gms.location.ActivityTransitionRequest
-import com.google.android.gms.location.DetectedActivity
 import com.google.android.gms.tasks.Task
+import com.javinator9889.handwashingreminder.utils.Preferences
 import timber.log.Timber
 
 
 class ActivityHandler(private val context: Context) {
     private val requestCode = 51824210
-    private val tag = ActivityHandler::class.simpleName
     private val transitions: MutableList<ActivityTransition> = mutableListOf()
     private var task: Task<Void>? = null
     private val pendingIntent: PendingIntent
     private var activityRegistered = false
 
     init {
-        val activitiesSet = setOf(
-            DetectedActivity.IN_VEHICLE,
-            DetectedActivity.ON_BICYCLE,
-            DetectedActivity.RUNNING,
-            DetectedActivity.WALKING
-        )
+        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val activitiesSet = setOf<Int>()
+        preferences.getStringSet(
+            Preferences.ACTIVITIES_ENABLED,
+            Preferences.DEFAULT_ACTIVITY_SET
+        )!!.run {
+            forEach { activitiesSet.plus(Integer.parseInt(it)) }
+        }
         addTransitions(activitiesSet, transitions)
         with(Intent(context, ActivityReceiver::class.java)) {
             pendingIntent = PendingIntent.getBroadcast(

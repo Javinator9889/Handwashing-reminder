@@ -18,6 +18,8 @@
  */
 package com.javinator9889.handwashingreminder.utils
 
+import com.google.android.gms.location.DetectedActivity
+
 const val TIME_CHANNEL_ID = "timeNotificationsChannel"
 const val ACTIVITY_CHANNEL_ID = "activityNotificationsChannel"
 
@@ -33,6 +35,13 @@ class Preferences {
         const val ANALYTICS_ENABLED = "firebase:analytics"
         const val PERFORMANCE_ENABLED = "firebase:performance"
         const val ACTIVITY_TRACKING_ENABLED = "activity:gms:tracking"
+        const val ACTIVITIES_ENABLED = "activity:gms:activities:enabled"
+        val DEFAULT_ACTIVITY_SET = setOf(
+            DetectedActivity.IN_VEHICLE.toString(),
+            DetectedActivity.ON_BICYCLE.toString(),
+            DetectedActivity.RUNNING.toString(),
+            DetectedActivity.WALKING.toString()
+        )
     }
 }
 

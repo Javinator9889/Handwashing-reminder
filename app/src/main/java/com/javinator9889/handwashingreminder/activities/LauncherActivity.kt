@@ -161,8 +161,6 @@ class LauncherActivity : AppCompatActivity() {
 
     private fun installRequiredModules(waitingThread: Thread) {
         thread(start = true) {
-            if (waitingThread.isAlive)
-                waitingThread.join()
             val modules = ArrayList<String>(MODULE_COUNT)
             if (sharedPreferences.getBoolean(ADS_ENABLED, true))
                 modules.add(Ads.MODULE_NAME)
@@ -182,6 +180,8 @@ class LauncherActivity : AppCompatActivity() {
             } else {
                 createDynamicFeatureActivityIntent(modules.toTypedArray())
             }
+            if (waitingThread.isAlive)
+                waitingThread.join()
             startActivityForResult(intent, DYNAMIC_FEATURE_INSTALL_RESULT_CODE)
         }
     }

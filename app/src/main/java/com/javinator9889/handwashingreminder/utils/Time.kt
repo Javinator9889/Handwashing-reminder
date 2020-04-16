@@ -32,3 +32,5 @@ fun timeDifferenceSecs(to: String): Long {
     dateFormat.parse(dateFormat.format(diff))?.let { return it.time / 1000 }
     return 0L
 }
+
+fun formatTime(time: Int) = if (time < 10) "0$time" else time.toString()

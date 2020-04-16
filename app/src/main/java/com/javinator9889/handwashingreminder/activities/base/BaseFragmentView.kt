@@ -33,5 +33,5 @@ abstract class BaseFragmentView : BaseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(layoutId, container, false)
+    ): View = inflater.inflate(layoutId, container, false)
 }

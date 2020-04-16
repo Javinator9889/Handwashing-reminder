@@ -78,11 +78,11 @@ class DiseasesFragment : BaseFragmentView() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val view = super.onCreateView(inflater, container, savedInstanceState)
         val fastAdapter = FastAdapter.with(adapters)
         val rvManager = LinearLayoutManager(context)
-        with(requireView().findViewById<RecyclerView>(R.id.diseasesContainer)) {
+        with(view.findViewById<RecyclerView>(R.id.diseasesContainer)) {
             layoutManager = rvManager
             adapter = fastAdapter
         }

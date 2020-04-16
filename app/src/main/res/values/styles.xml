@@ -9,6 +9,7 @@
         <item name="switchStyle">
             @style/Widget.MaterialComponents.CompoundButton.Switch
         </item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
 
     <style name="AppTheme.MaterialDialogs" parent="AppTheme">

@@ -32,6 +32,7 @@ import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.edit
+import androidx.preference.PreferenceManager
 import com.javinator9889.handwashingreminder.activities.FAST_START_KEY
 import com.javinator9889.handwashingreminder.activities.LauncherActivity
 import com.javinator9889.handwashingreminder.activities.PENDING_INTENT_CODE
@@ -47,7 +48,7 @@ class NotificationsHandler(
     private val channelDesc: String = ""
 ) {
     private val preferences: SharedPreferences =
-        context.getSharedPreferences(Preferences.NAME, Context.MODE_PRIVATE)
+        PreferenceManager.getDefaultSharedPreferences(context)
     private val notificationId = 1
     private val vibrationPattern = longArrayOf(300L, 300L, 300L, 300L)
 

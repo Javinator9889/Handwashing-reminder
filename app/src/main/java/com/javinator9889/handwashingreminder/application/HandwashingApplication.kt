@@ -21,6 +21,7 @@ package com.javinator9889.handwashingreminder.application
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.multidex.MultiDex
+import androidx.preference.PreferenceManager
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.play.core.splitcompat.SplitCompat
@@ -30,7 +31,6 @@ import com.javinator9889.handwashingreminder.gms.ads.AdLoader
 import com.javinator9889.handwashingreminder.jobs.workers.WorkHandler
 import com.javinator9889.handwashingreminder.utils.LogReportTree
 import com.javinator9889.handwashingreminder.utils.Preferences
-import com.javinator9889.handwashingreminder.utils.Preferences.Companion.NAME
 import com.javinator9889.handwashingreminder.utils.isDebuggable
 import javinator9889.localemanager.application.BaseApplication
 import javinator9889.localemanager.utils.languagesupport.LanguagesSupport.Language
@@ -66,7 +66,7 @@ class HandwashingApplication : BaseApplication() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        sharedPreferences = getCustomSharedPreferences(this)!!
+        sharedPreferences = getCustomSharedPreferences(this)
         if (isDebuggable()) {
             Timber.plant(Timber.DebugTree())
             Timber.d("Application is in DEBUG mode")
@@ -106,6 +106,6 @@ class HandwashingApplication : BaseApplication() {
     /**
      * {@inheritDoc}
      */
-    override fun getCustomSharedPreferences(base: Context): SharedPreferences? =
-        base.getSharedPreferences(NAME, Context.MODE_PRIVATE)
+    override fun getCustomSharedPreferences(base: Context): SharedPreferences =
+        PreferenceManager.getDefaultSharedPreferences(base)
 }

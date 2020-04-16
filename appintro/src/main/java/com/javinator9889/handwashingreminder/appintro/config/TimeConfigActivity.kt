@@ -35,6 +35,7 @@ import com.javinator9889.handwashingreminder.activities.support.ActionBarBase
 import com.javinator9889.handwashingreminder.appintro.R
 import com.javinator9889.handwashingreminder.utils.AndroidVersion
 import com.javinator9889.handwashingreminder.utils.TimeConfig
+import com.javinator9889.handwashingreminder.utils.formatTime
 import com.javinator9889.handwashingreminder.utils.isAtLeast
 import java.util.*
 
@@ -134,10 +135,6 @@ class TimeConfigActivity :
         return Time(tpHour, tpMinute)
     }
 
-    private fun formatTime(time: Int): String {
-        return if (time < 10) "0$time" else time.toString()
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         val tpTime = getHours()
@@ -164,7 +161,6 @@ class TimeConfigActivity :
     override fun onClick(v: View?) {
         when (v) {
             setButton, hours, minutes, clockIcon, ddot -> {
-                val date = Calendar.getInstance()
                 val tpHour = Integer.parseInt(hours.text as String)
                 val tpMinute = Integer.parseInt(minutes.text as String)
                 val tpDialog = TimePickerDialog(

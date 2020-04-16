@@ -107,4 +107,39 @@
     </string-array>
     <string name="previous">Previous</string>
     <string name="next">Next</string>
+    <string name="time_preferences_section">Scheduled time settings</string>
+    <string name="breakfast_pref_title">Breakfast time &#9749;</string>
+    <string name="breakfast_pref_summ">You set your breakfast time to: </string>
+    <string name="lunch_pref_title">Lunch time &#127857;</string>
+    <string name="lunch_pref_summ">You set your lunch time to: </string>
+    <string name="dinner_pref_title">Dinner time &#129367;</string>
+    <string name="dinner_pref_summ">You set your dinner time to: </string>
+    <string name="activity_section">Activity notifications</string>
+    <string-array name="activities">
+        <item>After walking</item>
+        <item>After running</item>
+        <item>After going cycling</item>
+        <item>After leaving a vehicle</item>
+    </string-array>
+    <string-array name="activity_values">
+        <item>7</item>
+        <item>8</item>
+        <item>1</item>
+        <item>0</item>
+    </string-array>
+    <string-array name="empty_array" />
+    <string name="google_api_not_found">You need to have Google Play
+        Services installed and available for using this functionality</string>
+    <string name="permission_permanently_denied">You denied permanently
+    the access to your activity. Enable it from settings</string>
+    <string name="activity_disabled">You will not receive any activity
+        notifications</string>
+    <string name="activity_enabled">You will receive notifications for
+        the activities selected below</string>
+    <string name="activity_recognition">Enable activity recognition</string>
+    <string name="activities_to_enable">When you will receive
+        notifications?</string>
+    <string name="activities_info">You will receive notifications</string>
+    <string name="activities_disabled">You will receive no
+        notifications</string>
 </resources>

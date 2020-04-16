@@ -31,6 +31,7 @@ import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.support.ActionBarBase
 import com.javinator9889.handwashingreminder.activities.views.fragments.diseases.DiseasesFragment
 import com.javinator9889.handwashingreminder.activities.views.fragments.news.NewsFragment
+import com.javinator9889.handwashingreminder.activities.views.fragments.settings.SettingsView
 import com.javinator9889.handwashingreminder.activities.views.fragments.washinghands.WashingHandsFragment
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.mikepenz.iconics.IconicsDrawable
@@ -160,7 +161,7 @@ class MainActivity : ActionBarBase(),
             R.id.diseases -> DiseasesFragment()
             R.id.handwashing -> WashingHandsFragment()
             R.id.news -> NewsFragment()
-            R.id.settings -> DiseasesFragment()
+            R.id.settings -> SettingsView()
             else -> Fragment()  // this should never happen
         }
         fragments[id] = WeakReference(fragment)

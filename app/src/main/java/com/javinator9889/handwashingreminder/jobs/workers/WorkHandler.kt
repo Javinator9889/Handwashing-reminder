@@ -19,6 +19,7 @@
 package com.javinator9889.handwashingreminder.jobs.workers
 
 import android.content.Context
+import androidx.preference.PreferenceManager
 import androidx.work.*
 import com.javinator9889.handwashingreminder.utils.Preferences
 import com.javinator9889.handwashingreminder.utils.Workers
@@ -34,8 +35,7 @@ class WorkHandler(private val context: Context) {
 
     fun enqueuePeriodicNotificationsWorker(forceUpdate: Boolean = false) {
         val currentDate = Calendar.getInstance()
-        val preferences =
-            context.getSharedPreferences(Preferences.NAME, Context.MODE_PRIVATE)
+        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
 
         val breakfastTime =
             preferences.getString(Preferences.BREAKFAST_TIME, "")!!
