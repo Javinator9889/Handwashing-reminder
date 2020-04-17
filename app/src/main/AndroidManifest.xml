@@ -26,8 +26,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.javinator9889.handwashingreminder.activities.MainActivity" />
-        <activity android:name="com.javinator9889.handwashingreminder.activities.PrivacyTermsActivity" />
+        <activity android:name=".activities.MainActivity" />
+        <activity android:name=".activities.PrivacyTermsActivity" />
         <activity android:name=".activities.DynamicFeatureProgress" />
         <activity android:name=".activities.views.fragments.washinghands.WashingHandsFragment" />
 

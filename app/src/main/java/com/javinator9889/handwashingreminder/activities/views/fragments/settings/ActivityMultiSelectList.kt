@@ -22,6 +22,7 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.preference.MultiSelectListPreference
 import com.javinator9889.handwashingreminder.R
+import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import java.util.*
 
 class ActivityMultiSelectList : MultiSelectListPreference {
@@ -38,6 +39,7 @@ class ActivityMultiSelectList : MultiSelectListPreference {
     override fun notifyChanged() {
         super.notifyChanged()
         loadSummary()
+        reloadActivityHandler()
     }
 
     private fun loadSummary() {
@@ -59,5 +61,11 @@ class ActivityMultiSelectList : MultiSelectListPreference {
             context.getText(R.string.activities_disabled)
         else
             "${context.getString(R.string.activities_info)} $builder"
+    }
+
+    private fun reloadActivityHandler() {
+        with(HandwashingApplication.getInstance()) {
+            activityHandler.reload()
+        }
     }
 }

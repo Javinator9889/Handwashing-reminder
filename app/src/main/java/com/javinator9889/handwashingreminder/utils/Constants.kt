@@ -25,10 +25,9 @@ const val ACTIVITY_CHANNEL_ID = "activityNotificationsChannel"
 
 class Preferences {
     companion object {
-        const val NAME = "handwasingreminder:prefs"
-        const val CREATE_CHANNEL_KEY = "create_channel_req"
-        const val APP_INIT_KEY = "application_initialized"
-        const val ADS_ENABLED = "app_admob_enabled"
+        const val CREATE_CHANNEL_KEY = "notifications:channel:create"
+        const val APP_INIT_KEY = "app:initialized"
+        const val ADS_ENABLED = "app:ads:enabled"
         const val BREAKFAST_TIME = "app:breakfast"
         const val LUNCH_TIME = "app:lunch"
         const val DINNER_TIME = "app:dinner"

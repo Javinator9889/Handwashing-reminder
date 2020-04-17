@@ -42,4 +42,33 @@
             android:key="activity:gms:activities:enabled"
             android:title="@string/activities_to_enable" />
     </PreferenceCategory>
+    <PreferenceCategory android:title="Preference category">
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="firebase:analytics"
+            android:title="@string/firebase_analytics"
+            android:summary="@string/firebase_analytics_policy"/>
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="firebase:analytics"
+            android:title="@string/firebase_performance"
+            android:summary="@string/firebase_performance_policy"/>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Preference category">
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="app:ads:enabled"
+            android:title="Enable ads"
+            android:summary="Allow the app to show ads on diseases view and support development"/>
+
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/activities"
+            android:entryValues="@array/activities"
+            android:key="list_preference_1"
+            android:title="Make a donation"
+            android:summary="Support the app development by making a donation"/>
+    </PreferenceCategory>
 </PreferenceScreen>

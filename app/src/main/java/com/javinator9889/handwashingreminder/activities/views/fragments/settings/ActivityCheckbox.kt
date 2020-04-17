@@ -27,6 +27,7 @@ import androidx.preference.CheckBoxPreference
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.javinator9889.handwashingreminder.R
+import com.javinator9889.handwashingreminder.application.HandwashingApplication
 
 class ActivityCheckbox : CheckBoxPreference {
     constructor(context: Context) : super(context)
@@ -70,5 +71,15 @@ class ActivityCheckbox : CheckBoxPreference {
     override fun onSetInitialValue(defaultValue: Any?) {
         if (isEnabled)
             super.onSetInitialValue(defaultValue)
+    }
+
+    override fun setChecked(checked: Boolean) {
+        super.setChecked(checked)
+        with(HandwashingApplication.getInstance()) {
+            if (checked)
+                activityHandler.startTrackingActivity()
+            else
+                activityHandler.disableActivityTracker()
+        }
     }
 }

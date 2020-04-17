@@ -177,7 +177,6 @@ dependencies {
     // https://github.com/bumptech/glide
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     kapt 'com.github.bumptech.glide:compiler:4.11.0'
-    // https://developer.android.com/jetpack/androidx/releases/concurrent
-    implementation 'androidx.concurrent:concurrent-futures:1.0.0'
-    implementation 'androidx.concurrent:concurrent-futures-ktx:1.1.0-alpha01'
+    // https://github.com/afollestad/material-dialogs/
+    implementation 'com.afollestad.material-dialogs:core:3.3.0'
 }

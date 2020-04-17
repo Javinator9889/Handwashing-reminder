@@ -142,4 +142,14 @@
     <string name="activities_info">You will receive notifications</string>
     <string name="activities_disabled">You will receive no
         notifications</string>
+    <string name="firebase_analytics" translatable="false">Firebase Analytics</string>
+    <string name="firebase_performance" translatable="false">Firebase
+        Performance</string>
+    <string name="ads_explanation_title">Disable ads?</string>
+    <string name="ads_explanation_desc">I know ads
+        are sometimes disgusting and annoying and indeed they are not a great
+        source of income so I\'m allowing you to turn them off
+        &#128521;. This way I won\'t make any money, but you can make a
+    donation whenever you want and supporting my development &#128519;</string>
+    <string name="disable">Disable</string>
 </resources>

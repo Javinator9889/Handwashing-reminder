@@ -25,7 +25,6 @@ import androidx.preference.PreferenceManager
 import com.google.android.gms.location.ActivityRecognition
 import com.google.android.gms.location.ActivityTransition
 import com.google.android.gms.location.ActivityTransitionRequest
-import com.google.android.gms.tasks.Task
 import com.javinator9889.handwashingreminder.utils.Preferences
 import timber.log.Timber
 
@@ -33,31 +32,21 @@ import timber.log.Timber
 class ActivityHandler(private val context: Context) {
     private val requestCode = 51824210
     private val transitions: MutableList<ActivityTransition> = mutableListOf()
-    private var task: Task<Void>? = null
-    private val pendingIntent: PendingIntent
+    private var pendingIntent: PendingIntent
     private var activityRegistered = false
 
     init {
-        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-        val activitiesSet = setOf<Int>()
-        preferences.getStringSet(
-            Preferences.ACTIVITIES_ENABLED,
-            Preferences.DEFAULT_ACTIVITY_SET
-        )!!.run {
-            forEach { activitiesSet.plus(Integer.parseInt(it)) }
-        }
+        val activitiesSet = createSetOfTransitions()
         addTransitions(activitiesSet, transitions)
-        with(Intent(context, ActivityReceiver::class.java)) {
-            pendingIntent = PendingIntent.getBroadcast(
-                context, requestCode, this, PendingIntent.FLAG_UPDATE_CURRENT
-            )
-        }
+        pendingIntent = createPendingIntent()
     }
 
     fun startTrackingActivity() {
+        if (transitions.size == 0)
+            return
         Timber.d("Starting activity recognition")
         with(ActivityTransitionRequest(transitions)) {
-            task = ActivityRecognition.getClient(context)
+            ActivityRecognition.getClient(context)
                 .requestActivityTransitionUpdates(this, pendingIntent).apply {
                     addOnSuccessListener { activityRegistered = true }
                     addOnFailureListener { activityRegistered = false }
@@ -69,13 +58,34 @@ class ActivityHandler(private val context: Context) {
         Timber.d("Stopping activity recognition")
         if (!activityRegistered)
             return
-        task = ActivityRecognition.getClient(context)
+        ActivityRecognition.getClient(context)
             .removeActivityTransitionUpdates(pendingIntent).apply {
                 addOnSuccessListener { pendingIntent.cancel() }
-                addOnFailureListener { e: Exception ->
-                    Timber.e(e)
-                }
+                addOnFailureListener { e: Exception -> Timber.e(e) }
             }
+    }
+
+    fun reload() {
+        with(createSetOfTransitions()) {
+            transitions.clear()
+            addTransitions(this, transitions)
+            disableActivityTracker()
+            pendingIntent = createPendingIntent()
+            startTrackingActivity()
+        }
+    }
+
+    private fun createSetOfTransitions(): Set<Int> {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        with(setOf<Int>()) {
+            preferences.getStringSet(
+                Preferences.ACTIVITIES_ENABLED,
+                Preferences.DEFAULT_ACTIVITY_SET
+            )!!.run {
+                forEach { this.plus(Integer.parseInt(it)) }
+            }
+            return this
+        }
     }
 
     private fun addTransitions(
@@ -88,6 +98,14 @@ class ActivityHandler(private val context: Context) {
                 .setActivityType(activity)
                 .setActivityTransition(activityTransition)
                 .build()
+        }
+    }
+
+    private fun createPendingIntent(): PendingIntent {
+        with(Intent(context, ActivityReceiver::class.java)) {
+            return PendingIntent.getBroadcast(
+                context, requestCode, this, PendingIntent.FLAG_UPDATE_CURRENT
+            )
         }
     }
 }
