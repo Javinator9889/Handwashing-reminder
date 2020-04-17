@@ -41,6 +41,7 @@ class Preferences {
             DetectedActivity.RUNNING.toString(),
             DetectedActivity.WALKING.toString()
         )
+        const val DONATIONS = "donations"
     }
 }
 
@@ -135,6 +136,16 @@ class Videos {
             )
         )
     }
+}
+
+object Billing {
+    val CATALOG_DEBUG =
+        arrayOf(
+            "android.test.purchased",
+            "android.test.canceled",
+            "android.test.refunded",
+            "android.test.item_unavailable"
+        )
 }
 
 const val MODULE_COUNT = 2

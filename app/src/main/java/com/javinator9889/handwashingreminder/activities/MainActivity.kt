@@ -36,6 +36,7 @@ import com.javinator9889.handwashingreminder.activities.views.fragments.washingh
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
+import com.mikepenz.iconics.typeface.library.ionicons.Ionicons
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.how_to_wash_hands_layout.*
 import timber.log.Timber
@@ -69,7 +70,7 @@ class MainActivity : ActionBarBase(),
                 val icon = when (item.itemId) {
                     R.id.diseases ->
                         IconicsDrawable(
-                            this, GoogleMaterial.Icon.gmd_feedback
+                            this, Ionicons.Icon.ion_ios_medkit
                         )
                     R.id.news ->
                         IconicsDrawable(
@@ -77,7 +78,7 @@ class MainActivity : ActionBarBase(),
                         )
                     R.id.settings ->
                         IconicsDrawable(
-                            this, GoogleMaterial.Icon.gmd_settings
+                            this, Ionicons.Icon.ion_android_settings
                         )
                     else -> null
                 }

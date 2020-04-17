@@ -29,6 +29,7 @@ import com.javinator9889.handwashingreminder.jobs.workers.WorkHandler
 import com.javinator9889.handwashingreminder.utils.Preferences
 import com.javinator9889.handwashingreminder.utils.formatTime
 import kotlinx.coroutines.runBlocking
+import kotlin.concurrent.thread
 
 class TimePickerPreference : EditTextPreference,
     TimePickerDialog.OnTimeSetListener {
@@ -42,7 +43,7 @@ class TimePickerPreference : EditTextPreference,
         defStyleRes: Int
     ) : super(context, attrs, defStyleAttr, defStyleRes)
 
-    private val summaryText: CharSequence
+    private lateinit var summaryText: CharSequence
 
     init {
         val emojiLoader = EmojiLoader.get(context)
@@ -61,9 +62,11 @@ class TimePickerPreference : EditTextPreference,
             )
             else -> PreferenceData("", "")
         }
-        val emojiCompat = runBlocking { emojiLoader.await() }
-        title = emojiCompat.process(data.title)
-        summaryText = emojiCompat.process(data.summary)
+        thread(start = true) {
+            val emojiCompat = runBlocking { emojiLoader.await() }
+            title = emojiCompat.process(data.title)
+            summaryText = emojiCompat.process(data.summary)
+        }
     }
 
     private fun setSummary(hours: Int, minutes: Int): String {

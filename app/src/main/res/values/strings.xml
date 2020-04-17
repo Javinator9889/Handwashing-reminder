@@ -152,4 +152,63 @@
         &#128521;. This way I won\'t make any money, but you can make a
     donation whenever you want and supporting my development &#128519;</string>
     <string name="disable">Disable</string>
+    <string name="enable_ads">Enable ads</string>
+    <string name="enable_ads_summ">Allow the app to show ads on diseases view and support development</string>
+    <string name="donations">Contribute with a donation</string>
+    <string name="donations_summ">Support the app development by making a donation</string>
+    <string-array name="in_app_donations_names">
+        <item>Donate 1€</item>
+        <item>Donate 2€</item>
+        <item>Donate 5€</item>
+        <item>Donate 10€</item>
+        <item>Donate 15€</item>
+        <item>Donate 20€</item>
+        <item>Donate 30€</item>
+        <item>Donate 50€</item>
+        <item>Donate 70€</item>
+        <item>Donate 100€</item>
+    </string-array>
+    <string-array name="in_app_donations">
+        <item>in_app_donations</item>
+        <item>in_app_donations_2</item>
+        <item>in_app_donations_5</item>
+        <item>in_app_donations_10</item>
+        <item>in_app_donations_15</item>
+        <item>in_app_donations_20</item>
+        <item>in_app_donations_30</item>
+        <item>in_app_donations_50</item>
+        <item>in_app_donations_70</item>
+        <item>in_app_donations_100</item>
+    </string-array>
+    <string-array name="in_app_donations_debug">
+        <item>android.test.purchased</item>
+        <item>android.test.canceled</item>
+        <item>android.test.canceled</item>
+        <item>android.test.refunded</item>
+        <item>android.test.item_unavailable</item>
+        <item>android.test.purchased</item>
+        <item>android.test.purchased</item>
+        <item>android.test.refunded</item>
+        <item>android.test.refunded</item>
+        <item>android.test.canceled</item>
+    </string-array>
+    <string name="donation_thanks">Thank you for donating!</string>
+    <string name="donation_desc">You are awesome &#128561; With your
+        donation I can continue developing this app and include new
+        features &#128170;
+
+        Stay tuned for them!
+    </string>
+    <string name="donation_cancelled">Donation cancelled</string>
+    <string name="donation_cancelled_desc">It looks like the donation
+        was cancelled. It doesn\'t matter, you can do it at any time
+        &#128521;</string>
+    <string name="donation_error">Error while donating</string>
+    <string name="donation_error_desc">There was an error while trying
+        to do the donation &#128560;. Maybe you don\'t have enough
+        money on your credit card or Google Play Store is not available
+    at this time</string>
+    <string name="suggestions">Send comments and suggestions</string>
+    <string name="open_source_libs">Open source libraries</string>
+    <string name="tos_and_privacy">Terms of service and privacy policy</string>
 </resources>

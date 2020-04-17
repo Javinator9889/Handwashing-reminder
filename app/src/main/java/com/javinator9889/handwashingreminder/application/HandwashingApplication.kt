@@ -28,6 +28,7 @@ import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.javinator9889.handwashingreminder.gms.activity.ActivityHandler
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
+import com.javinator9889.handwashingreminder.gms.vendor.BillingService
 import com.javinator9889.handwashingreminder.jobs.workers.WorkHandler
 import com.javinator9889.handwashingreminder.utils.LogReportTree
 import com.javinator9889.handwashingreminder.utils.Preferences
@@ -40,6 +41,7 @@ import timber.log.Timber
 class HandwashingApplication : BaseApplication() {
     var adLoader: AdLoader? = null
     lateinit var workHandler: WorkHandler
+    lateinit var billingService: BillingService
     lateinit var activityHandler: ActivityHandler
     lateinit var remoteConfig: FirebaseRemoteConfig
     lateinit var sharedPreferences: SharedPreferences
@@ -92,6 +94,7 @@ class HandwashingApplication : BaseApplication() {
         } catch (_: UninitializedPropertyAccessException) {
             Timber.i("Scheduler times have not been initialized")
         }
+        billingService = BillingService(this)
     }
 
     /**

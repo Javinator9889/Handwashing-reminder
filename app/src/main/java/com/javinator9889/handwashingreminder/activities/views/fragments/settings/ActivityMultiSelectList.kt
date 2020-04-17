@@ -23,6 +23,9 @@ import android.util.AttributeSet
 import androidx.preference.MultiSelectListPreference
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
+import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.iconics.typeface.library.ionicons.Ionicons
+import com.mikepenz.iconics.utils.sizeDp
 import java.util.*
 
 class ActivityMultiSelectList : MultiSelectListPreference {
@@ -35,6 +38,12 @@ class ActivityMultiSelectList : MultiSelectListPreference {
         context: Context, attrs: AttributeSet?, defStyleAttr: Int,
         defStyleRes: Int
     ) : super(context, attrs, defStyleAttr, defStyleRes)
+
+    init {
+        icon = IconicsDrawable(context, Ionicons.Icon.ion_android_alert).apply {
+            sizeDp = 20
+        }
+    }
 
     override fun notifyChanged() {
         super.notifyChanged()

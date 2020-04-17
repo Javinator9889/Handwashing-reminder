@@ -42,7 +42,7 @@ android {
         applicationId "com.javinator9889.handwashingreminder"
         minSdkVersion 17
         targetSdkVersion 29
-        versionCode 66
+        versionCode 70
         versionName "1.0-${gitCommitHash}"
         multiDexEnabled true
 
@@ -77,6 +77,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             multiDexEnabled = true
             signingConfig signingConfigs.release
+
+            debuggable false
+            jniDebuggable false
+            renderscriptDebuggable false
+            zipAlignEnabled true
         }
     }
     dexOptions {
@@ -179,4 +184,8 @@ dependencies {
     kapt 'com.github.bumptech.glide:compiler:4.11.0'
     // https://github.com/afollestad/material-dialogs/
     implementation 'com.afollestad.material-dialogs:core:3.3.0'
+    // https://developer.android.com/google/play/billing/billing_library_overview
+    implementation 'com.android.billingclient:billing:2.2.0'
+    implementation 'com.android.billingclient:billing-ktx:2.2.0'
+//    compile 'org.sufficientlysecure:donations:2.6'
 }

@@ -51,7 +51,7 @@
             android:summary="@string/firebase_analytics_policy"/>
         <SwitchPreference
             android:defaultValue="false"
-            android:key="firebase:analytics"
+            android:key="firebase:performance"
             android:title="@string/firebase_performance"
             android:summary="@string/firebase_performance_policy"/>
     </PreferenceCategory>
@@ -60,15 +60,30 @@
         <SwitchPreference
             android:defaultValue="false"
             android:key="app:ads:enabled"
-            android:title="Enable ads"
-            android:summary="Allow the app to show ads on diseases view and support development"/>
+            android:title="@string/enable_ads"
+            android:summary="@string/enable_ads_summ"/>
 
         <ListPreference
             android:defaultValue="1"
-            android:entries="@array/activities"
-            android:entryValues="@array/activities"
-            android:key="list_preference_1"
-            android:title="Make a donation"
-            android:summary="Support the app development by making a donation"/>
+            android:entries="@array/in_app_donations_names"
+            android:entryValues="@array/in_app_donations"
+            android:key="donations"
+            android:persistent="false"
+            android:title="@string/donations"
+            android:summary="@string/donations_summ"/>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Preference category">
+        <Preference
+            android:title="@string/suggestions"
+            android:key="send_suggestions"
+            android:persistent="false" />
+        <Preference
+            android:title="@string/open_source_libs"
+            android:key="opensource_libs"
+            android:persistent="false" />
+        <Preference
+            android:title="@string/tos_and_privacy"
+            android:key="tos_privacy"
+            android:persistent="false" />
     </PreferenceCategory>
 </PreferenceScreen>

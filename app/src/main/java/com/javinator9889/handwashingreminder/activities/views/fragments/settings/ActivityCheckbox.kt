@@ -28,6 +28,9 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
+import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.iconics.typeface.library.ionicons.Ionicons
+import com.mikepenz.iconics.utils.sizeDp
 
 class ActivityCheckbox : CheckBoxPreference {
     constructor(context: Context) : super(context)
@@ -66,6 +69,9 @@ class ActivityCheckbox : CheckBoxPreference {
             }
         }
         isEnabled = !isViewDisabled
+        icon = IconicsDrawable(
+            context, Ionicons.Icon.ion_android_walk
+        ).apply { sizeDp = 20 }
     }
 
     override fun onSetInitialValue(defaultValue: Any?) {
