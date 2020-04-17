@@ -142,6 +142,7 @@
     <string name="activities_info">You will receive notifications</string>
     <string name="activities_disabled">You will receive no
         notifications</string>
+    <string name="data_sharing_category">Data sharing preferences</string>
     <string name="firebase_analytics" translatable="false">Firebase Analytics</string>
     <string name="firebase_performance" translatable="false">Firebase
         Performance</string>
@@ -152,6 +153,7 @@
         &#128521;. This way I won\'t make any money, but you can make a
     donation whenever you want and supporting my development &#128519;</string>
     <string name="disable">Disable</string>
+    <string name="ads_donations_category">Support the development</string>
     <string name="enable_ads">Enable ads</string>
     <string name="enable_ads_summ">Allow the app to show ads on diseases view and support development</string>
     <string name="donations">Contribute with a donation</string>
@@ -208,7 +210,25 @@
         to do the donation &#128560;. Maybe you don\'t have enough
         money on your credit card or Google Play Store is not available
     at this time</string>
+    <string name="collaborating">Collaborate with the project</string>
     <string name="suggestions">Send comments and suggestions</string>
     <string name="open_source_libs">Open source libraries</string>
     <string name="tos_and_privacy">Terms of service and privacy policy</string>
+    <string name="send_email_client">Choose and email client</string>
+    <string name="share">Share this app</string>
+    <string name="share_text">
+        Washing your hands has never been so easy! Discover \'Handwashing
+        reminder\' and get notified whether you should wash your hands
+        &#128166;&#128079;, by custom notifications or by your activity.
+        https://s.javinator9889.com/hwreminder
+    </string>
+    <string name="share_title">Discover Handwashing reminder</string>
+    <string name="share_label">Sharing Handwashing reminder</string>
+    <string name="help_translating">Help translating the app</string>
+    <string name="help_translating_summ">Would you like to see the app
+        in your language? Collaborate and translate it!</string>
+    <string name="no_browser">No browser found!</string>
+    <string name="no_browser_long">It looks like you have no browser
+        installed on your phone. Please, install one for accessing to
+        the website</string>
 </resources>

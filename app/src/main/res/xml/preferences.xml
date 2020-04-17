@@ -2,24 +2,29 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <Preference
+        android:title="@string/share"
+        android:key="share"
+        android:persistent="false" />
+
     <PreferenceCategory
         android:title="@string/time_preferences_section"
         app:allowDividerAbove="true"
         app:allowDividerBelow="true">
 
-        <EditTextPreference
+        <com.javinator9889.handwashingreminder.activities.views.fragments.settings.TimePickerPreference
             android:id="@+id/breakfast"
             android:key="app:breakfast"
             android:selectAllOnFocus="true"
             android:singleLine="true" />
 
-        <EditTextPreference
+        <com.javinator9889.handwashingreminder.activities.views.fragments.settings.TimePickerPreference
             android:id="@+id/lunch"
             android:key="app:lunch"
             android:selectAllOnFocus="true"
             android:singleLine="true" />
 
-        <EditTextPreference
+        <com.javinator9889.handwashingreminder.activities.views.fragments.settings.TimePickerPreference
             android:id="@+id/dinner"
             android:key="app:dinner"
             android:selectAllOnFocus="true"
@@ -42,7 +47,8 @@
             android:key="activity:gms:activities:enabled"
             android:title="@string/activities_to_enable" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="Preference category">
+    <PreferenceCategory
+        android:title="@string/data_sharing_category">
 
         <SwitchPreference
             android:defaultValue="false"
@@ -55,7 +61,8 @@
             android:title="@string/firebase_performance"
             android:summary="@string/firebase_performance_policy"/>
     </PreferenceCategory>
-    <PreferenceCategory android:title="Preference category">
+    <PreferenceCategory
+        android:title="@string/ads_donations_category">
 
         <SwitchPreference
             android:defaultValue="false"
@@ -72,7 +79,13 @@
             android:title="@string/donations"
             android:summary="@string/donations_summ"/>
     </PreferenceCategory>
-    <PreferenceCategory android:title="Preference category">
+    <PreferenceCategory
+        android:title="@string/collaborating">
+        <Preference
+            android:title="@string/help_translating"
+            android:summary="@string/help_translating_summ"
+            android:key="translate"
+            android:persistent="false" />
         <Preference
             android:title="@string/suggestions"
             android:key="send_suggestions"

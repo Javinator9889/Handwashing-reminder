@@ -19,12 +19,18 @@
 package com.javinator9889.handwashingreminder.utils
 
 import android.app.ActivityManager
+import android.content.ContentResolver
 import android.content.Context
 import android.content.pm.ApplicationInfo
+import android.content.res.Resources
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities.*
+import android.net.Uri
 import android.os.Build
+import androidx.annotation.AnyRes
+import com.javinator9889.handwashingreminder.BuildConfig
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
+
 
 fun isAtLeast(version: AndroidVersion): Boolean =
     Build.VERSION.SDK_INT >= version.code
@@ -66,3 +72,51 @@ fun isConnected(): Boolean {
 fun isDebuggable(): Boolean =
     (0 != HandwashingApplication.getInstance().applicationInfo.flags and
             ApplicationInfo.FLAG_DEBUGGABLE)
+
+fun getDeviceInfo(): String = with(StringBuilder()) {
+    append("Model: "); append(Build.MODEL); append("\n")
+    append("ID: "); append(Build.ID); append("\n")
+    append("Manufacturer: "); append(Build.MANUFACTURER); append("\n")
+    append("Brand: "); append(Build.BRAND); append("\n")
+    append("Incremental: "); append(Build.VERSION.INCREMENTAL); append("\n")
+    append("SDK: "); append(Build.VERSION.SDK_INT); append("\n")
+    append("Board: "); append(Build.BOARD); append("\n")
+    append("Release version: "); append(Build.VERSION.RELEASE); append("\n")
+    append("Product: "); append(Build.PRODUCT); append("\n")
+    append("App version: "); append(BuildConfig.VERSION_NAME); append(" (");
+    append(BuildConfig.VERSION_CODE); append(")\n");
+    append("------------------------------------------------------------------")
+    append("\n")
+    toString()
+}
+
+/**
+ * get uri to any resource type
+ * @param context - context
+ * @param resId - resource id
+ * @throws Resources.NotFoundException if the given ID does not exist.
+ * @return - Uri to resource by given id
+ */
+@Throws(Resources.NotFoundException::class)
+fun getUriToResource(context: Context, @AnyRes resId: Int): Uri {
+    /** Return a Resources instance for your application's package.  */
+    val res: Resources = context.resources
+
+    /** return uri  */
+    return Uri.parse(
+        ContentResolver.SCHEME_ANDROID_RESOURCE +
+                "://" + res.getResourcePackageName(resId)
+                + '/' + res.getResourceTypeName(resId)
+                + '/' + res.getResourceEntryName(resId)
+    )
+}
+
+fun getUriFromRes(context: Context, @AnyRes resId: Int): Uri =
+    with(context.resources) {
+        Uri.Builder()
+            .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+            .authority(getResourcePackageName(resId))
+            .appendPath(getResourceTypeName(resId))
+            .appendPath(getResourceEntryName(resId))
+            .build()
+    }

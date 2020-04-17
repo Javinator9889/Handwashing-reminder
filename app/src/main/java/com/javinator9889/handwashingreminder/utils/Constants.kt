@@ -148,8 +148,14 @@ object Billing {
         )
 }
 
+object Email {
+    const val TO = "contact@javinator9889.com"
+    const val SUBJECT = "Handwashing reminder | Suggestions"
+}
+
+const val TRANSLATE_URL = "https://s.javinator9889.com/hwtranslate"
+
 const val MODULE_COUNT = 2
 const val DYNAMIC_FEATURE_INSTALL_RESULT_CODE = 32
-const val IMAGE_CACHE_DIR = "images"
 const val CONFIRMATION_REQUEST_CODE = 128
 const val PERMISSIONS_REQUEST_CODE = 10
