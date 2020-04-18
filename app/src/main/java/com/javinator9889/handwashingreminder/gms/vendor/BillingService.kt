@@ -82,8 +82,10 @@ class BillingService(private val context: Context) : PurchasesUpdatedListener {
                     skuDetailsMap[skuDetail.sku] = skuDetail
                 }
             } else {
-                Timber.e("Error in billing client: ${result
-                    .responseCode} - message: ${result.debugMessage}")
+                Timber.e(
+                    "Error in billing client: ${result
+                        .responseCode} - message: ${result.debugMessage}"
+                )
             }
         }
     }
@@ -124,8 +126,10 @@ class BillingService(private val context: Context) : PurchasesUpdatedListener {
                     resultCode = BillingResponseCode.USER_CANCELED
                 )
         } else {
-            Timber.e("Purchase failed - error code: ${billingResult
-                .responseCode}| ${billingResult.debugMessage}")
+            Timber.e(
+                "Purchase failed - error code: ${billingResult
+                    .responseCode}| ${billingResult.debugMessage}"
+            )
             for (listener in purchaseFinishedListener)
                 listener.get()?.onPurchaseFinished(
                     resultCode = BillingResponseCode.ERROR

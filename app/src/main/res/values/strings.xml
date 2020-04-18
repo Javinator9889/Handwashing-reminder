@@ -116,10 +116,10 @@
     <string name="dinner_pref_summ">You set your dinner time to: </string>
     <string name="activity_section">Activity notifications</string>
     <string-array name="activities">
-        <item>After walking</item>
-        <item>After running</item>
-        <item>After going cycling</item>
-        <item>After leaving a vehicle</item>
+        <item>After walking &#128694;</item>
+        <item>After running &#127939;&#8205;&#9792;&#65039;</item>
+        <item>After going cycling &#128692;</item>
+        <item>After leaving a vehicle &#128649;</item>
     </string-array>
     <string-array name="activity_values">
         <item>7</item>

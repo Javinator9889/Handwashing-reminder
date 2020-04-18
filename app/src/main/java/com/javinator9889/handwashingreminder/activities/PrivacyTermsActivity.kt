@@ -40,7 +40,7 @@ class PrivacyTermsActivity : ActionBarBase() {
         val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
         toolbar.setTitleTextColor(Color.BLACK)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowTitleEnabled(true);
+        supportActionBar?.setDisplayShowTitleEnabled(true)
 
         with(HandwashingApplication.getInstance()) {
             val bundle = Bundle(1).apply { putString("view", "privacy") }

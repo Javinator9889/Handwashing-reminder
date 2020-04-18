@@ -49,6 +49,7 @@ import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.typeface.library.ionicons.Ionicons
 import com.mikepenz.iconics.utils.sizeDp
 import kotlinx.coroutines.runBlocking
+import timber.log.Timber
 import java.lang.ref.WeakReference
 import kotlin.concurrent.thread
 
@@ -213,7 +214,6 @@ class SettingsView : PreferenceFragmentCompat(),
                 resources.getTextArray(R.array.in_app_donations_debug)
             else
                 resources.getTextArray(R.array.in_app_donations)
-            it.value = it.entryValues[0].toString()
             it.icon = icon(Ionicons.Icon.ion_card)
             app.billingService.addOnPurchaseFinishedListener(this)
             donationsPreference = WeakReference(it)
@@ -339,6 +339,7 @@ class SettingsView : PreferenceFragmentCompat(),
             }
             ::donationsPreference.isInitialized &&
                     preference == donationsPreference.get() -> {
+                Timber.d("Purchase clicked - $newValue")
                 val purchaseId = newValue as String
                 app.billingService.doPurchase(purchaseId, requireActivity())
                 false

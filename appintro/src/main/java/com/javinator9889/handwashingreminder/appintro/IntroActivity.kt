@@ -164,6 +164,11 @@ class IntroActivity : AppIntro2(),
                 Preferences.ACTIVITY_TRACKING_ENABLED,
                 activityRecognitionPermissionGranted
             )
+            if (activityRecognitionPermissionGranted) {
+                putStringSet(
+                    Preferences.ACTIVITIES_ENABLED,
+                    Preferences.DEFAULT_ACTIVITY_SET)
+            }
             putBoolean(Preferences.APP_INIT_KEY, true)
         }
         val splitInstallManager = SplitInstallManagerFactory.create(this)
