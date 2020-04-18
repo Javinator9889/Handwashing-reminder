@@ -22,12 +22,13 @@ import android.app.ActivityManager
 import android.content.ContentResolver
 import android.content.Context
 import android.content.pm.ApplicationInfo
-import android.content.res.Resources
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities.*
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.AnyRes
+import com.google.android.play.core.splitinstall.SplitInstallManager
+import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.javinator9889.handwashingreminder.BuildConfig
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 
@@ -90,27 +91,6 @@ fun getDeviceInfo(): String = with(StringBuilder()) {
     toString()
 }
 
-/**
- * get uri to any resource type
- * @param context - context
- * @param resId - resource id
- * @throws Resources.NotFoundException if the given ID does not exist.
- * @return - Uri to resource by given id
- */
-@Throws(Resources.NotFoundException::class)
-fun getUriToResource(context: Context, @AnyRes resId: Int): Uri {
-    /** Return a Resources instance for your application's package.  */
-    val res: Resources = context.resources
-
-    /** return uri  */
-    return Uri.parse(
-        ContentResolver.SCHEME_ANDROID_RESOURCE +
-                "://" + res.getResourcePackageName(resId)
-                + '/' + res.getResourceTypeName(resId)
-                + '/' + res.getResourceEntryName(resId)
-    )
-}
-
 fun getUriFromRes(context: Context, @AnyRes resId: Int): Uri =
     with(context.resources) {
         Uri.Builder()
@@ -120,3 +100,11 @@ fun getUriFromRes(context: Context, @AnyRes resId: Int): Uri =
             .appendPath(getResourceEntryName(resId))
             .build()
     }
+
+fun isModuleInstalled(context: Context, module: String): Boolean =
+    with(SplitInstallManagerFactory.create(context)) {
+        isModuleInstalled(this, module)
+    }
+
+fun isModuleInstalled(manager: SplitInstallManager, module: String): Boolean =
+    module in manager.installedModules

@@ -25,7 +25,10 @@ import android.os.Bundle
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.play.core.splitcompat.SplitCompat
+import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.javinator9889.handwashingreminder.R
@@ -61,8 +64,8 @@ class LauncherActivity : AppCompatActivity() {
             }
         }
         val displayThread = displayWelcomeScreen()
-        initVariables()
         installRequiredModules(displayThread)
+        initVariables()
     }
 
     private fun displayWelcomeScreen(): Thread {
@@ -117,6 +120,7 @@ class LauncherActivity : AppCompatActivity() {
     ) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == DYNAMIC_FEATURE_INSTALL_RESULT_CODE) {
+            EmojiLoader.get(this)
             if (sharedPreferences.getBoolean(ADS_ENABLED, true)) {
                 when (resultCode) {
                     Activity.RESULT_OK -> {
@@ -162,13 +166,23 @@ class LauncherActivity : AppCompatActivity() {
     private fun installRequiredModules(waitingThread: Thread) {
         thread(start = true) {
             val modules = ArrayList<String>(MODULE_COUNT)
+            val googleApi = GoogleApiAvailability.getInstance()
             if (sharedPreferences.getBoolean(ADS_ENABLED, true))
-                modules.add(Ads.MODULE_NAME)
+                modules += Ads.MODULE_NAME
             if (!sharedPreferences.getBoolean(APP_INIT_KEY, false)) {
-                modules.add(AppIntro.MODULE_NAME)
+                modules += AppIntro.MODULE_NAME
                 launchOnInstall = true
             }
-            modules.removeAll { module -> module == "" }
+            if (googleApi.isGooglePlayServicesAvailable(
+                    this,
+                    GOOGLE_PLAY_SERVICES_MIN_VERSION
+                ) != ConnectionResult.SUCCESS
+            )
+                modules += BundledEmoji.MODULE_NAME
+            else
+                with(SplitInstallManagerFactory.create(this)) {
+                    deferredUninstall(listOf(BundledEmoji.MODULE_NAME))
+                }
             modules.trimToSize()
             val intent = if (launchOnInstall) {
                 createDynamicFeatureActivityIntent(
@@ -210,6 +224,5 @@ class LauncherActivity : AppCompatActivity() {
             fetchAndActivate()
         }
         Iconics.init(this)
-        EmojiLoader.get(this)
     }
 }

@@ -42,7 +42,7 @@ android {
         applicationId "com.javinator9889.handwashingreminder"
         minSdkVersion 17
         targetSdkVersion 29
-        versionCode 70
+        versionCode 72
         versionName "1.0-${gitCommitHash}"
         multiDexEnabled true
 
@@ -88,7 +88,7 @@ android {
         preDexLibraries true
         javaMaxHeapSize "1G"
     }
-    dynamicFeatures = [":appintro", ":ads"]
+    dynamicFeatures = [":appintro", ":ads", ":bundledemoji"]
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -132,13 +132,10 @@ dependencies {
     implementation 'com.afollestad.material-dialogs:lifecycle:3.3.0'
     implementation 'com.afollestad.material-dialogs:bottomsheets:3.3.0'
     // https://github.com/mikepenz/Android-Iconics
-    implementation 'com.mikepenz:iconics-core:5.0.1'
-    implementation 'com.mikepenz:iconics-views:5.0.1'
+    implementation 'com.mikepenz:iconics-core:5.0.2'
+    implementation 'com.mikepenz:iconics-views:5.0.2'
     //noinspection GradleDependency
     implementation 'com.mikepenz:google-material-typeface:3.0.1.4.original-kotlin@aar'
-    //noinspection GradleDependency
-    implementation 'com.mikepenz:material-design-iconic-typeface:2.2.0.6-kotlin@aar'
-    implementation 'com.mikepenz:fontawesome-typeface:5.9.0.0-kotlin@aar'
     implementation 'com.mikepenz:ionicons-typeface:2.0.1.5-kotlin@aar'
     // https://github.com/mikepenz/AboutLibraries
     implementation "com.mikepenz:aboutlibraries-core:${latestAboutLibsRelease}"
@@ -187,5 +184,4 @@ dependencies {
     // https://developer.android.com/google/play/billing/billing_library_overview
     implementation 'com.android.billingclient:billing:2.2.0'
     implementation 'com.android.billingclient:billing-ktx:2.2.0'
-//    compile 'org.sufficientlysecure:donations:2.6'
 }

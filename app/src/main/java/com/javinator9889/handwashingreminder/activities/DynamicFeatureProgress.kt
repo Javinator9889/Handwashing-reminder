@@ -44,7 +44,6 @@ import timber.log.Timber
 class DynamicFeatureProgress : SplitCompatBaseActivity(),
     SplitInstallStateUpdatedListener {
     companion object {
-        const val TAG = "DynamicFeatureInstaller"
         const val MODULES = "modules"
         const val LAUNCH_ON_INSTALL = "modules:launch_on_install"
         const val PACKAGE_NAME = "modules:package_name"
@@ -73,9 +72,9 @@ class DynamicFeatureProgress : SplitCompatBaseActivity(),
         }
         val installRequestBuilder = SplitInstallRequest.newBuilder()
         modules.filterNotEmpty().forEach { module ->
-            if (!splitInstallManager.installedModules.contains(module)) {
+            if (module !in splitInstallManager.installedModules) {
                 installRequestBuilder.addModule(module)
-                ++moduleCount
+                moduleCount++
             }
         }
         if (moduleCount > 0 && modules.isNotEmpty()) {
@@ -159,8 +158,7 @@ class DynamicFeatureProgress : SplitCompatBaseActivity(),
                 percentage.text = getString(R.string.installing)
             }
             SplitInstallSessionStatus.INSTALLED -> {
-                ++currentModule
-                if (currentModule >= moduleCount) {
+                if (++currentModule >= moduleCount) {
                     dynamic_content_title.text = getString(R.string.done)
                     setResultWithIntent(Activity.RESULT_OK)
                     finish()

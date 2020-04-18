@@ -89,7 +89,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
-                        android:layout_marginRight="8dp"
                         android:tint="@color/dkgray"
                         app:iiv_color="@color/dkgray"
                         app:iiv_icon="faw_clock"

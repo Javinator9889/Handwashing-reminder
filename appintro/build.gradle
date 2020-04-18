@@ -57,14 +57,12 @@ dependencies {
     // https://developer.android.com/jetpack/androidx/releases/recyclerview
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     // https://github.com/mikepenz/Android-Iconics
-    implementation 'com.mikepenz:iconics-core:5.0.1'
-    implementation 'com.mikepenz:iconics-views:5.0.1'
+    implementation 'com.mikepenz:iconics-core:5.0.2'
+    implementation 'com.mikepenz:iconics-views:5.0.2'
     //noinspection GradleDependency
     implementation 'com.mikepenz:google-material-typeface:3.0.1.4.original-kotlin@aar'
     //noinspection GradleDependency
-    implementation 'com.mikepenz:material-design-iconic-typeface:2.2.0.6-kotlin@aar'
     implementation 'com.mikepenz:fontawesome-typeface:5.9.0.0-kotlin@aar'
-    implementation 'com.mikepenz:ionicons-typeface:2.0.1.5-kotlin@aar'
     // https://developer.android.com/kotlin/ktx#play-core
     implementation 'com.google.android.play:core-ktx:1.7.0'
     // https://developer.android.com/studio/build/multidex

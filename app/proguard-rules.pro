@@ -36,6 +36,10 @@
     *;
 }
 
+-keep class com.javinator9889.handwashingreminder.bundledemoji.BundledEmojiConfig {
+    *;
+}
+
 -keep class kotlin.Metadata {
     *;
 }

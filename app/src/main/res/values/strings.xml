@@ -231,4 +231,5 @@
     <string name="no_browser_long">It looks like you have no browser
         installed on your phone. Please, install one for accessing to
         the website</string>
+    <string name="title_bundledemoji">Bundled Emoji</string>
 </resources>

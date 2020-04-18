@@ -26,6 +26,7 @@ import androidx.core.util.forEach
 import androidx.core.util.set
 import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.support.ActionBarBase
@@ -152,7 +153,7 @@ class MainActivity : ActionBarBase(),
             show(fragment)
             hide(displayedFragment)
             activeFragment = id
-            setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+            setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
             disallowAddToBackStack()
         }.commit()
     }

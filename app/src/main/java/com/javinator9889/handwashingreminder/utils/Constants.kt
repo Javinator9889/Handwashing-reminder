@@ -71,6 +71,14 @@ class Ads {
     }
 }
 
+class BundledEmoji {
+    companion object Modules {
+        const val MODULE_NAME = "bundledemoji"
+        const val PACKAGE_NAME = "com.javinator9889.handwashingreminder.bundledemoji"
+        const val CLASS_NAME = "BundledEmojiConfig"
+    }
+}
+
 class RemoteConfig {
     companion object Keys {
         const val SPECIAL_EVENT = "special_event"
@@ -155,7 +163,9 @@ object Email {
 
 const val TRANSLATE_URL = "https://s.javinator9889.com/hwtranslate"
 
-const val MODULE_COUNT = 2
+const val MODULE_COUNT = 3
 const val DYNAMIC_FEATURE_INSTALL_RESULT_CODE = 32
 const val CONFIRMATION_REQUEST_CODE = 128
 const val PERMISSIONS_REQUEST_CODE = 10
+
+const val GOOGLE_PLAY_SERVICES_MIN_VERSION = 1100000

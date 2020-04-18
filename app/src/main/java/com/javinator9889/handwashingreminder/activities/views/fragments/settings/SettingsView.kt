@@ -318,7 +318,7 @@ class SettingsView : PreferenceFragmentCompat(),
                                 ret = false
                             }
                             negativeButton(R.string.disable) {
-                                ret = true;
+                                ret = true
                                 adEnabler.disableAds()
                                 app.adLoader = null
                                 with(SplitInstallService.getInstance(app)) {

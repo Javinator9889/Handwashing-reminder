@@ -94,9 +94,9 @@ class BillingService(private val context: Context) : PurchasesUpdatedListener {
                 BillingResponseCode.BILLING_UNAVAILABLE
             ).build()
         val skuDetails = skuDetailsMap[productId]
-            ?: return BillingResult.newBuilder().setResponseCode(
-                BillingResponseCode.ITEM_UNAVAILABLE
-            ).build()
+            ?: return BillingResult.newBuilder()
+                .setResponseCode(BillingResponseCode.ITEM_UNAVAILABLE)
+                .build()
         val flowParams = BillingFlowParams.newBuilder()
             .setSkuDetails(skuDetails)
             .build()
