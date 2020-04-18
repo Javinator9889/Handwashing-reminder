@@ -28,6 +28,7 @@ import com.javinator9889.handwashingreminder.emoji.EmojiLoader
 import com.javinator9889.handwashingreminder.listeners.OnPurchaseFinishedListener
 import com.javinator9889.handwashingreminder.utils.isDebuggable
 import kotlinx.coroutines.runBlocking
+import timber.log.Timber
 import java.lang.ref.WeakReference
 import kotlin.concurrent.thread
 
@@ -80,6 +81,9 @@ class BillingService(private val context: Context) : PurchasesUpdatedListener {
                 for (skuDetail in skuDetailsList) {
                     skuDetailsMap[skuDetail.sku] = skuDetail
                 }
+            } else {
+                Timber.e("Error in billing client: ${result
+                    .responseCode} - message: ${result.debugMessage}")
             }
         }
     }
@@ -120,6 +124,8 @@ class BillingService(private val context: Context) : PurchasesUpdatedListener {
                     resultCode = BillingResponseCode.USER_CANCELED
                 )
         } else {
+            Timber.e("Purchase failed - error code: ${billingResult
+                .responseCode}| ${billingResult.debugMessage}")
             for (listener in purchaseFinishedListener)
                 listener.get()?.onPurchaseFinished(
                     resultCode = BillingResponseCode.ERROR
@@ -131,7 +137,8 @@ class BillingService(private val context: Context) : PurchasesUpdatedListener {
         if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
             if (!purchase.isAcknowledged) {
                 val params = ConsumeParams.newBuilder()
-                    .setPurchaseToken(purchase.purchaseToken).build()
+                    .setPurchaseToken(purchase.purchaseToken)
+                    .build()
                 billingClient.consumeAsync(params) { billingResult, token ->
                     if (billingResult.responseCode == BillingResponseCode.OK) {
                         for (listener in purchaseFinishedListener)

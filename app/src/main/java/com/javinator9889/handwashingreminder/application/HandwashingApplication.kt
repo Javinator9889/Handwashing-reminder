@@ -25,7 +25,9 @@ import androidx.preference.PreferenceManager
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.play.core.splitcompat.SplitCompat
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.perf.FirebasePerformance
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.javinator9889.handwashingreminder.gms.activity.ActivityHandler
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
@@ -46,6 +48,8 @@ class HandwashingApplication : BaseApplication() {
     lateinit var activityHandler: ActivityHandler
     lateinit var remoteConfig: FirebaseRemoteConfig
     lateinit var sharedPreferences: SharedPreferences
+    lateinit var firebaseAnalytics: FirebaseAnalytics
+    lateinit var firebasePerformance: FirebasePerformance
     //TODO lateinit var firebaseAnalytics
     //TODO lateinit var firebasePerformance
 
@@ -70,14 +74,15 @@ class HandwashingApplication : BaseApplication() {
         super.onCreate()
         instance = this
         sharedPreferences = getCustomSharedPreferences(this)
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
+        firebasePerformance = FirebasePerformance.getInstance()
         if (isDebuggable()) {
             Timber.plant(Timber.DebugTree())
             Timber.d("Application is in DEBUG mode")
             with(FirebaseCrashlytics.getInstance()) {
                 setCrashlyticsCollectionEnabled(false)
             }
-        }
-        else
+        } else
             Timber.plant(LogReportTree())
         activityHandler = ActivityHandler(this)
         if (sharedPreferences.getBoolean(
@@ -90,6 +95,14 @@ class HandwashingApplication : BaseApplication() {
             activityHandler.startTrackingActivity()
         else
             activityHandler.disableActivityTracker()
+        firebaseAnalytics.setAnalyticsCollectionEnabled(
+            sharedPreferences.getBoolean(
+                Preferences.ANALYTICS_ENABLED,
+                true
+            )
+        )
+        firebasePerformance.isPerformanceCollectionEnabled =
+            sharedPreferences.getBoolean(Preferences.PERFORMANCE_ENABLED, true)
 
         remoteConfig = FirebaseRemoteConfig.getInstance()
         workHandler = WorkHandler(this)

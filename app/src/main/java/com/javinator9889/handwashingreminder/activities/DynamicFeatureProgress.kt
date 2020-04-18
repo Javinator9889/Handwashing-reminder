@@ -34,6 +34,7 @@ import com.google.android.play.core.splitinstall.model.SplitInstallSessionStatus
 import com.javinator9889.handwashingreminder.BuildConfig
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.SplitCompatBaseActivity
+import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.utils.AndroidVersion
 import com.javinator9889.handwashingreminder.utils.CONFIRMATION_REQUEST_CODE
 import com.javinator9889.handwashingreminder.utils.filterNotEmpty
@@ -59,6 +60,11 @@ class DynamicFeatureProgress : SplitCompatBaseActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         splitInstallManager.registerListener(this)
+        with(HandwashingApplication.getInstance()) {
+            firebaseAnalytics.setCurrentScreen(
+                this@DynamicFeatureProgress, "Dynamic module", null
+            )
+        }
         modules =
             intent.getStringArrayExtra(MODULES) ?: throw NullPointerException(
                 "An array of modules must be provided for " +

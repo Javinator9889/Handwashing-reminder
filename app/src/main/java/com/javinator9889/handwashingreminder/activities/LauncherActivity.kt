@@ -57,6 +57,7 @@ class LauncherActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         app = HandwashingApplication.getInstance()
         sharedPreferences = app.sharedPreferences
+        app.firebaseAnalytics.setCurrentScreen(this, "Launcher", null)
         with(intent) {
             notNull {
                 launchFromNotification =

@@ -69,8 +69,8 @@ class SlidePolicyFragment : AppIntroBaseFragment(), ISlidePolicy {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(layoutId, container, false)
-        firebaseAnalytics = view.firstSwitch
-        firebasePerformance = view.secondSwitch
+        firebaseAnalytics = view.analyticsSwitch
+        firebasePerformance = view.performanceSwitch
         slidePolicyCheckBox = view.policyCheckbox
         layout = view.main
 

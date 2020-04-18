@@ -22,6 +22,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
+import com.google.firebase.perf.metrics.AddTrace
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.utils.Videos.URI.FILENAME
 import com.javinator9889.handwashingreminder.utils.Videos.URI.HASH
@@ -69,6 +70,7 @@ class VideoModel(
         return file.name
     }
 
+    @AddTrace(name = "videoDownload")
     private suspend fun downloadVideo(
         url: String,
         hash: String,

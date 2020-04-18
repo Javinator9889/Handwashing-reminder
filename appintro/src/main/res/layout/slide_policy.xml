@@ -73,14 +73,14 @@
                 app:layout_constraintVertical_weight="3">
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/firstSwitch"
+                    android:id="@+id/analyticsSwitch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginRight="16dp"
-                    android:checked="false"
+                    android:checked="true"
                     android:padding="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -88,7 +88,7 @@
                     tools:text="Policy switch" />
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/secondSwitch"
+                    android:id="@+id/performanceSwitch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -96,11 +96,11 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginRight="16dp"
-                    android:checked="false"
+                    android:checked="true"
                     android:padding="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/firstSwitch"
+                    app:layout_constraintTop_toBottomOf="@+id/analyticsSwitch"
                     tools:text="Policy switch" />
 
                 <com.mikepenz.iconics.view.IconicsTextView
@@ -116,7 +116,7 @@
                     android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/secondSwitch" />
+                    app:layout_constraintTop_toBottomOf="@+id/performanceSwitch" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

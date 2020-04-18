@@ -28,6 +28,7 @@ import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.perf.metrics.AddTrace
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.support.ActionBarBase
 import com.javinator9889.handwashingreminder.activities.views.fragments.diseases.DiseasesFragment
@@ -52,9 +53,11 @@ class MainActivity : ActionBarBase(),
     private var activeFragment by Delegates.notNull<@IdRes Int>()
     private lateinit var app: HandwashingApplication
 
+    @AddTrace(name = "onCreateMainView")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         app = HandwashingApplication.getInstance()
+        app.firebaseAnalytics.setCurrentScreen(this, "Main view", null)
         delegateMenuIcons(menu)
         val ids =
             arrayOf(R.id.diseases, R.id.handwashing, R.id.news, R.id.settings)
@@ -111,8 +114,17 @@ class MainActivity : ActionBarBase(),
         }
     }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean =
-        onItemSelected(item.itemId)
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        val screenTitle = when (item.itemId) {
+            R.id.diseases -> "diseases"
+            R.id.handwashing -> "handwashing"
+            R.id.news -> "news"
+            R.id.settings -> "settings"
+            else -> "Main view"
+        }
+        app.firebaseAnalytics.setCurrentScreen(this, screenTitle, null)
+        return onItemSelected(item.itemId)
+    }
 
     protected fun onItemSelected(@IdRes id: Int): Boolean {
         return try {

@@ -38,6 +38,12 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
     // https://github.com/JakeWharton/timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
+    // https://firebase.google.com/docs/android/setup#add-sdks
+    implementation 'com.google.firebase:firebase-core:17.3.0'
+    implementation 'com.google.firebase:firebase-common-ktx:19.3.0'
+    implementation 'com.google.firebase:firebase-analytics:17.3.0'
+    implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta04'
+    implementation 'com.google.firebase:firebase-perf:19.0.6'
 }
 repositories {
     mavenCentral()

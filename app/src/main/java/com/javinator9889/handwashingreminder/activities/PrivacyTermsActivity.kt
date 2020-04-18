@@ -24,8 +24,10 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.support.ActionBarBase
+import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.collections.PrivacyTermsCollectionAdapter
 
 class PrivacyTermsActivity : ActionBarBase() {
@@ -39,6 +41,13 @@ class PrivacyTermsActivity : ActionBarBase() {
         toolbar.setTitleTextColor(Color.BLACK)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(true);
+
+        with(HandwashingApplication.getInstance()) {
+            val bundle = Bundle(1).apply { putString("view", "privacy") }
+            firebaseAnalytics.logEvent(
+                FirebaseAnalytics.Event.VIEW_ITEM, bundle
+            )
+        }
 
         tabLayout = findViewById(R.id.privacy_terms_tab)
         viewPager = findViewById(R.id.pager)

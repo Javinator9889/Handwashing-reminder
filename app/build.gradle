@@ -5,6 +5,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.mikepenz.aboutlibraries.plugin'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
+apply plugin: 'com.google.firebase.firebase-perf'
 
 
 def secretsPropertiesFile = rootProject.file("secrets.properties")
@@ -147,10 +148,11 @@ dependencies {
     // https://kotlinlang.org/docs/reference/reflection.html
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     // https://firebase.google.com/docs/android/setup#add-sdks
-    implementation 'com.google.firebase:firebase-core:17.1.0'
-    implementation 'com.google.firebase:firebase-common-ktx:18.0.0'
-    implementation 'com.google.firebase:firebase-analytics:17.1.0'
+    implementation 'com.google.firebase:firebase-core:17.3.0'
+    implementation 'com.google.firebase:firebase-common-ktx:19.3.0'
+    implementation 'com.google.firebase:firebase-analytics:17.3.0'
     implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta04'
+    implementation 'com.google.firebase:firebase-perf:19.0.6'
     // http://airbnb.io/lottie/#/android?id=getting-started
     implementation "com.airbnb.android:lottie:3.4.0"
     // https://firebase.google.com/docs/remote-config/use-config-android
