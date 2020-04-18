@@ -162,6 +162,11 @@ object Email {
 }
 
 const val TRANSLATE_URL = "https://s.javinator9889.com/hwtranslate"
+const val PLAYSTORE_URL = "https://play.google.com/store/apps/details?id=com.javinator9889.handwashingreminder"
+const val TELEGRAM_URL = "https://t.me/handwash"
+const val TWITTER_URL = "https://twitter.com/javinator9889"
+const val LINKEDIN_URL = "https://www.linkedin.com/in/javinator9889"
+const val GITHUB_URL = "https://github.com/Javinator9889/Handwashing-reminder"
 
 const val MODULE_COUNT = 3
 const val DYNAMIC_FEATURE_INSTALL_RESULT_CODE = 32

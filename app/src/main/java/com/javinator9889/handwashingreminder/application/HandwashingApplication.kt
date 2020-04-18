@@ -25,6 +25,7 @@ import androidx.preference.PreferenceManager
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.play.core.splitcompat.SplitCompat
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.javinator9889.handwashingreminder.gms.activity.ActivityHandler
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
@@ -72,6 +73,9 @@ class HandwashingApplication : BaseApplication() {
         if (isDebuggable()) {
             Timber.plant(Timber.DebugTree())
             Timber.d("Application is in DEBUG mode")
+            with(FirebaseCrashlytics.getInstance()) {
+                setCrashlyticsCollectionEnabled(false)
+            }
         }
         else
             Timber.plant(LogReportTree())

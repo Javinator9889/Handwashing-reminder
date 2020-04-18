@@ -26,6 +26,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.StringRes
 import androidx.emoji.text.EmojiCompat
 import androidx.preference.ListPreference
 import androidx.preference.Preference
@@ -43,6 +44,7 @@ import com.javinator9889.handwashingreminder.listeners.OnPurchaseFinishedListene
 import com.javinator9889.handwashingreminder.utils.*
 import com.mikepenz.aboutlibraries.LibsBuilder
 import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.typeface.library.ionicons.Ionicons
 import com.mikepenz.iconics.utils.sizeDp
 import kotlinx.coroutines.runBlocking
@@ -84,6 +86,11 @@ class SettingsView : PreferenceFragmentCompat(),
     ): View {
         val view = super.onCreateView(inflater, container, savedInstanceState)!!
         val share = findPreference<Preference>("share")
+        val playStore = findPreference<Preference>("playstore")
+        val telegram = findPreference<Preference>("telegram")
+        val github = findPreference<Preference>("github")
+        val linkedIn = findPreference<Preference>("linkedin")
+        val twitter = findPreference<Preference>("twitter")
         val breakfast = findPreference<TimePickerPreference>(
             Preferences.BREAKFAST_TIME
         )
@@ -106,9 +113,7 @@ class SettingsView : PreferenceFragmentCompat(),
         val libraries = findPreference<Preference>("opensource_libs")
         val privacyAndTerms = findPreference<Preference>("tos_privacy")
         share?.let {
-            it.icon = IconicsDrawable(
-                requireContext(), Ionicons.Icon.ion_android_share
-            ).apply { sizeDp = 20 }
+            it.icon = icon(Ionicons.Icon.ion_android_share)
             it.setOnPreferenceClickListener {
                 with(Intent.createChooser(Intent().apply {
                     action = Intent.ACTION_SEND
@@ -140,40 +145,62 @@ class SettingsView : PreferenceFragmentCompat(),
                 true
             }
         }
+        playStore?.let {
+            it.icon = icon(Ionicons.Icon.ion_android_playstore)
+            it.setOnPreferenceClickListener {
+                openWebsite(PLAYSTORE_URL, "Play Store")
+                true
+            }
+        }
+        telegram?.let {
+            it.setOnPreferenceClickListener {
+                openWebsite(TELEGRAM_URL, "Telegram")
+                true
+            }
+        }
+        github?.let {
+            it.icon = icon(Ionicons.Icon.ion_social_github)
+            it.setOnPreferenceClickListener {
+                openWebsite(GITHUB_URL, R.string.browser_err)
+                true
+            }
+        }
+        twitter?.let {
+            it.icon = icon(Ionicons.Icon.ion_social_twitter)
+            it.setOnPreferenceClickListener {
+                openWebsite(TWITTER_URL, "Twitter")
+                true
+            }
+        }
+        linkedIn?.let {
+            it.icon = icon(Ionicons.Icon.ion_social_linkedin)
+            it.setOnPreferenceClickListener {
+                openWebsite(LINKEDIN_URL, R.string.browser_err)
+                true
+            }
+        }
         breakfast?.let {
-            it.icon = IconicsDrawable(
-                requireContext(), Ionicons.Icon.ion_coffee
-            ).apply { sizeDp = 20 }
+            it.icon = icon(Ionicons.Icon.ion_coffee)
         }
         lunch?.let {
-            it.icon = IconicsDrawable(
-                requireContext(), Ionicons.Icon.ion_android_restaurant
-            ).apply { sizeDp = 20 }
+            it.icon = icon(Ionicons.Icon.ion_android_restaurant)
         }
         dinner?.let {
-            it.icon = IconicsDrawable(
-                requireContext(), Ionicons.Icon.ion_ios_moon_outline
-            ).apply { sizeDp = 20 }
+            it.icon = icon(Ionicons.Icon.ion_ios_moon_outline)
         }
         firebaseAnalytics?.let {
             it.onPreferenceChangeListener = this
-            it.icon = IconicsDrawable(
-                requireContext(), Ionicons.Icon.ion_arrow_graph_up_right
-            ).apply { sizeDp = 20 }
+            it.icon = icon(Ionicons.Icon.ion_arrow_graph_up_right)
             firebaseAnalyticsPreference = WeakReference(it)
         }
         firebasePerformance?.let {
             it.onPreferenceChangeListener = this
-            it.icon = IconicsDrawable(
-                requireContext(), Ionicons.Icon.ion_speedometer
-            ).apply { sizeDp = 20 }
+            it.icon = icon(Ionicons.Icon.ion_speedometer)
             firebasePerformancePreference = WeakReference(it)
         }
         ads?.let {
             it.onPreferenceChangeListener = this
-            it.icon = IconicsDrawable(
-                requireContext(), Ionicons.Icon.ion_ios_barcode_outline
-            ).apply { sizeDp = 20 }
+            it.icon = icon(Ionicons.Icon.ion_ios_barcode_outline)
             adsPreference = WeakReference(it)
         }
         donations?.let {
@@ -183,198 +210,202 @@ class SettingsView : PreferenceFragmentCompat(),
             else
                 resources.getStringArray(R.array.in_app_donations)
             it.setDefaultValue(it.entries[0])
-            it.icon = IconicsDrawable(
-                requireContext(), Ionicons.Icon.ion_card
-            ).apply { sizeDp = 20 }
+            it.icon = icon(Ionicons.Icon.ion_card)
             app.billingService.addOnPurchaseFinishedListener(this)
             donationsPreference = WeakReference(it)
         }
         translations?.let {
-            it.icon = IconicsDrawable(
-                requireContext(), Ionicons.Icon.ion_chatbox_working
-            ).apply { sizeDp = 20 }
+            it.icon = icon(Ionicons.Icon.ion_chatbox_working)
             it.setOnPreferenceClickListener {
-                val website = Uri.parse(TRANSLATE_URL)
-                with(Intent(Intent.ACTION_VIEW, website)) {
-                    if (resolveActivity(requireContext().packageManager) !=
-                        null
-                    ) startActivity(this)
-                    else
-                        MaterialDialog(requireContext()).show {
-                            title(R.string.no_browser)
-                            message(R.string.no_browser_long)
-                            positiveButton(android.R.string.ok)
-                            cancelable(true)
-                            cancelOnTouchOutside(true)
-                        }
-                    }
-                    true
-                }
+                openWebsite(TRANSLATE_URL, R.string.browser_err)
+                true
             }
-            suggestions?.let {
-                it.setOnPreferenceClickListener {
-                    with(Intent(Intent.ACTION_SEND)) {
-                        putExtra(Intent.EXTRA_EMAIL, arrayOf(Email.TO))
-                        putExtra(Intent.EXTRA_SUBJECT, Email.SUBJECT)
-                        putExtra(Intent.EXTRA_TEXT, getDeviceInfo())
-                        type = "message/rfc822"
-                        startActivity(
-                            Intent.createChooser(
-                                this, getString(R.string.send_email_client)
-                            )
+        }
+        suggestions?.let {
+            it.setOnPreferenceClickListener {
+                with(Intent(Intent.ACTION_SEND)) {
+                    putExtra(Intent.EXTRA_EMAIL, arrayOf(Email.TO))
+                    putExtra(Intent.EXTRA_SUBJECT, Email.SUBJECT)
+                    putExtra(Intent.EXTRA_TEXT, getDeviceInfo())
+                    type = "message/rfc822"
+                    startActivity(
+                        Intent.createChooser(
+                            this, getString(R.string.send_email_client)
                         )
-                    }
-                    true
-                }
-                it.icon =
-                    IconicsDrawable(
-                        requireContext(),
-                        Ionicons.Icon.ion_chatbubbles
                     )
-                        .apply {
-                            sizeDp = 20
-                        }
-            }
-            libraries?.let {
-                it.setOnPreferenceClickListener {
-                    LibsBuilder()
-                        .withAutoDetect(true)
-                        .withFields(R.string::class.java.fields)
-                        .withCheckCachedDetection(true)
-                        .withSortEnabled(true)
-                        .withAboutVersionShown(true)
-                        .withAboutVersionShownCode(true)
-                        .withAboutVersionShownName(true)
-                        .withShowLoadingProgress(true)
-                        .withActivityTitle(getString(R.string.app_name))
-                        .start(requireContext())
-                    true
                 }
-                it.icon =
-                    IconicsDrawable(requireContext(), Ionicons.Icon.ion_code)
-                        .apply { sizeDp = 20 }
+                true
             }
-            privacyAndTerms?.let {
-                it.setOnPreferenceClickListener {
-                    Intent(
-                        requireContext(),
-                        PrivacyTermsActivity::class.java
-                    ).run {
-                        startActivity(this)
-                    }
-                    true
-                }
-                it.icon = IconicsDrawable(
+            it.icon = icon(Ionicons.Icon.ion_chatbubbles)
+        }
+        libraries?.let {
+            it.setOnPreferenceClickListener {
+                LibsBuilder()
+                    .withAutoDetect(true)
+                    .withFields(R.string::class.java.fields)
+                    .withCheckCachedDetection(true)
+                    .withSortEnabled(true)
+                    .withAboutVersionShown(true)
+                    .withAboutVersionShownCode(true)
+                    .withAboutVersionShownName(true)
+                    .withShowLoadingProgress(true)
+                    .withActivityTitle(getString(R.string.app_name))
+                    .start(requireContext())
+                true
+            }
+            it.icon = icon(Ionicons.Icon.ion_code)
+        }
+        privacyAndTerms?.let {
+            it.setOnPreferenceClickListener {
+                Intent(
                     requireContext(),
-                    Ionicons.Icon.ion_android_cloud_done
-                ).apply { sizeDp = 20 }
+                    PrivacyTermsActivity::class.java
+                ).run {
+                    startActivity(this)
+                }
+                true
             }
-            return view
+            it.icon = icon(Ionicons.Icon.ion_android_cloud_done)
         }
+        return view
+    }
 
-        override fun onPreferenceChange(
-            preference: Preference?,
-            newValue: Any?
-        ): Boolean {
-            return when {
-                ::firebaseAnalyticsPreference.isInitialized &&
-                        preference == firebaseAnalyticsPreference.get() -> {
-                    val enabled = newValue as Boolean
+    override fun onPreferenceChange(
+        preference: Preference?,
+        newValue: Any?
+    ): Boolean {
+        return when {
+            ::firebaseAnalyticsPreference.isInitialized &&
+                    preference == firebaseAnalyticsPreference.get() -> {
+                val enabled = newValue as Boolean
 //                if (enabled)
-                    //TODO app.firebaseAnalytics.enable()
+                //TODO app.firebaseAnalytics.enable()
 //                else
-                    //TODO app.firebaseAnalytics.disable()
-                    true
-                }
-                ::firebasePerformancePreference.isInitialized &&
-                        preference == firebasePerformancePreference.get() -> {
-                    val enabled = newValue as Boolean
+                //TODO app.firebaseAnalytics.disable()
+                true
+            }
+            ::firebasePerformancePreference.isInitialized &&
+                    preference == firebasePerformancePreference.get() -> {
+                val enabled = newValue as Boolean
 //                if (enabled)
-                    //TODO app.firebasePerformance.enable()
+                //TODO app.firebasePerformance.enable()
 //                else
-                    //TODO app.firebasePerformance.disable()
-                    true
-                }
-                ::adsPreference.isInitialized &&
-                        preference == adsPreference.get() -> {
-                    val enabled = newValue as Boolean
-                    var ret = false
-                    val adEnabler = AdsEnabler(app)
-                    if (enabled) {
-                        adEnabler.enableAds()
-                        with(SplitInstallService.getInstance(app)) {
-                            deferredInstall(Ads.MODULE_NAME)
-                        }
-                        ret = true
-                    } else {
-                        MaterialDialog(requireContext()).show {
-                            title(R.string.ads_explanation_title)
-                            message(
-                                text = emojiCompat.process(
-                                    context.getText(R.string.ads_explanation_desc)
-                                )
-                            )
-                            positiveButton(android.R.string.cancel) {
-                                ret = false
-                            }
-                            negativeButton(R.string.disable) {
-                                ret = true
-                                adEnabler.disableAds()
-                                app.adLoader = null
-                                with(SplitInstallService.getInstance(app)) {
-                                    deferredUninstall(Ads.MODULE_NAME)
-                                }
-                                (preference as SwitchPreference).isChecked =
-                                    false
-                            }
-                            cancelOnTouchOutside(false)
-                            cancelable(false)
-                        }
+                //TODO app.firebasePerformance.disable()
+                true
+            }
+            ::adsPreference.isInitialized &&
+                    preference == adsPreference.get() -> {
+                val enabled = newValue as Boolean
+                var ret = false
+                val adEnabler = AdsEnabler(app)
+                if (enabled) {
+                    adEnabler.enableAds()
+                    with(SplitInstallService.getInstance(app)) {
+                        deferredInstall(Ads.MODULE_NAME)
                     }
-                    ret
+                    ret = true
+                } else {
+                    MaterialDialog(requireContext()).show {
+                        title(R.string.ads_explanation_title)
+                        message(
+                            text = emojiCompat.process(
+                                context.getText(R.string.ads_explanation_desc)
+                            )
+                        )
+                        positiveButton(android.R.string.cancel) {
+                            ret = false
+                        }
+                        negativeButton(R.string.disable) {
+                            ret = true
+                            adEnabler.disableAds()
+                            app.adLoader = null
+                            with(SplitInstallService.getInstance(app)) {
+                                deferredUninstall(Ads.MODULE_NAME)
+                            }
+                            (preference as SwitchPreference).isChecked =
+                                false
+                        }
+                        cancelOnTouchOutside(false)
+                        cancelable(false)
+                    }
                 }
-                ::donationsPreference.isInitialized &&
-                        preference == donationsPreference.get() -> {
-                    val purchaseId = newValue as String
-                    app.billingService.doPurchase(purchaseId, requireActivity())
-                    false
-                }
-                else -> true
+                ret
             }
-        }
-
-        override fun onPurchaseFinished(token: String, resultCode: Int) {
-            val context = requireContext()
-            when (resultCode) {
-                BillingResponseCode.OK -> {
-                    MaterialDialog(context)
-                        .title(R.string.donation_thanks)
-                        .message(
-                            text = emojiCompat
-                                .process(context.getText(R.string.donation_desc))
-                        )
-                        .positiveButton(android.R.string.ok)
-                }
-                BillingResponseCode.USER_CANCELED -> {
-                    MaterialDialog(context)
-                        .title(R.string.donation_cancelled)
-                        .message(
-                            text = emojiCompat.process(
-                                context.getText(R.string.donation_cancelled_desc)
-                            )
-                        )
-                        .positiveButton(android.R.string.ok)
-                }
-                else -> {
-                    MaterialDialog(context)
-                        .title(R.string.donation_error)
-                        .message(
-                            text = emojiCompat.process(
-                                context.getText(R.string.donation_error_desc)
-                            )
-                        )
-                        .positiveButton(android.R.string.ok)
-                }
-            }.show()
+            ::donationsPreference.isInitialized &&
+                    preference == donationsPreference.get() -> {
+                val purchaseId = newValue as String
+                app.billingService.doPurchase(purchaseId, requireActivity())
+                false
+            }
+            else -> true
         }
     }
+
+    override fun onPurchaseFinished(token: String, resultCode: Int) {
+        if (context == null)
+            return
+        val context = requireContext()
+        when (resultCode) {
+            BillingResponseCode.OK -> {
+                MaterialDialog(context)
+                    .title(R.string.donation_thanks)
+                    .message(
+                        text = emojiCompat
+                            .process(context.getText(R.string.donation_desc))
+                    )
+                    .positiveButton(android.R.string.ok)
+            }
+            BillingResponseCode.USER_CANCELED -> {
+                MaterialDialog(context)
+                    .title(R.string.donation_cancelled)
+                    .message(
+                        text = emojiCompat.process(
+                            context.getText(R.string.donation_cancelled_desc)
+                        )
+                    )
+                    .positiveButton(android.R.string.ok)
+            }
+            else -> {
+                MaterialDialog(context)
+                    .title(R.string.donation_error)
+                    .message(
+                        text = emojiCompat.process(
+                            context.getText(R.string.donation_error_desc)
+                        )
+                    )
+                    .positiveButton(android.R.string.ok)
+            }
+        }.show()
+    }
+
+    private fun icon(icon: IIcon): IconicsDrawable =
+        IconicsDrawable(requireContext(), icon).apply { sizeDp = 20 }
+
+    private fun openWebsite(url: String, @StringRes onErrString: Int) {
+        openWebsite(url, getString(onErrString))
+    }
+
+    private fun openWebsite(url: String, onErrString: String) {
+        if (context == null)
+            return
+        val website = Uri.parse(url)
+        with(Intent(Intent.ACTION_VIEW, website)) {
+            if (resolveActivity(requireContext().packageManager) !=
+                null
+            ) startActivity(this)
+            else
+                MaterialDialog(requireContext()).show {
+                    title(R.string.no_app)
+                    message(
+                        text = getString(
+                            R.string.no_app_long,
+                            onErrString
+                        )
+                    )
+                    positiveButton(android.R.string.ok)
+                    cancelable(true)
+                    cancelOnTouchOutside(true)
+                }
+        }
+    }
+}

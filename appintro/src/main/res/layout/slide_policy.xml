@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:paddingBottom="@dimen/appIntro2BottomBarHeight"
-    android:orientation="vertical"
-    tools:background="@color/appinto_background_color">
+    android:orientation="vertical">
 
     <ScrollView
         android:id="@+id/scrollableContainer"

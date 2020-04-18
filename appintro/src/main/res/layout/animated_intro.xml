@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    android:paddingBottom="@dimen/appIntro2BottomBarHeight"
-    tools:background="@color/appinto_background_color">
+    android:paddingBottom="@dimen/appIntro2BottomBarHeight">
 
     <TextView
         android:id="@+id/title"

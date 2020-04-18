@@ -70,29 +70,29 @@ class AnimatedAppIntro :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
-        if (arguments != null && arguments!!.size() != 0) {
-            val argsTitleTypeface = arguments!!.getString(ARG_TITLE_TYPEFACE)
-            val argsDescTypeface = arguments!!.getString(ARG_DESC_TYPEFACE)
+        if (arguments != null && requireArguments().size() != 0) {
+            val argsTitleTypeface = requireArguments().getString(ARG_TITLE_TYPEFACE)
+            val argsDescTypeface = requireArguments().getString(ARG_DESC_TYPEFACE)
             val argsTitleTypefaceRes =
-                arguments!!.getInt(ARG_TITLE_TYPEFACE_RES)
-            val argsDescTypefaceRes = arguments!!.getInt(ARG_DESC_TYPEFACE_RES)
-            drawable = arguments!!.getInt(ARG_DRAWABLE)
-            animatedDrawable = arguments!!.getInt(ARG_ANIM_DRAWABLE)
-            animationLoop = arguments!!.getBoolean(ARG_ANIM_LOOP)
-            title = arguments!!.getString(ARG_TITLE)
-            description = arguments!!.getString(ARG_DESC)
+                requireArguments().getInt(ARG_TITLE_TYPEFACE_RES)
+            val argsDescTypefaceRes = requireArguments().getInt(ARG_DESC_TYPEFACE_RES)
+            drawable = requireArguments().getInt(ARG_DRAWABLE)
+            animatedDrawable = requireArguments().getInt(ARG_ANIM_DRAWABLE)
+            animationLoop = requireArguments().getBoolean(ARG_ANIM_LOOP)
+            title = requireArguments().getString(ARG_TITLE)
+            description = requireArguments().getString(ARG_DESC)
             titleTypeface =
                 TypefaceContainer(argsTitleTypeface, argsTitleTypefaceRes)
             descTypeface =
                 TypefaceContainer(argsDescTypeface, argsDescTypefaceRes)
-            bgColor = arguments!!.getInt(ARG_BG_COLOR)
+            bgColor = requireArguments().getInt(ARG_BG_COLOR)
             titleColor =
-                if (arguments!!.containsKey(ARG_TITLE_COLOR))
-                    arguments!!.getInt(ARG_TITLE_COLOR)
+                if (requireArguments().containsKey(ARG_TITLE_COLOR))
+                    requireArguments().getInt(ARG_TITLE_COLOR)
                 else 0
             descColor =
-                if (arguments!!.containsKey(ARG_DESC_COLOR))
-                    arguments!!.getInt(ARG_DESC_COLOR)
+                if (requireArguments().containsKey(ARG_DESC_COLOR))
+                    requireArguments().getInt(ARG_DESC_COLOR)
                 else 0
         }
     }

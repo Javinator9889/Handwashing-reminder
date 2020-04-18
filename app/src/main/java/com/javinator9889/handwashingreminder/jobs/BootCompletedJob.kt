@@ -23,10 +23,9 @@ import android.content.Context
 import android.content.Intent
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.utils.Preferences
+import timber.log.Timber
 
 class BootCompletedJob : BroadcastReceiver() {
-    private val tag = BootCompletedJob::class.simpleName
-
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent?.action == Intent.ACTION_BOOT_COMPLETED) {
             val app = HandwashingApplication.getInstance()
@@ -39,11 +38,11 @@ class BootCompletedJob : BroadcastReceiver() {
                 app.activityHandler.startTrackingActivity()
             else
                 app.activityHandler.disableActivityTracker()
-            /*try {
+            try {
                 app.workHandler.enqueuePeriodicNotificationsWorker()
             } catch (e: UninitializedPropertyAccessException) {
-                Log.e(tag, "Schedule times have not been initialized yet", e)
-            }*/
+                Timber.e(e, "Schedule times have not been initialized yet")
+            }
         }
     }
 }

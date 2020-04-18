@@ -2,10 +2,33 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <Preference
-        android:title="@string/share"
-        android:key="share"
-        android:persistent="false" />
+    <PreferenceCategory android:title="@string/social_sharing">
+        <Preference
+            android:key="share"
+            android:persistent="false"
+            android:title="@string/share" />
+        <Preference
+            android:key="playstore"
+            android:persistent="false"
+            android:title="@string/playstore"/>
+        <Preference
+            android:key="telegram"
+            android:persistent="false"
+            android:icon="@drawable/ic_telegram"
+            android:title="@string/telegram" />
+        <Preference
+            android:key="github"
+            android:persistent="false"
+            android:title="@string/github"/>
+        <Preference
+            android:key="linkedin"
+            android:persistent="false"
+            android:title="@string/linkedin"/>
+        <Preference
+            android:key="twitter"
+            android:persistent="false"
+            android:title="@string/twitter"/>
+    </PreferenceCategory>
 
     <PreferenceCategory
         android:title="@string/time_preferences_section"
@@ -37,38 +60,36 @@
             android:defaultValue="false"
             android:key="activity:gms:tracking"
             android:title="@string/activity_recognition"
-            app:summary="For enabling the activity recognition, you need both Google Play Services and permissions"/>
+            app:summary="For enabling the activity recognition, you need both Google Play Services and permissions" />
 
         <com.javinator9889.handwashingreminder.activities.views.fragments.settings.ActivityMultiSelectList
-            android:dependency="activity:gms:tracking"
             android:defaultValue="@array/empty_array"
+            android:dependency="activity:gms:tracking"
             android:entries="@array/activities"
             android:entryValues="@array/activity_values"
             android:key="activity:gms:activities:enabled"
             android:title="@string/activities_to_enable" />
     </PreferenceCategory>
-    <PreferenceCategory
-        android:title="@string/data_sharing_category">
+    <PreferenceCategory android:title="@string/data_sharing_category">
 
         <SwitchPreference
             android:defaultValue="false"
             android:key="firebase:analytics"
-            android:title="@string/firebase_analytics"
-            android:summary="@string/firebase_analytics_policy"/>
+            android:summary="@string/firebase_analytics_policy"
+            android:title="@string/firebase_analytics" />
         <SwitchPreference
             android:defaultValue="false"
             android:key="firebase:performance"
-            android:title="@string/firebase_performance"
-            android:summary="@string/firebase_performance_policy"/>
+            android:summary="@string/firebase_performance_policy"
+            android:title="@string/firebase_performance" />
     </PreferenceCategory>
-    <PreferenceCategory
-        android:title="@string/ads_donations_category">
+    <PreferenceCategory android:title="@string/ads_donations_category">
 
         <SwitchPreference
             android:defaultValue="false"
             android:key="app:ads:enabled"
-            android:title="@string/enable_ads"
-            android:summary="@string/enable_ads_summ"/>
+            android:summary="@string/enable_ads_summ"
+            android:title="@string/enable_ads" />
 
         <ListPreference
             android:defaultValue="1"
@@ -76,27 +97,26 @@
             android:entryValues="@array/in_app_donations"
             android:key="donations"
             android:persistent="false"
-            android:title="@string/donations"
-            android:summary="@string/donations_summ"/>
+            android:summary="@string/donations_summ"
+            android:title="@string/donations" />
     </PreferenceCategory>
-    <PreferenceCategory
-        android:title="@string/collaborating">
+    <PreferenceCategory android:title="@string/collaborating">
         <Preference
-            android:title="@string/help_translating"
-            android:summary="@string/help_translating_summ"
             android:key="translate"
-            android:persistent="false" />
+            android:persistent="false"
+            android:summary="@string/help_translating_summ"
+            android:title="@string/help_translating" />
         <Preference
-            android:title="@string/suggestions"
             android:key="send_suggestions"
-            android:persistent="false" />
+            android:persistent="false"
+            android:title="@string/suggestions" />
         <Preference
-            android:title="@string/open_source_libs"
             android:key="opensource_libs"
-            android:persistent="false" />
+            android:persistent="false"
+            android:title="@string/open_source_libs" />
         <Preference
-            android:title="@string/tos_and_privacy"
             android:key="tos_privacy"
-            android:persistent="false" />
+            android:persistent="false"
+            android:title="@string/tos_and_privacy" />
     </PreferenceCategory>
 </PreferenceScreen>

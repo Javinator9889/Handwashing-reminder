@@ -227,9 +227,16 @@
     <string name="help_translating">Help translating the app</string>
     <string name="help_translating_summ">Would you like to see the app
         in your language? Collaborate and translate it!</string>
-    <string name="no_browser">No browser found!</string>
-    <string name="no_browser_long">It looks like you have no browser
-        installed on your phone. Please, install one for accessing to
-        the website</string>
+    <string name="no_app">No app can do this action!</string>
+    <string name="no_app_long">It looks like you have no app
+        installed on your phone that can do this now. Please, install one for
+        accessing %s</string>
+    <string name="browser_err">the website</string>
     <string name="title_bundledemoji">Bundled Emoji</string>
+    <string name="social_sharing">Social media and sharing</string>
+    <string name="twitter">Twitter</string>
+    <string name="linkedin">LinkedIn</string>
+    <string name="github">View project in GitHub</string>
+    <string name="playstore">View in Play Store</string>
+    <string name="telegram">Notifications channel</string>
 </resources>

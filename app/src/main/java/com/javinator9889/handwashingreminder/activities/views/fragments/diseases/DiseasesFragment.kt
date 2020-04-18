@@ -40,8 +40,8 @@ class DiseasesFragment : BaseFragmentView() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val adapter = ItemAdapter<Disease>()
-        val ads1 = ItemAdapter<Ads>()
-        val ads2 = ItemAdapter<Ads>()
+        val upperAds = ItemAdapter<Ads>()
+        val lowerAds = ItemAdapter<Ads>()
         val items = listOf(
             Disease(
                 R.raw.corona_virus,
@@ -68,10 +68,10 @@ class DiseasesFragment : BaseFragmentView() {
         val adsItems = listOf(Ads())
         val ads2Items = listOf(Ads())
         adapter.add(items)
-        ads1.add(adsItems)
-        ads2.add(ads2Items)
+        upperAds.add(adsItems)
+        lowerAds.add(ads2Items)
 
-        adapters = listOf(ads1, adapter, ads2)
+        adapters = listOf(upperAds, adapter, lowerAds)
     }
 
     override fun onCreateView(

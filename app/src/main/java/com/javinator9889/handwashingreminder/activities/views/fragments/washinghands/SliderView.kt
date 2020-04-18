@@ -109,6 +109,8 @@ class SliderView(position: Int) : BaseFragmentView() {
         video.start()
         GlideApp.with(this)
             .load(drawableId)
+            .centerInside()
+            .centerCrop()
             .into(image)
         super.onResume()
     }

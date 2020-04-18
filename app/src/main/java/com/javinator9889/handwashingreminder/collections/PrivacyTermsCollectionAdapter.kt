@@ -59,7 +59,7 @@ class TextViewContainer : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         arguments?.takeIf { it.containsKey(ARG_POSITION) }?.apply {
             val textView = view.findViewById<TextView>(R.id.text)
-            when (arguments!!.getInt(ARG_POSITION)) {
+            when (requireArguments().getInt(ARG_POSITION)) {
                 0 -> textView.text = HtmlCompat.fromHtml(
                     getString(R.string.privacy_policy_text),
                     HtmlCompat.FROM_HTML_MODE_LEGACY
