@@ -341,7 +341,19 @@ class SettingsView : PreferenceFragmentCompat(),
                     preference == donationsPreference.get() -> {
                 Timber.d("Purchase clicked - $newValue")
                 val purchaseId = newValue as String
-                app.billingService.doPurchase(purchaseId, requireActivity())
+                if (isConnected())
+                    app.billingService.doPurchase(purchaseId, requireActivity())
+                else {
+                    if (context == null)
+                        return false
+                    MaterialDialog(requireContext()).show {
+                        title(R.string.no_internet_connection)
+                        message(R.string.no_internet_connection_long)
+                        positiveButton(android.R.string.ok)
+                        cancelable(true)
+                        cancelOnTouchOutside(true)
+                    }
+                }
                 false
             }
             else -> true

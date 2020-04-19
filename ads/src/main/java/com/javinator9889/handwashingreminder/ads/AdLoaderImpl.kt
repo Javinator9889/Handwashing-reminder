@@ -33,6 +33,7 @@ import com.google.android.gms.ads.formats.NativeAdOptions
 import com.google.android.gms.ads.formats.UnifiedNativeAd
 import com.google.android.gms.ads.formats.UnifiedNativeAdView
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
+import com.javinator9889.handwashingreminder.utils.isConnected
 import com.javinator9889.handwashingreminder.utils.isDebuggable
 import timber.log.Timber
 import com.google.android.gms.ads.AdLoader as AdBase
@@ -76,7 +77,7 @@ class AdLoaderImpl private constructor(context: Context?) : AdLoader {
 
     @SuppressLint("InflateParams")
     override fun loadAdForViewGroup(view: ViewGroup, removeAllViews: Boolean) {
-        if (!isVideoEnded)
+        if (!isVideoEnded || !isConnected())
             return
         val adLoader = AdBase.Builder(view.context, ADMOB_APP_NATIVE_ID)
             .forUnifiedNativeAd { ad: UnifiedNativeAd ->

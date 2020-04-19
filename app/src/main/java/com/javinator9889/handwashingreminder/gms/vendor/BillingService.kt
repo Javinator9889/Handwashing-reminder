@@ -20,17 +20,13 @@ package com.javinator9889.handwashingreminder.gms.vendor
 
 import android.app.Activity
 import android.content.Context
-import androidx.emoji.text.EmojiCompat
 import com.android.billingclient.api.*
 import com.android.billingclient.api.BillingClient.BillingResponseCode
 import com.javinator9889.handwashingreminder.R
-import com.javinator9889.handwashingreminder.emoji.EmojiLoader
 import com.javinator9889.handwashingreminder.listeners.OnPurchaseFinishedListener
 import com.javinator9889.handwashingreminder.utils.isDebuggable
-import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import java.lang.ref.WeakReference
-import kotlin.concurrent.thread
 
 class BillingService(private val context: Context) : PurchasesUpdatedListener {
     private val billingClient: BillingClient =
@@ -40,7 +36,6 @@ class BillingService(private val context: Context) : PurchasesUpdatedListener {
             .build()
     private lateinit var skuDetailsMap: HashMap<String, SkuDetails>
     private var arePurchasesAvailable = false
-    private lateinit var emojiCompat: EmojiCompat
     private val purchaseFinishedListener =
         ArrayList<WeakReference<OnPurchaseFinishedListener>>()
 
@@ -58,11 +53,6 @@ class BillingService(private val context: Context) : PurchasesUpdatedListener {
                 billingClient.startConnection(this)
             }
         })
-        thread(start = true) {
-            emojiCompat = runBlocking {
-                EmojiLoader.get(context).await()
-            }
-        }
     }
 
     private fun querySkuDetails() {

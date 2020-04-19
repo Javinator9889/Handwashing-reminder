@@ -266,4 +266,8 @@
     <string name="github">View project in GitHub</string>
     <string name="playstore">View in Play Store</string>
     <string name="telegram">Notifications channel</string>
+    <string name="no_internet_connection">There is no network
+        connection</string>
+    <string name="no_internet_connection_long">To perform this action
+        please connect to a network for having access to Internet</string>
 </resources>
