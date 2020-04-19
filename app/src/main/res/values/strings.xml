@@ -9,6 +9,33 @@
         notifications</string>
     <string name="time_notification_channel_desc">Get a notification at
         scheduled times you have indicated in the application</string>
+    <string name="activity_notification_walk">Did you have a good walk?
+    &#128694;</string>
+    <string name="activity_notification_walk_content">Walking 30 minutes a
+        day is one of the greatest practices for having a good health &#128170;
+        Remember to wash your hands before eating or touching your face
+        &#129325; so you can have even better health &#128521;</string>
+    <string name="activity_notification_run">Did you enjoy running?
+        &#127939;&#8205;&#9792;&#65039;</string>
+    <string name="activity_notifications_run_content">It\'s always
+        funny to run &#128578; but usually it comes with a lot of sweat
+    &#128517;. Try washing your hands as soon as possible or even
+        better have a shower &#128704;</string>
+    <string name="activity_notification_cycling">Having a good ride?
+        &#128692;&#8205;&#9792;&#65039;</string>
+    <string name="activity_notification_cycling_content">I always enjoy
+    going cycling - it makes you feel free &#127794;. Your bike\'s handles were
+    probably dirty so try to wash your hands as soon as you can
+        &#128166;&#128079;</string>
+    <string name="activity_notification_vehicle">Time to wash your
+        hands &#128649;</string>
+    <string name="activity_notification_vehicle_content">In public
+        transport there are lots of people and you don\'t know if they
+        are ill or not &#128567;. Even in your own car there can be
+        diseases in the handles or in the steering wheel &#128663;, so
+        try to wash your hands as soon as you can for avoiding diseases
+        &#128166;&#128079;
+    </string>
     <string name="test_notification">This is a test notification</string>
     <string name="test_content">This is the content for a test
         notification</string>
