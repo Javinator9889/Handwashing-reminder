@@ -29,7 +29,6 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cardCtr"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -73,7 +72,6 @@
                     app:srcCompat="@drawable/ic_breakfast" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/timeCtr"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

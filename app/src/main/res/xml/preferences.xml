@@ -36,19 +36,16 @@
         app:allowDividerBelow="true">
 
         <com.javinator9889.handwashingreminder.activities.views.fragments.settings.TimePickerPreference
-            android:id="@+id/breakfast"
             android:key="app:breakfast"
             android:selectAllOnFocus="true"
             android:singleLine="true" />
 
         <com.javinator9889.handwashingreminder.activities.views.fragments.settings.TimePickerPreference
-            android:id="@+id/lunch"
             android:key="app:lunch"
             android:selectAllOnFocus="true"
             android:singleLine="true" />
 
         <com.javinator9889.handwashingreminder.activities.views.fragments.settings.TimePickerPreference
-            android:id="@+id/dinner"
             android:key="app:dinner"
             android:selectAllOnFocus="true"
             android:singleLine="true" />
@@ -56,7 +53,6 @@
     <PreferenceCategory android:title="@string/activity_section">
 
         <com.javinator9889.handwashingreminder.activities.views.fragments.settings.ActivityCheckbox
-            android:id="@+id/activity_enabler"
             android:defaultValue="false"
             android:key="activity:gms:tracking"
             android:title="@string/activity_recognition"

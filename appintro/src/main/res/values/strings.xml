@@ -3,17 +3,10 @@
     <string name="hours_abbrev">hh</string>
     <string name="double_dot">:</string>
     <string name="minutes_abbrev">mm</string>
-    <string name="tpicker_title">Choose an hour</string>
     <string name="time_config_title_tpl">When do you usually have %1$s?</string>
     <string name="breakfast">breakfast</string>
     <string name="lunch">lunch</string>
     <string name="dinner">dinner</string>
-    <string name="transition_card" translatable="false">card_transition</string>
-    <string-array name="transitions">
-        <item>first_card</item>
-        <item>second_card</item>
-        <item>third_card</item>
-    </string-array>
     <string name="done">Done</string>
     <string name="set_time">Set time</string>
     <string name="fill_hours">Please, fill out all the hours</string>
@@ -42,11 +35,4 @@
         contains information about possible application crashes or errors. It
         is always anonymous and will help me update the app, include
         new features and solve errors.</string>
-    <string name="autostart_permission_title">Autostart permission
-        required</string>
-    <string name="autostart_permission">We have detected you are
-        running a customized UI. For getting notifications on time,
-        please gran the app to autostart automatically (this option
-        will not waste your battery)</string>
-    <string name="accept">Accept</string>
 </resources>

@@ -36,10 +36,6 @@
         try to wash your hands as soon as you can for avoiding diseases
         &#128166;&#128079;
     </string>
-    <string name="test_notification">This is a test notification</string>
-    <string name="test_content">This is the content for a test
-        notification</string>
-    <string name="title_appintro">Handwashing reminder intro</string>
     <string name="privacy_policy_title">Privacy policy</string>
     <string name="tos_title">Terms and conditions</string>
     <string name="firebase_analytics_policy">Allow the application to
@@ -48,8 +44,6 @@
     <string name="firebase_performance_policy">Allow the application to
         track its performance and send anonymous data for improving
         in-app experience</string>
-    <string name="title_ads">Ads</string>
-    <string name="ad_attribution">Ad</string>
     <string name="dynamic_module_loading_title">Building your app…</string>
     <string name="dynamic_module_loading_text">We are adding new
         content to the app so it works correctly. Please, wait a minute
@@ -91,8 +85,6 @@
         <item>Do you know that washing your hands can keep you safe from
             more than 15 diseases? That\'s a lot &#128558;</item>
     </string-array>
-    <string name="disease">COVID-19</string>
-    <string name="disease_desc">A virus that kills people</string>
     <string name="washing_hands_first_title">Let\'s learn how to wash
         our hands</string>
     <string name="washing_hands_first_description">Join me in this trip
@@ -259,7 +251,6 @@
         installed on your phone that can do this now. Please, install one for
         accessing %s</string>
     <string name="browser_err">the website</string>
-    <string name="title_bundledemoji">Bundled Emoji</string>
     <string name="social_sharing">Social media and sharing</string>
     <string name="twitter">Twitter</string>
     <string name="linkedin">LinkedIn</string>

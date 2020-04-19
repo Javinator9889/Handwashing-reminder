@@ -49,7 +49,6 @@
         app:layout_constraintTop_toBottomOf="@+id/title">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/dummy"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
