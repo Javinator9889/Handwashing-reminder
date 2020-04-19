@@ -18,7 +18,7 @@
 
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
--renamesourcefileattribute SourceFile
+#-renamesourcefileattribute SourceFile
 
 -optimizationpasses 4
 
@@ -40,10 +40,6 @@
     *;
 }
 
--keep class kotlin.Metadata {
-    *;
-}
-
 # https://bumptech.github.io/glide/doc/download-setup.html#proguard
 -keep public class * implements com.bumptech.glide.module.GlideModule
 -keep public class * extends com.bumptech.glide.module.AppGlideModule
@@ -52,3 +48,11 @@
   public *;
 }
 -dontwarn com.bumptech.glide.load.resource.bitmap.VideoDecoder
+# Klaxon
+-keep public class kotlin.reflect.jvm.internal.impl.** { public *; }
+-keep class com.beust.klaxon.** { *; }
+-keep interface com.beust.klaxon.** { *; }
+-keep class kotlin.Metadata { *; }
+
+#data models
+-keep class com.javinator9889.handwashingreminder.collections.** { *;}

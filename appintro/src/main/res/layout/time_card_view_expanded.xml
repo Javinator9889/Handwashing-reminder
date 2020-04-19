@@ -8,7 +8,7 @@
         android:id="@+id/include"
         layout="@layout/appbar_layout" />
 
-    <ImageView
+    <com.javinator9889.handwashingreminder.graphics.RecyclingImageView
         android:id="@+id/infoImage"
         android:layout_width="0dp"
         android:layout_height="200dp"
