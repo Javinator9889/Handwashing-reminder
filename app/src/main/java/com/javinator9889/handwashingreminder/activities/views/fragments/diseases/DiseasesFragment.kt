@@ -21,10 +21,7 @@ package com.javinator9889.handwashingreminder.activities.views.fragments.disease
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.TextView
 import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityOptionsCompat
-import androidx.core.util.Pair
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -39,10 +36,6 @@ import com.javinator9889.handwashingreminder.activities.views.viewmodels.Disease
 import com.javinator9889.handwashingreminder.activities.views.viewmodels.DiseaseInformationViewModel
 import com.javinator9889.handwashingreminder.activities.views.viewmodels.ParsedHTMLText
 import com.javinator9889.handwashingreminder.activities.views.viewmodels.SavedViewModelFactory
-import com.javinator9889.handwashingreminder.collections.DiseaseDescriptionFragment
-import com.javinator9889.handwashingreminder.graphics.LottieAdaptedPerformanceAnimationView
-import com.javinator9889.handwashingreminder.utils.AndroidVersion
-import com.javinator9889.handwashingreminder.utils.isAtLeast
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.GenericItem
 import com.mikepenz.fastadapter.adapters.ItemAdapter
@@ -90,67 +83,8 @@ class DiseasesFragment : BaseFragmentView() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        /*val adapter = ItemAdapter<Disease>()
-        val upperAds = ItemAdapter<Ads>()
-        val lowerAds = ItemAdapter<Ads>()
-        val items = if (diseasesData?.diseases != null) {
-            val diseases = ArrayList<Disease>(diseasesData.diseases.size)
-            diseasesData.diseases.forEachIndexed { i, diseasesInformation ->
-                val animation = if (i % 2 == 0) R.raw.virus_red
-                else R.raw.virus_loader
-                diseases += Disease(
-                    animation
-                )
-            }
-            diseases.toList()
-        } else {
-            listOf<Disease>()
-        }
-        val items = ArrayList<Disease>(diseasesData?.diseases?.size)
-        diseasesData?.diseases?.forEachIndexed { i, diseasesInformation ->
-            items += Disease(
-
-            )
-        }
-        val items = listOf(
-            Disease(
-                R.raw.virus_red,
-                R.string.disease,
-                R.string.disease_desc,
-                R.layout.disease_card_layout,
-                0
-            ),
-            Disease(
-                R.raw.virus_loader,
-                R.string.disease,
-                R.string.disease_desc,
-                R.layout.disease_card_alt_layout,
-                1
-            ),
-            Disease(
-                R.raw.virus_red,
-                R.string.disease,
-                R.string.disease_desc,
-                R.layout.disease_card_layout,
-                2
-            )
-        )
-        val adsItems = listOf(Ads())
-        val ads2Items = listOf(Ads())
-        adapter.add(items)
-        upperAds.add(adsItems)
-        lowerAds.add(ads2Items)
-
-        adapters = listOf(upperAds, adapter, lowerAds)*/
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        val upperAdsAdapter = GenericItemAdapter()
-//        val diseasesListAdapter = GenericItemAdapter()
-//        val lowerAdsAdapter = GenericItemAdapter()
         val adapters = listOf(upperAdsAdapter, diseasesAdapter, lowerAdsAdapter)
         fastAdapter = FastAdapter.with(adapters)
         val rvManager = LinearLayoutManager(context)
@@ -180,36 +114,12 @@ class DiseasesFragment : BaseFragmentView() {
                 requireContext(),
                 DiseaseExpandedView::class.java
             )
-            val options =
-                if (isAtLeast(AndroidVersion.LOLLIPOP)) {
-                    val pairs = mutableListOf<Pair<View, String>>(
-                        Pair.create(
-                            v.findViewById<TextView>(R.id.title),
-                            DiseaseDescriptionFragment.DISEASE_NAME
-                        ),
-                        Pair.create(
-                            v.findViewById<LottieAdaptedPerformanceAnimationView>(
-                                R.id.image
-                            ),
-                            DiseaseDescriptionFragment.DISEASE_ANIM
-                        ),
-                        Pair.create(
-                            v.findViewById<TextView>(R.id.shortDescription),
-                            DiseaseDescriptionFragment.DISEASE_DESCRIPTION
-                        )
-                    )
-                    ActivityOptionsCompat
-                        .makeSceneTransitionAnimation(
-                            requireActivity(),
-                            *pairs.toTypedArray()
-                        )
-                } else null
             intent.putExtra(ARG_ANIMATION, animId)
             intent.putExtra(ARG_PARSED_TEXT, parsedHTMLText)
             ActivityCompat.startActivity(
                 requireContext(),
                 intent,
-                options?.toBundle()
+                null
             )
         }
     }

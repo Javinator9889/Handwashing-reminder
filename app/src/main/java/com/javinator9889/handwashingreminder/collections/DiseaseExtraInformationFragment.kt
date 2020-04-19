@@ -33,7 +33,7 @@ class DiseaseExtraInformationFragment(
     private val parsedHTMLText: ParsedHTMLText
 ) : BaseFragmentView() {
     @get:LayoutRes
-    override val layoutId: Int = R.layout.text_view_body
+    override val layoutId: Int = R.layout.simple_text_view
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)

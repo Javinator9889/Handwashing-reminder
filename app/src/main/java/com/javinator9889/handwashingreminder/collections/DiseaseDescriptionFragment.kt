@@ -20,7 +20,6 @@ package com.javinator9889.handwashingreminder.collections
 
 import android.os.Bundle
 import androidx.annotation.LayoutRes
-import androidx.core.view.ViewCompat
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.BaseFragmentView
 import com.javinator9889.handwashingreminder.activities.views.viewmodels.ParsedHTMLText
@@ -38,12 +37,6 @@ class DiseaseDescriptionFragment(
 ) : BaseFragmentView() {
     @get:LayoutRes
     override val layoutId: Int = R.layout.disease_description
-
-    companion object Transitions {
-        const val DISEASE_NAME = "detail:header:title"
-        const val DISEASE_DESCRIPTION = "detail:short_description"
-        const val DISEASE_ANIM = "detail:header:animation"
-    }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -73,8 +66,5 @@ class DiseaseDescriptionFragment(
             website.text =
                 getString(R.string.available_at, parsedHTMLText.website)
         }
-        ViewCompat.setTransitionName(title, DISEASE_NAME)
-        ViewCompat.setTransitionName(shortDescription, DISEASE_DESCRIPTION)
-        ViewCompat.setTransitionName(animatedView, DISEASE_ANIM)
     }
 }

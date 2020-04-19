@@ -28,6 +28,7 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.annotation.Keep
+import androidx.cardview.widget.CardView
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.formats.NativeAdOptions
 import com.google.android.gms.ads.formats.UnifiedNativeAd
@@ -85,8 +86,7 @@ class AdLoaderImpl private constructor(context: Context?) : AdLoader {
         val adLoader = AdBase.Builder(view.context, ADMOB_APP_NATIVE_ID)
             .forUnifiedNativeAd { ad: UnifiedNativeAd ->
                 val adView = LayoutInflater.from(view.context)
-                    .inflate(R.layout.native_ad_view, null) as
-                        UnifiedNativeAdView
+                    .inflate(R.layout.native_ad_view, null) as CardView
                 populateUnifiedNativeAdView(ad, adView)
                 if (removeAllViews)
                     view.removeAllViews()
@@ -112,8 +112,9 @@ class AdLoaderImpl private constructor(context: Context?) : AdLoader {
 
     private fun populateUnifiedNativeAdView(
         nativeAd: UnifiedNativeAd,
-        adView: UnifiedNativeAdView
+        view: CardView
     ) {
+        val adView = view.findViewById<UnifiedNativeAdView>(R.id.adView)
         currentNativeAd?.destroy()
         currentNativeAd = nativeAd
 
