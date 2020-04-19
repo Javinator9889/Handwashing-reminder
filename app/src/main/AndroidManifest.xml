@@ -32,6 +32,7 @@
         <activity android:name=".activities.PrivacyTermsActivity" />
         <activity android:name=".activities.DynamicFeatureProgress" />
         <activity android:name=".activities.views.fragments.washinghands.WashingHandsFragment" />
+        <activity android:name=".activities.views.fragments.diseases.DiseaseExpandedView" />
 
         <meta-data
             android:name="preloaded_fonts"

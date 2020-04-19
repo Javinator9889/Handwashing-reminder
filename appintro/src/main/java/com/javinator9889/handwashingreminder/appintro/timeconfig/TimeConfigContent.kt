@@ -21,7 +21,7 @@ package com.javinator9889.handwashingreminder.appintro.timeconfig
 import android.os.Parcel
 import android.os.Parcelable
 
-class TimeConfigContent(val title: String, val id: Long) : Parcelable {
+data class TimeConfigContent(val title: String, val id: Long) : Parcelable {
     var hours: String = ""
     var minutes: String = ""
 

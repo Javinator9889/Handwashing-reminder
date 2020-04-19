@@ -22,16 +22,16 @@ import android.view.View
 import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.annotation.RawRes
-import androidx.annotation.StringRes
+import com.google.android.material.card.MaterialCardView
 import com.javinator9889.handwashingreminder.R
+import com.javinator9889.handwashingreminder.activities.views.viewmodels.ParsedHTMLText
 import com.javinator9889.handwashingreminder.graphics.LottieAdaptedPerformanceAnimationView
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
 
 data class Disease(
     @RawRes val animation: Int,
-    @StringRes val title: Int,
-    @StringRes val description: Int,
+    val information: ParsedHTMLText,
     @LayoutRes override val layoutRes: Int,
     override val type: Int
 ) : AbstractItem<Disease.ViewHolder>() {
@@ -40,6 +40,8 @@ data class Disease(
 
     class ViewHolder(private val view: View) :
         FastAdapter.ViewHolder<Disease>(view) {
+        val cardContainer: MaterialCardView =
+            view.findViewById(R.id.cardDiseaseContainer)
         private val title: TextView = view.findViewById(R.id.title)
         private val description: TextView =
             view.findViewById(R.id.shortDescription)
@@ -47,8 +49,8 @@ data class Disease(
             view.findViewById(R.id.image)
 
         override fun bindView(item: Disease, payloads: List<Any>) {
-            title.text = getText(item.title)
-            description.text = getText(item.description)
+            title.text = item.information.name
+            description.text = item.information.shortDescription
             animation.setAnimation(item.animation)
         }
 
@@ -57,8 +59,5 @@ data class Disease(
             description.text = null
             animation.clearAnimation()
         }
-
-        private fun getText(@StringRes res: Int): CharSequence =
-            view.context.getText(res)
     }
 }

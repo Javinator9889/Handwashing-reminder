@@ -36,6 +36,7 @@ import com.javinator9889.handwashingreminder.gms.ads.AdLoader
 import com.javinator9889.handwashingreminder.utils.isConnected
 import com.javinator9889.handwashingreminder.utils.isDebuggable
 import timber.log.Timber
+import java.lang.ref.WeakReference
 import com.google.android.gms.ads.AdLoader as AdBase
 
 
@@ -67,11 +68,13 @@ class AdLoaderImpl private constructor(context: Context?) : AdLoader {
 
     @Keep
     companion object Provider : AdLoader.Provider {
-        private var instance: AdLoaderImpl? = null
+        private var instance = WeakReference<AdLoader?>(null)
 
         override fun instance(context: Context?): AdLoader {
-            this.instance = instance ?: AdLoaderImpl(context)
-            return instance!!
+            val appInstance = instance.get() ?: AdLoaderImpl(context)
+            if (instance.get() == null)
+                instance = WeakReference(appInstance)
+            return appInstance
         }
     }
 

@@ -36,7 +36,7 @@ class PrivacyTermsCollectionAdapter(fm: FragmentActivity) :
     override fun getItemCount(): Int = 2
 
     override fun createFragment(position: Int): Fragment {
-        val fragment = TextViewContainer()
+        val fragment = PolicyTextViewFragment()
         fragment.arguments = Bundle().apply {
             putInt(ARG_POSITION, position)
         }
@@ -47,7 +47,7 @@ class PrivacyTermsCollectionAdapter(fm: FragmentActivity) :
 
 private const val ARG_POSITION = "item:position"
 
-class TextViewContainer : BaseFragment() {
+class PolicyTextViewFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

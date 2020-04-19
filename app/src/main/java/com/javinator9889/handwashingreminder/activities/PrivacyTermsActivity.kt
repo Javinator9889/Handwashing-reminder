@@ -20,20 +20,17 @@ package com.javinator9889.handwashingreminder.activities
 
 import android.graphics.Color
 import android.os.Bundle
-import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.support.ActionBarBase
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.collections.PrivacyTermsCollectionAdapter
+import kotlinx.android.synthetic.main.disease_view_expanded.*
 
 class PrivacyTermsActivity : ActionBarBase() {
     override val layoutId: Int = R.layout.privacy_terms
-    private lateinit var tabLayout: TabLayout
-    private lateinit var viewPager: ViewPager2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,11 +46,9 @@ class PrivacyTermsActivity : ActionBarBase() {
             )
         }
 
-        tabLayout = findViewById(R.id.privacy_terms_tab)
-        viewPager = findViewById(R.id.pager)
         val adapter = PrivacyTermsCollectionAdapter(this)
-        viewPager.adapter = adapter
-        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+        pager.adapter = adapter
+        TabLayoutMediator(diseaseInfoTab, pager) { tab, position ->
             when (position) {
                 0 -> tab.text = getString(R.string.privacy_policy_title)
                 1 -> tab.text = getString(R.string.tos_title)

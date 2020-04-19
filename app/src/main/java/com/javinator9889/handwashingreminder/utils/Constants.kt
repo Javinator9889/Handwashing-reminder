@@ -84,6 +84,7 @@ class RemoteConfig {
         const val SPECIAL_EVENT = "special_event"
         const val ANIMATION_NAME = "animation_name"
         const val WORK_IN_PROGRESS = "work_in_progress_message"
+        const val DISEASES_JSON = "diseases"
     }
 }
 

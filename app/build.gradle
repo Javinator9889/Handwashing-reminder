@@ -186,4 +186,6 @@ dependencies {
     // https://developer.android.com/google/play/billing/billing_library_overview
     implementation 'com.android.billingclient:billing:2.2.0'
     implementation 'com.android.billingclient:billing-ktx:2.2.0'
+    // https://github.com/cbeust/klaxon
+    implementation 'com.beust:klaxon:5.2'
 }
