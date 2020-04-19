@@ -22,12 +22,11 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.beust.klaxon.Json
 
-data class DiseasesList(
-    val diseases: List<DiseasesInformation>
-) : Parcelable {
+class DiseasesListWrapper(val diseases: List<DiseasesInformation>?) :
+    Parcelable {
     @Suppress("unchecked_cast")
     constructor(parcel: Parcel) : this(
-        parcel.readArrayList(null)!! as List<DiseasesInformation>
+        parcel.readArrayList(null) as List<DiseasesInformation>?
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -38,16 +37,21 @@ data class DiseasesList(
         return 0
     }
 
-    companion object CREATOR : Parcelable.Creator<DiseasesList> {
-        override fun createFromParcel(parcel: Parcel): DiseasesList {
-            return DiseasesList(parcel)
+    companion object CREATOR : Parcelable.Creator<DiseasesListWrapper> {
+        override fun createFromParcel(parcel: Parcel): DiseasesListWrapper {
+            return DiseasesListWrapper(parcel)
         }
 
-        override fun newArray(size: Int): Array<DiseasesList?> {
+        override fun newArray(size: Int): Array<DiseasesListWrapper?> {
             return arrayOfNulls(size)
         }
     }
+
 }
+
+data class DiseasesList(
+    var diseases: List<DiseasesInformation>
+)
 
 data class DiseasesInformation(
     val name: String,
@@ -59,38 +63,4 @@ data class DiseasesInformation(
     val website: String,
     val symptoms: String,
     val prevention: String
-) : Parcelable {
-    constructor(parcel: Parcel) : this(
-        parcel.readString() ?: "",
-        parcel.readString() ?: "",
-        parcel.readString() ?: "",
-        parcel.readString() ?: "",
-        parcel.readString() ?: "",
-        parcel.readString() ?: "",
-        parcel.readString() ?: ""
-    )
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(name)
-        parcel.writeString(shortDescription)
-        parcel.writeString(longDescription)
-        parcel.writeString(provider)
-        parcel.writeString(website)
-        parcel.writeString(symptoms)
-        parcel.writeString(prevention)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<DiseasesInformation> {
-        override fun createFromParcel(parcel: Parcel): DiseasesInformation {
-            return DiseasesInformation(parcel)
-        }
-
-        override fun newArray(size: Int): Array<DiseasesInformation?> {
-            return arrayOfNulls(size)
-        }
-    }
-}
+)
