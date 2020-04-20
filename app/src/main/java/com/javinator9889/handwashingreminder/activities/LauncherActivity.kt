@@ -42,6 +42,7 @@ import com.javinator9889.handwashingreminder.utils.Preferences.Companion.APP_INI
 import com.javinator9889.handwashingreminder.utils.RemoteConfig.Keys.SPECIAL_EVENT
 import com.mikepenz.iconics.Iconics
 import kotlinx.android.synthetic.main.splash_screen.*
+import timber.log.Timber
 import kotlin.concurrent.thread
 
 internal const val FAST_START_KEY = "intent:fast_start"
@@ -225,5 +226,10 @@ class LauncherActivity : AppCompatActivity() {
             fetchAndActivate()
         }
         Iconics.init(this)
+        try {
+            app.workHandler.enqueuePeriodicNotificationsWorker()
+        } catch (_: UninitializedPropertyAccessException) {
+            Timber.i("Scheduler times have not been initialized")
+        }
     }
 }

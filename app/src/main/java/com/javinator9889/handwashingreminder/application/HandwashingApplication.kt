@@ -106,11 +106,6 @@ class HandwashingApplication : BaseApplication() {
 
         remoteConfig = FirebaseRemoteConfig.getInstance()
         workHandler = WorkHandler(this)
-        try {
-            workHandler.enqueuePeriodicNotificationsWorker()
-        } catch (_: UninitializedPropertyAccessException) {
-            Timber.i("Scheduler times have not been initialized")
-        }
         billingService = BillingService(this)
     }
 

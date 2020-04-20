@@ -69,21 +69,12 @@ class WorkHandler(private val context: Context) {
                 "Scheduled activity ${who.uuid} at ${dueDate.time}"
             )
 
-            val data = with(Data.Builder()) {
-                putInt(Workers.WHO, who.id)
-                putInt(Workers.HOUR, hour)
-                putInt(Workers.MINUTE, minute)
-                build()
-            }
-            val jobRequest = OneTimeWorkRequestBuilder<NotificationsWorker>()
-                .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
-                .setInputData(data)
-                .setBackoffCriteria(
-                    BackoffPolicy.LINEAR,
-                    30000L,
-                    TimeUnit.MILLISECONDS
-                )
-                .build()
+            val workData = workDataOf(
+                Workers.WHO to who.id,
+                Workers.HOUR to hour,
+                Workers.MINUTE to minute
+            )
+            val jobRequest = createJobRequest(timeDiff, workData)
 
             val policy = if (forceUpdate)
                 ExistingWorkPolicy.REPLACE
@@ -101,17 +92,14 @@ class WorkHandler(private val context: Context) {
     }
 
     fun enqueueNotificationsWorker(delay: Long, data: Data) {
-        val jobRequest =
-            OneTimeWorkRequestBuilder<NotificationsWorker>()
-                .setInitialDelay(delay, TimeUnit.MILLISECONDS)
-                .setInputData(data)
-                .build()
+        val jobRequest = createJobRequest(delay, data)
         val who = when (data.getInt(Workers.WHO, -1)) {
             Workers.BREAKFAST -> Workers.BREAKFAST_UUID
             Workers.LUNCH -> Workers.LUNCH_UUID
             Workers.DINNER -> Workers.DINNER_UUID
             else -> return
         }
+        Timber.d("Enqueuing job with ID: $who")
         with(workManager) {
             enqueueUniqueWork(
                 who,
@@ -119,5 +107,28 @@ class WorkHandler(private val context: Context) {
                 jobRequest
             )
         }
+    }
+
+    private fun createJobRequest(
+        initialDelayMillis: Long,
+        inputData: Data
+    ): OneTimeWorkRequest {
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.NOT_REQUIRED)
+            .setRequiresBatteryNotLow(false)
+            .setRequiresCharging(false)
+            .setRequiresDeviceIdle(false)
+            .setRequiresStorageNotLow(false)
+            .build()
+        return OneTimeWorkRequestBuilder<NotificationsWorker>()
+            .setInitialDelay(initialDelayMillis, TimeUnit.MILLISECONDS)
+            .setInputData(inputData)
+            .setConstraints(constraints)
+            .setBackoffCriteria(
+                BackoffPolicy.EXPONENTIAL,
+                15000L,
+                TimeUnit.MILLISECONDS
+            )
+            .build()
     }
 }

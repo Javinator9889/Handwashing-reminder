@@ -21,15 +21,17 @@ package com.javinator9889.handwashingreminder.jobs.workers
 import android.content.Context
 import androidx.annotation.ArrayRes
 import androidx.annotation.StringRes
+import androidx.work.CoroutineWorker
 import androidx.work.Data
-import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.emoji.EmojiLoader
 import com.javinator9889.handwashingreminder.notifications.NotificationsHandler
 import com.javinator9889.handwashingreminder.utils.TIME_CHANNEL_ID
 import com.javinator9889.handwashingreminder.utils.Workers
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.*
 
@@ -42,10 +44,10 @@ data class NotificationStructure(
 class NotificationsWorker(
     private val context: Context,
     private val params: WorkerParameters
-) : Worker(context, params) {
+) : CoroutineWorker(context, params) {
 
-    override fun doWork(): Result {
-        return try {
+    override suspend fun doWork(): Result = coroutineScope {
+        try {
             val emojiLoader = EmojiLoader.get(context)
             val notificationsHandler = NotificationsHandler(
                 context,
@@ -56,35 +58,48 @@ class NotificationsWorker(
             val workHandler = WorkHandler(context)
 
             val notificationData =
-                setNotificationData(params.inputData.getInt(Workers.WHO, -1))
-            val delay = nextExecutionDelay(params.inputData)
+                setNotificationData(
+                    inputData.getInt(
+                        Workers.WHO,
+                        -1
+                    )
+                )
+            val delay = nextExecutionDelay(inputData)
             if (delay == -1L)
-                return Result.failure()
+                return@coroutineScope Result.failure()
 
-            val emojiCompat = runBlocking {
-                emojiLoader.await()
-            }
+
+            val emojiCompat = emojiLoader.await()
             val title =
                 emojiCompat.process(context.getString(notificationData.title))
             val comments =
                 context.resources.getStringArray(notificationData.content)
             val comment = emojiCompat.process(comments.asList().random())
-            notificationsHandler.createNotification(
-                R.drawable.ic_handwashing_icon,
-                R.drawable.handwashing_app_logo,
-                title,
-                comment,
-                longContent = comment
-            )
+
+            withContext(Dispatchers.Main) {
+                notificationsHandler.createNotification(
+                    R.drawable.ic_handwashing_icon,
+                    R.drawable.handwashing_app_logo,
+                    title,
+                    comment,
+                    longContent = comment
+                )
+            }
 
             with(Data.Builder()) {
-                putAll(params.inputData)
+                putAll(inputData)
                 build()
-            }.let { workHandler.enqueueNotificationsWorker(delay, it) }
+            }.let {
+                Timber.d(it.toString())
+                workHandler.enqueueNotificationsWorker(delay, it)
+            }
             Result.success()
         } catch (e: Exception) {
             Timber.e(e, "Uncaught exception on worker class")
-            Result.failure()
+            if (runAttemptCount < 5)
+                Result.retry()
+            else
+                Result.failure()
         }
     }
 
