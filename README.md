@@ -69,8 +69,8 @@ will try to implement classic APK version.
 ## Contributing
 If you want to contribute:
 
-+ Rate, giving me a star.
-+ See my other projects in which I spent so much time working on them.
++ Rate, giving me a star 🌟.
++ See my other projects in which I spent so much time working on them 💻.
 + Donate me and I will work even harder :D
   ([donate here](https://paypal.me/javinator9889)).
-+ And watch if you would like to receive new updates.
++ And watch if you would like to receive new updates 👁.
