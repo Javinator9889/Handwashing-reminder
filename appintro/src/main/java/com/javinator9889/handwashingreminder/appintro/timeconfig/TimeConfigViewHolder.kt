@@ -25,12 +25,13 @@ import androidx.annotation.DrawableRes
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.javinator9889.handwashingreminder.appintro.R
+import com.javinator9889.handwashingreminder.graphics.GlideApp
 import com.javinator9889.handwashingreminder.listeners.ViewHolder
 import com.javinator9889.handwashingreminder.utils.TimeConfig
 import com.mikepenz.iconics.view.IconicsImageView
 
 
-class TimeConfigViewHolder(view: View) :
+class TimeConfigViewHolder(private val view: View) :
     RecyclerView.ViewHolder(view),
     View.OnClickListener {
     val title: TextView = view.findViewById(R.id.title)
@@ -109,6 +110,10 @@ class TimeConfigViewHolder(view: View) :
 
     private fun loadImageView(@DrawableRes imageRes: Int?) {
         if (imageRes != null)
-            image.setImageResource(imageRes)
+            GlideApp.with(view)
+                .load(imageRes)
+                .centerInside()
+                .centerCrop()
+                .into(image)
     }
 }

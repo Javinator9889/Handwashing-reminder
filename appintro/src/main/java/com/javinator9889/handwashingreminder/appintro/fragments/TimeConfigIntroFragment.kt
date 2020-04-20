@@ -83,6 +83,7 @@ class TimeConfigIntroFragment : AppIntroBaseFragment() {
             )
     }
 
+    @Suppress("unchecked_cast")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         savedInstanceState.notNull {

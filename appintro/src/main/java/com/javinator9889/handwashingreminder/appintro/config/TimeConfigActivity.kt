@@ -33,6 +33,7 @@ import androidx.core.view.ViewCompat
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.javinator9889.handwashingreminder.activities.support.ActionBarBase
 import com.javinator9889.handwashingreminder.appintro.R
+import com.javinator9889.handwashingreminder.graphics.GlideApp
 import com.javinator9889.handwashingreminder.utils.AndroidVersion
 import com.javinator9889.handwashingreminder.utils.TimeConfig
 import com.javinator9889.handwashingreminder.utils.formatTime
@@ -109,7 +110,11 @@ class TimeConfigActivity :
                 else -> null
             }
             if (imageRes != null)
-                image.setImageResource(imageRes)
+                GlideApp.with(this)
+                    .load(imageRes)
+                    .centerCrop()
+                    .centerInside()
+                    .into(image)
             setHours(sHours.toString(), sMinutes.toString())
         }
     }
