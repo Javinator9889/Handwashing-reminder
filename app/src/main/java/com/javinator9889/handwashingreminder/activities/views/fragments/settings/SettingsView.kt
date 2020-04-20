@@ -284,27 +284,45 @@ class SettingsView : PreferenceFragmentCompat(),
             emojiCompat = emojiLoader.await()
             breakfast?.let {
                 it.icon = icon(Ionicons.Icon.ion_coffee)
-                it.title =
-                    emojiCompat.process(getText(R.string.breakfast_pref_title))
-                it.summaryText =
-                    emojiCompat.process(getText(R.string.breakfast_pref_summ))
-                it.updateSummary()
+                try {
+                    it.title =
+                        emojiCompat.process(getText(R.string.breakfast_pref_title))
+                    it.summaryText =
+                        emojiCompat.process(getText(R.string.breakfast_pref_summ))
+                } catch (_: IllegalStateException) {
+                    it.title = getText(R.string.breakfast_pref_title)
+                    it.summaryText = getText(R.string.breakfast_pref_summ)
+                } finally {
+                    it.updateSummary()
+                }
             }
             lunch?.let {
                 it.icon = icon(Ionicons.Icon.ion_android_restaurant)
-                it.title =
-                    emojiCompat.process(getText(R.string.lunch_pref_title))
-                it.summaryText =
-                    emojiCompat.process(getText(R.string.lunch_pref_summ))
-                it.updateSummary()
+                try {
+                    it.title =
+                        emojiCompat.process(getText(R.string.lunch_pref_title))
+                    it.summaryText =
+                        emojiCompat.process(getText(R.string.lunch_pref_summ))
+                } catch (_: IllegalStateException) {
+                    it.title = getText(R.string.lunch_pref_title)
+                    it.summaryText = getText(R.string.lunch_pref_summ)
+                } finally {
+                    it.updateSummary()
+                }
             }
             dinner?.let {
                 it.icon = icon(Ionicons.Icon.ion_ios_moon_outline)
-                it.title =
-                    emojiCompat.process(getText(R.string.dinner_pref_title))
-                it.summaryText =
-                    emojiCompat.process(getText(R.string.dinner_pref_summ))
-                it.updateSummary()
+                try {
+                    it.title =
+                        emojiCompat.process(getText(R.string.dinner_pref_title))
+                    it.summaryText =
+                        emojiCompat.process(getText(R.string.dinner_pref_summ))
+                } catch (_: IllegalStateException) {
+                    it.title = getText(R.string.dinner_pref_title)
+                    it.summaryText = getText(R.string.dinner_pref_summ)
+                } finally {
+                    it.updateSummary()
+                }
             }
         }
     }
@@ -344,11 +362,15 @@ class SettingsView : PreferenceFragmentCompat(),
                 } else {
                     MaterialDialog(requireContext()).show {
                         title(R.string.ads_explanation_title)
-                        message(
-                            text = emojiCompat.process(
-                                context.getText(R.string.ads_explanation_desc)
+                        try {
+                            message(
+                                text = emojiCompat.process(
+                                    context.getText(R.string.ads_explanation_desc)
+                                )
                             )
-                        )
+                        } catch (_: IllegalStateException) {
+                            message(R.string.ads_explanation_desc)
+                        }
                         positiveButton(android.R.string.cancel) {
                             ret = false
                         }
@@ -397,33 +419,54 @@ class SettingsView : PreferenceFragmentCompat(),
         val context = requireContext()
         when (resultCode) {
             BillingResponseCode.OK -> {
-                MaterialDialog(context)
-                    .title(R.string.donation_thanks)
-                    .message(
-                        text = emojiCompat
-                            .process(context.getText(R.string.donation_desc))
-                    )
-                    .positiveButton(android.R.string.ok)
+                try {
+                    MaterialDialog(context)
+                        .title(R.string.donation_thanks)
+                        .message(
+                            text = emojiCompat
+                                .process(context.getText(R.string.donation_desc))
+                        )
+                        .positiveButton(android.R.string.ok)
+                } catch (_: IllegalStateException) {
+                    MaterialDialog(context)
+                        .title(R.string.donation_thanks)
+                        .message(R.string.donation_desc)
+                        .positiveButton(android.R.string.ok)
+                }
             }
             BillingResponseCode.USER_CANCELED -> {
-                MaterialDialog(context)
-                    .title(R.string.donation_cancelled)
-                    .message(
-                        text = emojiCompat.process(
-                            context.getText(R.string.donation_cancelled_desc)
+                try {
+                    MaterialDialog(context)
+                        .title(R.string.donation_cancelled)
+                        .message(
+                            text = emojiCompat.process(
+                                context.getText(R.string.donation_cancelled_desc)
+                            )
                         )
-                    )
-                    .positiveButton(android.R.string.ok)
+                        .positiveButton(android.R.string.ok)
+                } catch (_: IllegalStateException) {
+                    MaterialDialog(context)
+                        .title(R.string.donation_cancelled)
+                        .message(R.string.donation_cancelled_desc)
+                        .positiveButton(android.R.string.ok)
+                }
             }
             else -> {
-                MaterialDialog(context)
-                    .title(R.string.donation_error)
-                    .message(
-                        text = emojiCompat.process(
-                            context.getText(R.string.donation_error_desc)
+                try {
+                    MaterialDialog(context)
+                        .title(R.string.donation_error)
+                        .message(
+                            text = emojiCompat.process(
+                                context.getText(R.string.donation_error_desc)
+                            )
                         )
-                    )
-                    .positiveButton(android.R.string.ok)
+                        .positiveButton(android.R.string.ok)
+                } catch (_: IllegalStateException) {
+                    MaterialDialog(context)
+                        .title(R.string.donation_error)
+                        .message(R.string.donation_error_desc)
+                        .positiveButton(android.R.string.ok)
+                }
             }
         }.show()
     }

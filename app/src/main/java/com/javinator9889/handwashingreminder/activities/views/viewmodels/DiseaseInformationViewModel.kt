@@ -27,7 +27,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.beust.klaxon.Klaxon
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.collections.DiseasesInformation
 import com.javinator9889.handwashingreminder.collections.DiseasesList
 import com.javinator9889.handwashingreminder.collections.DiseasesListWrapper
@@ -49,13 +49,15 @@ class DiseaseInformationViewModel(
     private suspend fun parseHTML(): List<ParsedHTMLText> {
         val informationList = withContext(Dispatchers.IO) {
             if (state.contains(PARSED_JSON_KEY) &&
-                state.get<List<DiseasesInformation>>(PARSED_JSON_KEY) != null)
+                state.get<List<DiseasesInformation>>(PARSED_JSON_KEY) != null
+            )
                 DiseasesList(
                     state.get<List<DiseasesInformation>>(PARSED_JSON_KEY)!!
                 )
-            val diseasesString = with(FirebaseRemoteConfig.getInstance()) {
-                getString(DISEASES_JSON)
-            }
+            val diseasesString =
+                with(HandwashingApplication.getInstance().remoteConfig) {
+                    getString(DISEASES_JSON)
+                }
             Klaxon().parse<DiseasesList>(diseasesString)
         } ?: return emptyList()
         state.set(
@@ -104,7 +106,6 @@ class DiseaseInformationViewModel(
             isRemoveTrailingWhiteSpace = true
             HtmlFormatter.formatHtml(this)
         }
-//        HtmlCompat.fromHtml(text, HtmlCompat.FROM_HTML_MODE_LEGACY)
 }
 
 class DiseaseInformationFactory :

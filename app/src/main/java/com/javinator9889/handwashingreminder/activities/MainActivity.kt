@@ -58,6 +58,7 @@ class MainActivity : ActionBarBase(),
         super.onCreate(savedInstanceState)
         app = HandwashingApplication.getInstance()
         app.firebaseAnalytics.setCurrentScreen(this, "Main view", null)
+        app.remoteConfig.fetchAndActivate()
         delegateMenuIcons(menu)
         val ids =
             arrayOf(R.id.diseases, R.id.handwashing, R.id.news, R.id.settings)
