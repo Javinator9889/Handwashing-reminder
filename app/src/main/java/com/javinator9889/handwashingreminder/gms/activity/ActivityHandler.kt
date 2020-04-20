@@ -25,6 +25,7 @@ import androidx.preference.PreferenceManager
 import com.google.android.gms.location.ActivityRecognition
 import com.google.android.gms.location.ActivityTransition
 import com.google.android.gms.location.ActivityTransitionRequest
+import com.google.android.gms.tasks.Task
 import com.javinator9889.handwashingreminder.utils.Preferences
 import timber.log.Timber
 
@@ -54,11 +55,11 @@ class ActivityHandler(private val context: Context) {
         }
     }
 
-    fun disableActivityTracker() {
+    fun disableActivityTracker(): Task<Void>? {
         Timber.d("Stopping activity recognition")
         if (!activityRegistered)
-            return
-        ActivityRecognition.getClient(context)
+            return null
+        return ActivityRecognition.getClient(context)
             .removeActivityTransitionUpdates(pendingIntent).apply {
                 addOnSuccessListener { pendingIntent.cancel() }
                 addOnFailureListener { e: Exception -> Timber.e(e) }
@@ -69,20 +70,23 @@ class ActivityHandler(private val context: Context) {
         with(createSetOfTransitions()) {
             transitions.clear()
             addTransitions(this, transitions)
-            disableActivityTracker()
-            pendingIntent = createPendingIntent()
-            startTrackingActivity()
+            disableActivityTracker()?.let {
+                it.addOnSuccessListener {
+                    pendingIntent = createPendingIntent()
+                    startTrackingActivity()
+                }
+            }
         }
     }
 
     private fun createSetOfTransitions(): Set<Int> {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-        with(setOf<Int>()) {
+        with(hashSetOf<Int>()) {
             preferences.getStringSet(
                 Preferences.ACTIVITIES_ENABLED,
                 Preferences.DEFAULT_ACTIVITY_SET
             )!!.run {
-                forEach { this.plus(Integer.parseInt(it)) }
+                forEach { this@with += Integer.parseInt(it) }
             }
             return this
         }

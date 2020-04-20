@@ -147,19 +147,15 @@ class Videos {
     }
 }
 
-object Billing {
-    val CATALOG_DEBUG =
-        arrayOf(
-            "android.test.purchased",
-            "android.test.canceled",
-            "android.test.refunded",
-            "android.test.item_unavailable"
-        )
-}
-
 object Email {
     const val TO = "contact@javinator9889.com"
     const val SUBJECT = "Handwashing reminder | Suggestions"
+}
+
+object Firebase {
+    object Properties {
+        const val LANGUAGE = "language"
+    }
 }
 
 const val TRANSLATE_URL = "https://s.javinator9889.com/hwtranslate"

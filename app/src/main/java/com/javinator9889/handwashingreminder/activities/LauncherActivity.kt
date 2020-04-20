@@ -20,16 +20,17 @@ package com.javinator9889.handwashingreminder.activities
 
 import android.app.Activity
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.whenCreated
+import androidx.lifecycle.whenStarted
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
@@ -42,76 +43,75 @@ import com.javinator9889.handwashingreminder.utils.Preferences.Companion.APP_INI
 import com.javinator9889.handwashingreminder.utils.RemoteConfig.Keys.SPECIAL_EVENT
 import com.mikepenz.iconics.Iconics
 import kotlinx.android.synthetic.main.splash_screen.*
+import kotlinx.coroutines.*
 import timber.log.Timber
-import kotlin.concurrent.thread
 
 internal const val FAST_START_KEY = "intent:fast_start"
 internal const val PENDING_INTENT_CODE = 201
 
+@Suppress("DeferredResultUnused")
 class LauncherActivity : AppCompatActivity() {
     private var launchOnInstall = false
     private var launchFromNotification = false
     private lateinit var app: HandwashingApplication
-    private lateinit var sharedPreferences: SharedPreferences
+
+    init {
+        lifecycleScope.launch {
+            whenCreated {
+                app = HandwashingApplication.getInstance()
+                with(intent) {
+                    notNull {
+                        launchFromNotification =
+                            it.getBooleanExtra(FAST_START_KEY, false)
+                    }
+                }
+                async { initVariables() }
+            }
+            whenStarted {
+                withContext(Dispatchers.Main) { displayWelcomeScreen() }
+                withContext(Dispatchers.Main) { installRequiredModules() }
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        app = HandwashingApplication.getInstance()
-        sharedPreferences = app.sharedPreferences
-        app.firebaseAnalytics.setCurrentScreen(this, "Launcher", null)
-        with(intent) {
-            notNull {
-                launchFromNotification =
-                    it.getBooleanExtra(FAST_START_KEY, false)
-            }
-        }
-        val displayThread = displayWelcomeScreen()
-        installRequiredModules(displayThread)
-        initVariables()
+        setContentView(R.layout.splash_screen)
     }
 
-    private fun displayWelcomeScreen(): Thread {
-        setContentView(R.layout.splash_screen)
-        return thread(start = true) {
-            val isThereAnySpecialEvent =
-                app.remoteConfig.getBoolean(SPECIAL_EVENT) &&
-                        !launchFromNotification
-            var sleepDuration = 0L
-            var animationLoaded = false
-            val fadeInAnimation =
-                AnimationUtils.loadAnimation(this, android.R.anim.fade_in)
-            fadeInAnimation.duration = 300L
-            fadeInAnimation.setAnimationListener(object :
-                Animation.AnimationListener {
-                override fun onAnimationStart(animation: Animation?) {}
+    private suspend fun displayWelcomeScreen() {
+        val isThereAnySpecialEvent =
+            app.remoteConfig.getBoolean(SPECIAL_EVENT) &&
+                    !launchFromNotification
+        var sleepDuration = 0L
+        var animationLoaded = false
+        val fadeInAnimation =
+            AnimationUtils.loadAnimation(this, android.R.anim.fade_in)
+        fadeInAnimation.duration = 300L
+        fadeInAnimation.setAnimationListener(object :
+            Animation.AnimationListener {
+            override fun onAnimationStart(animation: Animation?) {}
 
-                override fun onAnimationRepeat(animation: Animation?) {}
+            override fun onAnimationRepeat(animation: Animation?) {}
 
-                override fun onAnimationEnd(animation: Animation?) {
-                    logo.playAnimation()
-                    animationLoaded = true
-                }
-            })
-            if (isThereAnySpecialEvent) {
-                runOnUiThread {
-                    logo.setAnimation(AnimatedResources.STAY_SAFE_STAY_HOME.res)
-                }
-                logo.enableMergePathsForKitKatAndAbove(true)
-                logo.addLottieOnCompositionLoadedListener {
-                    runOnUiThread {
-                        logo.startAnimation(fadeInAnimation)
-                    }
-                    sleepDuration = logo.duration
-                }
-                while (!animationLoaded)
-                    Thread.sleep(10)
-                Thread.sleep(sleepDuration)
-            } else {
-                runOnUiThread {
-                    logo.setImageResource(R.drawable.handwashing_app_logo)
-                    logo.startAnimation(fadeInAnimation)
-                }
+            override fun onAnimationEnd(animation: Animation?) {
+                logo.playAnimation()
+                animationLoaded = true
             }
+        })
+        if (isThereAnySpecialEvent) {
+            logo.setAnimation(AnimatedResources.STAY_SAFE_STAY_HOME.res)
+            logo.enableMergePathsForKitKatAndAbove(true)
+            logo.addLottieOnCompositionLoadedListener {
+                logo.startAnimation(fadeInAnimation)
+                sleepDuration = logo.duration
+            }
+            while (!animationLoaded)
+                delay(10L)
+            delay(sleepDuration)
+        } else {
+            logo.setImageResource(R.drawable.handwashing_app_logo)
+            logo.startAnimation(fadeInAnimation)
         }
     }
 
@@ -123,7 +123,7 @@ class LauncherActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == DYNAMIC_FEATURE_INSTALL_RESULT_CODE) {
             EmojiLoader.get(this)
-            if (sharedPreferences.getBoolean(ADS_ENABLED, true)) {
+            if (app.sharedPreferences.getBoolean(ADS_ENABLED, true)) {
                 when (resultCode) {
                     Activity.RESULT_OK -> {
                         val className = "${Ads.PACKAGE_NAME}.${Ads
@@ -165,41 +165,37 @@ class LauncherActivity : AppCompatActivity() {
         overridePendingTransition(0, android.R.anim.fade_out)
     }
 
-    private fun installRequiredModules(waitingThread: Thread) {
-        thread(start = true) {
-            val modules = ArrayList<String>(MODULE_COUNT)
-            val googleApi = GoogleApiAvailability.getInstance()
-            if (sharedPreferences.getBoolean(ADS_ENABLED, true))
-                modules += Ads.MODULE_NAME
-            if (!sharedPreferences.getBoolean(APP_INIT_KEY, false)) {
-                modules += AppIntro.MODULE_NAME
-                launchOnInstall = true
-            }
-            if (googleApi.isGooglePlayServicesAvailable(
-                    this,
-                    GOOGLE_PLAY_SERVICES_MIN_VERSION
-                ) != ConnectionResult.SUCCESS
-            )
-                modules += BundledEmoji.MODULE_NAME
-            else
-                with(SplitInstallManagerFactory.create(this)) {
-                    deferredUninstall(listOf(BundledEmoji.MODULE_NAME))
-                }
-            modules.trimToSize()
-            val intent = if (launchOnInstall) {
-                createDynamicFeatureActivityIntent(
-                    modules.toTypedArray(),
-                    launchOnInstall,
-                    AppIntro.MAIN_ACTIVITY_NAME,
-                    AppIntro.PACKAGE_NAME
-                )
-            } else {
-                createDynamicFeatureActivityIntent(modules.toTypedArray())
-            }
-            if (waitingThread.isAlive)
-                waitingThread.join()
-            startActivityForResult(intent, DYNAMIC_FEATURE_INSTALL_RESULT_CODE)
+    private fun installRequiredModules() {
+        val modules = ArrayList<String>(MODULE_COUNT)
+        val googleApi = GoogleApiAvailability.getInstance()
+        if (app.sharedPreferences.getBoolean(ADS_ENABLED, true))
+            modules += Ads.MODULE_NAME
+        if (!app.sharedPreferences.getBoolean(APP_INIT_KEY, false)) {
+            modules += AppIntro.MODULE_NAME
+            launchOnInstall = true
         }
+        if (googleApi.isGooglePlayServicesAvailable(
+                this,
+                GOOGLE_PLAY_SERVICES_MIN_VERSION
+            ) != ConnectionResult.SUCCESS
+        )
+            modules += BundledEmoji.MODULE_NAME
+        else
+            with(SplitInstallManagerFactory.create(this)) {
+                deferredUninstall(listOf(BundledEmoji.MODULE_NAME))
+            }
+        modules.trimToSize()
+        val intent = if (launchOnInstall) {
+            createDynamicFeatureActivityIntent(
+                modules.toTypedArray(),
+                launchOnInstall,
+                AppIntro.MAIN_ACTIVITY_NAME,
+                AppIntro.PACKAGE_NAME
+            )
+        } else {
+            createDynamicFeatureActivityIntent(modules.toTypedArray())
+        }
+        startActivityForResult(intent, DYNAMIC_FEATURE_INSTALL_RESULT_CODE)
     }
 
     private fun createDynamicFeatureActivityIntent(
@@ -217,17 +213,20 @@ class LauncherActivity : AppCompatActivity() {
     private fun initVariables() {
         val config = with(FirebaseRemoteConfigSettings.Builder()) {
             minimumFetchIntervalInSeconds = 3600
-            fetchTimeoutInSeconds = 3
+            fetchTimeoutInSeconds = 10
             build()
         }
-        with(FirebaseRemoteConfig.getInstance()) {
+        with(app.remoteConfig) {
+            Timber.d("Initializing Firebase Remote Config")
             setConfigSettingsAsync(config)
             setDefaultsAsync(R.xml.remote_config_defaults)
             fetchAndActivate()
         }
+        Timber.d("Initializing Iconics")
         Iconics.init(this)
         try {
             app.workHandler.enqueuePeriodicNotificationsWorker()
+            Timber.d("Adding periodic notifications if not enqueued yet")
         } catch (_: UninitializedPropertyAccessException) {
             Timber.i("Scheduler times have not been initialized")
         }

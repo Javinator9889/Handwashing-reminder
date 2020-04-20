@@ -33,12 +33,14 @@ import com.javinator9889.handwashingreminder.gms.activity.ActivityHandler
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
 import com.javinator9889.handwashingreminder.gms.vendor.BillingService
 import com.javinator9889.handwashingreminder.jobs.workers.WorkHandler
+import com.javinator9889.handwashingreminder.utils.Firebase
 import com.javinator9889.handwashingreminder.utils.LogReportTree
 import com.javinator9889.handwashingreminder.utils.Preferences
 import com.javinator9889.handwashingreminder.utils.isDebuggable
 import javinator9889.localemanager.application.BaseApplication
 import javinator9889.localemanager.utils.languagesupport.LanguagesSupport.Language
 import timber.log.Timber
+import java.util.*
 
 
 class HandwashingApplication : BaseApplication() {
@@ -50,8 +52,6 @@ class HandwashingApplication : BaseApplication() {
     lateinit var sharedPreferences: SharedPreferences
     lateinit var firebaseAnalytics: FirebaseAnalytics
     lateinit var firebasePerformance: FirebasePerformance
-    //TODO lateinit var firebaseAnalytics
-    //TODO lateinit var firebasePerformance
 
     companion object {
         private lateinit var instance: HandwashingApplication
@@ -75,6 +75,7 @@ class HandwashingApplication : BaseApplication() {
         instance = this
         sharedPreferences = getCustomSharedPreferences(this)
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
+        setupFirebaseProperties()
         firebasePerformance = FirebasePerformance.getInstance()
         if (isDebuggable()) {
             Timber.plant(Timber.DebugTree())
@@ -107,6 +108,19 @@ class HandwashingApplication : BaseApplication() {
         remoteConfig = FirebaseRemoteConfig.getInstance()
         workHandler = WorkHandler(this)
         billingService = BillingService(this)
+    }
+
+    private fun setupFirebaseProperties() {
+        when (Locale.getDefault().language) {
+            Locale(Language.SPANISH).language ->
+                firebaseAnalytics.setUserProperty(
+                    Firebase.Properties.LANGUAGE, Language.SPANISH
+                )
+            else ->
+                firebaseAnalytics.setUserProperty(
+                    Firebase.Properties.LANGUAGE, Language.ENGLISH
+                )
+        }
     }
 
     /**

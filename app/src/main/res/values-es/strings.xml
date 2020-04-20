@@ -234,7 +234,8 @@
     at this time</string>
     <string name="collaborating">Collaborate with the project</string>
     <string name="suggestions">Send comments and suggestions</string>
-    <string name="open_source_libs">Open source libraries</string>
+    <string name="open_source_libs">Third party and open source
+        libraries</string>
     <string name="tos_and_privacy">Terms of service and privacy policy</string>
     <string name="send_email_client">Choose and email client</string>
     <string name="share">Share this app</string>

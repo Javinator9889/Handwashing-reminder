@@ -82,10 +82,11 @@ class ActivityCheckbox : CheckBoxPreference {
     override fun setChecked(checked: Boolean) {
         super.setChecked(checked)
         with(HandwashingApplication.getInstance()) {
-            if (checked)
+            if (checked) {
                 activityHandler.startTrackingActivity()
-            else
+            } else {
                 activityHandler.disableActivityTracker()
+            }
         }
     }
 }
