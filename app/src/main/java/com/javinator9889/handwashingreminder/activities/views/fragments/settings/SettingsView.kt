@@ -192,12 +192,27 @@ class SettingsView : PreferenceFragmentCompat(),
             }
             breakfast?.let {
                 it.icon = icon(Ionicons.Icon.ion_coffee)
+                it.title =
+                    emojiCompat.process(getText(R.string.breakfast_pref_title))
+                it.summaryText =
+                    emojiCompat.process(getText(R.string.breakfast_pref_summ))
+                it.updateSummary()
             }
             lunch?.let {
                 it.icon = icon(Ionicons.Icon.ion_android_restaurant)
+                it.title =
+                    emojiCompat.process(getText(R.string.lunch_pref_title))
+                it.summaryText =
+                    emojiCompat.process(getText(R.string.lunch_pref_summ))
+                it.updateSummary()
             }
             dinner?.let {
                 it.icon = icon(Ionicons.Icon.ion_ios_moon_outline)
+                it.title =
+                    emojiCompat.process(getText(R.string.dinner_pref_title))
+                it.summaryText =
+                    emojiCompat.process(getText(R.string.dinner_pref_summ))
+                it.updateSummary()
             }
             firebaseAnalytics?.let {
                 it.onPreferenceChangeListener = this@SettingsView

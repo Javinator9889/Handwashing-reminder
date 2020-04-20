@@ -23,12 +23,8 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.TimePicker
 import androidx.preference.EditTextPreference
-import com.javinator9889.handwashingreminder.R
-import com.javinator9889.handwashingreminder.emoji.EmojiLoader
 import com.javinator9889.handwashingreminder.jobs.workers.WorkHandler
-import com.javinator9889.handwashingreminder.utils.Preferences
 import com.javinator9889.handwashingreminder.utils.formatTime
-import kotlinx.coroutines.runBlocking
 
 class TimePickerPreference : EditTextPreference,
     TimePickerDialog.OnTimeSetListener {
@@ -42,29 +38,7 @@ class TimePickerPreference : EditTextPreference,
         defStyleRes: Int
     ) : super(context, attrs, defStyleAttr, defStyleRes)
 
-    private lateinit var summaryText: CharSequence
-
-    init {
-        val emojiLoader = EmojiLoader.get(context)
-        val data = when (key) {
-            Preferences.BREAKFAST_TIME -> PreferenceData(
-                context.getText(R.string.breakfast_pref_title),
-                context.getText(R.string.breakfast_pref_summ)
-            )
-            Preferences.LUNCH_TIME -> PreferenceData(
-                context.getText(R.string.lunch_pref_title),
-                context.getText(R.string.lunch_pref_summ)
-            )
-            Preferences.DINNER_TIME -> PreferenceData(
-                context.getText(R.string.dinner_pref_title),
-                context.getText(R.string.dinner_pref_summ)
-            )
-            else -> PreferenceData("", "")
-        }
-        val emojiCompat = runBlocking { emojiLoader.await() }
-        title = emojiCompat.process(data.title)
-        summaryText = emojiCompat.process(data.summary)
-    }
+    lateinit var summaryText: CharSequence
 
     private fun setSummary(hours: Int, minutes: Int): String {
         return with("${formatTime(hours)}:${formatTime(minutes)}") {
@@ -74,14 +48,19 @@ class TimePickerPreference : EditTextPreference,
     }
 
     private fun setSummary(time: String): String {
-        summary = "$summaryText $time"
+        summary = if (::summaryText.isInitialized) "$summaryText $time"
+        else time
         return time
     }
 
-    override fun onSetInitialValue(defaultValue: Any?) {
+    fun updateSummary(time: String? = null) {
+        setSummary(time ?: text)
+    }
+
+    /*override fun onSetInitialValue(defaultValue: Any?) {
         text = getPersistedString("00:00")
         setSummary(text)
-    }
+    }*/
 
     override fun onClick() {
         val time = text.split(":")
@@ -100,9 +79,4 @@ class TimePickerPreference : EditTextPreference,
             enqueuePeriodicNotificationsWorker(true)
         }
     }
-
-    private data class PreferenceData(
-        val title: CharSequence,
-        val summary: CharSequence
-    )
 }
