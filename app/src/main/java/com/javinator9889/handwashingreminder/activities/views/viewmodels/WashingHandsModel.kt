@@ -78,12 +78,14 @@ class WashingHandsModel(
 
     private suspend fun processStringArray(@ArrayRes array: Int): CharSequence =
         with(HandwashingApplication.getInstance()) {
-            val emojiCompat = with(EmojiLoader.get(this)) {
-                this.await()
+            with(EmojiLoader.get(this)) {
+                try {
+                    this.await()
+                        .process(resources.getStringArray(array)[position])
+                } catch (_: IllegalStateException) {
+                    resources.getStringArray(array)[position]
+                }
             }
-            emojiCompat.process(
-                resources.getStringArray(array)[position]
-            )
         }
 
     @RawRes
