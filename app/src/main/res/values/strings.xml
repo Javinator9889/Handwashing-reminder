@@ -3,8 +3,8 @@
     <string name="activity_notification_channel_name">Activity
         notifications</string>
     <string name="activity_notification_channel_desc">Get a
-        notification when you get out of a vehicle to remind you to
-        wash your hands</string>
+        notification when you get out of a vehicle or finish an activity to
+        remind you to wash your hands</string>
     <string name="time_notification_channel_name">Scheduled
         notifications</string>
     <string name="time_notification_channel_desc">Get a notification at
@@ -19,8 +19,8 @@
         &#127939;&#8205;&#9792;&#65039;</string>
     <string name="activity_notifications_run_content">It\'s always
         funny to run &#128578; but usually it comes with a lot of sweat
-    &#128517;. Try washing your hands as soon as possible or even
-        better have a shower &#128704;</string>
+    &#128517;. Try washing your hands as soon as possible or, even
+        better, have a shower &#128704;</string>
     <string name="activity_notification_cycling">Having a good ride?
         &#128692;&#8205;&#9792;&#65039;</string>
     <string name="activity_notification_cycling_content">I always enjoy
@@ -101,7 +101,7 @@
     <string-array name="washing_hands_titles">
         <item>1. Rub your hands</item>
         <item>2. Clean in between your fingers</item>
-        <item>3. Back-clean in between the fingers</item>
+        <item>3. Back-clean and in between the fingers</item>
         <item>4. Back-clean of the fingers</item>
         <item>5. Cleaning the thumbs</item>
         <item>6. Cleaning the tips and nails of your fingers</item>
@@ -116,7 +116,7 @@
             and in between the fingers &#129306;. Do the same with the other
             hand.</item>
         <item>As you can see, your fingers are not clean yet &#128064;, so
-            put the back of your fingers against your palms.</item>
+            put the back of your fingers against your palms and rub.</item>
         <item>We almost forget them &#128556;! Clean both your thumbs
             using the other hand &#128077;.</item>
         <item>Now it\'s time to clean both your tips and nails. Put them
@@ -143,7 +143,7 @@
         <item>After going cycling &#128692;</item>
         <item>After leaving a vehicle &#128649;</item>
     </string-array>
-    <string-array name="activity_values">
+    <string-array name="activity_values" translatable="false">
         <item>7</item>
         <item>8</item>
         <item>1</item>
@@ -192,7 +192,7 @@
         <item>Donate 70€</item>
         <item>Donate 100€</item>
     </string-array>
-    <string-array name="in_app_donations">
+    <string-array name="in_app_donations" translatable="false">
         <item>in_app_donations</item>
         <item>in_app_donations_2</item>
         <item>in_app_donations_5</item>
@@ -204,7 +204,7 @@
         <item>in_app_donations_70</item>
         <item>in_app_donations_100</item>
     </string-array>
-    <string-array name="in_app_donations_debug">
+    <string-array name="in_app_donations_debug" translatable="false">
         <item>android.test.purchased</item>
         <item>android.test.canceled</item>
         <item>android.test.canceled</item>

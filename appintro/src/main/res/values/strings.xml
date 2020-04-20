@@ -12,13 +12,14 @@
     <string name="fill_hours">Please, fill out all the hours</string>
     <string name="graphics">graphics</string>
     <string name="slide_policy_text">By clicking here you accept the
-        terms and conditions of the application</string>
+        terms and conditions and privacy policy of the application</string>
     <string name="accept_policy">You need to agree to the privacy
-        policy in order to continue using this application</string>
+        policy and terms and conditions in order to continue using this
+        application</string>
     <string name="first_slide_title">Handwashing reminder</string>
     <string name="first_slide_desc">Do you know how crucial it can be
         washing your hands so you can avoid some diseases? With this app, you
-        will never forget it 😉
+        will never forget it &#128521;
     </string>
     <string name="second_slide_title">Custom hours</string>
     <string name="second_slide_desc">Customize your experience with an
@@ -27,12 +28,13 @@
     <string name="fourth_slide_title">Be even more precise</string>
     <string name="fourth_slide_desc">If you allow access to user activity,
         you will receive notifications when, for example, you get off from a
-        vehicle 🚇 or after running 🤼‍♂️. You can disable this option at any
+        vehicle &#128647; or after running 🤼‍&#127939;&#8205;️. You can disable this option at any
         moment</string>
-    <string name="privacy_policy_title">Privacy policy</string>
+    <string name="privacy_policy_title">Privacy policy and terms of
+        service</string>
     <string name="data_shared">{gmd_info_outline} Despite of the
         configuration above, some data will still be shared. This data
         contains information about possible application crashes or errors. It
-        is always anonymous and will help me update the app, include
-        new features and solve errors.</string>
+        is always anonymous and will help updating the app, including
+        new features and solving errors.</string>
 </resources>

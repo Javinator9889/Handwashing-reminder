@@ -1,274 +1,250 @@
 <resources>
     <string name="app_name">Handwashing reminder</string>
-    <string name="activity_notification_channel_name">Activity
-        notifications</string>
-    <string name="activity_notification_channel_desc">Get a
-        notification when you get out of a vehicle to remind you to
-        wash your hands</string>
-    <string name="time_notification_channel_name">Scheduled
-        notifications</string>
-    <string name="time_notification_channel_desc">Get a notification at
-        scheduled times you have indicated in the application</string>
-    <string name="activity_notification_walk">Did you have a good walk?
-    &#128694;</string>
-    <string name="activity_notification_walk_content">Walking 30 minutes a
-        day is one of the greatest practices for having a good health &#128170;
-        Remember to wash your hands before eating or touching your face
-        &#129325; so you can have even better health &#128521;</string>
-    <string name="activity_notification_run">Did you enjoy running?
-        &#127939;&#8205;&#9792;&#65039;</string>
-    <string name="activity_notifications_run_content">It\'s always
-        funny to run &#128578; but usually it comes with a lot of sweat
-    &#128517;. Try washing your hands as soon as possible or even
-        better have a shower &#128704;</string>
-    <string name="activity_notification_cycling">Having a good ride?
-        &#128692;&#8205;&#9792;&#65039;</string>
-    <string name="activity_notification_cycling_content">I always enjoy
-    going cycling - it makes you feel free &#127794;. Your bike\'s handles were
-    probably dirty so try to wash your hands as soon as you can
-        &#128166;&#128079;</string>
-    <string name="activity_notification_vehicle">Time to wash your
-        hands &#128649;</string>
-    <string name="activity_notification_vehicle_content">In public
-        transport there are lots of people and you don\'t know if they
-        are ill or not &#128567;. Even in your own car there can be
-        diseases in the handles or in the steering wheel &#128663;, so
-        try to wash your hands as soon as you can for avoiding diseases
-        &#128166;&#128079;
+    <string name="activity_notification_channel_name">Notificaciones de
+    actividad</string>
+    <string name="activity_notification_channel_desc">Recibe una
+        notificación cuando bajes de un vehículo o finalices una actividad
+        para recordarte que te laves las manos</string>
+    <string name="time_notification_channel_name">Notificaciones
+        programadas</string>
+    <string name="time_notification_channel_desc">Recibe notificaciones en
+        los tiempos programados que hayas definido en la aplicación
     </string>
-    <string name="title_appintro">Handwashing reminder intro</string>
-    <string name="privacy_policy_title">Privacy policy</string>
-    <string name="tos_title">Terms and conditions</string>
-    <string name="firebase_analytics_policy">Allow the application to
-        collect and send anonymous data with data activity and
-        analytics information</string>
-    <string name="firebase_performance_policy">Allow the application to
-        track its performance and send anonymous data for improving
-        in-app experience</string>
-    <string name="title_ads">Ads</string>
+    <string name="activity_notification_walk">¿Disfrutaste del paseo?
+    &#128694;</string>
+    <string name="activity_notification_walk_content">Andar 30 minutos al día
+        es una de las mejores prácticas para tener una buena salud &#128170;
+        Recuerda lavarte las manos antes de comer o tocarte la cara
+        &#129325; y así podrás tener todavía mejor salud &#128521;</string>
+    <string name="activity_notification_run">¿Qué tal fue la carrera?
+        &#127939;&#8205;&#9792;&#65039;</string>
+    <string name="activity_notifications_run_content">Siempre es divertido
+        correr &#128578; pero sueles acabar sudando mucho &#128517;. Intenta
+        lavarte las manos lo antes posible o, mejor todavía, date una ducha
+        &#128704;</string>
+    <string name="activity_notification_cycling">¿Teniendo una buena vuelta?
+        &#128692;&#8205;&#9792;&#65039;</string>
+    <string name="activity_notification_cycling_content">Siempre disfruto el
+        ir en bici - te hace sentir libre &#127794;. Los manillares de tu
+        bici posiblemente estuvieran sucios así que lávate las manos lo
+        antes que puedas &#128166;&#128079;</string>
+    <string name="activity_notification_vehicle">Hora de lavarse las manos
+        &#128649;</string>
+    <string name="activity_notification_vehicle_content">En el transporte
+        público hay mucha gente y no sabes si están enfermos o no &#128567;.
+        Incluso en tu propio coche pueden haber enfermedades en los pomos o
+        en el volante &#128663;, así que lávate las manos lo antes que puedas
+       para evitar enfermedades &#128166;&#128079;
+    </string>
+    <string name="title_appintro">Intro de Handwashing reminder</string>
+    <string name="privacy_policy_title">Política de privacidad</string>
+    <string name="tos_title">Términos y condiciones</string>
+    <string name="firebase_analytics_policy">Permite que la aplicación
+        recoja y envíe datos de manera anónima sobre la actividad e
+        información analítica</string>
+    <string name="firebase_performance_policy">Permite que la aplicación
+        monitorice el rendimiento de la misma y envíe datos anónimos para
+        mejorar la experiencia de usuario</string>
+    <string name="title_ads">Anuncios</string>
     <string name="ad_attribution">Ad</string>
-    <string name="dynamic_module_loading_title">Building your app…</string>
-    <string name="dynamic_module_loading_text">We are adding new
-        content to the app so it works correctly. Please, wait a minute
-    - this process should not last long.</string>
-    <string name="dynamic_module_loading_error">Oops! Something went
-        wrong 😥 - please retry the process</string>
-    <string name="done">Done</string>
-    <string name="preparing">Preparing…</string>
-    <string name="installing">Installing…</string>
-    <string name="diseases">Diseases</string>
-    <string name="handwashing">Washing your hands</string>
-    <string name="news">News</string>
-    <string name="settings">Settings</string>
-    <string name="breakfast_title">Breakfast time! &#9749;</string>
+    <string name="dynamic_module_loading_title">Construyendo tu
+        aplicación…</string>
+    <string name="dynamic_module_loading_text">Estamos añadiendo nuevo
+        contenido a la aplicación para que funcione correctamente. Por favor,
+        espera un minuto - este proceso no debería durar mucho.</string>
+    <string name="dynamic_module_loading_error">¡Vaya! Algo ha ido
+        mal 😥 - intenta el proceso de nuevo</string>
+    <string name="done">Hecho</string>
+    <string name="preparing">Preparando…</string>
+    <string name="installing">Instalando…</string>
+    <string name="diseases">Enfermedades</string>
+    <string name="handwashing">Lavarse las manos</string>
+    <string name="news">Noticias</string>
+    <string name="settings">Ajustes</string>
+    <string name="breakfast_title">¡Hora del desayuno! &#9749;</string>
     <string-array name="breakfast_comments">
-        <item>During sleep your hands get dirty, it\'s important to wash
-            them before having breakfast &#128564;</item>
-        <item>Washing your hands before breakfast will ensure you a good
-            day &#128521;</item>
-        <item>30 seconds for good health? Where do I sign! Just wash your
-        hands &#128521;&#128166;&#128079;</item>
+        <item>Mientras duermes se ensucian las manos, por lo que es
+            importante lavárselas antes de desayunar &#128564;</item>
+        <item>Lavarse las manos antes del desayuno te asegurará un buen
+            día &#128521;</item>
+        <item>¿30 segundos por una buena salud? ¡Dónde firmo! Solo lávate
+            las manos &#128521;&#128166;&#128079;</item>
     </string-array>
-    <string name="lunch_title">Time to lunch and wash your hands!
+    <string name="lunch_title">¡Hora de comer y lavarse las manos!
         &#127857;</string>
     <string-array name="lunch_comments">
-        <item>Having a good day? Let\'s continue with it having your hands
-        clean &#128513;</item>
-        <item>After a busy morning it\'s time to eat and do it clean
-            &#128521;</item>
-        <item>If you have gone to the street is even more important to
-            wash your hands before having lunch &#128166;&#128079;</item>
+        <item>¿Estás teniendo un buend día? Sigamos con él teniendo las manos
+            limpias &#128513;</item>
+        <item>Después de una mañana ocupada es momento de comer y
+            hacerlo bien &#128521; &#128166;&#128079;</item>
+        <item>Si has estado en la calle es todavía más importante que te
+            laves las manos antes de comer &#128166;&#128079;</item>
     </string-array>
-    <string name="dinner_title">Let\'s have a clean dinner &#129367;</string>
+    <string name="dinner_title">Tengamos una cena limpia &#129367;</string>
     <string-array name="dinner_comments">
-        <item>The day is finishing and you can do it fully by
-            &#128166;&#128079;</item>
-        <item>Remember before having dinner and going to sleep to wash
-            your hands and count sheeps &#128017;</item>
-        <item>Do you know that washing your hands can keep you safe from
-            more than 15 diseases? That\'s a lot &#128558;</item>
+        <item>El día está acabando y lo puedes hacer completamente lavándote
+            las manos &#128166;&#128079;</item>
+        <item>Recuerda antes de cenar e ir a dormir lavarte las manos y
+            contar ovejitas &#128017;</item>
+        <item>¿Sabías que lavarte las manos puede protegerte de más de 15
+            enfermedades? Son muchas &#128558;</item>
     </string-array>
-    <string name="washing_hands_first_title">Let\'s learn how to wash
-        our hands</string>
-    <string name="washing_hands_first_description">Join me in this trip
-    in which we will learn how to completely wash our hands
-        &#128166;&#128079;. This is very important not only for you but
-    for everyone who is around you: from a baby &#128118; to your
-        grandparents &#128116;&#128117;. It\'s a small responsibility
-        act that only lasts 30 seconds.
+    <string name="washing_hands_first_title">Aprendamos cómo lavarnos las manos</string>
+    <string name="washing_hands_first_description">Únete a mí en este
+        viaje en donde aprenderemos cómo lavarnos las manos completamente
+        &#128166;&#128079;. Es muy importante no solo por ti sino por todos
+        los que te rodean: desde un bebé &#128118; hasta tus abuelos
+        &#128116;&#128117;. Es un pequeño acto de responsabilidad que
+        dura solo 30 segundos.
 
-    Remember, it\'s not only for you but for them.</string>
+    Recuerda, no es solo por ti sino por ellos.</string>
     <string-array name="washing_hands_titles">
-        <item>1. Rub your hands</item>
-        <item>2. Clean in between your fingers</item>
-        <item>3. Back-clean in between the fingers</item>
-        <item>4. Back-clean of the fingers</item>
-        <item>5. Cleaning the thumbs</item>
-        <item>6. Cleaning the tips and nails of your fingers</item>
-        <item>7. Finish cleaning</item>
+        <item>1. Frota tus manos</item>
+        <item>2. Limpia entre tus dedos</item>
+        <item>3. Limpia el dorso y por encima de los dedos</item>
+        <item>4. Limpia el extremo de tus dedos</item>
+        <item>5. Lavando los pulgares</item>
+        <item>6. Limpiando las yemas de los dedos y las uñas</item>
+        <item>7. Termina de lavarte</item>
     </string-array>
     <string-array name="washing_hands_descriptions">
-        <item>By wetting your hands and applying enough soap, rub your
-            hands together for spreading the soap &#129532;.</item>
-        <item>Now, using the spread soap, clean in between your fingers
-            &#128400; (as shown in the video).</item>
-        <item>By putting one hand on the back of the other one, clean it
-            and in between the fingers &#129306;. Do the same with the other
-            hand.</item>
-        <item>As you can see, your fingers are not clean yet &#128064;, so
-            put the back of your fingers against your palms.</item>
-        <item>We almost forget them &#128556;! Clean both your thumbs
-            using the other hand &#128077;.</item>
-        <item>No it\'s time to clean both your tips and nails. Put them
-            against your palm and clean them. Wow &#128561;! Such a
-            beautiful nails! &#128133;</item>
-        <item>Finally, clean the top of your hand (near your wrist).
-            Then, rinse your hands in water and dry them with a
-            disposable towel &#129531;. And finally, use it for turning off the
-            tap. And it\'s done, you have finished! &#127882;&#127881;</item>
+        <item>Aplicando suficiente jabón y agua, frota tus manos para
+            esparcirlos &#129532;.</item>
+        <item>Ahora, con el jabón esparcido, limpia el hueco entre los
+            dedos &#128400; (como se muestra en el vídeo).</item>
+        <item>Poniendo una mano encima de la otra, limpia el dorso y entre
+            los dedos &#129306;. Haz lo mismo con la otra mano.</item>
+        <item>Como puedes ver, tus dedos no están limpios todavía &#128064;,
+            así que pon el extremo de los dedos contra la palma de tu mano y
+            frota.</item>
+        <item>¡Casi los olvidamos &#128556;! Limpia tus dos pulgares usando
+            la otra mano &#128077;.</item>
+        <item>Ahora es momento de limpiar las yemas y las uñas. Ponlas contra
+            la palma de tu mano y límpialos. ¡Wow &#128561;! ¡Qué uñas tan
+            bonitas! &#128133;</item>
+        <item>Finalmente, limpia el dorso de tu mano (cerca de la
+            muñeca). Luego, moja tus manos en agua y sécalas con una toallita
+            desechable, y úsala para cerrar el grifo. ¡Y eso es todo, has
+            acabado! &#127882;&#127881;</item>
     </string-array>
-    <string name="previous">Previous</string>
-    <string name="next">Next</string>
-    <string name="time_preferences_section">Scheduled time settings</string>
-    <string name="breakfast_pref_title">Breakfast time &#9749;</string>
-    <string name="breakfast_pref_summ">You set your breakfast time to: </string>
-    <string name="lunch_pref_title">Lunch time &#127857;</string>
-    <string name="lunch_pref_summ">You set your lunch time to: </string>
-    <string name="dinner_pref_title">Dinner time &#129367;</string>
-    <string name="dinner_pref_summ">You set your dinner time to: </string>
-    <string name="activity_section">Activity notifications</string>
+    <string name="previous">Anterior</string>
+    <string name="next">Siguiente</string>
+    <string name="time_preferences_section">Ajustes de los tiempos
+        programados</string>
+    <string name="breakfast_pref_title">Hora del desayuno &#9749;</string>
+    <string name="breakfast_pref_summ">Has establecido la hora del desayuno a
+        las: </string>
+    <string name="lunch_pref_title">Hora de la comida &#127857;</string>
+    <string name="lunch_pref_summ">Has establecido la hora de la comida a
+        las: </string>
+    <string name="dinner_pref_title">Hora de la cena &#129367;</string>
+    <string name="dinner_pref_summ">Has establecido la hora de la cena a las:
+    </string>
+    <string name="activity_section">Notificaciones de actividad</string>
     <string-array name="activities">
-        <item>After walking &#128694;</item>
-        <item>After running &#127939;&#8205;&#9792;&#65039;</item>
-        <item>After going cycling &#128692;</item>
-        <item>After leaving a vehicle &#128649;</item>
-    </string-array>
-    <string-array name="activity_values">
-        <item>7</item>
-        <item>8</item>
-        <item>1</item>
-        <item>0</item>
+        <item>Después de andar &#128694;</item>
+        <item>Después de correr &#127939;&#8205;&#9792;&#65039;</item>
+        <item>Después de ir en bici &#128692;</item>
+        <item>Después de bajarte de un vehículo &#128649;</item>
     </string-array>
     <string-array name="empty_array" />
-    <string name="google_api_not_found">You need to have Google Play
-        Services installed and available for using this functionality</string>
-    <string name="permission_permanently_denied">You denied permanently
-    the access to your activity. Enable it from settings</string>
-    <string name="activity_disabled">You will not receive any activity
-        notifications</string>
-    <string name="activity_enabled">You will receive notifications for
-        the activities selected below</string>
-    <string name="activity_recognition">Enable activity recognition</string>
-    <string name="activities_to_enable">When you will receive
-        notifications?</string>
-    <string name="activities_info">You will receive notifications</string>
-    <string name="activities_disabled">You will receive no
-        notifications</string>
-    <string name="data_sharing_category">Data sharing preferences</string>
-    <string name="firebase_analytics" translatable="false">Firebase Analytics</string>
-    <string name="firebase_performance" translatable="false">Firebase
-        Performance</string>
-    <string name="ads_explanation_title">Disable ads?</string>
-    <string name="ads_explanation_desc">I know ads
-        are sometimes disgusting and annoying and indeed they are not a great
-        source of income so I\'m allowing you to turn them off
-        &#128521;. This way I won\'t make any money, but you can make a
-    donation whenever you want and supporting my development &#128519;</string>
-    <string name="disable">Disable</string>
-    <string name="ads_donations_category">Support the development</string>
-    <string name="enable_ads">Enable ads</string>
-    <string name="enable_ads_summ">Allow the app to show ads on diseases view and support development</string>
-    <string name="donations">Contribute with a donation</string>
-    <string name="donations_summ">Support the app development by making a donation</string>
+    <string name="google_api_not_found">Tienes que tener los Servicios de
+        Google Play instalados y funcionando para usar esta funcionalidad</string>
+    <string name="permission_permanently_denied">Has denegado
+        permanentemente el acceso a tu actividad. Habilítalo desde los
+        ajustes</string>
+    <string name="activity_disabled">No recibirás notificaciones de ninguna
+        actividad</string>
+    <string name="activity_enabled">Recibirás notificaciones de las
+        actividades seleccionadas debajo</string>
+    <string name="activity_recognition">Habilitar reconocimiento de la
+        actividad</string>
+    <string name="activities_to_enable">¿Cuándo recibirás notificaciones?</string>
+    <string name="activities_info">Recibirás notificaciones</string>
+    <string name="activities_disabled">No recibirás notificaciones</string>
+    <string name="data_sharing_category">Preferencias de datos compartidos</string>
+    <string name="ads_explanation_title">¿Deshabilitar anuncios?</string>
+    <string name="ads_explanation_desc">Sé que los anuncios muchas veces son
+        molestos y en verdad no son una gran fuente de ingresos, por lo que 
+        te dejo que los quites &#128521;. De esta manera no haré dinero 
+        pero puedes hacerme una donación cuando quieras y apoyar el 
+        desarrollo &#128519;</string>
+    <string name="disable">Deshabilitar</string>
+    <string name="ads_donations_category">Apoya el desarrollo</string>
+    <string name="enable_ads">Habilitar anuncios</string>
+    <string name="enable_ads_summ">Permite que la aplicación muestre 
+        anuncios en la sección de enfermedads y apoya el desarrollo</string>
+    <string name="donations">Contribuye con una donación</string>
+    <string name="donations_summ">Apoya el desarrollo de la aplicación 
+        con una donación</string>
     <string-array name="in_app_donations_names">
-        <item>Donate 1€</item>
-        <item>Donate 2€</item>
-        <item>Donate 5€</item>
-        <item>Donate 10€</item>
-        <item>Donate 15€</item>
-        <item>Donate 20€</item>
-        <item>Donate 30€</item>
-        <item>Donate 50€</item>
-        <item>Donate 70€</item>
-        <item>Donate 100€</item>
+        <item>Dona 1€</item>
+        <item>Dona 2€</item>
+        <item>Dona 5€</item>
+        <item>Dona 10€</item>
+        <item>Dona 15€</item>
+        <item>Dona 20€</item>
+        <item>Dona 30€</item>
+        <item>Dona 50€</item>
+        <item>Dona 70€</item>
+        <item>Dona 100€</item>
     </string-array>
-    <string-array name="in_app_donations">
-        <item>in_app_donations</item>
-        <item>in_app_donations_2</item>
-        <item>in_app_donations_5</item>
-        <item>in_app_donations_10</item>
-        <item>in_app_donations_15</item>
-        <item>in_app_donations_20</item>
-        <item>in_app_donations_30</item>
-        <item>in_app_donations_50</item>
-        <item>in_app_donations_70</item>
-        <item>in_app_donations_100</item>
-    </string-array>
-    <string-array name="in_app_donations_debug">
-        <item>android.test.purchased</item>
-        <item>android.test.canceled</item>
-        <item>android.test.canceled</item>
-        <item>android.test.refunded</item>
-        <item>android.test.item_unavailable</item>
-        <item>android.test.purchased</item>
-        <item>android.test.purchased</item>
-        <item>android.test.refunded</item>
-        <item>android.test.refunded</item>
-        <item>android.test.canceled</item>
-    </string-array>
-    <string name="donation_thanks">Thank you for donating!</string>
-    <string name="donation_desc">You are awesome &#128561; With your
-        donation I can continue developing this app and include new
-        features &#128170;
+    <string name="donation_thanks">¡Muchas gracias por donar!</string>
+    <string name="donation_desc">Eres increíble &#128561; Con tu donación
+        ahora puedo seguir desarrollando la aplicación e incluir nuevas
+        funciones &#128170;
 
-        Stay tuned for them!
+        ¡Estáte atento que en nada llegan!
     </string>
-    <string name="donation_cancelled">Donation cancelled</string>
-    <string name="donation_cancelled_desc">It looks like the donation
-        was cancelled. It doesn\'t matter, you can do it at any time
+    <string name="donation_cancelled">Donación cancelada</string>
+    <string name="donation_cancelled_desc">Parece que la donación se ha
+        cancelado. No pasa nada, lo puedes hacer cuando quieras
         &#128521;</string>
-    <string name="donation_error">Error while donating</string>
-    <string name="donation_error_desc">There was an error while trying
-        to do the donation &#128560;. Maybe you don\'t have enough
-        money on your credit card or Google Play Store is not available
-    at this time</string>
-    <string name="collaborating">Collaborate with the project</string>
-    <string name="suggestions">Send comments and suggestions</string>
-    <string name="open_source_libs">Third party and open source
-        libraries</string>
-    <string name="tos_and_privacy">Terms of service and privacy policy</string>
-    <string name="send_email_client">Choose and email client</string>
-    <string name="share">Share this app</string>
+    <string name="donation_error">Error al hacer la donación</string>
+    <string name="donation_error_desc">Ha habido un problema al intentar
+        hacer la donación &#128560;. Quizás no tienes suficiente dinero en la
+        tarjeta de crédito o la Google Play Store no está disponible en
+    este momento.</string>
+    <string name="collaborating">Colabora con el proyecto</string>
+    <string name="suggestions">Envía comentarios y sugerencias</string>
+    <string name="open_source_libs">Librerías de terceros y de código
+        abierto</string>
+    <string name="tos_and_privacy">Términos de servicio y política de
+        privacidad</string>
+    <string name="send_email_client">Escoge un cliente de correo
+        electrónico</string>
+    <string name="share">Comparte esta aplicación</string>
     <string name="share_text">
-        Washing your hands has never been so easy! Discover \'Handwashing
-        reminder\' and get notified whether you should wash your hands
-        &#128166;&#128079;, by custom notifications or by your activity.
-        https://s.javinator9889.com/hwreminder
+        ¡Lavarte las manos nunca había sido tan sencillo! Descubre
+        \'Handwashing reminder\' y recibe notificaciones cuando deberías
+        lavarte las manos &#128166;&#128079;, mediante notificaciones
+        personalizadas o con tu actividad.
+        &#128073; https://s.javinator9889.com/hwreminder
     </string>
-    <string name="share_title">Discover Handwashing reminder</string>
-    <string name="share_label">Sharing Handwashing reminder</string>
-    <string name="help_translating">Help translating the app</string>
-    <string name="help_translating_summ">Would you like to see the app
-        in your language? Collaborate and translate it!</string>
-    <string name="no_app">No app can do this action!</string>
-    <string name="no_app_long">It looks like you have no app
-        installed on your phone that can do this now. Please, install one for
-        accessing %s</string>
-    <string name="browser_err">the website</string>
+    <string name="share_title">Descubre Handwashing reminder</string>
+    <string name="share_label">Compartiendo Handwashing reminder</string>
+    <string name="help_translating">Ayuda a traducir la aplicación</string>
+    <string name="help_translating_summ">¿Te gustaría ver la aplicación
+        traducida en tu idioma? ¡Colabora y tradúcela!</string>
+    <string name="no_app">¡Ninguna aplicación puede hacer esta acción!</string>
+    <string name="no_app_long">Parece que no tienes ninguna aplicación
+        instalada que pueda hacer esto ahora. Por favor, instala una para
+        acceder a %s</string>
+    <string name="browser_err">el sitio web</string>
     <string name="title_bundledemoji">Bundled Emoji</string>
-    <string name="social_sharing">Social media and sharing</string>
+    <string name="social_sharing">Redes sociales y compartir</string>
     <string name="twitter">Twitter</string>
     <string name="linkedin">LinkedIn</string>
-    <string name="github">View project in GitHub</string>
-    <string name="playstore">View in Play Store</string>
-    <string name="telegram">Notifications channel</string>
-    <string name="no_internet_connection">There is no network
-        connection</string>
-    <string name="no_internet_connection_long">To perform this action
-        please connect to a network for having access to Internet</string>
-    <string name="description">Description</string>
-    <string name="symptoms">Symptoms</string>
-    <string name="prevention">Prevention</string>
-    <string name="written_by">Written by %s</string>
-    <string name="available_at">Available at: %s</string>
+    <string name="github">Ver el proyecto en GitHub</string>
+    <string name="playstore">Ver en la Play Store</string>
+    <string name="telegram">Canal de notificaciones</string>
+    <string name="no_internet_connection">No hay ninguna conexión de
+        red</string>
+    <string name="no_internet_connection_long">Para hacer esta acción,
+        por favor conéctate a Internet</string>
+    <string name="description">Descipción</string>
+    <string name="symptoms">Síntomas</string>
+    <string name="prevention">Prevención</string>
+    <string name="written_by">Escrito por %s</string>
+    <string name="available_at">Disponible en: %s</string>
 </resources>
