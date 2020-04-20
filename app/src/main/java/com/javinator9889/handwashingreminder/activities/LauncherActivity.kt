@@ -31,12 +31,18 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.perf.FirebasePerformance
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.emoji.EmojiLoader
+import com.javinator9889.handwashingreminder.gms.activity.ActivityHandler
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
 import com.javinator9889.handwashingreminder.gms.ads.AdsEnabler
+import com.javinator9889.handwashingreminder.gms.vendor.BillingService
+import com.javinator9889.handwashingreminder.jobs.workers.WorkHandler
 import com.javinator9889.handwashingreminder.utils.*
 import com.javinator9889.handwashingreminder.utils.Preferences.Companion.ADS_ENABLED
 import com.javinator9889.handwashingreminder.utils.Preferences.Companion.APP_INIT_KEY
@@ -52,11 +58,11 @@ import kotlin.collections.ArrayList
 internal const val FAST_START_KEY = "intent:fast_start"
 internal const val PENDING_INTENT_CODE = 201
 
-@Suppress("DeferredResultUnused")
 class LauncherActivity : AppCompatActivity() {
     private var launchOnInstall = false
     private var launchFromNotification = false
     private lateinit var app: HandwashingApplication
+    private lateinit var initDeferred: Deferred<Unit>
 
     init {
         lifecycleScope.launch {
@@ -68,11 +74,15 @@ class LauncherActivity : AppCompatActivity() {
                             it.getBooleanExtra(FAST_START_KEY, false)
                     }
                 }
-                async { initVariables() }
+                initDeferred = async { initVariables() }
             }
             whenStarted {
-                withContext(Dispatchers.Main) { displayWelcomeScreen() }
-                withContext(Dispatchers.Main) { installRequiredModules() }
+                try {
+                    withContext(Dispatchers.Main) { displayWelcomeScreen() }
+                    withContext(Dispatchers.Main) { installRequiredModules() }
+                } finally {
+                    initDeferred.await()
+                }
             }
         }
     }
@@ -214,23 +224,25 @@ class LauncherActivity : AppCompatActivity() {
     }
 
     private fun initVariables() {
-        val config = with(FirebaseRemoteConfigSettings.Builder()) {
-            minimumFetchIntervalInSeconds = 3600
-            fetchTimeoutInSeconds = 10
-            build()
+        app.firebaseAnalytics = FirebaseAnalytics.getInstance(this)
+        app.firebasePerformance = FirebasePerformance.getInstance()
+        app.remoteConfig = FirebaseRemoteConfig.getInstance()
+        app.activityHandler = ActivityHandler(this)
+        if (app.sharedPreferences.getBoolean(
+                Preferences.ACTIVITY_TRACKING_ENABLED, false
+            ) && with(GoogleApiAvailability.getInstance()) {
+                isGooglePlayServicesAvailable(this@LauncherActivity) ==
+                        ConnectionResult.SUCCESS
+            }
+        ) {
+            app.activityHandler.startTrackingActivity()
+        } else {
+            app.activityHandler.disableActivityTracker()
         }
-        with(app.remoteConfig) {
-            Timber.d("Initializing Firebase Remote Config")
-            setConfigSettingsAsync(config)
-            setDefaultsAsync(
-                when (Locale.getDefault().language) {
-                    Locale(Language.SPANISH).language ->
-                        R.xml.remote_config_defaults_es
-                    else -> R.xml.remote_config_defaults
-                }
-            )
-            fetchAndActivate()
-        }
+
+        setupFirebaseProperties()
+        app.workHandler = WorkHandler(this)
+        app.billingService = BillingService(this)
         Timber.d("Initializing Iconics")
         Iconics.init(this)
         try {
@@ -239,5 +251,46 @@ class LauncherActivity : AppCompatActivity() {
         } catch (_: UninitializedPropertyAccessException) {
             Timber.i("Scheduler times have not been initialized")
         }
+    }
+
+    private fun setupFirebaseProperties() {
+        Timber.d("User default locale: ${Locale.getDefault().language}")
+        val remoteConfigSettings = when (Locale.getDefault().language) {
+            Locale(Language.SPANISH).language -> {
+                app.firebaseAnalytics.setUserProperty(
+                    Firebase.Properties.LANGUAGE, Language.SPANISH
+                )
+                R.xml.remote_config_defaults_es
+            }
+            else -> {
+                app.firebaseAnalytics.setUserProperty(
+                    Firebase.Properties.LANGUAGE, Language.ENGLISH
+                )
+                R.xml.remote_config_defaults_es
+            }
+        }
+        val config = with(FirebaseRemoteConfigSettings.Builder()) {
+            minimumFetchIntervalInSeconds = 30
+            fetchTimeoutInSeconds = 20
+            build()
+        }
+        with(app.remoteConfig) {
+            Timber.d("Initializing Firebase Remote Config")
+            setConfigSettingsAsync(config)
+            setDefaultsAsync(remoteConfigSettings)
+            fetchAndActivate()
+        }
+        app.firebaseAnalytics.setAnalyticsCollectionEnabled(
+            app.sharedPreferences.getBoolean(
+                Preferences.ANALYTICS_ENABLED,
+                true
+            )
+        )
+        app.firebasePerformance.isPerformanceCollectionEnabled =
+            app.sharedPreferences.getBoolean(
+                Preferences.PERFORMANCE_ENABLED,
+                true
+            )
+        Timber.d("Performance enabled: ${app.firebasePerformance.isPerformanceCollectionEnabled}")
     }
 }
