@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.javinator9889.handwashingreminder.appintro">
 
     <dist:module
@@ -11,9 +12,14 @@
         <dist:fusing dist:include="true" />
     </dist:module>
 
-    <application>
-        <activity android:name=".IntroActivity" />
-        <activity android:name=".config.TimeConfigActivity" />
+    <application
+        tools:ignore="LockedOrientationActivity">
+        <activity android:name=".IntroActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation" />
+        <activity android:name=".config.TimeConfigActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation" />
     </application>
 </manifest>
 
