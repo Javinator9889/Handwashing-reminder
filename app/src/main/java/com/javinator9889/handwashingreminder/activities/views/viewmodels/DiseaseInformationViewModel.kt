@@ -22,7 +22,6 @@ import android.os.Parcel
 import android.os.Parcelable
 import android.text.Spanned
 import android.text.TextUtils
-import androidx.core.text.HtmlCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -34,6 +33,8 @@ import com.javinator9889.handwashingreminder.collections.DiseasesList
 import com.javinator9889.handwashingreminder.collections.DiseasesListWrapper
 import com.javinator9889.handwashingreminder.utils.RemoteConfig.Keys.DISEASES_JSON
 import kotlinx.coroutines.*
+import org.sufficientlysecure.htmltextview.HtmlFormatter
+import org.sufficientlysecure.htmltextview.HtmlFormatterBuilder
 
 private const val DATA_KEY = "text:html:text"
 private const val PARSED_JSON_KEY = "text:json:parsed"
@@ -97,8 +98,13 @@ class DiseaseInformationViewModel(
         }
     }
 
-    private fun createHTML(text: String): Spanned =
-        HtmlCompat.fromHtml(text, HtmlCompat.FROM_HTML_MODE_LEGACY)
+    private fun createHTML(htmlText: String): Spanned =
+        with(HtmlFormatterBuilder()) {
+            html = htmlText
+            isRemoveTrailingWhiteSpace = true
+            HtmlFormatter.formatHtml(this)
+        }
+//        HtmlCompat.fromHtml(text, HtmlCompat.FROM_HTML_MODE_LEGACY)
 }
 
 class DiseaseInformationFactory :

@@ -28,6 +28,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.emoji.text.EmojiCompat
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.whenCreated
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -48,10 +50,9 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.typeface.library.ionicons.Ionicons
 import com.mikepenz.iconics.utils.sizeDp
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.lang.ref.WeakReference
-import kotlin.concurrent.thread
 
 class SettingsView : PreferenceFragmentCompat(),
     Preference.OnPreferenceChangeListener, OnPurchaseFinishedListener {
@@ -64,14 +65,17 @@ class SettingsView : PreferenceFragmentCompat(),
     private lateinit var emojiCompat: EmojiCompat
     private val app = HandwashingApplication.getInstance()
 
+    init {
+        lifecycleScope.launch {
+            whenCreated {
+                emojiCompat = EmojiLoader.get(requireContext()).await()
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requireActivity().setTheme(R.style.AppTheme_MaterialDialogs)
-        thread(start = true) {
-            emojiCompat = runBlocking {
-                EmojiLoader.get(requireContext()).await()
-            }
-        }
     }
 
     override fun onCreatePreferences(
@@ -87,193 +91,205 @@ class SettingsView : PreferenceFragmentCompat(),
         savedInstanceState: Bundle?
     ): View {
         val view = super.onCreateView(inflater, container, savedInstanceState)!!
-        val share = findPreference<Preference>("share")
-        val playStore = findPreference<Preference>("playstore")
-        val telegram = findPreference<Preference>("telegram")
-        val github = findPreference<Preference>("github")
-        val linkedIn = findPreference<Preference>("linkedin")
-        val twitter = findPreference<Preference>("twitter")
-        val breakfast = findPreference<TimePickerPreference>(
-            Preferences.BREAKFAST_TIME
-        )
-        val lunch = findPreference<TimePickerPreference>(
-            Preferences.LUNCH_TIME
-        )
-        val dinner = findPreference<TimePickerPreference>(
-            Preferences.DINNER_TIME
-        )
-        val firebaseAnalytics = findPreference<SwitchPreference>(
-            Preferences.ANALYTICS_ENABLED
-        )
-        val firebasePerformance = findPreference<SwitchPreference>(
-            Preferences.PERFORMANCE_ENABLED
-        )
-        val ads = findPreference<SwitchPreference>(Preferences.ADS_ENABLED)
-        val donations = findPreference<ListPreference>(Preferences.DONATIONS)
-        val translations = findPreference<Preference>("translate")
-        val suggestions = findPreference<Preference>("send_suggestions")
-        val libraries = findPreference<Preference>("opensource_libs")
-        val privacyAndTerms = findPreference<Preference>("tos_privacy")
-        share?.let {
-            it.icon = icon(Ionicons.Icon.ion_android_share)
-            it.setOnPreferenceClickListener {
-                app.firebaseAnalytics.logEvent(
-                    FirebaseAnalytics.Event.SHARE, null
-                )
-                with(Intent.createChooser(Intent().apply {
-                    action = Intent.ACTION_SEND
-                    putExtra(Intent.EXTRA_TEXT, getText(R.string.share_text))
-                    putExtra(Intent.EXTRA_TITLE, getText(R.string.share_title))
-                    ClipData.Item(
-                        getUriFromRes(
-                            requireContext(),
-                            R.drawable.handwashing_app_logo
-                        )
+        viewLifecycleOwner.lifecycleScope.launch {
+            val share = findPreference<Preference>("share")
+            val playStore = findPreference<Preference>("playstore")
+            val telegram = findPreference<Preference>("telegram")
+            val github = findPreference<Preference>("github")
+            val linkedIn = findPreference<Preference>("linkedin")
+            val twitter = findPreference<Preference>("twitter")
+            val breakfast = findPreference<TimePickerPreference>(
+                Preferences.BREAKFAST_TIME
+            )
+            val lunch = findPreference<TimePickerPreference>(
+                Preferences.LUNCH_TIME
+            )
+            val dinner = findPreference<TimePickerPreference>(
+                Preferences.DINNER_TIME
+            )
+            val firebaseAnalytics = findPreference<SwitchPreference>(
+                Preferences.ANALYTICS_ENABLED
+            )
+            val firebasePerformance = findPreference<SwitchPreference>(
+                Preferences.PERFORMANCE_ENABLED
+            )
+            val ads = findPreference<SwitchPreference>(Preferences.ADS_ENABLED)
+            val donations =
+                findPreference<ListPreference>(Preferences.DONATIONS)
+            val translations = findPreference<Preference>("translate")
+            val suggestions = findPreference<Preference>("send_suggestions")
+            val libraries = findPreference<Preference>("opensource_libs")
+            val privacyAndTerms = findPreference<Preference>("tos_privacy")
+            share?.let {
+                it.icon = icon(Ionicons.Icon.ion_android_share)
+                it.setOnPreferenceClickListener {
+                    app.firebaseAnalytics.logEvent(
+                        FirebaseAnalytics.Event.SHARE, null
                     )
-                    clipData = ClipData(
-                        ClipDescription(
-                            getString(R.string.share_label),
-                            arrayOf("image/*")
-                        ),
+                    with(Intent.createChooser(Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(
+                            Intent.EXTRA_TEXT,
+                            getText(R.string.share_text)
+                        )
+                        putExtra(
+                            Intent.EXTRA_TITLE,
+                            getText(R.string.share_title)
+                        )
                         ClipData.Item(
                             getUriFromRes(
                                 requireContext(),
                                 R.drawable.handwashing_app_logo
                             )
                         )
-                    )
-                    flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-                    type = "text/plain"
-                }, null)) {
-                    startActivity(this)
-                }
-                true
-            }
-        }
-        playStore?.let {
-            it.icon = icon(Ionicons.Icon.ion_android_playstore)
-            it.setOnPreferenceClickListener {
-                openWebsite(PLAYSTORE_URL, "Play Store")
-                true
-            }
-        }
-        telegram?.let {
-            it.setOnPreferenceClickListener {
-                openWebsite(TELEGRAM_URL, "Telegram")
-                true
-            }
-        }
-        github?.let {
-            it.icon = icon(Ionicons.Icon.ion_social_github)
-            it.setOnPreferenceClickListener {
-                openWebsite(GITHUB_URL, R.string.browser_err)
-                true
-            }
-        }
-        twitter?.let {
-            it.icon = icon(Ionicons.Icon.ion_social_twitter)
-            it.setOnPreferenceClickListener {
-                openWebsite(TWITTER_URL, "Twitter")
-                true
-            }
-        }
-        linkedIn?.let {
-            it.icon = icon(Ionicons.Icon.ion_social_linkedin)
-            it.setOnPreferenceClickListener {
-                openWebsite(LINKEDIN_URL, R.string.browser_err)
-                true
-            }
-        }
-        breakfast?.let {
-            it.icon = icon(Ionicons.Icon.ion_coffee)
-        }
-        lunch?.let {
-            it.icon = icon(Ionicons.Icon.ion_android_restaurant)
-        }
-        dinner?.let {
-            it.icon = icon(Ionicons.Icon.ion_ios_moon_outline)
-        }
-        firebaseAnalytics?.let {
-            it.onPreferenceChangeListener = this
-            it.icon = icon(Ionicons.Icon.ion_arrow_graph_up_right)
-            firebaseAnalyticsPreference = WeakReference(it)
-        }
-        firebasePerformance?.let {
-            it.onPreferenceChangeListener = this
-            it.icon = icon(Ionicons.Icon.ion_speedometer)
-            firebasePerformancePreference = WeakReference(it)
-        }
-        ads?.let {
-            it.onPreferenceChangeListener = this
-            it.icon = icon(Ionicons.Icon.ion_ios_barcode_outline)
-            adsPreference = WeakReference(it)
-        }
-        donations?.let {
-            it.onPreferenceChangeListener = this
-            it.entryValues = if (isDebuggable())
-                resources.getTextArray(R.array.in_app_donations_debug)
-            else
-                resources.getTextArray(R.array.in_app_donations)
-            it.icon = icon(Ionicons.Icon.ion_card)
-            app.billingService.addOnPurchaseFinishedListener(this)
-            donationsPreference = WeakReference(it)
-        }
-        translations?.let {
-            it.icon = icon(Ionicons.Icon.ion_chatbox_working)
-            it.setOnPreferenceClickListener {
-                openWebsite(TRANSLATE_URL, R.string.browser_err)
-                true
-            }
-        }
-        suggestions?.let {
-            it.setOnPreferenceClickListener {
-                with(Intent(Intent.ACTION_SEND)) {
-                    putExtra(Intent.EXTRA_EMAIL, arrayOf(Email.TO))
-                    putExtra(Intent.EXTRA_SUBJECT, Email.SUBJECT)
-                    putExtra(Intent.EXTRA_TEXT, getDeviceInfo())
-                    type = "message/rfc822"
-                    startActivity(
-                        Intent.createChooser(
-                            this, getString(R.string.send_email_client)
+                        clipData = ClipData(
+                            ClipDescription(
+                                getString(R.string.share_label),
+                                arrayOf("image/*")
+                            ),
+                            ClipData.Item(
+                                getUriFromRes(
+                                    requireContext(),
+                                    R.drawable.handwashing_app_logo
+                                )
+                            )
                         )
+                        flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                        type = "text/plain"
+                    }, null)) {
+                        startActivity(this)
+                    }
+                    true
+                }
+            }
+            playStore?.let {
+                it.icon = icon(Ionicons.Icon.ion_android_playstore)
+                it.setOnPreferenceClickListener {
+                    openWebsite(PLAYSTORE_URL, "Play Store")
+                    true
+                }
+            }
+            telegram?.let {
+                it.setOnPreferenceClickListener {
+                    openWebsite(TELEGRAM_URL, "Telegram")
+                    true
+                }
+            }
+            github?.let {
+                it.icon = icon(Ionicons.Icon.ion_social_github)
+                it.setOnPreferenceClickListener {
+                    openWebsite(GITHUB_URL, R.string.browser_err)
+                    true
+                }
+            }
+            twitter?.let {
+                it.icon = icon(Ionicons.Icon.ion_social_twitter)
+                it.setOnPreferenceClickListener {
+                    openWebsite(TWITTER_URL, "Twitter")
+                    true
+                }
+            }
+            linkedIn?.let {
+                it.icon = icon(Ionicons.Icon.ion_social_linkedin)
+                it.setOnPreferenceClickListener {
+                    openWebsite(LINKEDIN_URL, R.string.browser_err)
+                    true
+                }
+            }
+            breakfast?.let {
+                it.icon = icon(Ionicons.Icon.ion_coffee)
+            }
+            lunch?.let {
+                it.icon = icon(Ionicons.Icon.ion_android_restaurant)
+            }
+            dinner?.let {
+                it.icon = icon(Ionicons.Icon.ion_ios_moon_outline)
+            }
+            firebaseAnalytics?.let {
+                it.onPreferenceChangeListener = this@SettingsView
+                it.icon = icon(Ionicons.Icon.ion_arrow_graph_up_right)
+                firebaseAnalyticsPreference = WeakReference(it)
+            }
+            firebasePerformance?.let {
+                it.onPreferenceChangeListener = this@SettingsView
+                it.icon = icon(Ionicons.Icon.ion_speedometer)
+                firebasePerformancePreference = WeakReference(it)
+            }
+            ads?.let {
+                it.onPreferenceChangeListener = this@SettingsView
+                it.icon = icon(Ionicons.Icon.ion_ios_barcode_outline)
+                adsPreference = WeakReference(it)
+            }
+            donations?.let {
+                it.onPreferenceChangeListener = this@SettingsView
+                it.entryValues = if (isDebuggable())
+                    resources.getTextArray(R.array.in_app_donations_debug)
+                else
+                    resources.getTextArray(R.array.in_app_donations)
+                it.icon = icon(Ionicons.Icon.ion_card)
+                app.billingService
+                    .addOnPurchaseFinishedListener(this@SettingsView)
+                donationsPreference = WeakReference(it)
+            }
+            translations?.let {
+                it.icon = icon(Ionicons.Icon.ion_chatbox_working)
+                it.setOnPreferenceClickListener {
+                    openWebsite(TRANSLATE_URL, R.string.browser_err)
+                    true
+                }
+            }
+            suggestions?.let {
+                it.setOnPreferenceClickListener {
+                    with(Intent(Intent.ACTION_SEND)) {
+                        putExtra(Intent.EXTRA_EMAIL, arrayOf(Email.TO))
+                        putExtra(Intent.EXTRA_SUBJECT, Email.SUBJECT)
+                        putExtra(Intent.EXTRA_TEXT, getDeviceInfo())
+                        type = "message/rfc822"
+                        startActivity(
+                            Intent.createChooser(
+                                this, getString(R.string.send_email_client)
+                            )
+                        )
+                    }
+                    true
+                }
+                it.icon = icon(Ionicons.Icon.ion_chatbubbles)
+            }
+            libraries?.let {
+                it.setOnPreferenceClickListener {
+                    val bundle = Bundle(1).apply {
+                        putString("view", "libs")
+                    }
+                    app.firebaseAnalytics.logEvent(
+                        FirebaseAnalytics.Event.VIEW_ITEM, bundle
                     )
+                    LibsBuilder()
+                        .withAutoDetect(true)
+                        .withFields(R.string::class.java.fields)
+                        .withCheckCachedDetection(true)
+                        .withSortEnabled(true)
+                        .withAboutVersionShown(true)
+                        .withAboutVersionShownCode(true)
+                        .withAboutVersionShownName(true)
+                        .withShowLoadingProgress(true)
+                        .withActivityTitle(getString(R.string.app_name))
+                        .start(requireContext())
+                    true
                 }
-                true
+                it.icon = icon(Ionicons.Icon.ion_code)
             }
-            it.icon = icon(Ionicons.Icon.ion_chatbubbles)
-        }
-        libraries?.let {
-            it.setOnPreferenceClickListener {
-                val bundle = Bundle(1).apply { putString("view", "libs") }
-                app.firebaseAnalytics.logEvent(
-                    FirebaseAnalytics.Event.VIEW_ITEM, bundle
-                )
-                LibsBuilder()
-                    .withAutoDetect(true)
-                    .withFields(R.string::class.java.fields)
-                    .withCheckCachedDetection(true)
-                    .withSortEnabled(true)
-                    .withAboutVersionShown(true)
-                    .withAboutVersionShownCode(true)
-                    .withAboutVersionShownName(true)
-                    .withShowLoadingProgress(true)
-                    .withActivityTitle(getString(R.string.app_name))
-                    .start(requireContext())
-                true
-            }
-            it.icon = icon(Ionicons.Icon.ion_code)
-        }
-        privacyAndTerms?.let {
-            it.setOnPreferenceClickListener {
-                Intent(
-                    requireContext(),
-                    PrivacyTermsActivity::class.java
-                ).run {
-                    startActivity(this)
+            privacyAndTerms?.let {
+                it.setOnPreferenceClickListener {
+                    Intent(
+                        requireContext(),
+                        PrivacyTermsActivity::class.java
+                    ).run {
+                        startActivity(this)
+                    }
+                    true
                 }
-                true
+                it.icon = icon(Ionicons.Icon.ion_android_cloud_done)
             }
-            it.icon = icon(Ionicons.Icon.ion_android_cloud_done)
         }
         return view
     }
