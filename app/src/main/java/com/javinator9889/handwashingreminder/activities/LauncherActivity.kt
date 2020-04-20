@@ -42,9 +42,12 @@ import com.javinator9889.handwashingreminder.utils.Preferences.Companion.ADS_ENA
 import com.javinator9889.handwashingreminder.utils.Preferences.Companion.APP_INIT_KEY
 import com.javinator9889.handwashingreminder.utils.RemoteConfig.Keys.SPECIAL_EVENT
 import com.mikepenz.iconics.Iconics
+import javinator9889.localemanager.utils.languagesupport.LanguagesSupport.Language
 import kotlinx.android.synthetic.main.splash_screen.*
 import kotlinx.coroutines.*
 import timber.log.Timber
+import java.util.*
+import kotlin.collections.ArrayList
 
 internal const val FAST_START_KEY = "intent:fast_start"
 internal const val PENDING_INTENT_CODE = 201
@@ -219,7 +222,13 @@ class LauncherActivity : AppCompatActivity() {
         with(app.remoteConfig) {
             Timber.d("Initializing Firebase Remote Config")
             setConfigSettingsAsync(config)
-            setDefaultsAsync(R.xml.remote_config_defaults)
+            setDefaultsAsync(
+                when (Locale.getDefault().language) {
+                    Locale(Language.SPANISH).language ->
+                        R.xml.remote_config_defaults_es
+                    else -> R.xml.remote_config_defaults
+                }
+            )
             fetchAndActivate()
         }
         Timber.d("Initializing Iconics")

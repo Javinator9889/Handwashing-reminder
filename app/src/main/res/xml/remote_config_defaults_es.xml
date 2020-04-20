@@ -14,8 +14,8 @@
     </entry>
     <entry>
         <key>diseases</key>
-        <value>{ "diseases": [{ "name" : "No Internet", "short_description":
-            "Connect to Internet for downloading this feature",
+        <value>{ "diseases": [{ "name" : "No hay Internet", "short_description":
+            "Conéctate a Internet para usar esta funcionalidad",
             "long_description": "", "provider": "", "website": "", "symptoms":
             "", "prevention": ""
             }]
