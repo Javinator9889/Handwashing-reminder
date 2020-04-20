@@ -78,6 +78,8 @@ class HandwashingApplication : BaseApplication() {
             }
         } else
             Timber.plant(LogReportTree())
+        activityHandler = ActivityHandler(this)
+        workHandler = WorkHandler(this)
     }
 
     /**

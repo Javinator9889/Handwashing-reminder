@@ -38,11 +38,9 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.emoji.EmojiLoader
-import com.javinator9889.handwashingreminder.gms.activity.ActivityHandler
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
 import com.javinator9889.handwashingreminder.gms.ads.AdsEnabler
 import com.javinator9889.handwashingreminder.gms.vendor.BillingService
-import com.javinator9889.handwashingreminder.jobs.workers.WorkHandler
 import com.javinator9889.handwashingreminder.utils.*
 import com.javinator9889.handwashingreminder.utils.Preferences.Companion.ADS_ENABLED
 import com.javinator9889.handwashingreminder.utils.Preferences.Companion.APP_INIT_KEY
@@ -224,10 +222,9 @@ class LauncherActivity : AppCompatActivity() {
     }
 
     private fun initVariables() {
-        app.firebaseAnalytics = FirebaseAnalytics.getInstance(this)
+        app.firebaseAnalytics = FirebaseAnalytics.getInstance(app)
         app.firebasePerformance = FirebasePerformance.getInstance()
         app.remoteConfig = FirebaseRemoteConfig.getInstance()
-        app.activityHandler = ActivityHandler(this)
         if (app.sharedPreferences.getBoolean(
                 Preferences.ACTIVITY_TRACKING_ENABLED, false
             ) && with(GoogleApiAvailability.getInstance()) {
@@ -241,7 +238,6 @@ class LauncherActivity : AppCompatActivity() {
         }
 
         setupFirebaseProperties()
-        app.workHandler = WorkHandler(this)
         app.billingService = BillingService(this)
         Timber.d("Initializing Iconics")
         Iconics.init(this)

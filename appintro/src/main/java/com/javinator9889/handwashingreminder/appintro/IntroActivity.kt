@@ -55,6 +55,7 @@ import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.listeners.ViewHolder
 import com.javinator9889.handwashingreminder.utils.*
 import kotlinx.android.synthetic.main.animated_intro.*
+import timber.log.Timber
 import com.javinator9889.handwashingreminder.appintro.R as RIntro
 
 
@@ -375,11 +376,15 @@ class IntroActivity : AppIntro2(),
     }
 
     private fun changeSlide() {
-        val currentSlide =
-            mPagerAdapter.getItem(pager.currentItem)
-        val nextSlide =
-            mPagerAdapter.getItem(pager.currentItem + 1)
-        onSlideChanged(currentSlide, nextSlide)
-        pager.goToNextSlide()
+        try {
+            val currentSlide =
+                mPagerAdapter.getItem(pager.currentItem)
+            val nextSlide =
+                mPagerAdapter.getItem(pager.currentItem + 1)
+            onSlideChanged(currentSlide, nextSlide)
+            pager.goToNextSlide()
+        } catch (_: ArrayIndexOutOfBoundsException) {
+            Timber.e("Requested next slide illegally (not exists)")
+        }
     }
 }
