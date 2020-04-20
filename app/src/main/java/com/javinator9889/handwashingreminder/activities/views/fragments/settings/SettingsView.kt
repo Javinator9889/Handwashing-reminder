@@ -27,7 +27,6 @@ import android.view.View
 import androidx.annotation.StringRes
 import androidx.emoji.text.EmojiCompat
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.whenCreated
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -63,14 +62,6 @@ class SettingsView : PreferenceFragmentCompat(),
     private lateinit var emojiCompat: EmojiCompat
     private val app = HandwashingApplication.getInstance()
 
-    init {
-        lifecycleScope.launch {
-            whenCreated {
-                emojiCompat = EmojiLoader.get(requireContext()).await()
-            }
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requireActivity().setTheme(R.style.AppTheme_MaterialDialogs)
@@ -86,6 +77,7 @@ class SettingsView : PreferenceFragmentCompat(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewLifecycleOwner.lifecycleScope.launch {
+            val emojiLoader = EmojiLoader.get(view.context)
             val share = findPreference<Preference>("share")
             val playStore = findPreference<Preference>("playstore")
             val telegram = findPreference<Preference>("telegram")
@@ -190,30 +182,6 @@ class SettingsView : PreferenceFragmentCompat(),
                     true
                 }
             }
-            breakfast?.let {
-                it.icon = icon(Ionicons.Icon.ion_coffee)
-                it.title =
-                    emojiCompat.process(getText(R.string.breakfast_pref_title))
-                it.summaryText =
-                    emojiCompat.process(getText(R.string.breakfast_pref_summ))
-                it.updateSummary()
-            }
-            lunch?.let {
-                it.icon = icon(Ionicons.Icon.ion_android_restaurant)
-                it.title =
-                    emojiCompat.process(getText(R.string.lunch_pref_title))
-                it.summaryText =
-                    emojiCompat.process(getText(R.string.lunch_pref_summ))
-                it.updateSummary()
-            }
-            dinner?.let {
-                it.icon = icon(Ionicons.Icon.ion_ios_moon_outline)
-                it.title =
-                    emojiCompat.process(getText(R.string.dinner_pref_title))
-                it.summaryText =
-                    emojiCompat.process(getText(R.string.dinner_pref_summ))
-                it.updateSummary()
-            }
             firebaseAnalytics?.let {
                 it.onPreferenceChangeListener = this@SettingsView
                 it.icon = icon(Ionicons.Icon.ion_arrow_graph_up_right)
@@ -312,6 +280,31 @@ class SettingsView : PreferenceFragmentCompat(),
                     true
                 }
                 it.icon = icon(Ionicons.Icon.ion_android_cloud_done)
+            }
+            emojiCompat = emojiLoader.await()
+            breakfast?.let {
+                it.icon = icon(Ionicons.Icon.ion_coffee)
+                it.title =
+                    emojiCompat.process(getText(R.string.breakfast_pref_title))
+                it.summaryText =
+                    emojiCompat.process(getText(R.string.breakfast_pref_summ))
+                it.updateSummary()
+            }
+            lunch?.let {
+                it.icon = icon(Ionicons.Icon.ion_android_restaurant)
+                it.title =
+                    emojiCompat.process(getText(R.string.lunch_pref_title))
+                it.summaryText =
+                    emojiCompat.process(getText(R.string.lunch_pref_summ))
+                it.updateSummary()
+            }
+            dinner?.let {
+                it.icon = icon(Ionicons.Icon.ion_ios_moon_outline)
+                it.title =
+                    emojiCompat.process(getText(R.string.dinner_pref_title))
+                it.summaryText =
+                    emojiCompat.process(getText(R.string.dinner_pref_summ))
+                it.updateSummary()
             }
         }
     }
