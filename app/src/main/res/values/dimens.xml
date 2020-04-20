@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="indicator_size">6dp</dimen>
+    <dimen name="indicator_size_selected">8dp</dimen>
+    <dimen name="tab_indicator_size">80dp</dimen>
+</resources>

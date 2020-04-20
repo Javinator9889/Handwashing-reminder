@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory android:title="@string/social_sharing">
+        <Preference
+            android:key="share"
+            android:persistent="false"
+            android:title="@string/share" />
+        <Preference
+            android:key="playstore"
+            android:persistent="false"
+            android:title="@string/playstore"/>
+        <Preference
+            android:key="telegram"
+            android:persistent="false"
+            android:icon="@drawable/ic_telegram"
+            android:title="@string/telegram" />
+        <Preference
+            android:key="github"
+            android:persistent="false"
+            android:title="@string/github"/>
+        <Preference
+            android:key="linkedin"
+            android:persistent="false"
+            android:title="@string/linkedin"/>
+        <Preference
+            android:key="twitter"
+            android:persistent="false"
+            android:title="@string/twitter"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/time_preferences_section"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true">
+
+        <com.javinator9889.handwashingreminder.activities.views.fragments.settings.TimePickerPreference
+            android:key="app:breakfast"
+            android:selectAllOnFocus="true"
+            android:singleLine="true" />
+
+        <com.javinator9889.handwashingreminder.activities.views.fragments.settings.TimePickerPreference
+            android:key="app:lunch"
+            android:selectAllOnFocus="true"
+            android:singleLine="true" />
+
+        <com.javinator9889.handwashingreminder.activities.views.fragments.settings.TimePickerPreference
+            android:key="app:dinner"
+            android:selectAllOnFocus="true"
+            android:singleLine="true" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/activity_section">
+
+        <com.javinator9889.handwashingreminder.activities.views.fragments.settings.ActivityCheckbox
+            android:defaultValue="false"
+            android:key="activity:gms:tracking"
+            android:title="@string/activity_recognition"
+            app:summary="For enabling the activity recognition, you need both Google Play Services and permissions" />
+
+        <com.javinator9889.handwashingreminder.activities.views.fragments.settings.ActivityMultiSelectList
+            android:defaultValue="@array/empty_array"
+            android:dependency="activity:gms:tracking"
+            android:entries="@array/activities"
+            android:entryValues="@array/activity_values"
+            android:key="activity:gms:activities:enabled"
+            android:title="@string/activities_to_enable" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/data_sharing_category">
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="firebase:analytics"
+            android:summary="@string/firebase_analytics_policy"
+            android:title="@string/firebase_analytics" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="firebase:performance"
+            android:summary="@string/firebase_performance_policy"
+            android:title="@string/firebase_performance" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/ads_donations_category">
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="app:ads:enabled"
+            android:summary="@string/enable_ads_summ"
+            android:title="@string/enable_ads" />
+
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/in_app_donations_names"
+            android:entryValues="@array/in_app_donations"
+            android:key="donations"
+            android:persistent="false"
+            android:summary="@string/donations_summ"
+            android:title="@string/donations" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/collaborating">
+        <Preference
+            android:key="translate"
+            android:persistent="false"
+            android:summary="@string/help_translating_summ"
+            android:title="@string/help_translating" />
+        <Preference
+            android:key="send_suggestions"
+            android:persistent="false"
+            android:title="@string/suggestions" />
+        <Preference
+            android:key="opensource_libs"
+            android:persistent="false"
+            android:title="@string/open_source_libs" />
+        <Preference
+            android:key="tos_privacy"
+            android:persistent="false"
+            android:title="@string/tos_and_privacy" />
+    </PreferenceCategory>
+</PreferenceScreen>

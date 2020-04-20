@@ -1,0 +1,13 @@
+<manifest xmlns:dist="http://schemas.android.com/apk/distribution"
+    package="com.javinator9889.handwashingreminder.bundledemoji">
+
+    <dist:module
+        dist:instant="false"
+        dist:title="@string/title_bundledemoji">
+        <dist:delivery>
+            <dist:on-demand />
+        </dist:delivery>
+        <dist:fusing dist:include="true" />
+    </dist:module>
+</manifest>
+

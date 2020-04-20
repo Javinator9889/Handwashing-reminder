@@ -1,0 +1,254 @@
+<resources>
+    <string name="app_name">Handwashing reminder</string>
+    <string name="activity_notification_channel_name">Notificaciones de
+    actividad</string>
+    <string name="activity_notification_channel_desc">Recibe una
+        notificación cuando bajes de un vehículo o finalices una actividad
+        para recordarte que te laves las manos</string>
+    <string name="time_notification_channel_name">Notificaciones
+        programadas</string>
+    <string name="time_notification_channel_desc">Recibe notificaciones en
+        los tiempos programados que hayas definido en la aplicación
+    </string>
+    <string name="activity_notification_walk">¿Disfrutaste del paseo?
+    &#128694;</string>
+    <string name="activity_notification_walk_content">Andar 30 minutos al día
+        es una de las mejores prácticas para tener una buena salud &#128170;
+        Recuerda lavarte las manos antes de comer o tocarte la cara
+        &#129325; y así podrás tener todavía mejor salud &#128521;</string>
+    <string name="activity_notification_run">¿Qué tal fue la carrera?
+        &#127939;&#8205;&#9792;&#65039;</string>
+    <string name="activity_notifications_run_content">Siempre es divertido
+        correr &#128578; pero sueles acabar sudando mucho &#128517;. Intenta
+        lavarte las manos lo antes posible o, mejor todavía, date una ducha
+        &#128704;</string>
+    <string name="activity_notification_cycling">¿Teniendo una buena vuelta?
+        &#128692;&#8205;&#9792;&#65039;</string>
+    <string name="activity_notification_cycling_content">Siempre disfruto el
+        ir en bici - te hace sentir libre &#127794;. Los manillares de tu
+        bici posiblemente estuvieran sucios así que lávate las manos lo
+        antes que puedas &#128166;&#128079;</string>
+    <string name="activity_notification_vehicle">Hora de lavarse las manos
+        &#128649;</string>
+    <string name="activity_notification_vehicle_content">En el transporte
+        público hay mucha gente y no sabes si están enfermos o no &#128567;.
+        Incluso en tu propio coche pueden haber enfermedades en los pomos o
+        en el volante &#128663;, así que lávate las manos lo antes que puedas
+       para evitar enfermedades &#128166;&#128079;
+    </string>
+    <string name="title_appintro">Intro de Handwashing reminder</string>
+    <string name="privacy_policy_title">Política de privacidad</string>
+    <string name="tos_title">Términos y condiciones</string>
+    <string name="firebase_analytics_policy">Permite que la aplicación
+        recoja y envíe datos de manera anónima sobre la actividad e
+        información analítica</string>
+    <string name="firebase_performance_policy">Permite que la aplicación
+        monitorice el rendimiento de la misma y envíe datos anónimos para
+        mejorar la experiencia de usuario</string>
+    <string name="title_ads">Anuncios</string>
+    <string name="ad_attribution">Ad</string>
+    <string name="dynamic_module_loading_title">Construyendo tu
+        aplicación…</string>
+    <string name="dynamic_module_loading_text">Estamos añadiendo nuevo
+        contenido a la aplicación para que funcione correctamente. Por favor,
+        espera un minuto - este proceso no debería durar mucho.</string>
+    <string name="dynamic_module_loading_error">¡Vaya! Algo ha ido
+        mal 😥 - intenta el proceso de nuevo</string>
+    <string name="done">Hecho</string>
+    <string name="preparing">Preparando…</string>
+    <string name="installing">Instalando…</string>
+    <string name="diseases">Enfermedades</string>
+    <string name="handwashing">Lavarse las manos</string>
+    <string name="news">Noticias</string>
+    <string name="settings">Ajustes</string>
+    <string name="breakfast_title">¡Hora del desayuno! &#9749;</string>
+    <string-array name="breakfast_comments">
+        <item>Mientras duermes se ensucian las manos, por lo que es
+            importante lavárselas antes de desayunar &#128564;</item>
+        <item>Lavarse las manos antes del desayuno te asegurará un buen
+            día &#128521;</item>
+        <item>¿30 segundos por una buena salud? ¡Dónde firmo! Solo lávate
+            las manos &#128521;&#128166;&#128079;</item>
+    </string-array>
+    <string name="lunch_title">¡Hora de comer y lavarse las manos!
+        &#127857;</string>
+    <string-array name="lunch_comments">
+        <item>¿Estás teniendo un buend día? Sigamos con él teniendo las manos
+            limpias &#128513;</item>
+        <item>Después de una mañana ocupada es momento de comer y
+            hacerlo bien &#128521; &#128166;&#128079;</item>
+        <item>Si has estado en la calle es todavía más importante que te
+            laves las manos antes de comer &#128166;&#128079;</item>
+    </string-array>
+    <string name="dinner_title">Tengamos una cena limpia &#129367;</string>
+    <string-array name="dinner_comments">
+        <item>El día está acabando y lo puedes hacer completamente lavándote
+            las manos &#128166;&#128079;</item>
+        <item>Recuerda antes de cenar e ir a dormir lavarte las manos y
+            contar ovejitas &#128017;</item>
+        <item>¿Sabías que lavarte las manos puede protegerte de más de 15
+            enfermedades? Son muchas &#128558;</item>
+    </string-array>
+    <string name="washing_hands_first_title">Aprendamos cómo lavarnos las manos</string>
+    <string name="washing_hands_first_description">Únete a mí en este
+        viaje en donde aprenderemos cómo lavarnos las manos completamente
+        &#128166;&#128079;. Es muy importante no solo por ti sino por todos
+        los que te rodean: desde un bebé &#128118; hasta tus abuelos
+        &#128116;&#128117;. Es un pequeño acto de responsabilidad que
+        dura solo 30 segundos.
+
+    Recuerda, no es solo por ti sino por ellos.</string>
+    <string-array name="washing_hands_titles">
+        <item>1. Frota tus manos</item>
+        <item>2. Limpia entre tus dedos</item>
+        <item>3. Limpia el dorso y por encima de los dedos</item>
+        <item>4. Limpia el extremo de tus dedos</item>
+        <item>5. Lavando los pulgares</item>
+        <item>6. Limpiando las yemas de los dedos y las uñas</item>
+        <item>7. Termina de lavarte</item>
+    </string-array>
+    <string-array name="washing_hands_descriptions">
+        <item>Aplicando suficiente jabón y agua, frota tus manos para
+            esparcirlos &#129532;.</item>
+        <item>Ahora, con el jabón esparcido, limpia el hueco entre los
+            dedos &#128400; (como se muestra en el vídeo).</item>
+        <item>Poniendo una mano encima de la otra, limpia el dorso y entre
+            los dedos &#129306;. Haz lo mismo con la otra mano.</item>
+        <item>Como puedes ver, tus dedos no están limpios todavía &#128064;,
+            así que pon el extremo de los dedos contra la palma de tu mano y
+            frota.</item>
+        <item>¡Casi los olvidamos &#128556;! Limpia tus dos pulgares usando
+            la otra mano &#128077;.</item>
+        <item>Ahora es momento de limpiar las yemas y las uñas. Ponlas contra
+            la palma de tu mano y límpialos. ¡Wow &#128561;! ¡Qué uñas tan
+            bonitas! &#128133;</item>
+        <item>Finalmente, limpia el dorso de tu mano (cerca de la
+            muñeca). Luego, moja tus manos en agua y sécalas con una toallita
+            desechable, y úsala para cerrar el grifo. ¡Y eso es todo, has
+            acabado! &#127882;&#127881;</item>
+    </string-array>
+    <string name="previous">Anterior</string>
+    <string name="next">Siguiente</string>
+    <string name="time_preferences_section">Ajustes de los tiempos
+        programados</string>
+    <string name="breakfast_pref_title">Hora del desayuno &#9749;</string>
+    <string name="breakfast_pref_summ">Has establecido la hora del desayuno a
+        las: </string>
+    <string name="lunch_pref_title">Hora de la comida &#127857;</string>
+    <string name="lunch_pref_summ">Has establecido la hora de la comida a
+        las: </string>
+    <string name="dinner_pref_title">Hora de la cena &#129367;</string>
+    <string name="dinner_pref_summ">Has establecido la hora de la cena a las:
+    </string>
+    <string name="activity_section">Notificaciones de actividad</string>
+    <string-array name="activities">
+        <item>Después de andar &#128694;</item>
+        <item>Después de correr &#127939;&#8205;&#9792;&#65039;</item>
+        <item>Después de ir en bici &#128692;</item>
+        <item>Después de bajarte de un vehículo &#128649;</item>
+    </string-array>
+    <string-array name="empty_array" />
+    <string name="google_api_not_found">Tienes que tener los Servicios de
+        Google Play instalados y funcionando para usar esta funcionalidad</string>
+    <string name="permission_permanently_denied">Has denegado
+        permanentemente el acceso a tu actividad. Habilítalo desde los
+        ajustes</string>
+    <string name="activity_disabled">No recibirás notificaciones de ninguna
+        actividad</string>
+    <string name="activity_enabled">Recibirás notificaciones de las
+        actividades seleccionadas debajo</string>
+    <string name="activity_recognition">Habilitar reconocimiento de la
+        actividad</string>
+    <string name="activities_to_enable">¿Cuándo recibirás notificaciones?</string>
+    <string name="activities_info">Recibirás notificaciones</string>
+    <string name="activities_disabled">No recibirás notificaciones</string>
+    <string name="data_sharing_category">Preferencias de datos compartidos</string>
+    <string name="ads_explanation_title">¿Deshabilitar anuncios?</string>
+    <string name="ads_explanation_desc">Sé que los anuncios muchas veces son
+        molestos y en verdad no son una gran fuente de ingresos, por lo que 
+        te dejo que los quites &#128521;. De esta manera no haré dinero 
+        pero puedes hacerme una donación cuando quieras y apoyar el 
+        desarrollo &#128519;</string>
+    <string name="disable">Deshabilitar</string>
+    <string name="ads_donations_category">Apoya el desarrollo</string>
+    <string name="enable_ads">Habilitar anuncios</string>
+    <string name="enable_ads_summ">Permite que la aplicación muestre 
+        anuncios en la sección de enfermedades y apoya el desarrollo</string>
+    <string name="donations">Contribuye con una donación</string>
+    <string name="donations_summ">Apoya el desarrollo de la aplicación 
+        con una donación</string>
+    <string-array name="in_app_donations_names">
+        <item>Dona 1€</item>
+        <item>Dona 2€</item>
+        <item>Dona 5€</item>
+        <item>Dona 10€</item>
+        <item>Dona 15€</item>
+        <item>Dona 20€</item>
+        <item>Dona 30€</item>
+        <item>Dona 50€</item>
+        <item>Dona 70€</item>
+        <item>Dona 100€</item>
+    </string-array>
+    <string name="donation_thanks">¡Muchas gracias por donar!</string>
+    <string name="donation_desc">Eres increíble &#128561; Con tu donación
+        ahora puedo seguir desarrollando la aplicación e incluir nuevas
+        funciones &#128170;
+
+        ¡Estáte atento que en nada llegan!
+    </string>
+    <string name="donation_cancelled">Donación cancelada</string>
+    <string name="donation_cancelled_desc">Parece que la donación se ha
+        cancelado. No pasa nada, lo puedes hacer cuando quieras
+        &#128521;</string>
+    <string name="donation_error">Error al hacer la donación</string>
+    <string name="donation_error_desc">Ha habido un problema al intentar
+        hacer la donación &#128560;. Quizás no tienes suficiente dinero en la
+        tarjeta de crédito o la Google Play Store no está disponible en
+    este momento.</string>
+    <string name="collaborating">Colabora con el proyecto</string>
+    <string name="suggestions">Envía comentarios y sugerencias</string>
+    <string name="open_source_libs">Librerías de terceros y de código
+        abierto</string>
+    <string name="tos_and_privacy">Términos de servicio y política de
+        privacidad</string>
+    <string name="send_email_client">Escoge un cliente de correo
+        electrónico</string>
+    <string name="share">Comparte esta aplicación</string>
+    <string name="share_text">
+        ¡Lavarte las manos nunca había sido tan sencillo! Descubre
+        \'Handwashing reminder\' y recibe notificaciones cuando deberías
+        lavarte las manos &#128166;&#128079;, mediante notificaciones
+        personalizadas o con tu actividad.
+        &#128073; https://s.javinator9889.com/hwreminder
+    </string>
+    <string name="share_title">Descubre Handwashing reminder</string>
+    <string name="share_label">Compartiendo Handwashing reminder</string>
+    <string name="help_translating">Ayuda a traducir la aplicación</string>
+    <string name="help_translating_summ">¿Te gustaría ver la aplicación
+        traducida en tu idioma? ¡Colabora y tradúcela!</string>
+    <string name="no_app">¡Ninguna aplicación puede hacer esta acción!</string>
+    <string name="no_app_long">Parece que no tienes ninguna aplicación
+        instalada que pueda hacer esto ahora. Por favor, instala una para
+        %s</string>
+    <string name="playstore_err">acceder a la Play Store</string>
+    <string name="twitter_err">acceder a Twitter</string>
+    <string name="telegram_err">acceder a Telegram</string>
+    <string name="sending_email">enviar un email</string>
+    <string name="browser_err">acceder al sitio web</string>
+    <string name="title_bundledemoji">Bundled Emoji</string>
+    <string name="social_sharing">Redes sociales y compartir</string>
+    <string name="twitter">Twitter</string>
+    <string name="linkedin">LinkedIn</string>
+    <string name="github">Ver el proyecto en GitHub</string>
+    <string name="playstore">Ver en la Play Store</string>
+    <string name="telegram">Canal de notificaciones</string>
+    <string name="no_internet_connection">No hay ninguna conexión de
+        red</string>
+    <string name="no_internet_connection_long">Para hacer esta acción,
+        por favor conéctate a Internet</string>
+    <string name="description">Descipción</string>
+    <string name="symptoms">Síntomas</string>
+    <string name="prevention">Prevención</string>
+    <string name="written_by">Escrito por %s</string>
+    <string name="available_at">Disponible en: %s</string>
+</resources>

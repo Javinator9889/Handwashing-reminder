@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:paddingBottom="@dimen/appIntro2BottomBarHeight"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbarFadeDuration="0"
+        android:scrollbars="vertical"
+        android:fadeScrollbars="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/title"
+                style="@style/AppIntroDefaultHeading"
+                android:layout_width="0dp"
+                android:layout_height="110dp"
+                android:fontFamily="@font/raleway_bold"
+                android:gravity="center"
+                android:textColor="@color/dkgray"
+                app:layout_constraintBottom_toTopOf="@+id/image"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="spread"
+                app:layout_constraintVertical_weight="2"
+                tools:text="Welcome" />
+
+            <com.javinator9889.handwashingreminder.graphics.LottieAdaptedPerformanceAnimationView
+                android:id="@+id/image"
+                android:layout_width="0dp"
+                android:layout_height="260dp"
+                android:contentDescription="@string/graphics"
+                android:padding="32dp"
+                android:paddingLeft="32dp"
+                android:paddingTop="32dp"
+                android:paddingRight="32dp"
+                android:paddingBottom="32dp"
+                android:scaleType="centerInside"
+                app:layout_constraintBottom_toTopOf="@+id/policyContainer"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                app:layout_constraintVertical_weight="5"
+                app:lottie_autoPlay="false"
+                app:lottie_loop="false" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/policyContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/image"
+                app:layout_constraintVertical_weight="3">
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/analyticsSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    android:checked="true"
+                    android:padding="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Policy switch" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/performanceSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    android:checked="true"
+                    android:padding="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/analyticsSwitch"
+                    tools:text="Policy switch" />
+
+                <com.mikepenz.iconics.view.IconicsTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    android:text="@string/data_shared"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/performanceSwitch" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/policyCheckbox"
+        style="@style/AppIntroDefaultText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:textColor="@color/dkgray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="This is a demo of the AppIntro Library" />
+</LinearLayout>

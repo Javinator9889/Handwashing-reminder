@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hours_abbrev">hh</string>
+    <string name="double_dot">:</string>
+    <string name="minutes_abbrev">mm</string>
+    <string name="time_config_title_tpl">¿Cuándo sueles %1$s?</string>
+    <string name="breakfast">desayunar</string>
+    <string name="lunch">comer</string>
+    <string name="dinner">cenar</string>
+    <string name="done">Hecho</string>
+    <string name="set_time">Cambiar hora</string>
+    <string name="fill_hours">Por favor, completa todas las horas</string>
+    <string name="graphics">gráficos</string>
+    <string name="slide_policy_text">Al hacer clic aquí aceptas los términos
+        y condiciones de servicio y de privacidad de la aplicación</string>
+    <string name="accept_policy">Tienes que aceptar la política de
+        privacidad y los términos de servicio para poder usar esta
+        aplicación</string>
+    <string name="first_slide_title">Handwashing reminder</string>
+    <string name="first_slide_desc">¿Sabes lo importante que puede ser
+        lavarse las manos para evitar ciertas enfermedades? Con esta
+        aplicación, nunca lo olvidarás &#128521;
+    </string>
+    <string name="second_slide_title">Horas personalizadas</string>
+    <string name="second_slide_desc">Configura tu experiencia
+        programando cuándo sueles hacer ciertas acciones, por lo que
+        recibirás notificaciones para que te laves las manos</string>
+    <string name="fourth_slide_title">Se todavía más preciso</string>
+    <string name="fourth_slide_desc">Si permites el reconocimiento de tu
+        actividad podrás recibir notificaciones cuando, por ejemplo, te bajas
+        de un vehículo &#128647; o después de correr &#127939;&#8205;.
+        Puedes deshabilitar esta opción en cualquier momento</string>
+    <string name="privacy_policy_title">Política de privacidad y
+        términos de servicio</string>
+    <string name="data_shared">{gmd_info_outline} A pesar de la
+        configuración escogida anteriormente, algunos datos seguirán
+        siendo compartidos. Estos datos contienen información sobre
+        posibles errores de la aplicación. Son siempre anónimos y
+        ayudarán con el desarrollo de la aplicación, incluir nuevas
+        funciones y corregir errores.</string>
+</resources>

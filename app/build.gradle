@@ -1,0 +1,193 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.mikepenz.aboutlibraries.plugin'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
+apply plugin: 'com.google.firebase.firebase-perf'
+
+
+def secretsPropertiesFile = rootProject.file("secrets.properties")
+def secretProperties = new Properties()
+
+if (secretsPropertiesFile.exists())
+    secretProperties.load(new FileInputStream(secretsPropertiesFile))
+else {
+    secretProperties.setProperty("google_project_id", "\"${System.getenv('google_project_id') ?: "null"}\"")
+    secretProperties.setProperty("signing_keystore_password", "${System.getenv('signing_keystore_password')}")
+    secretProperties.setProperty("signing_key_password", "${System.getenv('signing_key_password')}")
+    secretProperties.setProperty("signing_key_alias", "${System.getenv('signing_key_alias')}")
+}
+
+/*
+ * Gets the version name from the latest Git tag
+ */
+def gitCommitHash = { ->
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'rev-parse', 'HEAD'
+        standardOutput = stdout
+    }
+    return stdout.toString().substring(0, 8).trim()
+}
+
+android {
+    viewBinding.enabled = true
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+
+    android.defaultConfig.vectorDrawables.useSupportLibrary = true
+
+    defaultConfig {
+        applicationId "com.javinator9889.handwashingreminder"
+        minSdkVersion 17
+        targetSdkVersion 29
+        versionCode 91
+        versionName "1.0-${gitCommitHash}"
+        multiDexEnabled true
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    signingConfigs {
+        release {
+            storeFile file("../android-signing-keystore.jks")
+            storePassword "${secretProperties['signing_keystore_password']}"
+            keyAlias "${secretProperties['signing_key_alias']}"
+            keyPassword "${secretProperties['signing_key_password']}"
+        }
+    }
+    buildTypes {
+        debug {
+            ext.enableCrashliytics = false
+            versionNameSuffix "-debug"
+            debuggable true
+            multiDexEnabled = true
+        }
+        beta {
+            initWith(debug)
+            versionNameSuffix "-beta"
+            minifyEnabled true
+            debuggable true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+            multiDexEnabled = true
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            multiDexEnabled = true
+            signingConfig signingConfigs.release
+
+            debuggable false
+            jniDebuggable false
+            renderscriptDebuggable false
+            zipAlignEnabled true
+        }
+    }
+    dexOptions {
+        preDexLibraries true
+        javaMaxHeapSize "1G"
+    }
+    dynamicFeatures = [":appintro", ":ads", ":bundledemoji"]
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.core:core-ktx:1.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    testImplementation 'junit:junit:4.13'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    // https://github.com/Javinator9889/LocaleManager
+    implementation 'com.github.javinator9889:localemanager:1.1X'
+    // https://material.io/develop/android/docs/getting-started/
+    implementation 'com.google.android.material:material:1.1.0'
+    // https://developers.google.com/android/guides/setup
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
+    // https://developer.android.com/jetpack/androidx/releases/annotation
+    implementation 'androidx.annotation:annotation:1.1.0'
+    // https://developer.android.com/jetpack/androidx/releases/cardview
+    implementation 'androidx.cardview:cardview:1.0.0'
+    // https://developer.android.com/jetpack/androidx/releases/recyclerview
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    // https://developer.android.com/studio/build/multidex
+    implementation 'androidx.multidex:multidex:2.0.1'
+    // https://github.com/afollestad/material-dialogs
+    implementation 'com.afollestad.material-dialogs:core:3.3.0'
+    implementation 'com.afollestad.material-dialogs:datetime:3.3.0'
+    implementation 'com.afollestad.material-dialogs:lifecycle:3.3.0'
+    implementation 'com.afollestad.material-dialogs:bottomsheets:3.3.0'
+    // https://github.com/mikepenz/Android-Iconics
+    implementation 'com.mikepenz:iconics-core:5.0.2'
+    implementation 'com.mikepenz:iconics-views:5.0.2'
+    //noinspection GradleDependency
+    implementation 'com.mikepenz:google-material-typeface:3.0.1.4.original-kotlin@aar'
+    implementation 'com.mikepenz:ionicons-typeface:2.0.1.5-kotlin@aar'
+    // https://github.com/mikepenz/AboutLibraries
+    implementation "com.mikepenz:aboutlibraries-core:${latestAboutLibsRelease}"
+    implementation "com.mikepenz:aboutlibraries:${latestAboutLibsRelease}"
+    // https://developer.android.com/kotlin/ktx#play-core
+    implementation 'com.google.android.play:core-ktx:1.7.0'
+    // https://developer.android.com/kotlin/ktx#collection
+    implementation 'androidx.collection:collection-ktx:1.1.0'
+    // https://kotlinlang.org/docs/reference/reflection.html
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    // https://firebase.google.com/docs/android/setup#add-sdks
+    implementation 'com.google.firebase:firebase-core:17.3.0'
+    implementation 'com.google.firebase:firebase-common-ktx:19.3.0'
+    implementation 'com.google.firebase:firebase-analytics:17.3.0'
+    implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta04'
+    implementation 'com.google.firebase:firebase-perf:19.0.6'
+    // http://airbnb.io/lottie/#/android?id=getting-started
+    implementation "com.airbnb.android:lottie:3.4.0"
+    // https://firebase.google.com/docs/remote-config/use-config-android
+    implementation 'com.google.firebase:firebase-config:19.1.3'
+    // https://developer.android.com/jetpack/androidx/releases/work#declaring_dependencies
+    implementation 'androidx.work:work-runtime-ktx:2.3.4'
+    // https://mvnrepository.com/artifact/androidx.emoji/emoji/1.0.0
+    implementation 'androidx.emoji:emoji:1.0.0'
+    implementation 'androidx.emoji:emoji-appcompat:1.0.0'
+    // https://github.com/mikepenz/FastAdapter
+    implementation "com.mikepenz:fastadapter:${latestFastAdapterRelease}"
+    // https://developer.android.com/kotlin/ktx#lifecycle
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.2.0'
+    // https://developer.android.com/kotlin/ktx#viewmodel
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    // https://developer.android.com/kotlin/ktx#fragment
+    implementation 'androidx.fragment:fragment-ktx:1.2.4'
+    // https://developer.android.com/kotlin/ktx#livedata
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
+    // https://github.com/JakeWharton/timber
+    implementation 'com.jakewharton.timber:timber:4.7.1'
+    // https://developer.android.com/jetpack/androidx/releases/lifecycle#declaring_dependencies
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.2.0'
+    // https://developer.android.com/reference/kotlin/androidx/preference/package-summary
+    implementation 'androidx.preference:preference:1.1.0'
+    // https://github.com/bumptech/glide
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    kapt 'com.github.bumptech.glide:compiler:4.11.0'
+    // https://github.com/afollestad/material-dialogs/
+    implementation 'com.afollestad.material-dialogs:core:3.3.0'
+    // https://developer.android.com/google/play/billing/billing_library_overview
+    implementation 'com.android.billingclient:billing:2.2.0'
+    implementation 'com.android.billingclient:billing-ktx:2.2.0'
+    // https://github.com/cbeust/klaxon
+    implementation 'com.beust:klaxon:5.2'
+    // https://github.com/SufficientlySecure/html-textview
+    implementation 'org.sufficientlysecure:html-textview:3.9'
+}

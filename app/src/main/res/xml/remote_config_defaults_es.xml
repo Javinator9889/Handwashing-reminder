@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?><!-- START xml_defaults -->
+<defaultsMap>
+    <entry>
+        <key>special_event</key>
+        <value>false</value>
+    </entry>
+    <entry>
+        <key>animation_name</key>
+        <value>stay-safe-stay-home.json</value>
+    </entry>
+    <entry>
+        <key>work_in_progress_message</key>
+        <value>Bajo desarrollo</value>
+    </entry>
+    <entry>
+        <key>diseases</key>
+        <value>{ "diseases": [{ "name" : "No hay datos disponibles",
+            "short_description":
+            "No hay datos disponibles ahora mismo. Inténtalo de nuevo más
+            tarde",
+            "long_description": "", "provider": "", "website": "", "symptoms":
+            "", "prevention": ""
+            }]
+            }
+        </value>
+    </entry>
+</defaultsMap>
