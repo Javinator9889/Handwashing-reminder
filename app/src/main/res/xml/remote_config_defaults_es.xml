@@ -14,8 +14,10 @@
     </entry>
     <entry>
         <key>diseases</key>
-        <value>{ "diseases": [{ "name" : "No hay Internet", "short_description":
-            "Conéctate a Internet para usar esta funcionalidad",
+        <value>{ "diseases": [{ "name" : "No hay datos disponibles",
+            "short_description":
+            "No hay datos disponibles ahora mismo. Inténtalo de nuevo más
+            tarde",
             "long_description": "", "provider": "", "website": "", "symptoms":
             "", "prevention": ""
             }]

@@ -27,15 +27,19 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.perf.FirebasePerformance
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.gms.activity.ActivityHandler
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
 import com.javinator9889.handwashingreminder.gms.vendor.BillingService
 import com.javinator9889.handwashingreminder.jobs.workers.WorkHandler
+import com.javinator9889.handwashingreminder.utils.Firebase
 import com.javinator9889.handwashingreminder.utils.LogReportTree
 import com.javinator9889.handwashingreminder.utils.isDebuggable
 import javinator9889.localemanager.application.BaseApplication
 import javinator9889.localemanager.utils.languagesupport.LanguagesSupport.Language
 import timber.log.Timber
+import java.util.*
+import kotlin.properties.Delegates
 
 
 class HandwashingApplication : BaseApplication() {
@@ -47,6 +51,7 @@ class HandwashingApplication : BaseApplication() {
     lateinit var sharedPreferences: SharedPreferences
     lateinit var firebaseAnalytics: FirebaseAnalytics
     lateinit var firebasePerformance: FirebasePerformance
+    var remoteConfigSettings by Delegates.notNull<Int>()
 
     companion object {
         private lateinit var instance: HandwashingApplication
@@ -80,6 +85,28 @@ class HandwashingApplication : BaseApplication() {
             Timber.plant(LogReportTree())
         activityHandler = ActivityHandler(this)
         workHandler = WorkHandler(this)
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
+        firebasePerformance = FirebasePerformance.getInstance()
+        remoteConfig = FirebaseRemoteConfig.getInstance()
+        initFirebaseUserProperties()
+    }
+
+    private fun initFirebaseUserProperties() {
+        Timber.d("User default locale: ${Locale.getDefault().language}")
+        remoteConfigSettings = when (Locale.getDefault().language) {
+            Locale(Language.SPANISH).language -> {
+                firebaseAnalytics.setUserProperty(
+                    Firebase.Properties.LANGUAGE, Language.SPANISH
+                )
+                R.xml.remote_config_defaults_es
+            }
+            else -> {
+                firebaseAnalytics.setUserProperty(
+                    Firebase.Properties.LANGUAGE, Language.ENGLISH
+                )
+                R.xml.remote_config_defaults_es
+            }
+        }
     }
 
     /**

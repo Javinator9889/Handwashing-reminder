@@ -31,9 +31,6 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.perf.FirebasePerformance
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
@@ -46,12 +43,9 @@ import com.javinator9889.handwashingreminder.utils.Preferences.Companion.ADS_ENA
 import com.javinator9889.handwashingreminder.utils.Preferences.Companion.APP_INIT_KEY
 import com.javinator9889.handwashingreminder.utils.RemoteConfig.Keys.SPECIAL_EVENT
 import com.mikepenz.iconics.Iconics
-import javinator9889.localemanager.utils.languagesupport.LanguagesSupport.Language
 import kotlinx.android.synthetic.main.splash_screen.*
 import kotlinx.coroutines.*
 import timber.log.Timber
-import java.util.*
-import kotlin.collections.ArrayList
 
 internal const val FAST_START_KEY = "intent:fast_start"
 internal const val PENDING_INTENT_CODE = 201
@@ -222,9 +216,6 @@ class LauncherActivity : AppCompatActivity() {
     }
 
     private fun initVariables() {
-        app.firebaseAnalytics = FirebaseAnalytics.getInstance(app)
-        app.firebasePerformance = FirebasePerformance.getInstance()
-        app.remoteConfig = FirebaseRemoteConfig.getInstance()
         if (app.sharedPreferences.getBoolean(
                 Preferences.ACTIVITY_TRACKING_ENABLED, false
             ) && with(GoogleApiAvailability.getInstance()) {
@@ -250,30 +241,15 @@ class LauncherActivity : AppCompatActivity() {
     }
 
     private fun setupFirebaseProperties() {
-        Timber.d("User default locale: ${Locale.getDefault().language}")
-        val remoteConfigSettings = when (Locale.getDefault().language) {
-            Locale(Language.SPANISH).language -> {
-                app.firebaseAnalytics.setUserProperty(
-                    Firebase.Properties.LANGUAGE, Language.SPANISH
-                )
-                R.xml.remote_config_defaults_es
-            }
-            else -> {
-                app.firebaseAnalytics.setUserProperty(
-                    Firebase.Properties.LANGUAGE, Language.ENGLISH
-                )
-                R.xml.remote_config_defaults_es
-            }
-        }
         val config = with(FirebaseRemoteConfigSettings.Builder()) {
-            minimumFetchIntervalInSeconds = 30
-            fetchTimeoutInSeconds = 20
+            minimumFetchIntervalInSeconds = 10
+            fetchTimeoutInSeconds = 5
             build()
         }
         with(app.remoteConfig) {
             Timber.d("Initializing Firebase Remote Config")
             setConfigSettingsAsync(config)
-            setDefaultsAsync(remoteConfigSettings)
+            setDefaultsAsync(app.remoteConfigSettings)
             fetchAndActivate()
         }
         app.firebaseAnalytics.setAnalyticsCollectionEnabled(
