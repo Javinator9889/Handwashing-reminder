@@ -253,8 +253,12 @@
     <string name="no_app">No app can do this action!</string>
     <string name="no_app_long">It looks like you have no app
         installed on your phone that can do this now. Please, install one for
-        accessing %s</string>
-    <string name="browser_err">the website</string>
+        %s</string>
+    <string name="playstore_err">access Play Store</string>
+    <string name="twitter_err">access Twitter</string>
+    <string name="telegram_err">access Telegram</string>
+    <string name="sending_email">sending an email</string>
+    <string name="browser_err">accessing the website</string>
     <string name="title_bundledemoji">Bundled Emoji</string>
     <string name="social_sharing">Social media and sharing</string>
     <string name="twitter">Twitter</string>

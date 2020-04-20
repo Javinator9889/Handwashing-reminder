@@ -173,7 +173,7 @@
     <string name="ads_donations_category">Apoya el desarrollo</string>
     <string name="enable_ads">Habilitar anuncios</string>
     <string name="enable_ads_summ">Permite que la aplicación muestre 
-        anuncios en la sección de enfermedads y apoya el desarrollo</string>
+        anuncios en la sección de enfermedades y apoya el desarrollo</string>
     <string name="donations">Contribuye con una donación</string>
     <string name="donations_summ">Apoya el desarrollo de la aplicación 
         con una donación</string>
@@ -229,8 +229,12 @@
     <string name="no_app">¡Ninguna aplicación puede hacer esta acción!</string>
     <string name="no_app_long">Parece que no tienes ninguna aplicación
         instalada que pueda hacer esto ahora. Por favor, instala una para
-        acceder a %s</string>
-    <string name="browser_err">el sitio web</string>
+        %s</string>
+    <string name="playstore_err">acceder a la Play Store</string>
+    <string name="twitter_err">acceder a Twitter</string>
+    <string name="telegram_err">acceder a Telegram</string>
+    <string name="sending_email">enviar un email</string>
+    <string name="browser_err">acceder al sitio web</string>
     <string name="title_bundledemoji">Bundled Emoji</string>
     <string name="social_sharing">Redes sociales y compartir</string>
     <string name="twitter">Twitter</string>

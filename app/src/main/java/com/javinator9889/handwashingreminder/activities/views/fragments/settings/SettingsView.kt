@@ -165,13 +165,13 @@ class SettingsView : PreferenceFragmentCompat(),
             playStore?.let {
                 it.icon = icon(Ionicons.Icon.ion_android_playstore)
                 it.setOnPreferenceClickListener {
-                    openWebsite(PLAYSTORE_URL, "Play Store")
+                    openWebsite(PLAYSTORE_URL, R.string.playstore_err)
                     true
                 }
             }
             telegram?.let {
                 it.setOnPreferenceClickListener {
-                    openWebsite(TELEGRAM_URL, "Telegram")
+                    openWebsite(TELEGRAM_URL, R.string.telegram_err)
                     true
                 }
             }
@@ -185,7 +185,7 @@ class SettingsView : PreferenceFragmentCompat(),
             twitter?.let {
                 it.icon = icon(Ionicons.Icon.ion_social_twitter)
                 it.setOnPreferenceClickListener {
-                    openWebsite(TWITTER_URL, "Twitter")
+                    openWebsite(TWITTER_URL, R.string.twitter_err)
                     true
                 }
             }
@@ -240,16 +240,30 @@ class SettingsView : PreferenceFragmentCompat(),
             }
             suggestions?.let {
                 it.setOnPreferenceClickListener {
-                    with(Intent(Intent.ACTION_SEND)) {
+                    with(Intent(Intent.ACTION_SENDTO)) {
+                        type = "*/*"
+                        data = Uri.parse("mailto:")
                         putExtra(Intent.EXTRA_EMAIL, arrayOf(Email.TO))
                         putExtra(Intent.EXTRA_SUBJECT, Email.SUBJECT)
                         putExtra(Intent.EXTRA_TEXT, getDeviceInfo())
-                        type = "message/rfc822"
-                        startActivity(
-                            Intent.createChooser(
-                                this, getString(R.string.send_email_client)
-                            )
-                        )
+                        if (resolveActivity(requireContext().packageManager)
+                            != null
+                        ) {
+                            startActivity(this)
+                        } else {
+                            MaterialDialog(requireContext()).show {
+                                title(R.string.no_app)
+                                message(
+                                    text = getString(
+                                        R.string.no_app_long,
+                                        getString(R.string.sending_email)
+                                    )
+                                )
+                                positiveButton(android.R.string.ok)
+                                cancelable(true)
+                                cancelOnTouchOutside(true)
+                            }
+                        }
                     }
                     true
                 }
