@@ -23,9 +23,7 @@ import android.content.ClipDescription
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.emoji.text.EmojiCompat
 import androidx.lifecycle.lifecycleScope
@@ -85,12 +83,8 @@ class SettingsView : PreferenceFragmentCompat(),
         setPreferencesFromResource(R.xml.preferences, rootKey)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val view = super.onCreateView(inflater, container, savedInstanceState)!!
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewLifecycleOwner.lifecycleScope.launch {
             val share = findPreference<Preference>("share")
             val playStore = findPreference<Preference>("playstore")
@@ -305,7 +299,6 @@ class SettingsView : PreferenceFragmentCompat(),
                 it.icon = icon(Ionicons.Icon.ion_android_cloud_done)
             }
         }
-        return view
     }
 
     override fun onPreferenceChange(

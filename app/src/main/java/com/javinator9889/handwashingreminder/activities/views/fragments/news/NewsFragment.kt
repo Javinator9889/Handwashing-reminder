@@ -18,10 +18,39 @@
  */
 package com.javinator9889.handwashingreminder.activities.views.fragments.news
 
+import android.os.Bundle
+import android.view.View
 import androidx.annotation.LayoutRes
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.BaseFragmentView
+import com.javinator9889.handwashingreminder.utils.RemoteConfig
+import kotlinx.android.synthetic.main.under_construction.*
+
+private const val ARG_UNDER_CONSTRUCTION_TEXT = "news:text:content"
 
 class NewsFragment : BaseFragmentView() {
-    @LayoutRes override val layoutId: Int = R.layout.under_construction
+    @LayoutRes
+    override val layoutId: Int = R.layout.under_construction
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        if (savedInstanceState != null) {
+            underConstructionText.text = savedInstanceState.getString(
+                ARG_UNDER_CONSTRUCTION_TEXT
+            )
+        } else {
+            with(FirebaseRemoteConfig.getInstance()) {
+                underConstructionText.text =
+                    getString(RemoteConfig.WORK_IN_PROGRESS)
+            }
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(
+            ARG_UNDER_CONSTRUCTION_TEXT, underConstructionText.text.toString()
+        )
+    }
 }
