@@ -57,11 +57,17 @@
 }
 
 # https://bumptech.github.io/glide/doc/download-setup.html#proguard
+# https://github.com/bumptech/glide/blob/master/library/proguard-rules.txt
 -keep public class * implements com.bumptech.glide.module.GlideModule
--keep public class * extends com.bumptech.glide.module.AppGlideModule
+-keep class * extends com.bumptech.glide.module.AppGlideModule {
+ <init>(...);
+}
 -keep public enum com.bumptech.glide.load.ImageHeaderParser$** {
   **[] $VALUES;
   public *;
+}
+-keep class com.bumptech.glide.load.data.ParcelFileDescriptorRewinder$InternalRewinder {
+  *** rewind();
 }
 -dontwarn com.bumptech.glide.load.resource.bitmap.VideoDecoder
 # Klaxon
