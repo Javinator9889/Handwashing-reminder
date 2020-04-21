@@ -43,6 +43,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.perf.FirebasePerformance
 import com.javinator9889.handwashingreminder.activities.MainActivity
 import com.javinator9889.handwashingreminder.appintro.config.TimeConfigActivity
 import com.javinator9889.handwashingreminder.appintro.custom.SliderPageBuilder
@@ -77,15 +78,9 @@ class IntroActivity : AppIntro2(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        with(HandwashingApplication.getInstance()) {
-            firebaseAnalytics.logEvent(
-                FirebaseAnalytics.Event.TUTORIAL_BEGIN, null
-            )
-            firebaseAnalytics.setCurrentScreen(
-                this@IntroActivity,
-                "Intro",
-                null
-            )
+        with(FirebaseAnalytics.getInstance(this)) {
+            logEvent(FirebaseAnalytics.Event.TUTORIAL_BEGIN, null)
+            setCurrentScreen(this@IntroActivity, "Intro", null)
         }
 
         val firstSlide = SliderPageBuilder.Builder()
@@ -186,6 +181,7 @@ class IntroActivity : AppIntro2(),
         else
             app.activityHandler.disableActivityTracker()
         app.workHandler.enqueuePeriodicNotificationsWorker()
+        val firebaseAnalytics = FirebaseAnalytics.getInstance(this)
         with(Bundle(2)) {
             putBoolean(
                 "analytics_enabled",
@@ -195,19 +191,22 @@ class IntroActivity : AppIntro2(),
                 "performance_enabled",
                 policySlide.firebasePerformance.isChecked
             )
-            app.firebaseAnalytics.logEvent(
-                FirebaseAnalytics.Event.SELECT_ITEM, this
+            firebaseAnalytics.logEvent(
+                FirebaseAnalytics.Event.SELECT_ITEM,
+                this
             )
         }
-        app.firebaseAnalytics.logEvent(
+        firebaseAnalytics.logEvent(
             FirebaseAnalytics.Event.TUTORIAL_COMPLETE, null
         )
         if (!policySlide.firebaseAnalytics.isChecked) {
-            app.firebaseAnalytics.setCurrentScreen(this, null, null)
-            app.firebaseAnalytics.setAnalyticsCollectionEnabled(false)
+            firebaseAnalytics.setCurrentScreen(this, null, null)
+            firebaseAnalytics.setAnalyticsCollectionEnabled(false)
         }
-        app.firebasePerformance.isPerformanceCollectionEnabled =
-            policySlide.firebasePerformance.isChecked
+        with(FirebasePerformance.getInstance()) {
+            isPerformanceCollectionEnabled =
+                policySlide.firebasePerformance.isChecked
+        }
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         this.finish()

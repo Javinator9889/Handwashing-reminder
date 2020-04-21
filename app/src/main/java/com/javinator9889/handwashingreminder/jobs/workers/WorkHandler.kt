@@ -103,7 +103,7 @@ class WorkHandler(private val context: Context) {
         with(workManager) {
             enqueueUniqueWork(
                 who,
-                ExistingWorkPolicy.APPEND,
+                ExistingWorkPolicy.REPLACE,
                 jobRequest
             )
         }

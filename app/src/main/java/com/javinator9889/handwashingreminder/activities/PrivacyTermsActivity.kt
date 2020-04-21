@@ -25,7 +25,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.support.ActionBarBase
-import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.collections.PrivacyTermsCollectionAdapter
 import kotlinx.android.synthetic.main.disease_view_expanded.*
 
@@ -39,11 +38,9 @@ class PrivacyTermsActivity : ActionBarBase() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(true)
 
-        with(HandwashingApplication.getInstance()) {
+        with(FirebaseAnalytics.getInstance(this)) {
             val bundle = Bundle(1).apply { putString("view", "privacy") }
-            firebaseAnalytics.logEvent(
-                FirebaseAnalytics.Event.VIEW_ITEM, bundle
-            )
+            logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle)
         }
 
         val adapter = PrivacyTermsCollectionAdapter(this)

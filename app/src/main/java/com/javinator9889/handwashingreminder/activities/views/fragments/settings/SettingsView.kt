@@ -34,6 +34,7 @@ import androidx.preference.SwitchPreference
 import com.afollestad.materialdialogs.MaterialDialog
 import com.android.billingclient.api.BillingClient.BillingResponseCode
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.perf.FirebasePerformance
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.PrivacyTermsActivity
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
@@ -109,9 +110,9 @@ class SettingsView : PreferenceFragmentCompat(),
             share?.let {
                 it.icon = icon(Ionicons.Icon.ion_android_share)
                 it.setOnPreferenceClickListener {
-                    app.firebaseAnalytics.logEvent(
-                        FirebaseAnalytics.Event.SHARE, null
-                    )
+                    with(FirebaseAnalytics.getInstance(requireContext())) {
+                        logEvent(FirebaseAnalytics.Event.SHARE, null)
+                    }
                     with(Intent.createChooser(Intent().apply {
                         action = Intent.ACTION_SEND
                         putExtra(
@@ -251,9 +252,9 @@ class SettingsView : PreferenceFragmentCompat(),
                     val bundle = Bundle(1).apply {
                         putString("view", "libs")
                     }
-                    app.firebaseAnalytics.logEvent(
-                        FirebaseAnalytics.Event.VIEW_ITEM, bundle
-                    )
+                    with(FirebaseAnalytics.getInstance(requireContext())) {
+                        logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle)
+                    }
                     LibsBuilder()
                         .withAutoDetect(true)
                         .withFields(R.string::class.java.fields)
@@ -335,17 +336,19 @@ class SettingsView : PreferenceFragmentCompat(),
             ::firebaseAnalyticsPreference.isInitialized &&
                     preference == firebaseAnalyticsPreference.get() -> {
                 val enabled = newValue as Boolean
-                app.firebaseAnalytics.setAnalyticsCollectionEnabled(enabled)
-                if (!enabled)
-                    app.firebaseAnalytics.setCurrentScreen(
-                        requireActivity(), null, null
-                    )
+                with(FirebaseAnalytics.getInstance(requireContext())) {
+                    setAnalyticsCollectionEnabled(enabled)
+                    if (!enabled)
+                        setCurrentScreen(requireActivity(), null, null)
+                }
                 true
             }
             ::firebasePerformancePreference.isInitialized &&
                     preference == firebasePerformancePreference.get() -> {
                 val enabled = newValue as Boolean
-                app.firebasePerformance.isPerformanceCollectionEnabled = enabled
+                with(FirebasePerformance.getInstance()) {
+                    isPerformanceCollectionEnabled = enabled
+                }
                 true
             }
             ::adsPreference.isInitialized &&
@@ -483,10 +486,9 @@ class SettingsView : PreferenceFragmentCompat(),
             return
         val website = Uri.parse(url)
         val bundle = Bundle(1).apply { putString("url", url) }
-        app.firebaseAnalytics.logEvent(
-            FirebaseAnalytics.Event.VIEW_ITEM,
-            bundle
-        )
+        with(FirebaseAnalytics.getInstance(requireContext())) {
+            logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle)
+        }
         with(Intent(Intent.ACTION_VIEW, website)) {
             if (resolveActivity(requireContext().packageManager) !=
                 null

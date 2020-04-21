@@ -27,7 +27,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.beust.klaxon.Klaxon
-import com.javinator9889.handwashingreminder.application.HandwashingApplication
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.javinator9889.handwashingreminder.collections.DiseasesInformation
 import com.javinator9889.handwashingreminder.collections.DiseasesList
 import com.javinator9889.handwashingreminder.collections.DiseasesListWrapper
@@ -55,7 +55,7 @@ class DiseaseInformationViewModel(
                     state.get<List<DiseasesInformation>>(PARSED_JSON_KEY)!!
                 )
             val diseasesString =
-                with(HandwashingApplication.getInstance().remoteConfig) {
+                with(FirebaseRemoteConfig.getInstance()) {
                     getString(DISEASES_JSON)
                 }
             Klaxon().parse<DiseasesList>(diseasesString)

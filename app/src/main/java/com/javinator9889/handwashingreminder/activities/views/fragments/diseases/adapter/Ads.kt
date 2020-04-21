@@ -47,6 +47,5 @@ class Ads : AbstractItem<Ads.ViewHolder>() {
                 it.destroy()
             }
         }
-
     }
 }

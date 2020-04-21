@@ -46,6 +46,7 @@ class SliderView : BaseFragmentView() {
     private lateinit var videoURI: Uri
     private var drawableId by Delegates.notNull<Int>()
     private val counter = AtomicInteger(0)
+    private var position by Delegates.notNull<Int>()
     private lateinit var videoModelFactory: VideoModelFactory
     private lateinit var handsFactory: WashingHandsModelFactory
     private val viewModel: VideoModel by viewModels {
@@ -95,6 +96,7 @@ class SliderView : BaseFragmentView() {
         IllegalStateException("Arguments cannot be null")
         videoModelFactory = VideoModelFactory(args.getInt(ARG_POSITION))
         handsFactory = WashingHandsModelFactory(args.getInt(ARG_POSITION))
+        position = args.getInt(ARG_POSITION)
     }
 
     override fun onPause() {
@@ -129,6 +131,11 @@ class SliderView : BaseFragmentView() {
         image.doOnLayout {
             washingHandsModel.setImageSize(it.measuredWidth, it.measuredHeight)
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(ARG_POSITION, position)
     }
 
     private fun incrementCounter() {

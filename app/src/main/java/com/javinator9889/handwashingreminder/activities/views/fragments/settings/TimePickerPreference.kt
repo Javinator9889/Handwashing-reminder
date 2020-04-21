@@ -57,11 +57,6 @@ class TimePickerPreference : EditTextPreference,
         setSummary(time ?: text)
     }
 
-    /*override fun onSetInitialValue(defaultValue: Any?) {
-        text = getPersistedString("00:00")
-        setSummary(text)
-    }*/
-
     override fun onClick() {
         val time = text.split(":")
         val tpHour = Integer.parseInt(time[0])
