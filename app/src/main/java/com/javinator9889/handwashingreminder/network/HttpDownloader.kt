@@ -25,7 +25,7 @@ import com.javinator9889.handwashingreminder.utils.isAtLeast
 
 object HttpDownloader {
     fun newInstance(): OkHttpDownloader {
-        val className = if (isAtLeast(AndroidVersion.LOLLIPOP) && false)
+        val className = if (isAtLeast(AndroidVersion.LOLLIPOP))
             "${OkHttp.PACKAGE_NAME}.${OkHttp.CLASS_NAME}\$${OkHttp.PROVIDER_NAME}"
         else
             "${OkHttpLegacy.PACKAGE_NAME}.${OkHttpLegacy
