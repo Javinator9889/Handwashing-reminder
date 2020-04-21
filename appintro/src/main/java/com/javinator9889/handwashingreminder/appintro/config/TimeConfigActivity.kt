@@ -38,6 +38,7 @@ import com.javinator9889.handwashingreminder.utils.AndroidVersion
 import com.javinator9889.handwashingreminder.utils.TimeConfig
 import com.javinator9889.handwashingreminder.utils.formatTime
 import com.javinator9889.handwashingreminder.utils.isAtLeast
+import timber.log.Timber
 import java.util.*
 
 class TimeConfigActivity :
@@ -110,11 +111,16 @@ class TimeConfigActivity :
                 else -> null
             }
             if (imageRes != null)
-                GlideApp.with(this)
-                    .load(imageRes)
-                    .centerCrop()
-                    .centerInside()
-                    .into(image)
+                try {
+                    GlideApp.with(this)
+                        .load(imageRes)
+                        .centerCrop()
+                        .centerInside()
+                        .into(image)
+                } catch (e: Exception) {
+                    Timber.e(e, "Error while loading Glide view")
+                    image.setImageResource(imageRes)
+                }
             setHours(sHours.toString(), sMinutes.toString())
         }
     }

@@ -68,9 +68,14 @@ class SliderView : BaseFragmentView() {
                     Timber.d("Video finished loading")
                 })
                 washingHandsModel.image.observe(viewLifecycleOwner, Observer {
-                    GlideApp.with(this@SliderView)
-                        .load(it)
-                        .into(image)
+                    try {
+                        GlideApp.with(this@SliderView)
+                            .load(it)
+                            .into(image)
+                    } catch (e: Exception) {
+                        Timber.e(e, "Error while loading Glide view")
+                        image.setImageResource(it)
+                    }
                     drawableId = it
                     Timber.d("Image finished loading")
                     incrementCounter()
@@ -118,11 +123,16 @@ class SliderView : BaseFragmentView() {
         Timber.d("Slide resumed")
         video.requestFocus()
         video.start()
-        GlideApp.with(this)
-            .load(drawableId)
-            .centerInside()
-            .centerCrop()
-            .into(image)
+        try {
+            GlideApp.with(this)
+                .load(drawableId)
+                .centerInside()
+                .centerCrop()
+                .into(image)
+        } catch (e: Exception) {
+            Timber.e(e, "Error while loading Glide view")
+            image.setImageResource(drawableId)
+        }
         super.onResume()
     }
 

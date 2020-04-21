@@ -136,7 +136,7 @@ class IntroActivity : AppIntro2(),
         super.onDonePressed(currentFragment)
         val app = HandwashingApplication.getInstance()
         val sharedPreferences = app.sharedPreferences
-        sharedPreferences.edit {
+        sharedPreferences.edit(commit = true) {
             timeConfigSlide.rvItems.forEach { item ->
                 val time = "${item.hours}:${item.minutes}"
                 when (item.id) {
