@@ -43,7 +43,7 @@ data class NotificationStructure(
 
 class NotificationsWorker(
     private val context: Context,
-    private val params: WorkerParameters
+    params: WorkerParameters
 ) : CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result = coroutineScope {
@@ -70,11 +70,19 @@ class NotificationsWorker(
 
 
             val emojiCompat = emojiLoader.await()
-            val title =
-                emojiCompat.process(context.getString(notificationData.title))
-            val comments =
-                context.resources.getStringArray(notificationData.content)
-            val comment = emojiCompat.process(comments.asList().random())
+            var title: CharSequence
+            var comment: CharSequence
+            try {
+                title =
+                    emojiCompat.process(context.getString(notificationData.title))
+                val comments =
+                    context.resources.getStringArray(notificationData.content)
+                comment = emojiCompat.process(comments.asList().random())
+            } catch (_: IllegalStateException) {
+                title = context.getText(notificationData.title)
+                comment = context.resources
+                    .getStringArray(notificationData.content).asList().random()
+            }
 
             withContext(Dispatchers.Main) {
                 notificationsHandler.createNotification(

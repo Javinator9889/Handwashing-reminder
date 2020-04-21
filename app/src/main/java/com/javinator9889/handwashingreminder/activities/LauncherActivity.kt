@@ -175,6 +175,11 @@ class LauncherActivity : AppCompatActivity() {
         }
     }
 
+    override fun finish() {
+        Timber.d("Calling finish")
+        super.finish()
+    }
+
     private fun installRequiredModules() {
         val modules = ArrayList<String>(MODULE_COUNT)
         val googleApi = GoogleApiAvailability.getInstance()
