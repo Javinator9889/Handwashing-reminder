@@ -114,7 +114,6 @@ class TimeConfigActivity :
                 try {
                     GlideApp.with(this)
                         .load(imageRes)
-                        .centerCrop()
                         .centerInside()
                         .into(image)
                 } catch (e: Exception) {

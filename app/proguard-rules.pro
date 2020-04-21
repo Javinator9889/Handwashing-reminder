@@ -36,6 +36,22 @@
     *;
 }
 
+-keep class com.javinator9889.handwashingreminder.okhttp.OkHttpDownloader {
+    com.javinator9889.handwashingreminder.okhttp.OkHttpDownloader$Provider Provider;
+}
+
+-keep class com.javinator9889.handwashingreminder.okhttp.OkHttpDownloader$Provider {
+    *;
+}
+
+-keep class com.javinator9889.handwashingreminder.okhttplegacy.OkHttpDownloader {
+    com.javinator9889.handwashingreminder.okhttplegacy.OkHttpDownloader$Provider Provider;
+}
+
+-keep class com.javinator9889.handwashingreminder.okhttplegacy.OkHttpDownloader$Provider {
+    *;
+}
+
 -keep class com.javinator9889.handwashingreminder.bundledemoji.BundledEmojiConfig {
     *;
 }

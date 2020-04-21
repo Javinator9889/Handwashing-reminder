@@ -49,7 +49,9 @@ import com.mikepenz.iconics.Iconics
 import javinator9889.localemanager.utils.languagesupport.LanguagesSupport
 import kotlinx.android.synthetic.main.splash_screen.*
 import kotlinx.coroutines.*
+import org.conscrypt.Conscrypt
 import timber.log.Timber
+import java.security.Security
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -138,13 +140,7 @@ class LauncherActivity : AppCompatActivity() {
             if (app.sharedPreferences.getBoolean(ADS_ENABLED, true)) {
                 when (resultCode) {
                     Activity.RESULT_OK -> {
-                        val className = "${Ads.PACKAGE_NAME}.${Ads
-                            .CLASS_NAME}\$${Ads.PROVIDER_NAME}"
-                        val adProvider = Class.forName(className).kotlin
-                            .objectInstance as AdLoader.Provider
-                        app.adLoader = adProvider.instance(app)
-                        val adsEnabler = AdsEnabler(app)
-                        adsEnabler.enableAds()
+                        initAds()
                         data.notNull {
                             createPackageContext(packageName, 0).also {
                                 SplitCompat.install(it)
@@ -189,6 +185,10 @@ class LauncherActivity : AppCompatActivity() {
             modules += AppIntro.MODULE_NAME
             launchOnInstall = true
         }
+        modules += if (isAtLeast(AndroidVersion.LOLLIPOP))
+            OkHttp.MODULE_NAME
+        else
+            OkHttpLegacy.MODULE_NAME
         if (googleApi.isGooglePlayServicesAvailable(
                 this,
                 GOOGLE_PLAY_SERVICES_MIN_VERSION
@@ -213,6 +213,16 @@ class LauncherActivity : AppCompatActivity() {
         startActivityForResult(intent, DYNAMIC_FEATURE_INSTALL_RESULT_CODE)
     }
 
+    private fun initAds() {
+        val className = "${Ads.PACKAGE_NAME}.${Ads
+            .CLASS_NAME}\$${Ads.PROVIDER_NAME}"
+        val adProvider = Class.forName(className).kotlin
+            .objectInstance as AdLoader.Provider
+        app.adLoader = adProvider.instance(app)
+        val adsEnabler = AdsEnabler(app)
+        adsEnabler.enableAds()
+    }
+
     private fun createDynamicFeatureActivityIntent(
         modules: Array<String>,
         launchOnInstall: Boolean = false,
@@ -228,6 +238,9 @@ class LauncherActivity : AppCompatActivity() {
     private fun initVariables() {
         Timber.d("Initializing Iconics")
         Iconics.init(this)
+        Timber.d("Setting-up security providers")
+        Security.insertProviderAt(Conscrypt.newProvider(), 1)
+        Timber.d("Setting-up activity recognition")
         if (app.sharedPreferences.getBoolean(
                 Preferences.ACTIVITY_TRACKING_ENABLED, false
             ) && with(GoogleApiAvailability.getInstance()) {
@@ -239,6 +252,7 @@ class LauncherActivity : AppCompatActivity() {
         } else {
             app.activityHandler.disableActivityTracker()
         }
+        Timber.d("Initializing Billing Service")
         app.billingService = BillingService(this)
         try {
             app.workHandler.enqueuePeriodicNotificationsWorker()
@@ -246,6 +260,7 @@ class LauncherActivity : AppCompatActivity() {
         } catch (_: UninitializedPropertyAccessException) {
             Timber.i("Scheduler times have not been initialized")
         }
+        Timber.d("Setting-up Firebase custom properties")
         setupFirebaseProperties()
     }
 
@@ -261,22 +276,24 @@ class LauncherActivity : AppCompatActivity() {
         with(firebaseRemoteConfig) {
             Timber.d("Initializing Firebase Remote Config")
             setConfigSettingsAsync(config)
-            setDefaultsAsync(when (Locale.getDefault().language) {
-                Locale(LanguagesSupport.Language.SPANISH).language -> {
-                    firebaseAnalytics.setUserProperty(
-                        Firebase.Properties.LANGUAGE,
-                        LanguagesSupport.Language.SPANISH
-                    )
-                    R.xml.remote_config_defaults_es
+            setDefaultsAsync(
+                when (Locale.getDefault().language) {
+                    Locale(LanguagesSupport.Language.SPANISH).language -> {
+                        firebaseAnalytics.setUserProperty(
+                            Firebase.Properties.LANGUAGE,
+                            LanguagesSupport.Language.SPANISH
+                        )
+                        R.xml.remote_config_defaults_es
+                    }
+                    else -> {
+                        firebaseAnalytics.setUserProperty(
+                            Firebase.Properties.LANGUAGE,
+                            LanguagesSupport.Language.ENGLISH
+                        )
+                        R.xml.remote_config_defaults
+                    }
                 }
-                else -> {
-                    firebaseAnalytics.setUserProperty(
-                        Firebase.Properties.LANGUAGE,
-                        LanguagesSupport.Language.ENGLISH
-                    )
-                    R.xml.remote_config_defaults
-                }
-            })
+            )
             fetchAndActivate().addOnSuccessListener {
                 if (canFinishActivity)
                     finish()

@@ -43,9 +43,10 @@ android {
         applicationId "com.javinator9889.handwashingreminder"
         minSdkVersion 17
         targetSdkVersion 29
-        versionCode 94
-        versionName "1.0.1-${gitCommitHash}"
+        versionCode 101
+        versionName "1.1.0-${gitCommitHash}"
         multiDexEnabled true
+        resConfigs "en", "es"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -89,7 +90,7 @@ android {
         preDexLibraries true
         javaMaxHeapSize "1G"
     }
-    dynamicFeatures = [":appintro", ":ads", ":bundledemoji"]
+    dynamicFeatures = [":appintro", ":ads", ":bundledemoji", ":okhttp", ":okhttplegacy"]
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -99,7 +100,6 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
-
 
 }
 
@@ -127,11 +127,6 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     // https://developer.android.com/studio/build/multidex
     implementation 'androidx.multidex:multidex:2.0.1'
-    // https://github.com/afollestad/material-dialogs
-    implementation 'com.afollestad.material-dialogs:core:3.3.0'
-    implementation 'com.afollestad.material-dialogs:datetime:3.3.0'
-    implementation 'com.afollestad.material-dialogs:lifecycle:3.3.0'
-    implementation 'com.afollestad.material-dialogs:bottomsheets:3.3.0'
     // https://github.com/mikepenz/Android-Iconics
     implementation 'com.mikepenz:iconics-core:5.0.2'
     implementation 'com.mikepenz:iconics-views:5.0.2'
@@ -190,4 +185,8 @@ dependencies {
     implementation 'com.beust:klaxon:5.2'
     // https://github.com/SufficientlySecure/html-textview
     implementation 'org.sufficientlysecure:html-textview:3.9'
+    // https://square.github.io/okio/#releases
+    implementation 'com.squareup.okio:okio:2.5.0'
+    // https://github.com/google/conscrypt/
+    implementation 'org.conscrypt:conscrypt-android:2.4.0'
 }

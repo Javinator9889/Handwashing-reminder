@@ -115,7 +115,6 @@ class TimeConfigViewHolder(private val view: View) :
                 GlideApp.with(view)
                     .load(imageRes)
                     .centerInside()
-                    .centerCrop()
                     .into(image)
             } catch (e: Exception) {
                 Timber.e(e, "Error while loading Glide view")

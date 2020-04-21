@@ -127,7 +127,6 @@ class SliderView : BaseFragmentView() {
             GlideApp.with(this)
                 .load(drawableId)
                 .centerInside()
-                .centerCrop()
                 .into(image)
         } catch (e: Exception) {
             Timber.e(e, "Error while loading Glide view")
