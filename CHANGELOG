@@ -1,0 +1,9 @@
+## v1.0.1
++ Reduced boot time.
++ New notification's mechanism.
++ More optimizations.
++ Corrected an error with activity recognition in devices with Android 9 or lower.
+
+## v1.0
++ Initial release
+
