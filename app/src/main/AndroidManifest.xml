@@ -58,7 +58,17 @@
             android:exported="true">
         </receiver>
 
-        <receiver android:name=".jobs.BootCompletedJob"
+        <receiver
+            android:name=".jobs.UpdateReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action
+                    android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".jobs.BootCompletedJob"
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

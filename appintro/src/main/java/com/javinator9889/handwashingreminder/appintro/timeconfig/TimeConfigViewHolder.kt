@@ -29,6 +29,7 @@ import com.javinator9889.handwashingreminder.graphics.GlideApp
 import com.javinator9889.handwashingreminder.listeners.ViewHolder
 import com.javinator9889.handwashingreminder.utils.TimeConfig
 import com.mikepenz.iconics.view.IconicsImageView
+import timber.log.Timber
 
 
 class TimeConfigViewHolder(private val view: View) :
@@ -110,10 +111,15 @@ class TimeConfigViewHolder(private val view: View) :
 
     private fun loadImageView(@DrawableRes imageRes: Int?) {
         if (imageRes != null)
-            GlideApp.with(view)
-                .load(imageRes)
-                .centerInside()
-                .centerCrop()
-                .into(image)
+            try {
+                GlideApp.with(view)
+                    .load(imageRes)
+                    .centerInside()
+                    .centerCrop()
+                    .into(image)
+            } catch (e: Exception) {
+                Timber.e(e, "Error while loading Glide view")
+                image.setImageResource(imageRes)
+            }
     }
 }

@@ -28,6 +28,8 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
+import com.javinator9889.handwashingreminder.utils.AndroidVersion
+import com.javinator9889.handwashingreminder.utils.isAtLeast
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.ionicons.Ionicons
 import com.mikepenz.iconics.utils.sizeDp
@@ -57,7 +59,7 @@ class ActivityCheckbox : CheckBoxPreference {
         if (!isViewDisabled) {
             if (ContextCompat.checkSelfPermission(
                     context, Manifest.permission.ACTIVITY_RECOGNITION
-                ) == PERMISSION_DENIED
+                ) == PERMISSION_DENIED && isAtLeast(AndroidVersion.Q)
             ) {
                 isViewDisabled = true
                 summaryOff =

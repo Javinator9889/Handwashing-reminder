@@ -41,10 +41,10 @@ class WorkHandler(private val context: Context) {
             preferences.getString(Preferences.BREAKFAST_TIME, "")!!
         val lunchTime = preferences.getString(Preferences.LUNCH_TIME, "")!!
         val dinnerTime = preferences.getString(Preferences.DINNER_TIME, "")!!
-        if (breakfastTime == "" || lunchTime == "" || dinnerTime == "")
-            throw UninitializedPropertyAccessException(
-                "The scheduled time values are not initialized"
-            )
+        if (breakfastTime == "" || lunchTime == "" || dinnerTime == "") {
+            Timber.e("The scheduled times are not initialized")
+            return
+        }
         val times = arrayOf(breakfastTime, lunchTime, dinnerTime)
         times.forEach { time ->
             val dueDate = Calendar.getInstance()

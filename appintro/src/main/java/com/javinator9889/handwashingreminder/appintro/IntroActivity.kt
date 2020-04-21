@@ -43,6 +43,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.perf.FirebasePerformance
 import com.javinator9889.handwashingreminder.activities.MainActivity
 import com.javinator9889.handwashingreminder.appintro.config.TimeConfigActivity
 import com.javinator9889.handwashingreminder.appintro.custom.SliderPageBuilder
@@ -77,11 +78,9 @@ class IntroActivity : AppIntro2(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        with(HandwashingApplication.getInstance()) {
-            firebaseAnalytics.logEvent(
-                FirebaseAnalytics.Event.TUTORIAL_BEGIN, null
-            )
-            firebaseAnalytics.setCurrentScreen(this@IntroActivity, "Intro", null)
+        with(FirebaseAnalytics.getInstance(this)) {
+            logEvent(FirebaseAnalytics.Event.TUTORIAL_BEGIN, null)
+            setCurrentScreen(this@IntroActivity, "Intro", null)
         }
 
         val firstSlide = SliderPageBuilder.Builder()
@@ -137,7 +136,7 @@ class IntroActivity : AppIntro2(),
         super.onDonePressed(currentFragment)
         val app = HandwashingApplication.getInstance()
         val sharedPreferences = app.sharedPreferences
-        sharedPreferences.edit {
+        sharedPreferences.edit(commit = true) {
             timeConfigSlide.rvItems.forEach { item ->
                 val time = "${item.hours}:${item.minutes}"
                 when (item.id) {
@@ -161,6 +160,8 @@ class IntroActivity : AppIntro2(),
                 Preferences.ADS_ENABLED,
                 sharedPreferences.getBoolean(Preferences.ADS_ENABLED, true)
             )
+            if (!isAtLeast(AndroidVersion.Q))
+                activityRecognitionPermissionGranted = true
             putBoolean(
                 Preferences.ACTIVITY_TRACKING_ENABLED,
                 activityRecognitionPermissionGranted
@@ -168,7 +169,8 @@ class IntroActivity : AppIntro2(),
             if (activityRecognitionPermissionGranted) {
                 putStringSet(
                     Preferences.ACTIVITIES_ENABLED,
-                    Preferences.DEFAULT_ACTIVITY_SET)
+                    Preferences.DEFAULT_ACTIVITY_SET
+                )
             }
             putBoolean(Preferences.APP_INIT_KEY, true)
         }
@@ -179,6 +181,7 @@ class IntroActivity : AppIntro2(),
         else
             app.activityHandler.disableActivityTracker()
         app.workHandler.enqueuePeriodicNotificationsWorker()
+        val firebaseAnalytics = FirebaseAnalytics.getInstance(this)
         with(Bundle(2)) {
             putBoolean(
                 "analytics_enabled",
@@ -188,19 +191,22 @@ class IntroActivity : AppIntro2(),
                 "performance_enabled",
                 policySlide.firebasePerformance.isChecked
             )
-            app.firebaseAnalytics.logEvent(
-                FirebaseAnalytics.Event.SELECT_ITEM, this
+            firebaseAnalytics.logEvent(
+                FirebaseAnalytics.Event.SELECT_ITEM,
+                this
             )
         }
-        app.firebaseAnalytics.logEvent(
+        firebaseAnalytics.logEvent(
             FirebaseAnalytics.Event.TUTORIAL_COMPLETE, null
         )
         if (!policySlide.firebaseAnalytics.isChecked) {
-            app.firebaseAnalytics.setCurrentScreen(this, null, null)
-            app.firebaseAnalytics.setAnalyticsCollectionEnabled(false)
+            firebaseAnalytics.setCurrentScreen(this, null, null)
+            firebaseAnalytics.setAnalyticsCollectionEnabled(false)
         }
-        app.firebasePerformance.isPerformanceCollectionEnabled =
-            policySlide.firebasePerformance.isChecked
+        with(FirebasePerformance.getInstance()) {
+            isPerformanceCollectionEnabled =
+                policySlide.firebasePerformance.isChecked
+        }
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         this.finish()
@@ -355,7 +361,9 @@ class IntroActivity : AppIntro2(),
     ) {
         if (requestCode == PERMISSIONS_REQUEST_CODE) {
             activityRecognitionPermissionGranted =
-                grantResults.isNotEmpty() && grantResults[0] == PERMISSION_GRANTED
+                (grantResults.isNotEmpty() &&
+                        grantResults[0] == PERMISSION_GRANTED) ||
+                        !isAtLeast(AndroidVersion.Q)
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }

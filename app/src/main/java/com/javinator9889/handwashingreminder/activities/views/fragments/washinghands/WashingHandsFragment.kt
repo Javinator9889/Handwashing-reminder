@@ -82,7 +82,10 @@ class WashingHandsFragment : BaseFragmentView() {
             if (position == 0) {
                 return FirstSlide()
             }
-            with(SliderView(position - 1)) {
+            with(SliderView()) {
+                val args = Bundle(1)
+                args.putInt(ARG_POSITION, position - 1)
+                this.arguments = args
                 items[position] = WeakReference(this)
                 return this
             }

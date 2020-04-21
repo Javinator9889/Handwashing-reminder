@@ -39,14 +39,16 @@ import java.util.concurrent.atomic.AtomicInteger
 import kotlin.properties.Delegates
 
 private const val WAITING_ITEMS_COUNT = 4
+internal const val ARG_POSITION = "bundle:position"
 
-class SliderView(position: Int) : BaseFragmentView() {
+class SliderView : BaseFragmentView() {
     override val layoutId: Int = R.layout.wash_your_hands_demo
     private lateinit var videoURI: Uri
     private var drawableId by Delegates.notNull<Int>()
     private val counter = AtomicInteger(0)
-    private val videoModelFactory = VideoModelFactory(position)
-    private val handsFactory = WashingHandsModelFactory(position)
+    private var position by Delegates.notNull<Int>()
+    private lateinit var videoModelFactory: VideoModelFactory
+    private lateinit var handsFactory: WashingHandsModelFactory
     private val viewModel: VideoModel by viewModels {
         SavedViewModelFactory(videoModelFactory, this)
     }
@@ -66,9 +68,14 @@ class SliderView(position: Int) : BaseFragmentView() {
                     Timber.d("Video finished loading")
                 })
                 washingHandsModel.image.observe(viewLifecycleOwner, Observer {
-                    GlideApp.with(this@SliderView)
-                        .load(it)
-                        .into(image)
+                    try {
+                        GlideApp.with(this@SliderView)
+                            .load(it)
+                            .into(image)
+                    } catch (e: Exception) {
+                        Timber.e(e, "Error while loading Glide view")
+                        image.setImageResource(it)
+                    }
                     drawableId = it
                     Timber.d("Image finished loading")
                     incrementCounter()
@@ -86,6 +93,15 @@ class SliderView(position: Int) : BaseFragmentView() {
                     })
             }
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val args = arguments ?: savedInstanceState ?: throw
+        IllegalStateException("Arguments cannot be null")
+        videoModelFactory = VideoModelFactory(args.getInt(ARG_POSITION))
+        handsFactory = WashingHandsModelFactory(args.getInt(ARG_POSITION))
+        position = args.getInt(ARG_POSITION)
     }
 
     override fun onPause() {
@@ -107,11 +123,16 @@ class SliderView(position: Int) : BaseFragmentView() {
         Timber.d("Slide resumed")
         video.requestFocus()
         video.start()
-        GlideApp.with(this)
-            .load(drawableId)
-            .centerInside()
-            .centerCrop()
-            .into(image)
+        try {
+            GlideApp.with(this)
+                .load(drawableId)
+                .centerInside()
+                .centerCrop()
+                .into(image)
+        } catch (e: Exception) {
+            Timber.e(e, "Error while loading Glide view")
+            image.setImageResource(drawableId)
+        }
         super.onResume()
     }
 
@@ -121,7 +142,12 @@ class SliderView(position: Int) : BaseFragmentView() {
             washingHandsModel.setImageSize(it.measuredWidth, it.measuredHeight)
         }
     }
-    
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(ARG_POSITION, position)
+    }
+
     private fun incrementCounter() {
         Timber.d("Counter incremented")
         if (counter.incrementAndGet() < WAITING_ITEMS_COUNT)

@@ -31,6 +31,9 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.perf.FirebasePerformance
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
@@ -43,9 +46,12 @@ import com.javinator9889.handwashingreminder.utils.Preferences.Companion.ADS_ENA
 import com.javinator9889.handwashingreminder.utils.Preferences.Companion.APP_INIT_KEY
 import com.javinator9889.handwashingreminder.utils.RemoteConfig.Keys.SPECIAL_EVENT
 import com.mikepenz.iconics.Iconics
+import javinator9889.localemanager.utils.languagesupport.LanguagesSupport
 import kotlinx.android.synthetic.main.splash_screen.*
 import kotlinx.coroutines.*
 import timber.log.Timber
+import java.util.*
+import kotlin.collections.ArrayList
 
 internal const val FAST_START_KEY = "intent:fast_start"
 internal const val PENDING_INTENT_CODE = 201
@@ -53,6 +59,7 @@ internal const val PENDING_INTENT_CODE = 201
 class LauncherActivity : AppCompatActivity() {
     private var launchOnInstall = false
     private var launchFromNotification = false
+    private var canFinishActivity = false
     private lateinit var app: HandwashingApplication
     private lateinit var initDeferred: Deferred<Unit>
 
@@ -85,9 +92,9 @@ class LauncherActivity : AppCompatActivity() {
     }
 
     private suspend fun displayWelcomeScreen() {
-        val isThereAnySpecialEvent =
-            app.remoteConfig.getBoolean(SPECIAL_EVENT) &&
-                    !launchFromNotification
+        val isThereAnySpecialEvent = with(FirebaseRemoteConfig.getInstance()) {
+            getBoolean(SPECIAL_EVENT) && !launchFromNotification
+        }
         var sleepDuration = 0L
         var animationLoaded = false
         val fadeInAnimation =
@@ -161,13 +168,16 @@ class LauncherActivity : AppCompatActivity() {
                     overridePendingTransition(0, android.R.anim.fade_out)
                 }
             }
-            finish()
+            if (canFinishActivity)
+                finish()
+            else
+                canFinishActivity = true
         }
     }
 
     override fun finish() {
+        Timber.d("Calling finish")
         super.finish()
-        overridePendingTransition(0, android.R.anim.fade_out)
     }
 
     private fun installRequiredModules() {
@@ -216,6 +226,8 @@ class LauncherActivity : AppCompatActivity() {
     }
 
     private fun initVariables() {
+        Timber.d("Initializing Iconics")
+        Iconics.init(this)
         if (app.sharedPreferences.getBoolean(
                 Preferences.ACTIVITY_TRACKING_ENABLED, false
             ) && with(GoogleApiAvailability.getInstance()) {
@@ -227,42 +239,62 @@ class LauncherActivity : AppCompatActivity() {
         } else {
             app.activityHandler.disableActivityTracker()
         }
-
-        setupFirebaseProperties()
         app.billingService = BillingService(this)
-        Timber.d("Initializing Iconics")
-        Iconics.init(this)
         try {
             app.workHandler.enqueuePeriodicNotificationsWorker()
             Timber.d("Adding periodic notifications if not enqueued yet")
         } catch (_: UninitializedPropertyAccessException) {
             Timber.i("Scheduler times have not been initialized")
         }
+        setupFirebaseProperties()
     }
 
     private fun setupFirebaseProperties() {
+        val firebaseAnalytics = FirebaseAnalytics.getInstance(this)
+        val firebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
+        val firebasePerformance = FirebasePerformance.getInstance()
         val config = with(FirebaseRemoteConfigSettings.Builder()) {
             minimumFetchIntervalInSeconds = 10
             fetchTimeoutInSeconds = 5
             build()
         }
-        with(app.remoteConfig) {
+        with(firebaseRemoteConfig) {
             Timber.d("Initializing Firebase Remote Config")
             setConfigSettingsAsync(config)
-            setDefaultsAsync(app.remoteConfigSettings)
-            fetchAndActivate()
+            setDefaultsAsync(when (Locale.getDefault().language) {
+                Locale(LanguagesSupport.Language.SPANISH).language -> {
+                    firebaseAnalytics.setUserProperty(
+                        Firebase.Properties.LANGUAGE,
+                        LanguagesSupport.Language.SPANISH
+                    )
+                    R.xml.remote_config_defaults_es
+                }
+                else -> {
+                    firebaseAnalytics.setUserProperty(
+                        Firebase.Properties.LANGUAGE,
+                        LanguagesSupport.Language.ENGLISH
+                    )
+                    R.xml.remote_config_defaults
+                }
+            })
+            fetchAndActivate().addOnSuccessListener {
+                if (canFinishActivity)
+                    finish()
+                else
+                    canFinishActivity = true
+            }
         }
-        app.firebaseAnalytics.setAnalyticsCollectionEnabled(
+        firebaseAnalytics.setAnalyticsCollectionEnabled(
             app.sharedPreferences.getBoolean(
                 Preferences.ANALYTICS_ENABLED,
                 true
             )
         )
-        app.firebasePerformance.isPerformanceCollectionEnabled =
+        firebasePerformance.isPerformanceCollectionEnabled =
             app.sharedPreferences.getBoolean(
                 Preferences.PERFORMANCE_ENABLED,
                 true
             )
-        Timber.d("Performance enabled: ${app.firebasePerformance.isPerformanceCollectionEnabled}")
+        Timber.d("Performance enabled: ${firebasePerformance.isPerformanceCollectionEnabled}")
     }
 }

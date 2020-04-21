@@ -28,7 +28,9 @@ import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.perf.metrics.AddTrace
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.support.ActionBarBase
 import com.javinator9889.handwashingreminder.activities.views.fragments.diseases.DiseasesFragment
@@ -56,9 +58,12 @@ class MainActivity : ActionBarBase(),
     @AddTrace(name = "onCreateMainView")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        app = HandwashingApplication.getInstance()
-        app.firebaseAnalytics.setCurrentScreen(this, "Main view", null)
-        app.remoteConfig.fetchAndActivate()
+        with(FirebaseAnalytics.getInstance(this)) {
+            setCurrentScreen(this@MainActivity, "Main view", null)
+        }
+        with(FirebaseRemoteConfig.getInstance()) {
+            fetchAndActivate()
+        }
         delegateMenuIcons(menu)
         val ids =
             arrayOf(R.id.diseases, R.id.handwashing, R.id.news, R.id.settings)
@@ -123,7 +128,9 @@ class MainActivity : ActionBarBase(),
             R.id.settings -> "settings"
             else -> "Main view"
         }
-        app.firebaseAnalytics.setCurrentScreen(this, screenTitle, null)
+        with(FirebaseAnalytics.getInstance(this)) {
+            setCurrentScreen(this@MainActivity, screenTitle, null)
+        }
         return onItemSelected(item.itemId)
     }
 
