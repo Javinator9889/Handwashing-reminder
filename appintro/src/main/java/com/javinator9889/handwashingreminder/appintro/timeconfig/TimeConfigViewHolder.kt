@@ -23,9 +23,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
 import com.javinator9889.handwashingreminder.appintro.R
-import com.javinator9889.handwashingreminder.graphics.GlideApp
 import com.javinator9889.handwashingreminder.listeners.ViewHolder
 import com.javinator9889.handwashingreminder.utils.TimeConfig
 import com.mikepenz.iconics.view.IconicsImageView
@@ -112,10 +112,9 @@ class TimeConfigViewHolder(private val view: View) :
     private fun loadImageView(@DrawableRes imageRes: Int?) {
         if (imageRes != null)
             try {
-                GlideApp.with(view)
+                Glide.with(view)
                     .load(imageRes)
                     .centerInside()
-                    .centerCrop()
                     .into(image)
             } catch (e: Exception) {
                 Timber.e(e, "Error while loading Glide view")

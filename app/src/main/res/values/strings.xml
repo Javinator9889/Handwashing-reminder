@@ -275,4 +275,6 @@
     <string name="prevention">Prevention</string>
     <string name="written_by">Written by %s</string>
     <string name="available_at">Available at: %s</string>
+    <string name="title_okhttp" translatable="false">OkHttp</string>
+    <string name="title_okhttplegacy" translatable="false">Ok HTTP Legacy</string>
 </resources>

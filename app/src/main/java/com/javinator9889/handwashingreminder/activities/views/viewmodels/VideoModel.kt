@@ -24,6 +24,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.google.firebase.perf.metrics.AddTrace
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
+import com.javinator9889.handwashingreminder.network.HttpDownloader
 import com.javinator9889.handwashingreminder.utils.Videos.URI.FILENAME
 import com.javinator9889.handwashingreminder.utils.Videos.URI.HASH
 import com.javinator9889.handwashingreminder.utils.Videos.URI.URL
@@ -32,10 +33,14 @@ import com.javinator9889.handwashingreminder.utils.isConnected
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
+import okio.HashingSink
+import okio.buffer
+import okio.sink
 import timber.log.Timber
-import java.io.*
+import java.io.File
+import java.io.FileInputStream
+import java.io.InputStream
 import java.math.BigInteger
-import java.net.URL
 import java.security.MessageDigest
 import javax.inject.Inject
 
@@ -78,32 +83,20 @@ class VideoModel(
     ): File {
         val file = File(cachePath, name)
         withContext(Dispatchers.IO) {
-            val digest = MessageDigest.getInstance("SHA-256")
+            if (!isConnected() || !needsToDownloadFile(file, hash))
+                return@withContext
+            else
+                file.createNewFile()
+            val hashingSink = HashingSink.sha256(file.sink())
             do {
-                if (!isConnected() || !needsToDownloadFile(file, hash))
-                    return@withContext
-                else
-                    file.createNewFile()
-                val stream = with(URL(url)) {
-                    openStream()
-                }.let { BufferedInputStream(it, 8192) }
-                val data = ByteArray(8192)
-                val output = FileOutputStream(file)
-                try {
-                    var count = stream.read(data)
-                    while (count > 0) {
-                        output.write(data, 0, count)
-                        digest.update(data, 0, count)
-                        count = stream.read(data)
+                val okHttpDownloader = HttpDownloader.newInstance()
+                with(okHttpDownloader.downloadFile(url)) {
+                    hashingSink.buffer().use {
+                        it.writeAll(this)
                     }
-                    output.flush()
-                } catch (e: IOException) {
-                    Timber.e(e, "Unable to download video $name")
-                } finally {
-                    output.close()
-                    stream.close()
+                    close()
                 }
-            } while (!sameSHA2Hash(hash, digest))
+            } while (!hashingSink.hash.hex().equals(hash, true))
         }
         return file
     }

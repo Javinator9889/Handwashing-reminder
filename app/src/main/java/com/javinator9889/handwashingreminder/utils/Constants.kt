@@ -79,6 +79,24 @@ class BundledEmoji {
     }
 }
 
+class OkHttp {
+    companion object Modules {
+        const val MODULE_NAME = "okhttp"
+        const val PACKAGE_NAME = "com.javinator9889.handwashingreminder.okhttp"
+        const val CLASS_NAME = "OkHttpDownloader"
+        const val PROVIDER_NAME = "Provider"
+    }
+}
+
+class OkHttpLegacy {
+    companion object Modules {
+        const val MODULE_NAME = "okhttplegacy"
+        const val PACKAGE_NAME = "com.javinator9889.handwashingreminder.okhttplegacy"
+        const val CLASS_NAME = "OkHttpDownloader"
+        const val PROVIDER_NAME = "Provider"
+    }
+}
+
 class RemoteConfig {
     companion object Keys {
         const val SPECIAL_EVENT = "special_event"
