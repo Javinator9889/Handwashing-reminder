@@ -39,14 +39,15 @@ import java.util.concurrent.atomic.AtomicInteger
 import kotlin.properties.Delegates
 
 private const val WAITING_ITEMS_COUNT = 4
+internal const val ARG_POSITION = "bundle:position"
 
-class SliderView(position: Int) : BaseFragmentView() {
+class SliderView : BaseFragmentView() {
     override val layoutId: Int = R.layout.wash_your_hands_demo
     private lateinit var videoURI: Uri
     private var drawableId by Delegates.notNull<Int>()
     private val counter = AtomicInteger(0)
-    private val videoModelFactory = VideoModelFactory(position)
-    private val handsFactory = WashingHandsModelFactory(position)
+    private lateinit var videoModelFactory: VideoModelFactory
+    private lateinit var handsFactory: WashingHandsModelFactory
     private val viewModel: VideoModel by viewModels {
         SavedViewModelFactory(videoModelFactory, this)
     }
@@ -88,6 +89,14 @@ class SliderView(position: Int) : BaseFragmentView() {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val args = arguments ?: savedInstanceState ?: throw
+        IllegalStateException("Arguments cannot be null")
+        videoModelFactory = VideoModelFactory(args.getInt(ARG_POSITION))
+        handsFactory = WashingHandsModelFactory(args.getInt(ARG_POSITION))
+    }
+
     override fun onPause() {
         Timber.d("Slide paused")
         video.requestFocus()
@@ -121,7 +130,7 @@ class SliderView(position: Int) : BaseFragmentView() {
             washingHandsModel.setImageSize(it.measuredWidth, it.measuredHeight)
         }
     }
-    
+
     private fun incrementCounter() {
         Timber.d("Counter incremented")
         if (counter.incrementAndGet() < WAITING_ITEMS_COUNT)

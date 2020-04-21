@@ -165,6 +165,8 @@ class IntroActivity : AppIntro2(),
                 Preferences.ADS_ENABLED,
                 sharedPreferences.getBoolean(Preferences.ADS_ENABLED, true)
             )
+            if (!isAtLeast(AndroidVersion.Q))
+                activityRecognitionPermissionGranted = true
             putBoolean(
                 Preferences.ACTIVITY_TRACKING_ENABLED,
                 activityRecognitionPermissionGranted
