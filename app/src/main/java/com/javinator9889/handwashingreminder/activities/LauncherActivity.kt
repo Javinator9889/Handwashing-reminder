@@ -185,7 +185,7 @@ class LauncherActivity : AppCompatActivity() {
             modules += AppIntro.MODULE_NAME
             launchOnInstall = true
         }
-        modules += if (isAtLeast(AndroidVersion.LOLLIPOP) && false)
+        modules += if (isAtLeast(AndroidVersion.LOLLIPOP))
             OkHttp.MODULE_NAME
         else
             OkHttpLegacy.MODULE_NAME
