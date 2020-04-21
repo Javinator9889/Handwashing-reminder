@@ -81,7 +81,11 @@ class IntroActivity : AppIntro2(),
             firebaseAnalytics.logEvent(
                 FirebaseAnalytics.Event.TUTORIAL_BEGIN, null
             )
-            firebaseAnalytics.setCurrentScreen(this@IntroActivity, "Intro", null)
+            firebaseAnalytics.setCurrentScreen(
+                this@IntroActivity,
+                "Intro",
+                null
+            )
         }
 
         val firstSlide = SliderPageBuilder.Builder()
@@ -168,7 +172,8 @@ class IntroActivity : AppIntro2(),
             if (activityRecognitionPermissionGranted) {
                 putStringSet(
                     Preferences.ACTIVITIES_ENABLED,
-                    Preferences.DEFAULT_ACTIVITY_SET)
+                    Preferences.DEFAULT_ACTIVITY_SET
+                )
             }
             putBoolean(Preferences.APP_INIT_KEY, true)
         }
@@ -355,7 +360,9 @@ class IntroActivity : AppIntro2(),
     ) {
         if (requestCode == PERMISSIONS_REQUEST_CODE) {
             activityRecognitionPermissionGranted =
-                grantResults.isNotEmpty() && grantResults[0] == PERMISSION_GRANTED
+                (grantResults.isNotEmpty() &&
+                        grantResults[0] == PERMISSION_GRANTED) ||
+                        !isAtLeast(AndroidVersion.Q)
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
