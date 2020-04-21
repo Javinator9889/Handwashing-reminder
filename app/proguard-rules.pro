@@ -40,7 +40,7 @@
     com.javinator9889.handwashingreminder.okhttp.OkHttpDownloader$Provider Provider;
 }
 
--keep com.javinator9889.handwashingreminder.okhttp.OkHttpDownloader$Provider {
+-keep class com.javinator9889.handwashingreminder.okhttp.OkHttpDownloader$Provider {
     *;
 }
 
@@ -48,7 +48,7 @@
     com.javinator9889.handwashingreminder.okhttplegacy.OkHttpDownloader$Provider Provider;
 }
 
--keep com.javinator9889.handwashingreminder.okhttplegacy.OkHttpDownloader$Provider {
+-keep class com.javinator9889.handwashingreminder.okhttplegacy.OkHttpDownloader$Provider {
     *;
 }
 
