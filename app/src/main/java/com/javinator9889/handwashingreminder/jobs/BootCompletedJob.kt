@@ -40,6 +40,7 @@ class BootCompletedJob : BroadcastReceiver() {
             else
                 app.activityHandler.disableActivityTracker()
             try {
+                Timber.d("Enqueuing notifications as the device has rebooted")
                 with(WorkHandler(requireNotNull(context))) {
                     enqueuePeriodicNotificationsWorker()
                 }

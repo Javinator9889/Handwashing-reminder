@@ -189,10 +189,10 @@ class LauncherActivity : AppCompatActivity() {
             modules += AppIntro.MODULE_NAME
             launchOnInstall = true
         }
-        modules += if (isAtLeast(AndroidVersion.LOLLIPOP))
+        /*modules += if (isAtLeast(AndroidVersion.LOLLIPOP))
             OkHttp.MODULE_NAME
         else
-            OkHttpLegacy.MODULE_NAME
+            OkHttpLegacy.MODULE_NAME*/
         if (googleApi.isGooglePlayServicesAvailable(
                 this,
                 GOOGLE_PLAY_SERVICES_MIN_VERSION
