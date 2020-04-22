@@ -23,8 +23,8 @@ import androidx.preference.PreferenceManager
 import androidx.work.*
 import com.javinator9889.handwashingreminder.utils.Preferences
 import com.javinator9889.handwashingreminder.utils.Workers
+import com.javinator9889.handwashingreminder.utils.runAt
 import timber.log.Timber
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 data class Who(val uuid: String, val id: Int)
@@ -34,7 +34,6 @@ class WorkHandler(private val context: Context) {
         get() = WorkManager.getInstance(context)
 
     fun enqueuePeriodicNotificationsWorker(forceUpdate: Boolean = false) {
-        val currentDate = Calendar.getInstance()
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
 
         val breakfastTime =
@@ -47,18 +46,11 @@ class WorkHandler(private val context: Context) {
         }
         val times = arrayOf(breakfastTime, lunchTime, dinnerTime)
         times.forEach { time ->
-            val dueDate = Calendar.getInstance()
             val splittedTime = time.split(":")
             val hour = Integer.parseInt(splittedTime[0].trim())
             val minute = Integer.parseInt(splittedTime[1].trim())
 
-            dueDate.set(Calendar.HOUR_OF_DAY, hour)
-            dueDate.set(Calendar.MINUTE, minute)
-            dueDate.set(Calendar.SECOND, 0)
-            if (dueDate.before(currentDate))
-                dueDate.add(Calendar.HOUR_OF_DAY, 24)
-            val timeDiff = dueDate.timeInMillis - currentDate.timeInMillis
-
+            val timeDiff = runAt(hour, minute)
             val who = when (time) {
                 breakfastTime -> Who(Workers.BREAKFAST_UUID, Workers.BREAKFAST)
                 lunchTime -> Who(Workers.LUNCH_UUID, Workers.LUNCH)
@@ -66,7 +58,7 @@ class WorkHandler(private val context: Context) {
                 else -> return  // This should never happen
             }
             Timber.i(
-                "Scheduled activity ${who.uuid} at ${dueDate.time}"
+                "Scheduled activity ${who.uuid} in $timeDiff ms"
             )
 
             val workData = workDataOf(
@@ -103,7 +95,7 @@ class WorkHandler(private val context: Context) {
         with(workManager) {
             enqueueUniqueWork(
                 who,
-                ExistingWorkPolicy.APPEND,
+                ExistingWorkPolicy.REPLACE,
                 jobRequest
             )
         }

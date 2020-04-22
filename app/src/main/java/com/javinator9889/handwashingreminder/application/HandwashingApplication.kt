@@ -27,7 +27,6 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.javinator9889.handwashingreminder.gms.activity.ActivityHandler
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
 import com.javinator9889.handwashingreminder.gms.vendor.BillingService
-import com.javinator9889.handwashingreminder.jobs.workers.WorkHandler
 import com.javinator9889.handwashingreminder.utils.LogReportTree
 import com.javinator9889.handwashingreminder.utils.isDebuggable
 import javinator9889.localemanager.application.BaseApplication
@@ -37,7 +36,6 @@ import timber.log.Timber
 
 class HandwashingApplication : BaseApplication() {
     var adLoader: AdLoader? = null
-    lateinit var workHandler: WorkHandler
     lateinit var billingService: BillingService
     lateinit var activityHandler: ActivityHandler
     lateinit var sharedPreferences: SharedPreferences
@@ -74,7 +72,6 @@ class HandwashingApplication : BaseApplication() {
             Timber.plant(LogReportTree())
         }
         activityHandler = ActivityHandler(this)
-        workHandler = WorkHandler(this)
     }
 
     /**

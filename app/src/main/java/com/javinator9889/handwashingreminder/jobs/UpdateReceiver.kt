@@ -21,12 +21,22 @@ package com.javinator9889.handwashingreminder.jobs
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.javinator9889.handwashingreminder.application.HandwashingApplication
+import com.javinator9889.handwashingreminder.jobs.workers.WorkHandler
+import timber.log.Timber
 
 class UpdateReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
-        with(HandwashingApplication.getInstance().workHandler) {
-            enqueuePeriodicNotificationsWorker(true)
+        if (intent?.action == Intent.ACTION_MY_PACKAGE_REPLACED) {
+            Timber.d("Package updated so rescheduling jobs")
+            try {
+                with(WorkHandler(requireNotNull(context))) {
+                    enqueuePeriodicNotificationsWorker(true)
+                }
+            } catch (_: IllegalArgumentException) {
+                Timber.w(
+                    "Context is null so notifications cannot be rescheduled"
+                )
+            }
         }
     }
 }

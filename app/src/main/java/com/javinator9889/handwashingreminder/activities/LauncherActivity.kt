@@ -41,6 +41,7 @@ import com.javinator9889.handwashingreminder.emoji.EmojiLoader
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
 import com.javinator9889.handwashingreminder.gms.ads.AdsEnabler
 import com.javinator9889.handwashingreminder.gms.vendor.BillingService
+import com.javinator9889.handwashingreminder.jobs.workers.WorkHandler
 import com.javinator9889.handwashingreminder.utils.*
 import com.javinator9889.handwashingreminder.utils.Preferences.Companion.ADS_ENABLED
 import com.javinator9889.handwashingreminder.utils.Preferences.Companion.APP_INIT_KEY
@@ -254,12 +255,10 @@ class LauncherActivity : AppCompatActivity() {
         }
         Timber.d("Initializing Billing Service")
         app.billingService = BillingService(this)
-        try {
-            app.workHandler.enqueuePeriodicNotificationsWorker()
-            Timber.d("Adding periodic notifications if not enqueued yet")
-        } catch (_: UninitializedPropertyAccessException) {
-            Timber.i("Scheduler times have not been initialized")
+        with(WorkHandler(this)) {
+            enqueuePeriodicNotificationsWorker()
         }
+        Timber.d("Adding periodic notifications if not enqueued yet")
         Timber.d("Setting-up Firebase custom properties")
         setupFirebaseProperties()
     }

@@ -38,10 +38,12 @@ object EmojiLoader {
             emojiCompat.registerInitCallback(
                 object : EmojiCompat.InitCallback() {
                     override fun onInitialized() {
+                        emojiCompat.unregisterInitCallback(this)
                         deferred.complete(EmojiCompat.get())
                     }
 
                     override fun onFailed(throwable: Throwable?) {
+                        emojiCompat.unregisterInitCallback(this)
                         val exception = throwable
                             ?: RuntimeException("EmojiCompat failed to load")
                         deferred.completeExceptionally(exception)

@@ -29,12 +29,11 @@ import com.javinator9889.handwashingreminder.emoji.EmojiLoader
 import com.javinator9889.handwashingreminder.notifications.NotificationsHandler
 import com.javinator9889.handwashingreminder.utils.TIME_CHANNEL_ID
 import com.javinator9889.handwashingreminder.utils.Workers
+import com.javinator9889.handwashingreminder.utils.runAt
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.util.*
-
 
 data class NotificationStructure(
     @StringRes val title: Int,
@@ -47,6 +46,7 @@ class NotificationsWorker(
 ) : CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result = coroutineScope {
+        var shouldScheduleNext = true
         try {
             val emojiLoader = EmojiLoader.get(context)
             val notificationsHandler = NotificationsHandler(
@@ -55,8 +55,6 @@ class NotificationsWorker(
                 context.getString(R.string.time_notification_channel_name),
                 context.getString(R.string.time_notification_channel_desc)
             )
-            val workHandler = WorkHandler(context)
-
             val notificationData =
                 setNotificationData(
                     inputData.getInt(
@@ -64,10 +62,6 @@ class NotificationsWorker(
                         -1
                     )
                 )
-            val delay = nextExecutionDelay(inputData)
-            if (delay == -1L)
-                return@coroutineScope Result.failure()
-
 
             val emojiCompat = emojiLoader.await()
             var title: CharSequence
@@ -93,21 +87,29 @@ class NotificationsWorker(
                     longContent = comment
                 )
             }
-
-            with(Data.Builder()) {
-                putAll(inputData)
-                build()
-            }.let {
-                Timber.d(it.toString())
-                workHandler.enqueueNotificationsWorker(delay, it)
-            }
             Result.success()
         } catch (e: Exception) {
             Timber.e(e, "Uncaught exception on worker class")
-            if (runAttemptCount < 5)
+            if (runAttemptCount < 5) {
+                shouldScheduleNext = false
                 Result.retry()
-            else
-                Result.failure()
+            } else
+                Result.success()
+        } finally {
+            if (shouldScheduleNext) {
+                with(Data.Builder()) {
+                    putAll(inputData)
+                    build()
+                }.let {
+                    Timber.d(it.toString())
+                    val delay = nextExecutionDelay(inputData)
+                    if (delay == -1L)
+                        return@coroutineScope Result.failure()
+                    with(WorkHandler(context)) {
+                        enqueueNotificationsWorker(delay, it)
+                    }
+                }
+            }
         }
     }
 
@@ -132,9 +134,6 @@ class NotificationsWorker(
         }
 
     private fun nextExecutionDelay(data: Data): Long {
-        val currentDate = Calendar.getInstance()
-        val dueDate = Calendar.getInstance()
-
         val hour = data.getInt(Workers.HOUR, -1)
         val minute = data.getInt(Workers.MINUTE, -1)
         if (hour == -1 || hour == -1) {
@@ -142,12 +141,6 @@ class NotificationsWorker(
             return -1L
         }
 
-        dueDate.set(Calendar.HOUR_OF_DAY, hour)
-        dueDate.set(Calendar.MINUTE, minute)
-        dueDate.set(Calendar.SECOND, 0)
-        if (dueDate.before(currentDate))
-            dueDate.add(Calendar.HOUR_OF_DAY, 24)
-        Timber.i("Next execution scheduled at: ${dueDate.time}")
-        return dueDate.timeInMillis - currentDate.timeInMillis
+        return runAt(hour, minute)
     }
 }
