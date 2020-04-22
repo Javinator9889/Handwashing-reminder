@@ -33,6 +33,7 @@ import com.javinator9889.handwashingreminder.utils.runAt
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
@@ -75,7 +76,9 @@ abstract class AbstractNotificationsWorker(
 
     override suspend fun doWork(): Result = coroutineScope {
         with(HandwashingApplication.getInstance()) {
-            firebaseInitDeferred.await()
+            withTimeoutOrNull(10_000L) {
+                firebaseInitDeferred.await()
+            }
         }
         shouldScheduleNext = true
         var data: Data? = null

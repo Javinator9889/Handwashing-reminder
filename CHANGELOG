@@ -1,3 +1,6 @@
+## v1.1.1
++ New notifications handler - now they must notify when expected
+
 ## v1.1.0
 + NEW: OkHttp for handling file downloading.
 + Corrected a minor bug while displaying images.
