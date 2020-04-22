@@ -42,7 +42,6 @@ import java.io.FileInputStream
 import java.io.InputStream
 import java.math.BigInteger
 import java.security.MessageDigest
-import javax.inject.Inject
 
 private const val LIVEDATA_KEY = "videomodel:livedata"
 
@@ -128,7 +127,7 @@ class VideoModel(
     }
 }
 
-class VideoModelFactory @Inject constructor(private val position: Int) :
+class VideoModelFactory constructor(private val position: Int) :
     ViewModelAssistedFactory<VideoModel> {
     override fun create(handle: SavedStateHandle) = VideoModel(handle, position)
 }

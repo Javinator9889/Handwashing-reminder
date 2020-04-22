@@ -20,9 +20,12 @@ package com.javinator9889.handwashingreminder.application
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.multidex.MultiDex
 import androidx.preference.PreferenceManager
 import com.google.android.play.core.splitcompat.SplitCompat
+import com.google.firebase.FirebaseApp
+import com.google.firebase.FirebaseOptions
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.javinator9889.handwashingreminder.gms.activity.ActivityHandler
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
@@ -31,6 +34,7 @@ import com.javinator9889.handwashingreminder.utils.LogReportTree
 import com.javinator9889.handwashingreminder.utils.isDebuggable
 import javinator9889.localemanager.application.BaseApplication
 import javinator9889.localemanager.utils.languagesupport.LanguagesSupport.Language
+import kotlinx.coroutines.*
 import timber.log.Timber
 
 
@@ -39,6 +43,7 @@ class HandwashingApplication : BaseApplication() {
     lateinit var billingService: BillingService
     lateinit var activityHandler: ActivityHandler
     lateinit var sharedPreferences: SharedPreferences
+    lateinit var firebaseInitDeferred: Deferred<Unit>
 
     companion object {
         private lateinit var instance: HandwashingApplication
@@ -61,8 +66,8 @@ class HandwashingApplication : BaseApplication() {
         super.onCreate()
         instance = this
         sharedPreferences = getCustomSharedPreferences(this)
-
-        if (isDebuggable()) {
+        activityHandler = ActivityHandler(this)
+        /*if (isDebuggable()) {
             Timber.plant(Timber.DebugTree())
             Timber.d("Application is in DEBUG mode")
             with(FirebaseCrashlytics.getInstance()) {
@@ -70,8 +75,30 @@ class HandwashingApplication : BaseApplication() {
             }
         } else {
             Timber.plant(LogReportTree())
+        }*/
+        firebaseInitDeferred = initFirebaseAppAsync()
+        Log.d("Application", "Deferred Firebase Instantiating")
+    }
+
+    private fun initFirebaseAppAsync(): Deferred<Unit> {
+        return GlobalScope.async {
+            withContext(Dispatchers.IO) {
+                FirebaseApp.initializeApp(
+                    this@HandwashingApplication,
+                    FirebaseOptions
+                        .fromResource(this@HandwashingApplication)!!
+                )
+                if (isDebuggable()) {
+                    Timber.plant(Timber.DebugTree())
+                    Timber.d("Application is in DEBUG mode")
+                    with(FirebaseCrashlytics.getInstance()) {
+                        setCrashlyticsCollectionEnabled(false)
+                    }
+                } else {
+                    Timber.plant(LogReportTree())
+                }
+            }
         }
-        activityHandler = ActivityHandler(this)
     }
 
     /**

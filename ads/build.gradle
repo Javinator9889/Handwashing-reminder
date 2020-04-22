@@ -33,7 +33,7 @@ dependencies {
     // https://developer.android.com/kotlin/ktx#play-core
     implementation 'com.google.android.play:core-ktx:1.7.0'
     // https://firebase.google.com/docs/admob/android/quick-start#import_the_mobile_ads_sdk
-    implementation 'com.google.firebase:firebase-ads:19.0.1'
+    implementation 'com.google.firebase:firebase-ads:19.1.0'
     // https://developer.android.com/studio/build/multidex
     implementation 'androidx.multidex:multidex:2.0.1'
     // https://github.com/JakeWharton/timber

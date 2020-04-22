@@ -27,7 +27,6 @@ import androidx.lifecycle.liveData
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.emoji.EmojiLoader
-import javax.inject.Inject
 
 internal data class Measurements(var width: Int, var height: Int)
 
@@ -102,7 +101,7 @@ class WashingHandsModel(
         }
 }
 
-class WashingHandsModelFactory @Inject constructor(
+class WashingHandsModelFactory constructor(
     private val position: Int
 ) : ViewModelAssistedFactory<WashingHandsModel> {
     override fun create(handle: SavedStateHandle) =

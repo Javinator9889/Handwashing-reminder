@@ -29,6 +29,7 @@ import com.mikepenz.iconics.utils.sizeDp
 import java.util.*
 
 class ActivityMultiSelectList : MultiSelectListPreference {
+    private var isFirstCall = true
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
@@ -48,7 +49,10 @@ class ActivityMultiSelectList : MultiSelectListPreference {
     override fun notifyChanged() {
         super.notifyChanged()
         loadSummary()
-        reloadActivityHandler()
+        if (!isFirstCall)
+            reloadActivityHandler()
+        else
+            isFirstCall = false
     }
 
     private fun loadSummary() {

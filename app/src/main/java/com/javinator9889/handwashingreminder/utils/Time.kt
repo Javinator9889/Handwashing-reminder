@@ -18,25 +18,14 @@
  */
 package com.javinator9889.handwashingreminder.utils
 
-import android.annotation.SuppressLint
 import androidx.annotation.IntRange
-import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.temporal.ChronoUnit
 import java.util.*
+import kotlin.math.abs
 
-@SuppressLint("SimpleDateFormat")
-fun timeDifferenceSecs(to: String): Long {
-    if (to == "") return 0L
-    val dateFormat = SimpleDateFormat("HH:mm")
-    val fromDate = dateFormat.parse(to) ?: return 0L
-    val cTime = Calendar.getInstance().time
-    val diff = fromDate.time - cTime.time
-    dateFormat.parse(dateFormat.format(diff))?.let { return it.time / 1000 }
-    return 0L
-}
 
 fun formatTime(time: Int) = if (time < 10) "0$time" else time.toString()
 
@@ -51,24 +40,22 @@ fun runAt(
         val nowTime = now.toLocalTime()
         // check if is the same time or if today's time has passed so
         // then schedule for next day
-        if (nowTime == alarmTime || nowTime.isAfter(alarmTime))
-            now.plusDays(1)
+        if (nowTime == alarmTime || nowTime.isAfter(alarmTime)) {
+            now = now.plusDays(1)
+        }
         now = now
             .withHour(alarmTime.hour)
             .withMinute(alarmTime.minute)
-        Duration.between(LocalDateTime.now(), now).toMillis()
+        abs(Duration.between(LocalDateTime.now(), now).toMillis())
     } else {
         // get now time and truncate it to minutes
-        val now = with(Calendar.getInstance()) {
-            set(Calendar.MILLISECOND, 0)
-            set(Calendar.SECOND, 0)
-            this
-        }
+        val now = Calendar.getInstance()
         // clone now time truncated to minutes and set the specified hour and
         // minute in the new Calendar object
-        val alarm = (now.clone() as Calendar).apply {
+        val alarm = Calendar.getInstance().apply {
             set(Calendar.HOUR_OF_DAY, hour)
             set(Calendar.MINUTE, minute)
+            set(Calendar.SECOND, 0)
         }
         val nowTime = now.time
         val alarmTime = alarm.time
@@ -77,6 +64,6 @@ fun runAt(
         if (nowTime == alarmTime || nowTime.after(alarmTime)) {
             alarm.add(Calendar.HOUR_OF_DAY, 24)
         }
-        alarm.timeInMillis - now.timeInMillis
+        abs(alarm.timeInMillis - now.timeInMillis)
     }
 

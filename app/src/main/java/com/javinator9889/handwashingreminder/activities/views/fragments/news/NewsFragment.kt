@@ -21,7 +21,8 @@ package com.javinator9889.handwashingreminder.activities.views.fragments.news
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.LayoutRes
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.BaseFragmentView
 import com.javinator9889.handwashingreminder.utils.RemoteConfig
@@ -40,7 +41,7 @@ class NewsFragment : BaseFragmentView() {
                 ARG_UNDER_CONSTRUCTION_TEXT
             )
         } else {
-            with(FirebaseRemoteConfig.getInstance()) {
+            with(Firebase.remoteConfig) {
                 underConstructionText.text =
                     getString(RemoteConfig.WORK_IN_PROGRESS)
             }

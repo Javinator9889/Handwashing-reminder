@@ -29,8 +29,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.perf.metrics.AddTrace
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.support.ActionBarBase
 import com.javinator9889.handwashingreminder.activities.views.fragments.diseases.DiseasesFragment
@@ -61,7 +62,7 @@ class MainActivity : ActionBarBase(),
         with(FirebaseAnalytics.getInstance(this)) {
             setCurrentScreen(this@MainActivity, "Main view", null)
         }
-        with(FirebaseRemoteConfig.getInstance()) {
+        with(Firebase.remoteConfig) {
             fetchAndActivate()
         }
         delegateMenuIcons(menu)
