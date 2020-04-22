@@ -66,6 +66,9 @@ will try to implement classic APK version.
 
 [Download from Play Store](https://play.google.com/store/apps/details?id=com.javinator9889.handwashingreminder)
 
+<a href='https://play.google.com/store/apps/details?id=com.javinator9889.handwashingreminder&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'>
+<img alt='Get it on Google Play' src='https://play.google.com/intl/en_gb/badges/static/images/badges/en_badge_web_generic.png'/></a>
+
 ## Contributing
 If you want to contribute:
 
