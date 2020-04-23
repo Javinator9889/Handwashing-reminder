@@ -23,18 +23,21 @@ import androidx.preference.PreferenceManager
 import androidx.work.*
 import com.javinator9889.handwashingreminder.utils.Preferences
 import com.javinator9889.handwashingreminder.utils.Workers
+import com.javinator9889.handwashingreminder.utils.runAt
 import timber.log.Timber
-import java.util.*
 import java.util.concurrent.TimeUnit
 
-data class Who(val uuid: String, val id: Int)
+data class Who(
+    val uuid: String,
+    val id: Int,
+    val clazz: Class<out ListenableWorker>
+)
 
 class WorkHandler(private val context: Context) {
     private val workManager: WorkManager
         get() = WorkManager.getInstance(context)
 
     fun enqueuePeriodicNotificationsWorker(forceUpdate: Boolean = false) {
-        val currentDate = Calendar.getInstance()
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
 
         val breakfastTime =
@@ -47,34 +50,37 @@ class WorkHandler(private val context: Context) {
         }
         val times = arrayOf(breakfastTime, lunchTime, dinnerTime)
         times.forEach { time ->
-            val dueDate = Calendar.getInstance()
             val splittedTime = time.split(":")
             val hour = Integer.parseInt(splittedTime[0].trim())
             val minute = Integer.parseInt(splittedTime[1].trim())
 
-            dueDate.set(Calendar.HOUR_OF_DAY, hour)
-            dueDate.set(Calendar.MINUTE, minute)
-            dueDate.set(Calendar.SECOND, 0)
-            if (dueDate.before(currentDate))
-                dueDate.add(Calendar.HOUR_OF_DAY, 24)
-            val timeDiff = dueDate.timeInMillis - currentDate.timeInMillis
-
+            val timeDiff = runAt(hour, minute)
             val who = when (time) {
-                breakfastTime -> Who(Workers.BREAKFAST_UUID, Workers.BREAKFAST)
-                lunchTime -> Who(Workers.LUNCH_UUID, Workers.LUNCH)
-                dinnerTime -> Who(Workers.DINNER_UUID, Workers.DINNER)
-                else -> return  // This should never happen
+                breakfastTime -> Who(
+                    Workers.BREAKFAST_UUID,
+                    Workers.BREAKFAST,
+                    BreakfastWorker::class.java
+                )
+                lunchTime -> Who(
+                    Workers.LUNCH_UUID,
+                    Workers.LUNCH,
+                    LunchWorker::class.java
+                )
+                dinnerTime -> Who(
+                    Workers.DINNER_UUID,
+                    Workers.DINNER,
+                    DinnerWorker::class.java
+                )
+                else -> {
+                    Timber.e("Unmatched time: $time against $times")
+                    return
+                }
             }
             Timber.i(
-                "Scheduled activity ${who.uuid} at ${dueDate.time}"
+                "Scheduled activity ${who.uuid} in $timeDiff ms"
             )
 
-            val workData = workDataOf(
-                Workers.WHO to who.id,
-                Workers.HOUR to hour,
-                Workers.MINUTE to minute
-            )
-            val jobRequest = createJobRequest(timeDiff, workData)
+            val jobRequest = createJobRequest(timeDiff, who.clazz)
 
             val policy = if (forceUpdate)
                 ExistingWorkPolicy.REPLACE
@@ -91,27 +97,10 @@ class WorkHandler(private val context: Context) {
         }
     }
 
-    fun enqueueNotificationsWorker(delay: Long, data: Data) {
-        val jobRequest = createJobRequest(delay, data)
-        val who = when (data.getInt(Workers.WHO, -1)) {
-            Workers.BREAKFAST -> Workers.BREAKFAST_UUID
-            Workers.LUNCH -> Workers.LUNCH_UUID
-            Workers.DINNER -> Workers.DINNER_UUID
-            else -> return
-        }
-        Timber.d("Enqueuing job with ID: $who")
-        with(workManager) {
-            enqueueUniqueWork(
-                who,
-                ExistingWorkPolicy.APPEND,
-                jobRequest
-            )
-        }
-    }
-
     private fun createJobRequest(
         initialDelayMillis: Long,
-        inputData: Data
+        clazz: Class<out ListenableWorker>,
+        inputData: Data? = null
     ): OneTimeWorkRequest {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.NOT_REQUIRED)
@@ -120,15 +109,16 @@ class WorkHandler(private val context: Context) {
             .setRequiresDeviceIdle(false)
             .setRequiresStorageNotLow(false)
             .build()
-        return OneTimeWorkRequestBuilder<NotificationsWorker>()
-            .setInitialDelay(initialDelayMillis, TimeUnit.MILLISECONDS)
-            .setInputData(inputData)
-            .setConstraints(constraints)
-            .setBackoffCriteria(
+        return with(OneTimeWorkRequest.Builder(clazz)) {
+            setInitialDelay(initialDelayMillis, TimeUnit.MILLISECONDS)
+            inputData?.let { setInputData(it) }
+            setConstraints(constraints)
+            setBackoffCriteria(
                 BackoffPolicy.EXPONENTIAL,
                 15000L,
                 TimeUnit.MILLISECONDS
             )
-            .build()
+            build()
+        }
     }
 }

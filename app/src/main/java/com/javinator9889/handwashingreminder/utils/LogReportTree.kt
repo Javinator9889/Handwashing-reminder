@@ -37,9 +37,10 @@ class LogReportTree : Timber.Tree() {
     ) {
         when (priority) {
             Log.DEBUG, Log.VERBOSE -> return
+            Log.WARN -> crashlytics.log("W: $tag: $message")
             Log.ERROR -> {
-                crashlytics.log("E/$tag: $message");
-                t?.let { crashlytics.recordException(it) }
+                crashlytics.log("E/$tag: $message")
+                t?.let { crashlytics.recordException(t) }
             }
         }
     }

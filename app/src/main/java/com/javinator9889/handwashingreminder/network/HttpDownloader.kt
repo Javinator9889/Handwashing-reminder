@@ -18,20 +18,18 @@
  */
 package com.javinator9889.handwashingreminder.network
 
-import com.javinator9889.handwashingreminder.utils.AndroidVersion
-import com.javinator9889.handwashingreminder.utils.OkHttp
-import com.javinator9889.handwashingreminder.utils.OkHttpLegacy
-import com.javinator9889.handwashingreminder.utils.isAtLeast
+import com.javinator9889.handwashingreminder.network.okhttp.OkHttpDownloader as Downloader
 
 object HttpDownloader {
     fun newInstance(): OkHttpDownloader {
-        val className = if (isAtLeast(AndroidVersion.LOLLIPOP))
+        /*val className = if (isAtLeast(AndroidVersion.LOLLIPOP))
             "${OkHttp.PACKAGE_NAME}.${OkHttp.CLASS_NAME}\$${OkHttp.PROVIDER_NAME}"
         else
             "${OkHttpLegacy.PACKAGE_NAME}.${OkHttpLegacy
                 .CLASS_NAME}\$${OkHttpLegacy.PROVIDER_NAME}"
         val okHttpProvider = Class.forName(className).kotlin.objectInstance
                 as OkHttpDownloader.Provider
-        return okHttpProvider.newInstance()
+        return okHttpProvider.newInstance()*/
+        return Downloader.newInstance()
     }
 }

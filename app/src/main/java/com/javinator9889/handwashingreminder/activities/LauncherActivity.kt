@@ -32,15 +32,17 @@ import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.perf.FirebasePerformance
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
+import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.emoji.EmojiLoader
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
 import com.javinator9889.handwashingreminder.gms.ads.AdsEnabler
 import com.javinator9889.handwashingreminder.gms.vendor.BillingService
+import com.javinator9889.handwashingreminder.jobs.workers.WorkHandler
 import com.javinator9889.handwashingreminder.utils.*
 import com.javinator9889.handwashingreminder.utils.Preferences.Companion.ADS_ENABLED
 import com.javinator9889.handwashingreminder.utils.Preferences.Companion.APP_INIT_KEY
@@ -54,6 +56,7 @@ import timber.log.Timber
 import java.security.Security
 import java.util.*
 import kotlin.collections.ArrayList
+import com.javinator9889.handwashingreminder.utils.Firebase as FirebaseConf
 
 internal const val FAST_START_KEY = "intent:fast_start"
 internal const val PENDING_INTENT_CODE = 201
@@ -94,7 +97,8 @@ class LauncherActivity : AppCompatActivity() {
     }
 
     private suspend fun displayWelcomeScreen() {
-        val isThereAnySpecialEvent = with(FirebaseRemoteConfig.getInstance()) {
+        app.firebaseInitDeferred.await()
+        val isThereAnySpecialEvent = with(Firebase.remoteConfig) {
             getBoolean(SPECIAL_EVENT) && !launchFromNotification
         }
         var sleepDuration = 0L
@@ -185,10 +189,10 @@ class LauncherActivity : AppCompatActivity() {
             modules += AppIntro.MODULE_NAME
             launchOnInstall = true
         }
-        modules += if (isAtLeast(AndroidVersion.LOLLIPOP))
+        /*modules += if (isAtLeast(AndroidVersion.LOLLIPOP))
             OkHttp.MODULE_NAME
         else
-            OkHttpLegacy.MODULE_NAME
+            OkHttpLegacy.MODULE_NAME*/
         if (googleApi.isGooglePlayServicesAvailable(
                 this,
                 GOOGLE_PLAY_SERVICES_MIN_VERSION
@@ -235,7 +239,9 @@ class LauncherActivity : AppCompatActivity() {
         it.putExtra(DynamicFeatureProgress.PACKAGE_NAME, packageName)
     }
 
-    private fun initVariables() {
+    private suspend fun initVariables() {
+        app.firebaseInitDeferred.await()
+        Timber.d("Firebase initialized correctly")
         Timber.d("Initializing Iconics")
         Iconics.init(this)
         Timber.d("Setting-up security providers")
@@ -254,19 +260,17 @@ class LauncherActivity : AppCompatActivity() {
         }
         Timber.d("Initializing Billing Service")
         app.billingService = BillingService(this)
-        try {
-            app.workHandler.enqueuePeriodicNotificationsWorker()
-            Timber.d("Adding periodic notifications if not enqueued yet")
-        } catch (_: UninitializedPropertyAccessException) {
-            Timber.i("Scheduler times have not been initialized")
+        with(WorkHandler(this)) {
+            enqueuePeriodicNotificationsWorker()
         }
+        Timber.d("Adding periodic notifications if not enqueued yet")
         Timber.d("Setting-up Firebase custom properties")
         setupFirebaseProperties()
     }
 
     private fun setupFirebaseProperties() {
         val firebaseAnalytics = FirebaseAnalytics.getInstance(this)
-        val firebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
+        val firebaseRemoteConfig = Firebase.remoteConfig
         val firebasePerformance = FirebasePerformance.getInstance()
         val config = with(FirebaseRemoteConfigSettings.Builder()) {
             minimumFetchIntervalInSeconds = 10
@@ -280,14 +284,14 @@ class LauncherActivity : AppCompatActivity() {
                 when (Locale.getDefault().language) {
                     Locale(LanguagesSupport.Language.SPANISH).language -> {
                         firebaseAnalytics.setUserProperty(
-                            Firebase.Properties.LANGUAGE,
+                            FirebaseConf.Properties.LANGUAGE,
                             LanguagesSupport.Language.SPANISH
                         )
                         R.xml.remote_config_defaults_es
                     }
                     else -> {
                         firebaseAnalytics.setUserProperty(
-                            Firebase.Properties.LANGUAGE,
+                            FirebaseConf.Properties.LANGUAGE,
                             LanguagesSupport.Language.ENGLISH
                         )
                         R.xml.remote_config_defaults

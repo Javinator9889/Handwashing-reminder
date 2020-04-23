@@ -3,9 +3,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.mikepenz.aboutlibraries.plugin'
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.firebase.firebase-perf'
+apply plugin: 'com.google.firebase.crashlytics'
 
 
 def secretsPropertiesFile = rootProject.file("secrets.properties")
@@ -43,8 +42,8 @@ android {
         applicationId "com.javinator9889.handwashingreminder"
         minSdkVersion 17
         targetSdkVersion 29
-        versionCode 103
-        versionName "1.1.0-${gitCommitHash}"
+        versionCode 107
+        versionName "1.1.1-${gitCommitHash}"
         multiDexEnabled true
         resConfigs "en", "es"
 
@@ -143,7 +142,6 @@ dependencies {
     // https://kotlinlang.org/docs/reference/reflection.html
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     // https://firebase.google.com/docs/android/setup#add-sdks
-    implementation 'com.google.firebase:firebase-core:17.3.0'
     implementation 'com.google.firebase:firebase-common-ktx:19.3.0'
     implementation 'com.google.firebase:firebase-analytics:17.3.0'
     implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta04'
@@ -152,6 +150,7 @@ dependencies {
     implementation "com.airbnb.android:lottie:3.4.0"
     // https://firebase.google.com/docs/remote-config/use-config-android
     implementation 'com.google.firebase:firebase-config:19.1.3'
+    implementation 'com.google.firebase:firebase-config-ktx:19.1.3'
     // https://developer.android.com/jetpack/androidx/releases/work#declaring_dependencies
     implementation 'androidx.work:work-runtime-ktx:2.3.4'
     // https://mvnrepository.com/artifact/androidx.emoji/emoji/1.0.0
@@ -172,7 +171,7 @@ dependencies {
     // https://developer.android.com/jetpack/androidx/releases/lifecycle#declaring_dependencies
     implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.2.0'
     // https://developer.android.com/reference/kotlin/androidx/preference/package-summary
-    implementation 'androidx.preference:preference:1.1.0'
+    implementation 'androidx.preference:preference:1.1.1'
     // https://github.com/bumptech/glide
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     kapt 'com.github.bumptech.glide:compiler:4.11.0'

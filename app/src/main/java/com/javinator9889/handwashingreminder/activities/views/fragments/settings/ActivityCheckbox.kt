@@ -45,6 +45,8 @@ class ActivityCheckbox : CheckBoxPreference {
         defStyleRes: Int
     ) : super(context, attrs, defStyleAttr, defStyleRes)
 
+    private var firstCheck = true
+
     init {
         var isViewDisabled = false
         with(GoogleApiAvailability.getInstance()) {
@@ -83,6 +85,10 @@ class ActivityCheckbox : CheckBoxPreference {
 
     override fun setChecked(checked: Boolean) {
         super.setChecked(checked)
+        if (firstCheck) {
+            firstCheck = false
+            return
+        }
         with(HandwashingApplication.getInstance()) {
             if (checked) {
                 activityHandler.startTrackingActivity()

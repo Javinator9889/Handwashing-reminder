@@ -14,6 +14,7 @@
 
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
+-keepattributes *Annotation*
 -keepattributes SourceFile,LineNumberTable
 
 # If you keep the line number information, uncomment this to
@@ -78,3 +79,7 @@
 
 #data models
 -keep class com.javinator9889.handwashingreminder.collections.** { *;}
+
+# prevent Crashlytics obfuscation
+-keep class com.google.firebase.crashlytics.** { *; }
+-dontwarn com.google.firebase.crashlytics.**

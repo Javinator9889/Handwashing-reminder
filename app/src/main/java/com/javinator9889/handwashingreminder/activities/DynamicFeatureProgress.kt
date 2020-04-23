@@ -116,9 +116,8 @@ class DynamicFeatureProgress : SplitCompatBaseActivity(),
             SplitInstallSessionStatus.FAILED -> {
                 Toast.makeText(
                     this, getString(
-                        R.string
-                            .dynamic_module_loading_error
-                    ), Toast.LENGTH_LONG
+                        R.string.dynamic_module_loading_error, state.errorCode),
+                    Toast.LENGTH_LONG
                 ).show()
                 Timber.e(
                     "Installation failed - error code: ${state.errorCode}"

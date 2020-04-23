@@ -52,7 +52,7 @@
         content to the app so it works correctly. Please, wait a minute
     - this process should not last long.</string>
     <string name="dynamic_module_loading_error">Oops! Something went
-        wrong 😥 - please retry the process</string>
+        wrong 😥 - please retry the process | error code: %1$d</string>
     <string name="done">Done</string>
     <string name="preparing">Preparing…</string>
     <string name="installing">Installing…</string>

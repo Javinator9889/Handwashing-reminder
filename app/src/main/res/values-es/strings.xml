@@ -53,7 +53,7 @@
         contenido a la aplicación para que funcione correctamente. Por favor,
         espera un minuto - este proceso no debería durar mucho.</string>
     <string name="dynamic_module_loading_error">¡Vaya! Algo ha ido
-        mal 😥 - intenta el proceso de nuevo</string>
+        mal 😥 - intenta el proceso de nuevo | código de error: %1$d</string>
     <string name="done">Hecho</string>
     <string name="preparing">Preparando…</string>
     <string name="installing">Instalando…</string>
