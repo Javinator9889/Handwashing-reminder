@@ -30,6 +30,8 @@ import com.javinator9889.handwashingreminder.utils.timeAt
 import timber.log.Timber
 import java.util.*
 
+internal const val IDENTIFIER = "intent:id"
+
 class AlarmHandler(private val context: Context) {
     private val alarmManager =
         context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -68,7 +70,7 @@ class AlarmHandler(private val context: Context) {
 
     private fun createPendingIntentForAlarm(alarm: Alarms): PendingIntent {
         return with(Intent(context, AlarmReceiver::class.java)) {
-            identifier = alarm.identifier
+            putExtra(IDENTIFIER, alarm.identifier)
             PendingIntent.getBroadcast(context, alarm.code, this, 0)
         }
     }

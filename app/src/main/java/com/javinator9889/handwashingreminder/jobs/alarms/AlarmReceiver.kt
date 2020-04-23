@@ -28,7 +28,7 @@ import com.javinator9889.handwashingreminder.utils.goAsync
 
 class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        val worker = when (intent.identifier) {
+        val worker = when (intent.getStringExtra(IDENTIFIER)) {
             Alarms.BREAKFAST_ALARM.identifier ->
                 BreakfastNotificationWorker(context)
             Alarms.LUNCH_ALARM.identifier -> LunchNotificationWorker(context)
