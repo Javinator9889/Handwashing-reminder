@@ -20,7 +20,6 @@ package com.javinator9889.handwashingreminder.application
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.multidex.MultiDex
 import androidx.preference.PreferenceManager
 import com.google.android.play.core.splitcompat.SplitCompat
@@ -67,17 +66,7 @@ class HandwashingApplication : BaseApplication() {
         instance = this
         sharedPreferences = getCustomSharedPreferences(this)
         activityHandler = ActivityHandler(this)
-        /*if (isDebuggable()) {
-            Timber.plant(Timber.DebugTree())
-            Timber.d("Application is in DEBUG mode")
-            with(FirebaseCrashlytics.getInstance()) {
-                setCrashlyticsCollectionEnabled(false)
-            }
-        } else {
-            Timber.plant(LogReportTree())
-        }*/
         firebaseInitDeferred = initFirebaseAppAsync()
-        Log.d("Application", "Deferred Firebase Instantiating")
     }
 
     private fun initFirebaseAppAsync(): Deferred<Unit> {
