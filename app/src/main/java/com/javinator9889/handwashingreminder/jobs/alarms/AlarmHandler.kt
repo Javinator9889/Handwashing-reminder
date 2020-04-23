@@ -41,9 +41,19 @@ class AlarmHandler(private val context: Context) {
         )
     }
 
+    fun scheduleAllAlarms() {
+        for (alarm in Alarms.values())
+            scheduleAlarm(alarm)
+    }
+
     fun cancelAlarm(alarm: Alarms) {
         val pendingIntent = createPendingIntentForAlarm(alarm)
         alarmManager.cancel(pendingIntent)
+    }
+
+    fun cancelAllAlarms() {
+        for (alarm in Alarms.values())
+            cancelAlarm(alarm)
     }
 
     private fun createPendingIntentForAlarm(alarm: Alarms): PendingIntent {
@@ -58,7 +68,7 @@ class AlarmHandler(private val context: Context) {
         val savedTime = preferences.getString(alarm.preferenceKey, "")
         if (savedTime.isNullOrBlank())
             throw IllegalStateException("Time value cannot be null")
-        val splitTime = savedTime.split("")
+        val splitTime = savedTime.split(":")
         val hour = Integer.parseInt(splitTime[0])
         val minute = Integer.parseInt(splitTime[1])
         return ScheduleTimeData(hour, minute)

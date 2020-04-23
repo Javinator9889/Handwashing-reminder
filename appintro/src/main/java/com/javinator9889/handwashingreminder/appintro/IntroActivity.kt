@@ -53,7 +53,7 @@ import com.javinator9889.handwashingreminder.appintro.fragments.TimeConfigIntroF
 import com.javinator9889.handwashingreminder.appintro.timeconfig.TimeConfigViewHolder
 import com.javinator9889.handwashingreminder.appintro.utils.AnimatedResources
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
-import com.javinator9889.handwashingreminder.jobs.workers.WorkHandler
+import com.javinator9889.handwashingreminder.jobs.alarms.AlarmHandler
 import com.javinator9889.handwashingreminder.listeners.ViewHolder
 import com.javinator9889.handwashingreminder.utils.*
 import kotlinx.android.synthetic.main.animated_intro.*
@@ -181,9 +181,10 @@ class IntroActivity : AppIntro2(),
             app.activityHandler.startTrackingActivity()
         else
             app.activityHandler.disableActivityTracker()
-        with(WorkHandler(this)) {
-            enqueuePeriodicNotificationsWorker()
+        with(AlarmHandler(this)) {
+            scheduleAllAlarms()
         }
+        cacheDir.run { deleteRecursively() }
         val firebaseAnalytics = FirebaseAnalytics.getInstance(this)
         with(Bundle(2)) {
             putBoolean(

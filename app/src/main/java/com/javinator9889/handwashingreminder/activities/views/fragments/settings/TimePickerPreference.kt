@@ -23,7 +23,8 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.TimePicker
 import androidx.preference.EditTextPreference
-import com.javinator9889.handwashingreminder.jobs.workers.WorkHandler
+import com.javinator9889.handwashingreminder.jobs.alarms.AlarmHandler
+import com.javinator9889.handwashingreminder.jobs.alarms.Alarms
 import com.javinator9889.handwashingreminder.utils.formatTime
 
 class TimePickerPreference : EditTextPreference,
@@ -37,7 +38,7 @@ class TimePickerPreference : EditTextPreference,
         context: Context, attrs: AttributeSet?, defStyleAttr: Int,
         defStyleRes: Int
     ) : super(context, attrs, defStyleAttr, defStyleRes)
-
+    lateinit var alarm: Alarms
     lateinit var summaryText: CharSequence
 
     private fun setSummary(hours: Int, minutes: Int): String {
@@ -70,8 +71,8 @@ class TimePickerPreference : EditTextPreference,
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
         val time = setSummary(hourOfDay, minute)
         text = time
-        with(WorkHandler(context)) {
-            enqueuePeriodicNotificationsWorker(true)
+        with(AlarmHandler(context)) {
+            scheduleAlarm(alarm)
         }
     }
 }
