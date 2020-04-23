@@ -30,11 +30,12 @@ abstract class SplitCompatBaseActivity : BaseAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        splitInstallManager = SplitInstallManagerFactory.create(this)
+        splitInstallManager =
+            SplitInstallManagerFactory.create(applicationContext)
     }
 
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(base)
-        SplitCompat.install(this)
+        SplitCompat.install(base)
     }
 }

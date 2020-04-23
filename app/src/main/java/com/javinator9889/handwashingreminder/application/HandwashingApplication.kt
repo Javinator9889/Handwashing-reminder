@@ -56,7 +56,7 @@ class HandwashingApplication : BaseApplication() {
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
         MultiDex.install(base)
-        SplitCompat.install(this)
+        SplitCompat.install(base)
     }
 
     /**
