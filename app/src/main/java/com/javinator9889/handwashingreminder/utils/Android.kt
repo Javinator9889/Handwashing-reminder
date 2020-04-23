@@ -19,6 +19,7 @@
 package com.javinator9889.handwashingreminder.utils
 
 import android.app.ActivityManager
+import android.content.BroadcastReceiver
 import android.content.ContentResolver
 import android.content.Context
 import android.content.pm.ApplicationInfo
@@ -31,6 +32,9 @@ import com.google.android.play.core.splitinstall.SplitInstallManager
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.javinator9889.handwashingreminder.BuildConfig
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 fun isAtLeast(version: AndroidVersion): Boolean =
@@ -108,3 +112,19 @@ fun isModuleInstalled(context: Context, module: String): Boolean =
 
 fun isModuleInstalled(manager: SplitInstallManager, module: String): Boolean =
     module in manager.installedModules
+
+// https://github.com/romannurik/muzei/blob/master/extensions/src/main/java/com/google/android/apps/muzei/util/BroadcastReceiverExt.kt
+fun BroadcastReceiver.goAsync(
+    coroutineScope: CoroutineScope = GlobalScope,
+    block: suspend () -> Unit
+) {
+    val result = goAsync()
+    coroutineScope.launch {
+        try {
+            block()
+        } finally {
+            // Always call finish, even if the coroutine scope was cancelled
+            result.finish()
+        }
+    }
+}

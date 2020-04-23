@@ -24,30 +24,36 @@
         android:theme="@style/AppTheme"
         tools:ignore="LockedOrientationActivity">
 
-        <activity android:name="com.javinator9889.handwashingreminder.activities.LauncherActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation">
+        <activity
+            android:name="com.javinator9889.handwashingreminder.activities.LauncherActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.MainActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation" />
-        <activity android:name=".activities.PrivacyTermsActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation" />
-        <activity android:name=".activities.DynamicFeatureProgress"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation" />
-        <activity android:name=".activities.views.fragments.washinghands.WashingHandsFragment"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation" />
-        <activity android:name=".activities.views.fragments.diseases.DiseaseExpandedView"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation" />
+        <activity
+            android:name=".activities.MainActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.PrivacyTermsActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.DynamicFeatureProgress"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.views.fragments.washinghands.WashingHandsFragment"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.views.fragments.diseases.DiseaseExpandedView"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="preloaded_fonts"
@@ -56,15 +62,13 @@
         <receiver
             android:name=".gms.activity.ActivityReceiver"
             android:enabled="true"
-            android:exported="true">
-        </receiver>
+            android:exported="true" />
 
         <receiver
             android:name=".jobs.UpdateReceiver"
             android:enabled="true">
             <intent-filter>
-                <action
-                    android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
         </receiver>
 
@@ -75,7 +79,15 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <meta-data android:name="firebase_analytics_collection_enabled" android:value="false" />
+
+        <receiver
+            android:name=".jobs.alarms.AlarmReceiver"
+            android:enabled="true"
+            android:exported="true" />
+
+        <meta-data
+            android:name="firebase_analytics_collection_enabled"
+            android:value="false" />
         <provider
             android:name="com.google.firebase.provider.FirebaseInitProvider"
             android:authorities="${applicationId}.firebaseinitprovider"

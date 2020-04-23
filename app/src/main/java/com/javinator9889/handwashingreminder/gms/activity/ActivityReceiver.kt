@@ -30,7 +30,10 @@ import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.emoji.EmojiLoader
 import com.javinator9889.handwashingreminder.notifications.NotificationsHandler
 import com.javinator9889.handwashingreminder.utils.ACTIVITY_CHANNEL_ID
-import kotlinx.coroutines.*
+import com.javinator9889.handwashingreminder.utils.goAsync
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class ActivityReceiver : BroadcastReceiver() {
     /**
@@ -56,76 +59,71 @@ class ActivityReceiver : BroadcastReceiver() {
                         R.string.activity_notification_channel_desc
                     )
                 )
-                putNotification(
-                    notificationHandler,
-                    emojiLoader,
-                    event.activityType,
-                    context
-                )
+                goAsync {
+                    putNotification(
+                        notificationHandler,
+                        emojiLoader,
+                        event.activityType,
+                        context
+                    )
+                }
                 break
             }
         }
     }
 
-    private fun putNotification(
+    private suspend fun putNotification(
         notificationsHandler: NotificationsHandler,
         emojiLoader: CompletableDeferred<EmojiCompat>,
         detectedActivity: Int,
-        context: Context,
-        coroutineScope: CoroutineScope = GlobalScope
+        context: Context
     ) {
-        val result = goAsync()
-        coroutineScope.launch {
-            try {
-                val notificationContent = when (detectedActivity) {
-                    DetectedActivity.WALKING ->
-                        NotificationContent(
-                            R.string.activity_notification_walk,
-                            R.string.activity_notification_walk_content
-                        )
-                    DetectedActivity.RUNNING ->
-                        NotificationContent(
-                            R.string.activity_notification_run,
-                            R.string.activity_notifications_run_content
-                        )
-                    DetectedActivity.ON_BICYCLE ->
-                        NotificationContent(
-                            R.string.activity_notification_cycling,
-                            R.string.activity_notification_cycling_content
-                        )
-                    DetectedActivity.IN_VEHICLE ->
-                        NotificationContent(
-                            R.string.activity_notification_vehicle,
-                            R.string.activity_notification_vehicle_content
-                        )
-                    else -> throw IllegalArgumentException(
-                        "Activity not recognized"
-                    )
-                }
-                val emojiCompat = emojiLoader.await()
-                val title = emojiCompat.process(
-                    context.getText(notificationContent.title)
+        val notificationContent = when (detectedActivity) {
+            DetectedActivity.WALKING ->
+                NotificationContent(
+                    R.string.activity_notification_walk,
+                    R.string.activity_notification_walk_content
                 )
-                val content = emojiCompat.process(
-                    context.getText(notificationContent.content)
+            DetectedActivity.RUNNING ->
+                NotificationContent(
+                    R.string.activity_notification_run,
+                    R.string.activity_notifications_run_content
                 )
-                withContext(Dispatchers.Main) {
-                    notificationsHandler.createNotification(
-                        R.drawable.ic_stat_handwashing,
-                        R.drawable.handwashing_app_logo,
-                        title,
-                        content,
-                        longContent = content
-                    )
-                }
-            } finally {
-                result.finish()
-            }
+            DetectedActivity.ON_BICYCLE ->
+                NotificationContent(
+                    R.string.activity_notification_cycling,
+                    R.string.activity_notification_cycling_content
+                )
+            DetectedActivity.IN_VEHICLE ->
+                NotificationContent(
+                    R.string.activity_notification_vehicle,
+                    R.string.activity_notification_vehicle_content
+                )
+            else -> throw IllegalArgumentException(
+                "Activity not recognized"
+            )
+        }
+        val emojiCompat = emojiLoader.await()
+        var title = context.getText(notificationContent.title)
+        var content = context.getText(notificationContent.content)
+        try {
+            title = emojiCompat.process(title)
+            content = emojiCompat.process(content)
+        } catch (_: IllegalStateException) {
+        }
+        withContext(Dispatchers.Main) {
+            notificationsHandler.createNotification(
+                iconDrawable = R.drawable.ic_stat_handwashing,
+                largeIcon = R.drawable.handwashing_app_logo,
+                title = title,
+                content = content,
+                longContent = content
+            )
         }
     }
-
-    private data class NotificationContent(
-        @StringRes val title: Int,
-        @StringRes val content: Int
-    )
 }
+
+private data class NotificationContent(
+    @StringRes val title: Int,
+    @StringRes val content: Int
+)

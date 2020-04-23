@@ -22,6 +22,7 @@ import androidx.annotation.IntRange
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.ZoneOffset
 import java.time.temporal.ChronoUnit
 import java.util.*
 import kotlin.math.abs
@@ -67,3 +68,41 @@ fun runAt(
         abs(alarm.timeInMillis - now.timeInMillis)
     }
 
+fun timeAt(
+    @IntRange(from = 0, to = 23) hour: Int,
+    @IntRange(from = 0, to = 59) minute: Int
+): Long =
+    if (isAtLeast(AndroidVersion.O)) {
+        // trigger at hour:minute
+        val alarmTime = LocalTime.of(hour, minute)
+        var now = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES)
+        val nowTime = now.toLocalTime()
+        // check if is the same time or if today's time has passed so
+        // then schedule for next day
+        if (nowTime == alarmTime || nowTime.isAfter(alarmTime)) {
+            now = now.plusDays(1)
+        }
+        now = now
+            .withHour(alarmTime.hour)
+            .withMinute(alarmTime.minute)
+        now.toInstant(ZoneOffset.UTC).toEpochMilli()
+    } else {
+        // get now time and truncate it to minutes
+        val now = Calendar.getInstance()
+            .apply { timeInMillis = System.currentTimeMillis() }
+        // clone now time truncated to minutes and set the specified hour and
+        // minute in the new Calendar object
+        val alarm = (now.clone() as Calendar).apply {
+            set(Calendar.HOUR_OF_DAY, hour)
+            set(Calendar.MINUTE, minute)
+            set(Calendar.SECOND, 0)
+        }
+        val nowTime = now.time
+        val alarmTime = alarm.time
+        // check if they are the same time or if today's time has passed so
+        // then schedule for next day
+        if (nowTime == alarmTime || nowTime.after(alarmTime)) {
+            alarm.add(Calendar.HOUR_OF_DAY, 24)
+        }
+        alarm.timeInMillis
+    }
