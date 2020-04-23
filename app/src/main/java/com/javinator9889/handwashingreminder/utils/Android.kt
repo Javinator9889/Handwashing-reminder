@@ -30,6 +30,8 @@ import android.os.Build
 import androidx.annotation.AnyRes
 import com.google.android.play.core.splitinstall.SplitInstallManager
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
+import com.google.firebase.perf.FirebasePerformance
+import com.google.firebase.perf.metrics.Trace
 import com.javinator9889.handwashingreminder.BuildConfig
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import kotlinx.coroutines.CoroutineScope
@@ -125,6 +127,16 @@ fun BroadcastReceiver.goAsync(
         } finally {
             // Always call finish, even if the coroutine scope was cancelled
             result.finish()
+        }
+    }
+}
+
+inline fun <T> trace(name: String, block: (Trace) -> T): T {
+    with(FirebasePerformance.startTrace(name)) {
+        return try {
+            block(this)
+        } finally {
+            stop()
         }
     }
 }

@@ -19,10 +19,7 @@
 package com.javinator9889.handwashingreminder.utils
 
 import androidx.annotation.IntRange
-import java.time.Duration
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.ZoneOffset
+import java.time.*
 import java.time.temporal.ChronoUnit
 import java.util.*
 import kotlin.math.abs
@@ -49,10 +46,10 @@ fun runAt(
             .withMinute(alarmTime.minute)
         abs(Duration.between(LocalDateTime.now(), now).toMillis())
     } else {
-        // get now time and truncate it to minutes
+        // get current time
         val now = Calendar.getInstance()
-        // clone now time truncated to minutes and set the specified hour and
-        // minute in the new Calendar object
+        // get again current time but truncate it to minutes and with the
+        // specified hour:minute provided
         val alarm = Calendar.getInstance().apply {
             set(Calendar.HOUR_OF_DAY, hour)
             set(Calendar.MINUTE, minute)
@@ -75,27 +72,32 @@ fun timeAt(
     if (isAtLeast(AndroidVersion.O)) {
         // trigger at hour:minute
         val alarmTime = LocalTime.of(hour, minute)
-        var now = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES)
+        // obtain local date-time with fixed timezone (system default)
+        var now = LocalDateTime.now()
+            .atZone(ZoneId.systemDefault())
+            .truncatedTo(ChronoUnit.MINUTES)
         val nowTime = now.toLocalTime()
         // check if is the same time or if today's time has passed so
         // then schedule for next day
         if (nowTime == alarmTime || nowTime.isAfter(alarmTime)) {
             now = now.plusDays(1)
         }
-        now = now
+        val scheduledTime = now
             .withHour(alarmTime.hour)
             .withMinute(alarmTime.minute)
-        now.toInstant(ZoneOffset.UTC).toEpochMilli()
+            .withZoneSameInstant(ZoneOffset.UTC)
+        scheduledTime.toInstant().toEpochMilli()
     } else {
-        // get now time and truncate it to minutes
+        // get now time and set to system's millis
         val now = Calendar.getInstance()
             .apply { timeInMillis = System.currentTimeMillis() }
-        // clone now time truncated to minutes and set the specified hour and
+        // clone now calendar epoch time and set the specified hour and
         // minute in the new Calendar object
         val alarm = (now.clone() as Calendar).apply {
             set(Calendar.HOUR_OF_DAY, hour)
             set(Calendar.MINUTE, minute)
             set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
         }
         val nowTime = now.time
         val alarmTime = alarm.time

@@ -22,7 +22,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
-import com.google.firebase.perf.metrics.AddTrace
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.network.HttpDownloader
 import com.javinator9889.handwashingreminder.utils.Videos.URI.FILENAME
@@ -30,6 +29,7 @@ import com.javinator9889.handwashingreminder.utils.Videos.URI.HASH
 import com.javinator9889.handwashingreminder.utils.Videos.URI.URL
 import com.javinator9889.handwashingreminder.utils.Videos.URI.VideoList
 import com.javinator9889.handwashingreminder.utils.isConnected
+import com.javinator9889.handwashingreminder.utils.trace
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
@@ -63,7 +63,9 @@ class VideoModel(
             val hash = video[HASH]
             val filename = video[FILENAME]
             if (url != null && hash != null && filename != null) {
-                file = downloadVideo(url, hash, filename)
+                file = trace("videoDownload") {
+                    downloadVideo(url, hash, filename)
+                }
             }
         }
         var isVideoDownloaded = true
@@ -74,7 +76,6 @@ class VideoModel(
         return file.name
     }
 
-    @AddTrace(name = "videoDownload")
     private suspend fun downloadVideo(
         url: String,
         hash: String,

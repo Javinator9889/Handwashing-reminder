@@ -236,7 +236,11 @@ class LauncherActivity : AppCompatActivity() {
     }
 
     private suspend fun initVariables() {
-        app.firebaseInitDeferred.await()
+        // Wait at most 3 seconds for Firebase to initialize. Then continue
+        // with the app initialization
+        withTimeoutOrNull(3_000L) {
+            app.firebaseInitDeferred.await()
+        }
         Timber.d("Firebase initialized correctly")
         Timber.d("Initializing Iconics")
         Iconics.init(this)

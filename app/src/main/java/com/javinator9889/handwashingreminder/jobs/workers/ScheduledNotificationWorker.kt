@@ -42,14 +42,8 @@ abstract class ScheduledNotificationWorker(context: Context) {
 
     suspend fun doWork() = coroutineScope {
         try {
+            val startTime = System.currentTimeMillis()
             val emojiLoader = EmojiLoader.get(context)
-            with(HandwashingApplication.getInstance()) {
-                // Don't use so much resources, wait at most two seconds until
-                // completions or continue with execution
-                withTimeoutOrNull(2_000L) {
-                    firebaseInitDeferred.await()
-                }
-            }
             val notificationsHandler = NotificationsHandler(
                 context = context,
                 channelId = TIME_CHANNEL_ID,
@@ -73,7 +67,20 @@ abstract class ScheduledNotificationWorker(context: Context) {
                     longContent = content
                 )
             }
+            Timber.d(
+                "Posting a notification took: ${System
+                    .currentTimeMillis() - startTime}ms"
+            )
         } catch (e: Exception) {
+            with(HandwashingApplication.getInstance()) {
+                // Don't use so much resources, wait at most half a second until
+                // Firebase initializes or continue with execution.
+                // Firebase is only needed for Timber (Crashlytics) so until
+                // here there is no need to wait
+                withTimeoutOrNull(500L) {
+                    firebaseInitDeferred.await()
+                }
+            }
             Timber.e(e, "Unhandled exception on worker class")
             // We don't want to keep using CPU at this time if the request
             // fails so schedule next execution
