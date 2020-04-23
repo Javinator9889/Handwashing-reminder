@@ -83,3 +83,11 @@
 # prevent Crashlytics obfuscation
 -keep class com.google.firebase.crashlytics.** { *; }
 -dontwarn com.google.firebase.crashlytics.**
+
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+-keep class android.content.Intent { android.content.Intent setIdentifier(java.lang.String); }
+-keep class android.content.Intent { java.lang.String getIdentifier(); }

@@ -35,15 +35,19 @@ class AlarmHandler(private val context: Context) {
         context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
     fun scheduleAlarm(alarm: Alarms) {
-        cancelAlarm(alarm)
-        val pendingIntent = createPendingIntentForAlarm(alarm)
-        val alarmTime = getTimeForAlarm(alarm)
-        val scheduleTime = timeAt(alarmTime.hour, alarmTime.minute)
-        Timber.d("Alarm $alarm scheduled at ${Date(scheduleTime)}")
-        Timber.d("Current time: ${Date(System.currentTimeMillis())}")
-        AlarmManagerCompat.setExactAndAllowWhileIdle(
-            alarmManager, RTC_WAKEUP, scheduleTime, pendingIntent
-        )
+        try {
+            cancelAlarm(alarm)
+            val pendingIntent = createPendingIntentForAlarm(alarm)
+            val alarmTime = getTimeForAlarm(alarm)
+            val scheduleTime = timeAt(alarmTime.hour, alarmTime.minute)
+            Timber.d("Alarm $alarm scheduled at ${Date(scheduleTime)}")
+            Timber.d("Current time: ${Date(System.currentTimeMillis())}")
+            AlarmManagerCompat.setExactAndAllowWhileIdle(
+                alarmManager, RTC_WAKEUP, scheduleTime, pendingIntent
+            )
+        } catch (_: IllegalStateException) {
+            Timber.i("Time values are not initialized yet")
+        }
     }
 
     fun scheduleAllAlarms() {
