@@ -89,7 +89,7 @@ android {
         preDexLibraries true
         javaMaxHeapSize "1G"
     }
-    dynamicFeatures = [":appintro", ":ads", ":bundledemoji", ":okhttp", ":okhttplegacy"]
+    dynamicFeatures = [":appintro", ":ads", ":bundledemoji"]
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

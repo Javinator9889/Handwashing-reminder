@@ -88,7 +88,7 @@ class VideoModel(
                 file.createNewFile()
             val hashingSink = HashingSink.sha256(file.sink())
             do {
-                val okHttpDownloader = HttpDownloader.newInstance()
+                val okHttpDownloader = HttpDownloader()
                 with(okHttpDownloader.downloadFile(url)) {
                     hashingSink.buffer().use {
                         it.writeAll(this)
