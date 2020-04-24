@@ -22,8 +22,8 @@ import com.javinator9889.handwashingreminder.utils.Preferences
 
 enum class Alarms(
     val identifier: String,
-    val code: Int, val
-    preferenceKey: String
+    val code: Int,
+    val preferenceKey: String
 ) {
     BREAKFAST_ALARM("alarms:breakfast", 0, Preferences.BREAKFAST_TIME),
     LUNCH_ALARM("alarms:lunch", 1, Preferences.LUNCH_TIME),

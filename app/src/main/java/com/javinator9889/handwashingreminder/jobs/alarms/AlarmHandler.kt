@@ -28,7 +28,6 @@ import androidx.core.app.AlarmManagerCompat
 import androidx.preference.PreferenceManager
 import com.javinator9889.handwashingreminder.utils.timeAt
 import timber.log.Timber
-import java.util.*
 
 internal const val IDENTIFIER = "intent:id"
 
@@ -42,8 +41,6 @@ class AlarmHandler(private val context: Context) {
             val pendingIntent = createPendingIntentForAlarm(alarm)
             val alarmTime = getTimeForAlarm(alarm)
             val scheduleTime = timeAt(alarmTime.hour, alarmTime.minute)
-            Timber.d("Alarm $alarm scheduled at ${Date(scheduleTime)}")
-            Timber.d("Current time: ${Date(System.currentTimeMillis())}")
             AlarmManagerCompat.setExactAndAllowWhileIdle(
                 alarmManager, RTC_WAKEUP, scheduleTime, pendingIntent
             )
