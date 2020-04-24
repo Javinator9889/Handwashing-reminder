@@ -35,11 +35,11 @@ class LottieAdaptedPerformanceAnimationView : LottieAnimationView,
     init {
         addLottieOnCompositionLoadedListener(this)
         enableMergePathsForKitKatAndAbove(true)
+        setCacheComposition(true)
     }
 
-    override fun getDuration(): Long {
-        return if (isHighPerformingDevice()) super.getDuration() else 100L
-    }
+    override fun getDuration(): Long =
+        if (isHighPerformingDevice()) super.getDuration() else 100L
 
     override fun onCompositionLoaded(composition: LottieComposition?) {
         if (!isHighPerformingDevice()) {
