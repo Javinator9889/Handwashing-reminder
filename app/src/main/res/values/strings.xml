@@ -36,7 +36,7 @@
         try to wash your hands as soon as you can for avoiding diseases
         &#128166;&#128079;
     </string>
-    <string name="title_appintro">Handwashing reminder intro</string>
+    <string name="title_appintro" translatable="false">Handwashing reminder intro</string>
     <string name="privacy_policy_title">Privacy policy</string>
     <string name="tos_title">Terms and conditions</string>
     <string name="firebase_analytics_policy">Allow the application to
@@ -45,7 +45,7 @@
     <string name="firebase_performance_policy">Allow the application to
         track its performance and send anonymous data for improving
         in-app experience</string>
-    <string name="title_ads">Ads</string>
+    <string name="title_ads" translatable="false">Ads</string>
     <string name="ad_attribution">Ad</string>
     <string name="dynamic_module_loading_title">Building your app…</string>
     <string name="dynamic_module_loading_text">We are adding new

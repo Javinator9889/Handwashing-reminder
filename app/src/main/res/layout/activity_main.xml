@@ -7,7 +7,7 @@
     tools:context=".activities.MainActivity">
 
     <include
-        android:id="@+id/include"
+        android:id="@+id/bar"
         layout="@layout/appbar_layout"
         app:layout_constraintBottom_toTopOf="@+id/mainContent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,7 +21,7 @@
         app:layout_constraintBottom_toTopOf="@+id/menu"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include" />
+        app:layout_constraintTop_toBottomOf="@+id/bar" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         style="@style/Widget.MaterialComponents.BottomNavigationView"

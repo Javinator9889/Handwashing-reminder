@@ -36,7 +36,6 @@
         en el volante &#128663;, así que lávate las manos lo antes que puedas
        para evitar enfermedades &#128166;&#128079;
     </string>
-    <string name="title_appintro">Intro de Handwashing reminder</string>
     <string name="privacy_policy_title">Política de privacidad</string>
     <string name="tos_title">Términos y condiciones</string>
     <string name="firebase_analytics_policy">Permite que la aplicación
@@ -45,7 +44,6 @@
     <string name="firebase_performance_policy">Permite que la aplicación
         monitorice el rendimiento de la misma y envíe datos anónimos para
         mejorar la experiencia de usuario</string>
-    <string name="title_ads">Anuncios</string>
     <string name="ad_attribution">Ad</string>
     <string name="dynamic_module_loading_title">Construyendo tu
         aplicación…</string>

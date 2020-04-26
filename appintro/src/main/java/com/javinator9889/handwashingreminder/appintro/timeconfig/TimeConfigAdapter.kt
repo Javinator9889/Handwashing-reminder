@@ -31,8 +31,7 @@ class TimeConfigAdapter(
     private val dataset: Array<TimeConfigContent>,
     private val listener: ViewHolder.OnItemClickListener?,
     private val viewItems: SparseArray<TimeConfigViewHolder>
-) :
-    RecyclerView.Adapter<TimeConfigViewHolder>() {
+) : RecyclerView.Adapter<TimeConfigViewHolder>() {
     private var height = 0
     private lateinit var context: Context
 
