@@ -35,7 +35,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.paolorotolo.appintro.AppIntroBaseFragment
 import com.javinator9889.handwashingreminder.appintro.R
 import com.javinator9889.handwashingreminder.appintro.TIME_CONFIG_REQUEST_CODE
-import com.javinator9889.handwashingreminder.appintro.config.TimeConfigActivity
+import com.javinator9889.handwashingreminder.appintro.timeconfig.TimeConfigActivity
 import com.javinator9889.handwashingreminder.appintro.timeconfig.TimeConfigItem
 import com.javinator9889.handwashingreminder.utils.AndroidVersion
 import com.javinator9889.handwashingreminder.utils.TimeConfig

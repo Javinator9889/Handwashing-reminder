@@ -16,7 +16,7 @@
  *
  * Created by Javinator9889 on 19/03/20 - Handwashing reminder.
  */
-package com.javinator9889.handwashingreminder.appintro.config
+package com.javinator9889.handwashingreminder.appintro.timeconfig
 
 import android.app.Activity
 import android.app.TimePickerDialog
@@ -95,12 +95,24 @@ class TimeConfigActivity :
         ddot.setOnClickListener(this)
         minutes.setOnClickListener(this)
         clockIcon.setOnClickListener(this)
-        ViewCompat.setTransitionName(title, VIEW_TITLE_NAME)
-        ViewCompat.setTransitionName(image, INFO_IMAGE_NAME)
-        ViewCompat.setTransitionName(hours, USER_TIME_HOURS)
-        ViewCompat.setTransitionName(ddot, USER_DDOT)
-        ViewCompat.setTransitionName(minutes, USER_TIME_MINUTES)
-        ViewCompat.setTransitionName(clockIcon, USER_TIME_ICON)
+        ViewCompat.setTransitionName(title,
+            VIEW_TITLE_NAME
+        )
+        ViewCompat.setTransitionName(image,
+            INFO_IMAGE_NAME
+        )
+        ViewCompat.setTransitionName(hours,
+            USER_TIME_HOURS
+        )
+        ViewCompat.setTransitionName(ddot,
+            USER_DDOT
+        )
+        ViewCompat.setTransitionName(minutes,
+            USER_TIME_MINUTES
+        )
+        ViewCompat.setTransitionName(clockIcon,
+            USER_TIME_ICON
+        )
 
         if (savedInstanceState != null || intent.extras != null) {
             val data = savedInstanceState ?: intent.extras
@@ -147,7 +159,10 @@ class TimeConfigActivity :
     private fun getHours(): Time {
         val tpHour = Integer.parseInt(hours.text.toString())
         val tpMinute = Integer.parseInt(minutes.text.toString())
-        return Time(tpHour, tpMinute)
+        return Time(
+            tpHour,
+            tpMinute
+        )
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
