@@ -38,7 +38,6 @@ import com.javinator9889.handwashingreminder.activities.views.fragments.diseases
 import com.javinator9889.handwashingreminder.activities.views.fragments.news.NewsFragment
 import com.javinator9889.handwashingreminder.activities.views.fragments.settings.SettingsView
 import com.javinator9889.handwashingreminder.activities.views.fragments.washinghands.WashingHandsFragment
-import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
 import com.mikepenz.iconics.typeface.library.ionicons.Ionicons
@@ -49,12 +48,13 @@ import java.lang.ref.WeakReference
 import kotlin.concurrent.thread
 import kotlin.properties.Delegates
 
+internal const val ARG_CURRENT_ITEM = "bundle:args:current_item"
+
 class MainActivity : ActionBarBase(),
     BottomNavigationView.OnNavigationItemSelectedListener {
     override val layoutId: Int = R.layout.activity_main
     private val fragments: SparseArray<WeakReference<Fragment>> = SparseArray(4)
     private var activeFragment by Delegates.notNull<@IdRes Int>()
-    private lateinit var app: HandwashingApplication
 
     @AddTrace(name = "onCreateMainView")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,11 +68,23 @@ class MainActivity : ActionBarBase(),
         delegateMenuIcons(menu)
         val ids =
             arrayOf(R.id.diseases, R.id.handwashing, R.id.news, R.id.settings)
-        for (id in ids)
-            createFragmentForId(id)
-        activeFragment = R.id.diseases
         menu.setOnNavigationItemSelectedListener(this)
-        initFragmentView()
+        if (savedInstanceState != null) {
+            for (id in ids) {
+                val fragment = supportFragmentManager.getFragment(
+                    savedInstanceState,
+                    id.toString()
+                ) ?: createFragmentForId(id)
+                fragments[id] = WeakReference(fragment)
+            }
+            activeFragment = savedInstanceState.getInt(ARG_CURRENT_ITEM)
+//            loadFragment(activeFragment)
+        } else {
+            for (id in ids)
+                createFragmentForId(id)
+            activeFragment = R.id.diseases
+            initFragmentView()
+        }
     }
 
     protected fun delegateMenuIcons(menu: BottomNavigationView) {
@@ -133,6 +145,18 @@ class MainActivity : ActionBarBase(),
             setCurrentScreen(this@MainActivity, screenTitle, null)
         }
         return onItemSelected(item.itemId)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        fragments.forEach { id, reference ->
+            reference.get()?.let {
+                supportFragmentManager.putFragment(
+                    outState, id.toString(), it
+                )
+            }
+        }
+        outState.putInt(ARG_CURRENT_ITEM, activeFragment)
     }
 
     protected fun onItemSelected(@IdRes id: Int): Boolean {

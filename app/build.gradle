@@ -42,7 +42,7 @@ android {
         applicationId "com.javinator9889.handwashingreminder"
         minSdkVersion 17
         targetSdkVersion 29
-        versionCode 113
+        versionCode 115
         versionName "1.1.2-${gitCommitHash}"
         multiDexEnabled true
         resConfigs "en", "es"
