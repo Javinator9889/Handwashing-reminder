@@ -42,6 +42,7 @@ class Preferences {
             DetectedActivity.WALKING.toString()
         )
         const val DONATIONS = "donations"
+        const val INITIAL_TUTORIAL_DONE = "app:tutorial:is_done"
     }
 }
 

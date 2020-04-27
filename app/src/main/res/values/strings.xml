@@ -277,4 +277,13 @@
     <string name="available_at">Available at: %s</string>
     <string name="title_okhttp" translatable="false">OkHttp</string>
     <string name="title_okhttplegacy" translatable="false">Ok HTTP Legacy</string>
+    <string name="got_it">Got it!</string>
+    <string name="diseases_intro">Here you have information about some
+        diseases</string>
+    <string name="handwashing_intro">Here you can learn how to completely wash
+        your hands</string>
+    <string name="news_intro">Looking for latest news? Here you will
+        have it (is still under construction)</string>
+    <string name="settings_intro">Finally, here you will be able to
+        change the application settings so it can fit your requirements</string>
 </resources>

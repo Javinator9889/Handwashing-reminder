@@ -22,11 +22,13 @@ import android.os.Bundle
 import android.util.SparseArray
 import android.view.MenuItem
 import androidx.annotation.IdRes
+import androidx.core.content.edit
 import androidx.core.util.forEach
 import androidx.core.util.set
 import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.preference.PreferenceManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.ktx.Firebase
@@ -38,12 +40,15 @@ import com.javinator9889.handwashingreminder.activities.views.fragments.diseases
 import com.javinator9889.handwashingreminder.activities.views.fragments.news.NewsFragment
 import com.javinator9889.handwashingreminder.activities.views.fragments.settings.SettingsView
 import com.javinator9889.handwashingreminder.activities.views.fragments.washinghands.WashingHandsFragment
+import com.javinator9889.handwashingreminder.utils.Preferences
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
 import com.mikepenz.iconics.typeface.library.ionicons.Ionicons
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.how_to_wash_hands_layout.*
 import timber.log.Timber
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig
 import java.lang.ref.WeakReference
 import kotlin.concurrent.thread
 import kotlin.properties.Delegates
@@ -69,6 +74,7 @@ class MainActivity : ActionBarBase(),
         val ids =
             arrayOf(R.id.diseases, R.id.handwashing, R.id.news, R.id.settings)
         menu.setOnNavigationItemSelectedListener(this)
+        loadTutorial()
         if (savedInstanceState != null) {
             for (id in ids) {
                 val fragment = supportFragmentManager.getFragment(
@@ -78,7 +84,6 @@ class MainActivity : ActionBarBase(),
                 fragments[id] = WeakReference(fragment)
             }
             activeFragment = savedInstanceState.getInt(ARG_CURRENT_ITEM)
-//            loadFragment(activeFragment)
         } else {
             for (id in ids)
                 createFragmentForId(id)
@@ -201,6 +206,53 @@ class MainActivity : ActionBarBase(),
             setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
             disallowAddToBackStack()
         }.commit()
+    }
+
+    private fun loadTutorial() {
+        val preferences =
+            with(PreferenceManager.getDefaultSharedPreferences(this)) {
+                if (getBoolean(Preferences.INITIAL_TUTORIAL_DONE, false))
+                    return
+                else this
+            }
+        val config = ShowcaseConfig()
+        config.delay = 500L
+        with(MaterialShowcaseSequence(this)) {
+            setConfig(config)
+            val dismissText = getString(R.string.got_it)
+            val diseasesText = getString(R.string.diseases_intro)
+            val handwashingText = getString(R.string.handwashing_intro)
+            val newsText = getString(R.string.news_intro)
+            val settingsText = getString(R.string.settings_intro)
+            addSequenceItem(
+                findViewById(R.id.diseases),
+                diseasesText,
+                dismissText
+            )
+            addSequenceItem(
+                findViewById(R.id.handwashing),
+                handwashingText,
+                dismissText
+            )
+            addSequenceItem(
+                findViewById(R.id.news),
+                newsText,
+                dismissText
+            )
+            addSequenceItem(
+                findViewById(R.id.settings),
+                settingsText,
+                dismissText
+            )
+            var itemCount = 0
+            setOnItemDismissedListener { _, _ ->
+                if (itemCount++ == 3)
+                    preferences.edit {
+                        putBoolean(Preferences.INITIAL_TUTORIAL_DONE, true)
+                    }
+            }
+            start()
+        }
     }
 
     private fun createFragmentForId(@IdRes id: Int): Fragment {

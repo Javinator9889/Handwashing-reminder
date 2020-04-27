@@ -249,4 +249,13 @@
     <string name="prevention">Prevención</string>
     <string name="written_by">Escrito por %s</string>
     <string name="available_at">Disponible en: %s</string>
+    <string name="got_it">Listo</string>
+    <string name="diseases_intro">Aquí tienes información sobre algunas
+        enfermedades</string>
+    <string name="handwashing_intro">Aquí puedes aprender a cómo lavarte
+        completamente las manos</string>
+    <string name="news_intro">¿Buscando las últimas noticias? Aquí
+        estarán disponibles (todavía está bajo desarrollo)</string>
+    <string name="settings_intro">Finalmente, aquí podrás configurar la
+        aplicación para que encaje con tus gustos y preferencias</string>
 </resources>
