@@ -37,7 +37,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:fontFamily="@font/raleway_medium"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1"
@@ -53,6 +53,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/title">
@@ -74,35 +75,34 @@
                     android:layout_marginStart="32dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="24dp"
-                    android:layout_marginBottom="16dp"
                     android:fontFamily="sans-serif-light"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textSize="18sp"
                     android:visibility="invisible"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/video"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="Short description text" />
 
+                <com.javinator9889.handwashingreminder.graphics.RecyclingImageView
+                    android:id="@+id/image"
+                    android:layout_width="315dp"
+                    android:layout_height="238dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginBottom="16dp"
+                    android:contentDescription="Handwashing description"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/video"
+                    app:layout_constraintTop_toBottomOf="@+id/description"
+                    tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <com.javinator9889.handwashingreminder.graphics.RecyclingImageView
-                android:id="@+id/image"
-                android:layout_width="315dp"
-                android:layout_height="238dp"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="32dp"
-                android:layout_marginBottom="8dp"
-                android:contentDescription="Handwashing description"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/videoDescriptionContainer"
-                tools:srcCompat="@tools:sample/backgrounds/scenic" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
