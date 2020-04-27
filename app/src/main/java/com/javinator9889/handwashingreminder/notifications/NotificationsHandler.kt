@@ -33,9 +33,11 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
+import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.FAST_START_KEY
 import com.javinator9889.handwashingreminder.activities.LauncherActivity
 import com.javinator9889.handwashingreminder.activities.PENDING_INTENT_CODE
+import com.javinator9889.handwashingreminder.jobs.ShareReceiver
 import com.javinator9889.handwashingreminder.utils.AndroidVersion
 import com.javinator9889.handwashingreminder.utils.Preferences
 import com.javinator9889.handwashingreminder.utils.isAtLeast
@@ -122,7 +124,8 @@ class NotificationsHandler(
         longContent: CharSequence? = null
     ) {
         val notifyIntent = Intent(context, LauncherActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            flags =
+                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             putExtra(FAST_START_KEY, true)
         }
         val notifyPendingIntent = PendingIntent.getActivity(
@@ -130,6 +133,12 @@ class NotificationsHandler(
             PENDING_INTENT_CODE,
             notifyIntent,
             PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        val sharePendingIntent = PendingIntent.getBroadcast(
+            context,
+            0,
+            Intent(context, ShareReceiver::class.java),
+            0
         )
         with(NotificationCompat.Builder(context, channelId)) {
             setSmallIcon(iconDrawable)
@@ -139,6 +148,11 @@ class NotificationsHandler(
             setPriority(priority)
             setVibrate(vibrationPattern)
             setContentIntent(notifyPendingIntent)
+            addAction(
+                R.drawable.ic_share_black,
+                context.getString(R.string.share),
+                sharePendingIntent
+            )
             setAutoCancel(true)
             longContent.notNull {
                 setStyle(NotificationCompat.BigTextStyle().bigText(longContent))

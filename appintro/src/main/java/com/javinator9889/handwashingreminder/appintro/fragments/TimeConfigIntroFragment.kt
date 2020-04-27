@@ -29,7 +29,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
 import androidx.core.util.set
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.paolorotolo.appintro.AppIntroBaseFragment
@@ -40,6 +39,7 @@ import com.javinator9889.handwashingreminder.appintro.timeconfig.TimeConfigItem
 import com.javinator9889.handwashingreminder.utils.AndroidVersion
 import com.javinator9889.handwashingreminder.utils.TimeConfig
 import com.javinator9889.handwashingreminder.utils.isAtLeast
+import com.javinator9889.handwashingreminder.utils.isViewVisible
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
 import com.mikepenz.fastadapter.listeners.ClickEventHook
@@ -131,7 +131,7 @@ class TimeConfigIntroFragment : AppIntroBaseFragment() {
                         this[TimeConfigActivity.USER_TIME_MINUTES] = v.minutes
                     }
                     items.onEach {
-                        if (it.value.isVisible)
+                        if (it.value.isViewVisible(recyclerView))
                             pairs.add(Pair.create(it.value, it.key))
                     }
                     ActivityOptionsCompat.makeSceneTransitionAnimation(

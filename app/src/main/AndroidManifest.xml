@@ -74,6 +74,11 @@
             android:enabled="true"
             android:exported="true" />
 
+        <receiver
+            android:name=".jobs.ShareReceiver"
+            android:enabled="true"
+            android:exported="true" />
+
         <meta-data
             android:name="firebase_analytics_collection_enabled"
             android:value="false" />

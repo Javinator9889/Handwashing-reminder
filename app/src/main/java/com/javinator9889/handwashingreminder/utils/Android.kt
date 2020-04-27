@@ -23,10 +23,12 @@ import android.content.BroadcastReceiver
 import android.content.ContentResolver
 import android.content.Context
 import android.content.pm.ApplicationInfo
+import android.graphics.Rect
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities.*
 import android.net.Uri
 import android.os.Build
+import android.view.View
 import androidx.annotation.AnyRes
 import com.google.android.play.core.splitinstall.SplitInstallManager
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
@@ -139,4 +141,13 @@ inline fun <T> trace(name: String, block: (Trace) -> T): T {
             stop()
         }
     }
+}
+
+fun <T : View> T.isViewVisible(container: View?): Boolean {
+    if (container == null) return true
+    val scrollBounds = Rect()
+    container.getDrawingRect(scrollBounds)
+
+    val bottom = y + height
+    return scrollBounds.top < y && scrollBounds.bottom > bottom
 }
