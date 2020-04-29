@@ -20,6 +20,8 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.util.AttributeSet;
 
+import androidx.annotation.DrawableRes;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 
 /**
@@ -27,6 +29,8 @@ import androidx.appcompat.widget.AppCompatImageView;
  * being displayed.
  */
 public class RecyclingImageView extends AppCompatImageView {
+    @DrawableRes
+    private Integer mSavedDrawableRes = null;
 
     public RecyclingImageView(Context context) {
         super(context);
@@ -36,11 +40,39 @@ public class RecyclingImageView extends AppCompatImageView {
         super(context, attrs);
     }
 
+    public void setSavedDrawableRes(@Nullable @DrawableRes Integer mSavedDrawableRes) {
+        this.mSavedDrawableRes = mSavedDrawableRes;
+    }
+
+    @Nullable
+    @DrawableRes
+    public Integer getSavedDrawableRes() {
+        return mSavedDrawableRes;
+    }
+
+    @Override
+    protected void onWindowVisibilityChanged(int visibility) {
+        super.onWindowVisibilityChanged(visibility);
+        if (mSavedDrawableRes != null &&
+                visibility == VISIBLE &&
+                getDrawable() == null) {
+            try {
+                GlideApp.with(this)
+                        .load(mSavedDrawableRes)
+                        .centerInside()
+                        .into(this);
+            } catch (Exception ignored) {
+                setImageResource(mSavedDrawableRes);
+            }
+        } else if (visibility == INVISIBLE || visibility == GONE)
+            onDetachedFromWindow();
+    }
+
     /**
      * @see android.widget.ImageView#onDetachedFromWindow()
      */
     @Override
-    protected void onDetachedFromWindow() {
+    public void onDetachedFromWindow() {
         // This has been detached from Window, so clear the drawable
         setImageDrawable(null);
 

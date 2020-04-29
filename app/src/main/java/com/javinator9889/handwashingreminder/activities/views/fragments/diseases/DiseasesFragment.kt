@@ -47,10 +47,10 @@ import kotlinx.coroutines.launch
 class DiseasesFragment : BaseFragmentView() {
     override val layoutId: Int = R.layout.diseases_list
     private lateinit var parsedHTMLTexts: List<ParsedHTMLText>
+    private lateinit var fastAdapter: FastAdapter<GenericItem>
     private val upperAdsAdapter: ItemAdapter<Ads> = ItemAdapter()
     private val lowerAdsAdapter: ItemAdapter<Ads> = ItemAdapter()
     private val diseasesAdapter: ItemAdapter<Disease> = ItemAdapter()
-    private lateinit var fastAdapter: FastAdapter<GenericItem>
     private val informationFactory = DiseaseInformationFactory()
     private val informationViewModel: DiseaseInformationViewModel by viewModels {
         SavedViewModelFactory(informationFactory, this)
@@ -96,11 +96,9 @@ class DiseasesFragment : BaseFragmentView() {
     }
 
     private inner class DiseaseClickEventHook : ClickEventHook<Disease>() {
-        override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {
-            return if (viewHolder is Disease.ViewHolder)
-                viewHolder.cardContainer
+        override fun onBind(viewHolder: RecyclerView.ViewHolder) =
+            if (viewHolder is Disease.ViewHolder) viewHolder.cardContainer
             else null
-        }
 
         override fun onClick(
             v: View,

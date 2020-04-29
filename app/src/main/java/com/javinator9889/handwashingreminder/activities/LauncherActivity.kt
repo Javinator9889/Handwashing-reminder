@@ -42,7 +42,7 @@ import com.javinator9889.handwashingreminder.emoji.EmojiLoader
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
 import com.javinator9889.handwashingreminder.gms.ads.AdsEnabler
 import com.javinator9889.handwashingreminder.gms.vendor.BillingService
-import com.javinator9889.handwashingreminder.jobs.workers.WorkHandler
+import com.javinator9889.handwashingreminder.jobs.alarms.AlarmHandler
 import com.javinator9889.handwashingreminder.utils.*
 import com.javinator9889.handwashingreminder.utils.Preferences.Companion.ADS_ENABLED
 import com.javinator9889.handwashingreminder.utils.Preferences.Companion.APP_INIT_KEY
@@ -189,10 +189,6 @@ class LauncherActivity : AppCompatActivity() {
             modules += AppIntro.MODULE_NAME
             launchOnInstall = true
         }
-        /*modules += if (isAtLeast(AndroidVersion.LOLLIPOP))
-            OkHttp.MODULE_NAME
-        else
-            OkHttpLegacy.MODULE_NAME*/
         if (googleApi.isGooglePlayServicesAvailable(
                 this,
                 GOOGLE_PLAY_SERVICES_MIN_VERSION
@@ -240,7 +236,11 @@ class LauncherActivity : AppCompatActivity() {
     }
 
     private suspend fun initVariables() {
-        app.firebaseInitDeferred.await()
+        // Wait at most 3 seconds for Firebase to initialize. Then continue
+        // with the app initialization
+        withTimeoutOrNull(3_000L) {
+            app.firebaseInitDeferred.await()
+        }
         Timber.d("Firebase initialized correctly")
         Timber.d("Initializing Iconics")
         Iconics.init(this)
@@ -260,8 +260,8 @@ class LauncherActivity : AppCompatActivity() {
         }
         Timber.d("Initializing Billing Service")
         app.billingService = BillingService(this)
-        with(WorkHandler(this)) {
-            enqueuePeriodicNotificationsWorker()
+        with(AlarmHandler(this)) {
+            scheduleAllAlarms()
         }
         Timber.d("Adding periodic notifications if not enqueued yet")
         Timber.d("Setting-up Firebase custom properties")

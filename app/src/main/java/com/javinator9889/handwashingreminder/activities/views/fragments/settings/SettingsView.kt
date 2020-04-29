@@ -41,6 +41,7 @@ import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.emoji.EmojiLoader
 import com.javinator9889.handwashingreminder.gms.ads.AdsEnabler
 import com.javinator9889.handwashingreminder.gms.splitservice.SplitInstallService
+import com.javinator9889.handwashingreminder.jobs.alarms.Alarms
 import com.javinator9889.handwashingreminder.listeners.OnPurchaseFinishedListener
 import com.javinator9889.handwashingreminder.utils.*
 import com.mikepenz.aboutlibraries.LibsBuilder
@@ -285,6 +286,7 @@ class SettingsView : PreferenceFragmentCompat(),
             emojiCompat = emojiLoader.await()
             breakfast?.let {
                 it.icon = icon(Ionicons.Icon.ion_coffee)
+                it.alarm = Alarms.BREAKFAST_ALARM
                 try {
                     it.title =
                         emojiCompat.process(getText(R.string.breakfast_pref_title))
@@ -299,6 +301,7 @@ class SettingsView : PreferenceFragmentCompat(),
             }
             lunch?.let {
                 it.icon = icon(Ionicons.Icon.ion_android_restaurant)
+                it.alarm = Alarms.LUNCH_ALARM
                 try {
                     it.title =
                         emojiCompat.process(getText(R.string.lunch_pref_title))
@@ -313,6 +316,7 @@ class SettingsView : PreferenceFragmentCompat(),
             }
             dinner?.let {
                 it.icon = icon(Ionicons.Icon.ion_ios_moon_outline)
+                it.alarm = Alarms.DINNER_ALARM
                 try {
                     it.title =
                         emojiCompat.process(getText(R.string.dinner_pref_title))

@@ -27,14 +27,9 @@ import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
 import androidx.annotation.Keep
-import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.edit
-import androidx.core.util.Pair
-import androidx.core.util.forEach
+import androidx.core.util.set
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.github.paolorotolo.appintro.AppIntro2
 import com.github.paolorotolo.appintro.AppIntroViewPager
 import com.google.android.gms.common.ConnectionResult.SUCCESS
@@ -45,25 +40,25 @@ import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.perf.FirebasePerformance
 import com.javinator9889.handwashingreminder.activities.MainActivity
-import com.javinator9889.handwashingreminder.appintro.config.TimeConfigActivity
 import com.javinator9889.handwashingreminder.appintro.custom.SliderPageBuilder
 import com.javinator9889.handwashingreminder.appintro.fragments.AnimatedAppIntro
 import com.javinator9889.handwashingreminder.appintro.fragments.SlidePolicyFragment
 import com.javinator9889.handwashingreminder.appintro.fragments.TimeConfigIntroFragment
-import com.javinator9889.handwashingreminder.appintro.timeconfig.TimeConfigViewHolder
+import com.javinator9889.handwashingreminder.appintro.fragments.TimeContainer
+import com.javinator9889.handwashingreminder.appintro.timeconfig.TimeConfigItem
 import com.javinator9889.handwashingreminder.appintro.utils.AnimatedResources
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
-import com.javinator9889.handwashingreminder.jobs.workers.WorkHandler
-import com.javinator9889.handwashingreminder.listeners.ViewHolder
+import com.javinator9889.handwashingreminder.jobs.alarms.AlarmHandler
 import com.javinator9889.handwashingreminder.utils.*
 import kotlinx.android.synthetic.main.animated_intro.*
 import timber.log.Timber
 import com.javinator9889.handwashingreminder.appintro.R as RIntro
 
 
+const val TIME_CONFIG_REQUEST_CODE = 16
+
 @Keep
 class IntroActivity : AppIntro2(),
-    ViewHolder.OnItemClickListener,
     AppIntroViewPager.OnNextPageRequestedListener,
     View.OnClickListener {
     private lateinit var activitySlide: Fragment
@@ -100,10 +95,18 @@ class IntroActivity : AppIntro2(),
             .build()
         addSlide(secondSlide)
 
-        timeConfigSlide = TimeConfigIntroFragment()
-        timeConfigSlide.bgColor = Color.WHITE
-        timeConfigSlide.listener = this
-        timeConfigSlide.fromActivity = this
+        var timeFragment: TimeConfigIntroFragment? = null
+        if (savedInstanceState != null) {
+            timeFragment =
+                supportFragmentManager.getFragment(
+                    savedInstanceState,
+                    TimeConfigIntroFragment::class.simpleName!!
+                ) as TimeConfigIntroFragment?
+        }
+        if (timeFragment == null) {
+            timeConfigSlide = TimeConfigIntroFragment()
+            timeConfigSlide.bgColor = Color.WHITE
+        } else timeConfigSlide = timeFragment
         addSlide(timeConfigSlide)
 
         val gms = GoogleApiAvailability.getInstance()
@@ -117,13 +120,22 @@ class IntroActivity : AppIntro2(),
             addSlide(activitySlide)
         }
 
-        policySlide = SlidePolicyFragment().apply {
-            title = this@IntroActivity
-                .getString(RIntro.string.privacy_policy_title)
-            animatedDrawable = AnimatedResources.PRIVACY
-            titleColor = Color.DKGRAY
-            bgColor = Color.WHITE
+        var policyConfig: SlidePolicyFragment? = null
+        if (savedInstanceState != null) {
+            policyConfig = supportFragmentManager.getFragment(
+                savedInstanceState,
+                SlidePolicyFragment::class.simpleName!!
+            ) as SlidePolicyFragment?
         }
+        if (policyConfig == null) {
+            policySlide = SlidePolicyFragment().apply {
+                title = this@IntroActivity
+                    .getString(RIntro.string.privacy_policy_title)
+                animatedDrawable = AnimatedResources.PRIVACY
+                titleColor = Color.DKGRAY
+                bgColor = Color.WHITE
+            }
+        } else policySlide = policyConfig
         addSlide(policySlide)
 
         showSkipButton(false)
@@ -133,12 +145,30 @@ class IntroActivity : AppIntro2(),
         nextButton.setOnClickListener(this)
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        runCatching {
+            supportFragmentManager.putFragment(
+                outState,
+                TimeConfigIntroFragment::class.simpleName!!,
+                timeConfigSlide
+            )
+        }
+        runCatching {
+            supportFragmentManager.putFragment(
+                outState,
+                SlidePolicyFragment::class.simpleName!!,
+                policySlide
+            )
+        }
+    }
+
     override fun onDonePressed(currentFragment: Fragment?) {
         super.onDonePressed(currentFragment)
         val app = HandwashingApplication.getInstance()
         val sharedPreferences = app.sharedPreferences
         sharedPreferences.edit(commit = true) {
-            timeConfigSlide.rvItems.forEach { item ->
+            timeConfigSlide.itemAdapter.adapterItems.forEach { item ->
                 val time = "${item.hours}:${item.minutes}"
                 when (item.id) {
                     TimeConfig.BREAKFAST_ID ->
@@ -181,9 +211,10 @@ class IntroActivity : AppIntro2(),
             app.activityHandler.startTrackingActivity()
         else
             app.activityHandler.disableActivityTracker()
-        with(WorkHandler(this)) {
-            enqueuePeriodicNotificationsWorker()
+        with(AlarmHandler(this)) {
+            scheduleAllAlarms()
         }
+        cacheDir.run { deleteRecursively() }
         val firebaseAnalytics = FirebaseAnalytics.getInstance(this)
         with(Bundle(2)) {
             putBoolean(
@@ -215,78 +246,38 @@ class IntroActivity : AppIntro2(),
         this.finish()
     }
 
-    override fun onItemClick(
-        viewHolder: RecyclerView.ViewHolder?,
-        view: View?,
-        position: Int,
-        id: Long
-    ) {
-        if (viewHolder == null || viewHolder !is TimeConfigViewHolder)
-            return
-        val intent = Intent(this, TimeConfigActivity::class.java)
-        val options = if (isAtLeast(AndroidVersion.LOLLIPOP)) {
-            val pairs = mutableListOf<Pair<View, String>>()
-            val items = HashMap<String, View>(6).apply {
-                this[TimeConfigActivity.VIEW_TITLE_NAME] = viewHolder.title
-                this[TimeConfigActivity.INFO_IMAGE_NAME] = viewHolder.image
-                this[TimeConfigActivity.USER_TIME_ICON] = viewHolder.clockIcon
-                this[TimeConfigActivity.USER_TIME_HOURS] = viewHolder.hours
-                this[TimeConfigActivity.USER_DDOT] = viewHolder.ddot
-                this[TimeConfigActivity.USER_TIME_MINUTES] = viewHolder.minutes
-            }
-            val lm =
-                timeConfigSlide.recyclerView.layoutManager as LinearLayoutManager
-            if (position <= lm.findLastCompletelyVisibleItemPosition()) {
-                items.onEach {
-                    pairs.add(Pair.create(it.value, it.key))
-                }
-            }
-            ActivityOptionsCompat.makeSceneTransitionAnimation(
-                this,
-                *pairs.toTypedArray()
-            )
-        } else {
-            null
-        }
-        intent.putExtra(
-            "title", viewHolder.title.text
-        )
-        intent.putExtra(
-            "hours", viewHolder.hours.text
-        )
-        intent.putExtra(
-            "minutes", viewHolder.minutes.text
-        )
-        intent.putExtra("id", id)
-        ActivityCompat.startActivityForResult(
-            this, intent, id.toInt(), options?.toBundle()
-        )
-    }
-
     override fun onActivityResult(
         requestCode: Int,
         resultCode: Int,
         data: Intent?
     ) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (data == null)
+        if (data == null || requestCode != TIME_CONFIG_REQUEST_CODE)
             return
-        val view: TimeConfigViewHolder = when (requestCode.toLong()) {
-            TimeConfig.BREAKFAST_ID -> {
-                timeConfigSlide.viewItems[TimeConfig.BREAKFAST_ID.toInt()]
+        val id = data.getLongExtra("id", 0L)
+        if (timeConfigSlide.isInitialized) {
+            val position = data.getIntExtra("position", 0)
+            val hours = data.getStringExtra("hours")
+            val minutes = data.getStringExtra("minutes")
+            val titleText = when(id) {
+                TimeConfig.BREAKFAST_ID -> getString(RIntro.string.breakfast)
+                TimeConfig.LUNCH_ID -> getString(RIntro.string.lunch)
+                TimeConfig.DINNER_ID -> getString(RIntro.string.dinner)
+                else -> ""
             }
-            TimeConfig.LUNCH_ID -> {
-                timeConfigSlide.viewItems[TimeConfig.LUNCH_ID.toInt()]
-            }
-            TimeConfig.DINNER_ID -> {
-                timeConfigSlide.viewItems[TimeConfig.DINNER_ID.toInt()]
-            }
-            else -> null
-        } as TimeConfigViewHolder
-        view.hours.text = data.getStringExtra("hours")
-        view.minutes.text = data.getStringExtra("minutes")
-        view.saveContentToTextViews()
-        setSwipeLock()
+            timeConfigSlide.itemAdapter[position] = TimeConfigItem(
+                getString(RIntro.string.time_config_title_tpl, titleText),
+                id, hours, minutes
+            )
+            timeConfigSlide.fastAdapter.notifyAdapterItemChanged(position)
+            setSwipeLock()
+        } else {
+            timeConfigSlide.propertyContainer[id.toInt()] =
+                TimeContainer(
+                    data.getStringExtra("hours"),
+                    data.getStringExtra("minutes")
+                )
+        }
     }
 
     override fun onSlideChanged(
@@ -300,13 +291,15 @@ class IntroActivity : AppIntro2(),
             setSwipeLock(false)
         }
         if (oldFragment == activitySlide)
-            askForPermissions(
-                this,
-                Permission(
-                    Manifest.permission.ACTIVITY_RECOGNITION,
-                    PERMISSIONS_REQUEST_CODE
+            if (isAtLeast(AndroidVersion.Q)) {
+                askForPermissions(
+                    this,
+                    Permission(
+                        Manifest.permission.ACTIVITY_RECOGNITION,
+                        PERMISSIONS_REQUEST_CODE
+                    )
                 )
-            )
+            }
         if (newFragment is AnimatedAppIntro ||
             newFragment is SlidePolicyFragment
         )
@@ -316,8 +309,8 @@ class IntroActivity : AppIntro2(),
 
     private fun setSwipeLock() {
         var swipeLock = false
-        timeConfigSlide.viewItems.forEach { _, value ->
-            if (value.hours.text == "" && value.minutes.text == "") {
+        timeConfigSlide.itemAdapter.adapterItems.forEach { item ->
+            if (item.hours.isNullOrEmpty() && item.minutes.isNullOrEmpty()) {
                 swipeLock = true
                 return@forEach
             }
@@ -331,9 +324,7 @@ class IntroActivity : AppIntro2(),
         return when (timeConfigIntroFragment) {
             timeConfigSlide -> {
                 var isTimeSet = true
-                if (timeConfigSlide.rvItems.size != 3)
-                    return false
-                timeConfigSlide.rvItems.forEach { item ->
+                timeConfigSlide.itemAdapter.adapterItems.forEach { item ->
                     val hours = item.hours
                     val minutes = item.minutes
                     if (hours == "" || minutes == "") {

@@ -16,7 +16,7 @@
  *
  * Created by Javinator9889 on 19/03/20 - Handwashing reminder.
  */
-package com.javinator9889.handwashingreminder.appintro.config
+package com.javinator9889.handwashingreminder.appintro.timeconfig
 
 import android.app.Activity
 import android.app.TimePickerDialog
@@ -40,6 +40,7 @@ import com.javinator9889.handwashingreminder.utils.formatTime
 import com.javinator9889.handwashingreminder.utils.isAtLeast
 import timber.log.Timber
 import java.util.*
+import kotlin.properties.Delegates
 
 class TimeConfigActivity :
     ActionBarBase(),
@@ -64,6 +65,8 @@ class TimeConfigActivity :
     private lateinit var hours: TextView
     private lateinit var minutes: TextView
     private lateinit var clockIcon: ImageView
+    private var id by Delegates.notNull<Long>()
+    private var position by Delegates.notNull<Int>()
 
     data class Time(val hour: Int, val minute: Int)
 
@@ -92,19 +95,33 @@ class TimeConfigActivity :
         ddot.setOnClickListener(this)
         minutes.setOnClickListener(this)
         clockIcon.setOnClickListener(this)
-        ViewCompat.setTransitionName(title, VIEW_TITLE_NAME)
-        ViewCompat.setTransitionName(image, INFO_IMAGE_NAME)
-        ViewCompat.setTransitionName(hours, USER_TIME_HOURS)
-        ViewCompat.setTransitionName(ddot, USER_DDOT)
-        ViewCompat.setTransitionName(minutes, USER_TIME_MINUTES)
-        ViewCompat.setTransitionName(clockIcon, USER_TIME_ICON)
+        ViewCompat.setTransitionName(title,
+            VIEW_TITLE_NAME
+        )
+        ViewCompat.setTransitionName(image,
+            INFO_IMAGE_NAME
+        )
+        ViewCompat.setTransitionName(hours,
+            USER_TIME_HOURS
+        )
+        ViewCompat.setTransitionName(ddot,
+            USER_DDOT
+        )
+        ViewCompat.setTransitionName(minutes,
+            USER_TIME_MINUTES
+        )
+        ViewCompat.setTransitionName(clockIcon,
+            USER_TIME_ICON
+        )
 
         if (savedInstanceState != null || intent.extras != null) {
             val data = savedInstanceState ?: intent.extras
             val sHours = data!!.getCharSequence("hours")
             val sMinutes = data.getCharSequence("minutes")
             title.text = data.getCharSequence("title")
-            val imageRes = when (data.getLong("id")) {
+            id = data.getLong("id", TimeConfig.BREAKFAST_ID)
+            position = data.getInt("position", 0)
+            val imageRes = when (id) {
                 TimeConfig.BREAKFAST_ID -> R.drawable.ic_breakfast
                 TimeConfig.LUNCH_ID -> R.drawable.ic_lunch
                 TimeConfig.DINNER_ID -> R.drawable.ic_dinner
@@ -142,7 +159,10 @@ class TimeConfigActivity :
     private fun getHours(): Time {
         val tpHour = Integer.parseInt(hours.text.toString())
         val tpMinute = Integer.parseInt(minutes.text.toString())
-        return Time(tpHour, tpMinute)
+        return Time(
+            tpHour,
+            tpMinute
+        )
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -153,6 +173,8 @@ class TimeConfigActivity :
         outState.putCharSequence("hours", hour)
         outState.putCharSequence("minutes", minute)
         outState.putCharSequence("title", title.text)
+        outState.putLong("id", id)
+        outState.putInt("position", position)
     }
 
     override fun onBackPressed() {
@@ -160,6 +182,8 @@ class TimeConfigActivity :
         val tpTime = getHours()
         intent.putExtra("hours", formatTime(tpTime.hour))
         intent.putExtra("minutes", formatTime(tpTime.minute))
+        intent.putExtra("id", id)
+        intent.putExtra("position", position)
         setResult(Activity.RESULT_OK, intent)
         if (isAtLeast(AndroidVersion.LOLLIPOP))
             finishAfterTransition()

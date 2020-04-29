@@ -14,22 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  *
- * Created by Javinator9889 on 22/04/20 - Handwashing reminder.
+ * Created by Javinator9889 on 23/04/20 - Handwashing reminder.
  */
-package com.javinator9889.handwashingreminder.jobs.workers
+package com.javinator9889.handwashingreminder.jobs.alarms
 
-import android.content.Context
-import androidx.work.ListenableWorker
-import androidx.work.WorkerParameters
-import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.utils.Preferences
-import com.javinator9889.handwashingreminder.utils.Workers
 
-class LunchWorker(context: Context, params: WorkerParameters) :
-    AbstractNotificationsWorker(context, params) {
-    override val clazz: Class<out ListenableWorker> = LunchWorker::class.java
-    override val workUniqueName: String = Workers.LUNCH_UUID
-    override val preferencesKey: String = Preferences.LUNCH_TIME
-    override val titleRes: Int = R.string.lunch_title
-    override val commentsRes: Int = R.array.lunch_comments
+enum class Alarms(
+    val identifier: String,
+    val code: Int,
+    val preferenceKey: String
+) {
+    BREAKFAST_ALARM("alarms:breakfast", 0, Preferences.BREAKFAST_TIME),
+    LUNCH_ALARM("alarms:lunch", 1, Preferences.LUNCH_TIME),
+    DINNER_ALARM("alarms:dinner", 2, Preferences.DINNER_TIME)
 }

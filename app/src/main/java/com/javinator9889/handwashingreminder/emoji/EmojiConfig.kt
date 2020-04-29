@@ -36,7 +36,10 @@ object EmojiConfig {
                     context,
                     GOOGLE_PLAY_SERVICES_MIN_VERSION
                 ) == ConnectionResult.SUCCESS ||
-                !isModuleInstalled(context, BundledEmoji.MODULE_NAME)
+                !isModuleInstalled(
+                    context.applicationContext,
+                    BundledEmoji.MODULE_NAME
+                )
             ) {
                 with(
                     FontRequest(

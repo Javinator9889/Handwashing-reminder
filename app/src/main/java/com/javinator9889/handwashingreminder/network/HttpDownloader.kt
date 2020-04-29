@@ -18,18 +18,27 @@
  */
 package com.javinator9889.handwashingreminder.network
 
-import com.javinator9889.handwashingreminder.network.okhttp.OkHttpDownloader as Downloader
+import okhttp3.CacheControl
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okio.BufferedSource
+import java.io.IOException
 
-object HttpDownloader {
-    fun newInstance(): OkHttpDownloader {
-        /*val className = if (isAtLeast(AndroidVersion.LOLLIPOP))
-            "${OkHttp.PACKAGE_NAME}.${OkHttp.CLASS_NAME}\$${OkHttp.PROVIDER_NAME}"
-        else
-            "${OkHttpLegacy.PACKAGE_NAME}.${OkHttpLegacy
-                .CLASS_NAME}\$${OkHttpLegacy.PROVIDER_NAME}"
-        val okHttpProvider = Class.forName(className).kotlin.objectInstance
-                as OkHttpDownloader.Provider
-        return okHttpProvider.newInstance()*/
-        return Downloader.newInstance()
+class HttpDownloader : OkHttpDownloader {
+    private val client = OkHttpClient()
+
+    override fun downloadFile(url: String): BufferedSource {
+        val request = with(Request.Builder()) {
+            url(url)
+            cacheControl(CacheControl.FORCE_NETWORK)
+            build()
+        }
+        with(client.newCall(request).execute()) {
+            if (!isSuccessful) {
+                close()
+                throw IOException("Unexpected code $this")
+            }
+            return body()!!.source()
+        }
     }
 }

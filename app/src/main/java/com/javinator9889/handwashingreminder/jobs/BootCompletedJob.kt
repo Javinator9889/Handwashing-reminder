@@ -22,13 +22,13 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
-import com.javinator9889.handwashingreminder.jobs.workers.WorkHandler
+import com.javinator9889.handwashingreminder.jobs.alarms.AlarmHandler
 import com.javinator9889.handwashingreminder.utils.Preferences
 import timber.log.Timber
 
 class BootCompletedJob : BroadcastReceiver() {
-    override fun onReceive(context: Context?, intent: Intent?) {
-        if (intent?.action == Intent.ACTION_BOOT_COMPLETED) {
+    override fun onReceive(context: Context, intent: Intent) {
+        if (intent.action == Intent.ACTION_BOOT_COMPLETED) {
             val app = HandwashingApplication.getInstance()
             val preferences = app.sharedPreferences
             if (preferences.getBoolean(
@@ -39,15 +39,9 @@ class BootCompletedJob : BroadcastReceiver() {
                 app.activityHandler.startTrackingActivity()
             else
                 app.activityHandler.disableActivityTracker()
-            try {
-                Timber.d("Enqueuing notifications as the device has rebooted")
-                with(WorkHandler(requireNotNull(context))) {
-                    enqueuePeriodicNotificationsWorker()
-                }
-            } catch (_: IllegalArgumentException) {
-                Timber.w(
-                    "Context is null so notifications cannot be scheduled"
-                )
+            Timber.d("Enqueuing notifications as the device has rebooted")
+            with(AlarmHandler(context)) {
+                scheduleAllAlarms()
             }
         }
     }

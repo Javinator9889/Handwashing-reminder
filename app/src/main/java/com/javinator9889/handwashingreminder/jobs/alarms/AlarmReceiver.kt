@@ -14,23 +14,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  *
- * Created by Javinator9889 on 21/04/20 - Handwashing reminder.
+ * Created by Javinator9889 on 23/04/20 - Handwashing reminder.
  */
-package com.javinator9889.handwashingreminder.jobs
+package com.javinator9889.handwashingreminder.jobs.alarms
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.javinator9889.handwashingreminder.jobs.alarms.AlarmHandler
-import timber.log.Timber
+import com.javinator9889.handwashingreminder.jobs.workers.BreakfastNotificationWorker
+import com.javinator9889.handwashingreminder.jobs.workers.DinnerNotificationWorker
+import com.javinator9889.handwashingreminder.jobs.workers.LunchNotificationWorker
+import com.javinator9889.handwashingreminder.utils.goAsync
 
-class UpdateReceiver : BroadcastReceiver() {
+class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        if (intent.action == Intent.ACTION_MY_PACKAGE_REPLACED) {
-            Timber.d("Package updated so rescheduling jobs")
-            with(AlarmHandler(context)) {
-                scheduleAllAlarms()
-            }
+        val worker = when (intent.getStringExtra(IDENTIFIER)) {
+            Alarms.BREAKFAST_ALARM.identifier ->
+                BreakfastNotificationWorker(context)
+            Alarms.LUNCH_ALARM.identifier -> LunchNotificationWorker(context)
+            Alarms.DINNER_ALARM.identifier -> DinnerNotificationWorker(context)
+            else -> return
         }
+        goAsync { worker.doWork() }
     }
 }

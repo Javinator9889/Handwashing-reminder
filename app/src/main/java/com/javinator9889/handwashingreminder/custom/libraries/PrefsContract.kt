@@ -14,23 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  *
- * Created by Javinator9889 on 21/04/20 - Handwashing reminder.
+ * Created by Javinator9889 on 29/04/20 - Handwashing reminder.
  */
-package com.javinator9889.handwashingreminder.jobs
+package com.javinator9889.handwashingreminder.custom.libraries
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import com.javinator9889.handwashingreminder.jobs.alarms.AlarmHandler
-import timber.log.Timber
+object PrefsContract {
 
-class UpdateReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
-        if (intent.action == Intent.ACTION_MY_PACKAGE_REPLACED) {
-            Timber.d("Package updated so rescheduling jobs")
-            with(AlarmHandler(context)) {
-                scheduleAllAlarms()
-            }
-        }
-    }
+    internal const val SHARED_PREFS_NAME = "apprate_prefs"
+
+    internal const val PREF_APP_HAS_CRASHED = "pref_app_has_crashed"
+    internal const val PREF_DATE_FIRST_LAUNCH = "date_firstlaunch"
+    internal const val PREF_LAUNCH_COUNT = "launch_count"
+    internal const val PREF_DONT_SHOW_AGAIN = "dont_show_again"
+    const val PREF_DONT_SHOW_IF_CRASHED = "pref_dont_show_if_crashed"
 }

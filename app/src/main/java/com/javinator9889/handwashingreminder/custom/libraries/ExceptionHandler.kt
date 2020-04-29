@@ -14,23 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  *
- * Created by Javinator9889 on 21/04/20 - Handwashing reminder.
+ * Created by Javinator9889 on 29/04/20 - Handwashing reminder.
  */
-package com.javinator9889.handwashingreminder.jobs
+package com.javinator9889.handwashingreminder.custom.libraries
 
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
-import com.javinator9889.handwashingreminder.jobs.alarms.AlarmHandler
-import timber.log.Timber
+import android.content.SharedPreferences
 
-class UpdateReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
-        if (intent.action == Intent.ACTION_MY_PACKAGE_REPLACED) {
-            Timber.d("Package updated so rescheduling jobs")
-            with(AlarmHandler(context)) {
-                scheduleAllAlarms()
-            }
-        }
+class ExceptionHandler// Constructor.
+internal constructor(private val defaultExceptionHandler: Thread.UncaughtExceptionHandler, context: Context) :
+    Thread.UncaughtExceptionHandler {
+    private val preferences: SharedPreferences =
+        context.getSharedPreferences(PrefsContract.SHARED_PREFS_NAME, 0)
+
+    override fun uncaughtException(thread: Thread, throwable: Throwable) {
+        preferences.edit().putBoolean(PrefsContract.PREF_APP_HAS_CRASHED, true).apply()
+
+        // Call the original handler.
+        defaultExceptionHandler.uncaughtException(thread, throwable)
     }
 }

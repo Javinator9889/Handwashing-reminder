@@ -48,11 +48,16 @@ class ActivityMultiSelectList : MultiSelectListPreference {
 
     override fun notifyChanged() {
         super.notifyChanged()
-        loadSummary()
-        if (!isFirstCall)
+        if (!isFirstCall) {
+            loadSummary()
             reloadActivityHandler()
-        else
-            isFirstCall = false
+        }
+    }
+
+    override fun onSetInitialValue(defaultValue: Any?) {
+        super.onSetInitialValue(defaultValue)
+        isFirstCall = false
+        loadSummary()
     }
 
     private fun loadSummary() {

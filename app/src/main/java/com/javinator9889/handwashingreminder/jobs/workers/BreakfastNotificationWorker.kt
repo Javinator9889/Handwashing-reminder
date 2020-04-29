@@ -14,23 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  *
- * Created by Javinator9889 on 21/04/20 - Handwashing reminder.
+ * Created by Javinator9889 on 23/04/20 - Handwashing reminder.
  */
-package com.javinator9889.handwashingreminder.jobs
+package com.javinator9889.handwashingreminder.jobs.workers
 
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
-import com.javinator9889.handwashingreminder.jobs.alarms.AlarmHandler
-import timber.log.Timber
+import com.javinator9889.handwashingreminder.R
+import com.javinator9889.handwashingreminder.jobs.alarms.Alarms
 
-class UpdateReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
-        if (intent.action == Intent.ACTION_MY_PACKAGE_REPLACED) {
-            Timber.d("Package updated so rescheduling jobs")
-            with(AlarmHandler(context)) {
-                scheduleAllAlarms()
-            }
-        }
-    }
+class BreakfastNotificationWorker(context: Context) :
+    ScheduledNotificationWorker(context) {
+    override val alarm: Alarms = Alarms.BREAKFAST_ALARM
+    override val titleRes: Int = R.string.breakfast_title
+    override val contentsRes: Int = R.array.breakfast_comments
 }

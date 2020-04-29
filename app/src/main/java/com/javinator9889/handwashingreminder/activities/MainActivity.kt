@@ -22,11 +22,13 @@ import android.os.Bundle
 import android.util.SparseArray
 import android.view.MenuItem
 import androidx.annotation.IdRes
+import androidx.core.content.edit
 import androidx.core.util.forEach
 import androidx.core.util.set
 import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.preference.PreferenceManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.ktx.Firebase
@@ -38,23 +40,28 @@ import com.javinator9889.handwashingreminder.activities.views.fragments.diseases
 import com.javinator9889.handwashingreminder.activities.views.fragments.news.NewsFragment
 import com.javinator9889.handwashingreminder.activities.views.fragments.settings.SettingsView
 import com.javinator9889.handwashingreminder.activities.views.fragments.washinghands.WashingHandsFragment
-import com.javinator9889.handwashingreminder.application.HandwashingApplication
+import com.javinator9889.handwashingreminder.custom.libraries.AppRate
+import com.javinator9889.handwashingreminder.utils.Preferences
+import com.javinator9889.handwashingreminder.utils.isDebuggable
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
 import com.mikepenz.iconics.typeface.library.ionicons.Ionicons
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.how_to_wash_hands_layout.*
 import timber.log.Timber
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig
 import java.lang.ref.WeakReference
 import kotlin.concurrent.thread
 import kotlin.properties.Delegates
+
+internal const val ARG_CURRENT_ITEM = "bundle:args:current_item"
 
 class MainActivity : ActionBarBase(),
     BottomNavigationView.OnNavigationItemSelectedListener {
     override val layoutId: Int = R.layout.activity_main
     private val fragments: SparseArray<WeakReference<Fragment>> = SparseArray(4)
     private var activeFragment by Delegates.notNull<@IdRes Int>()
-    private lateinit var app: HandwashingApplication
 
     @AddTrace(name = "onCreateMainView")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,11 +75,24 @@ class MainActivity : ActionBarBase(),
         delegateMenuIcons(menu)
         val ids =
             arrayOf(R.id.diseases, R.id.handwashing, R.id.news, R.id.settings)
-        for (id in ids)
-            createFragmentForId(id)
-        activeFragment = R.id.diseases
         menu.setOnNavigationItemSelectedListener(this)
-        initFragmentView()
+        loadTutorial()
+        suggestRating()
+        if (savedInstanceState != null) {
+            for (id in ids) {
+                val fragment = supportFragmentManager.getFragment(
+                    savedInstanceState,
+                    id.toString()
+                ) ?: createFragmentForId(id)
+                fragments[id] = WeakReference(fragment)
+            }
+            activeFragment = savedInstanceState.getInt(ARG_CURRENT_ITEM)
+        } else {
+            for (id in ids)
+                createFragmentForId(id)
+            activeFragment = R.id.diseases
+            initFragmentView()
+        }
     }
 
     protected fun delegateMenuIcons(menu: BottomNavigationView) {
@@ -135,6 +155,18 @@ class MainActivity : ActionBarBase(),
         return onItemSelected(item.itemId)
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        fragments.forEach { id, reference ->
+            reference.get()?.let {
+                supportFragmentManager.putFragment(
+                    outState, id.toString(), it
+                )
+            }
+        }
+        outState.putInt(ARG_CURRENT_ITEM, activeFragment)
+    }
+
     protected fun onItemSelected(@IdRes id: Int): Boolean {
         return try {
             loadFragment(id)
@@ -177,6 +209,67 @@ class MainActivity : ActionBarBase(),
             setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
             disallowAddToBackStack()
         }.commit()
+    }
+
+    private fun loadTutorial() {
+        val preferences =
+            with(PreferenceManager.getDefaultSharedPreferences(this)) {
+                if (getBoolean(Preferences.INITIAL_TUTORIAL_DONE, false))
+                    return
+                else this
+            }
+        val config = ShowcaseConfig()
+        config.delay = 500L
+        with(MaterialShowcaseSequence(this)) {
+            setConfig(config)
+            val dismissText = getString(R.string.got_it)
+            val diseasesText = getString(R.string.diseases_intro)
+            val handwashingText = getString(R.string.handwashing_intro)
+            val newsText = getString(R.string.news_intro)
+            val settingsText = getString(R.string.settings_intro)
+            addSequenceItem(
+                findViewById(R.id.diseases),
+                diseasesText,
+                dismissText
+            )
+            addSequenceItem(
+                findViewById(R.id.handwashing),
+                handwashingText,
+                dismissText
+            )
+            addSequenceItem(
+                findViewById(R.id.news),
+                newsText,
+                dismissText
+            )
+            addSequenceItem(
+                findViewById(R.id.settings),
+                settingsText,
+                dismissText
+            )
+            var itemCount = 0
+            setOnItemDismissedListener { _, _ ->
+                if (itemCount++ == 3)
+                    preferences.edit {
+                        putBoolean(Preferences.INITIAL_TUTORIAL_DONE, true)
+                    }
+            }
+            start()
+        }
+    }
+
+    private fun suggestRating() {
+        with(AppRate(this)) {
+            if (!isDebuggable()) {
+                setMinDaysUntilPrompt(2L)
+                setMinLaunchesUntilPrompt(5)
+            }
+            dialogTitle = R.string.rate_text_title
+            dialogMessage = R.string.rate_app_message
+            positiveButtonText = R.string.rate_text
+            negativeButtonText = R.string.rate_do_not_show
+            init()
+        }
     }
 
     private fun createFragmentForId(@IdRes id: Int): Fragment {

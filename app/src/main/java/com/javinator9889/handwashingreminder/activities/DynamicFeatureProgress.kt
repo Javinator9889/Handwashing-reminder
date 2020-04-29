@@ -27,6 +27,7 @@ import android.widget.Toast
 import com.google.android.play.core.ktx.bytesDownloaded
 import com.google.android.play.core.ktx.errorCode
 import com.google.android.play.core.ktx.totalBytesToDownload
+import com.google.android.play.core.splitinstall.SplitInstallHelper
 import com.google.android.play.core.splitinstall.SplitInstallRequest
 import com.google.android.play.core.splitinstall.SplitInstallSessionState
 import com.google.android.play.core.splitinstall.SplitInstallStateUpdatedListener
@@ -163,6 +164,7 @@ class DynamicFeatureProgress : SplitCompatBaseActivity(),
                 percentage.text = getString(R.string.installing)
             }
             SplitInstallSessionStatus.INSTALLED -> {
+                SplitInstallHelper.updateAppInfo(this)
                 if (++currentModule >= moduleCount) {
                     dynamic_content_title.text = getString(R.string.done)
                     setResultWithIntent(Activity.RESULT_OK)

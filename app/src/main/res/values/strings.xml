@@ -36,7 +36,7 @@
         try to wash your hands as soon as you can for avoiding diseases
         &#128166;&#128079;
     </string>
-    <string name="title_appintro">Handwashing reminder intro</string>
+    <string name="title_appintro" translatable="false">Handwashing reminder intro</string>
     <string name="privacy_policy_title">Privacy policy</string>
     <string name="tos_title">Terms and conditions</string>
     <string name="firebase_analytics_policy">Allow the application to
@@ -45,7 +45,7 @@
     <string name="firebase_performance_policy">Allow the application to
         track its performance and send anonymous data for improving
         in-app experience</string>
-    <string name="title_ads">Ads</string>
+    <string name="title_ads" translatable="false">Ads</string>
     <string name="ad_attribution">Ad</string>
     <string name="dynamic_module_loading_title">Building your app…</string>
     <string name="dynamic_module_loading_text">We are adding new
@@ -277,4 +277,20 @@
     <string name="available_at">Available at: %s</string>
     <string name="title_okhttp" translatable="false">OkHttp</string>
     <string name="title_okhttplegacy" translatable="false">Ok HTTP Legacy</string>
+    <string name="got_it">Got it!</string>
+    <string name="diseases_intro">Here you have information about some
+        diseases</string>
+    <string name="handwashing_intro">Here you can learn how to completely wash
+        your hands</string>
+    <string name="news_intro">Looking for latest news? Here you will
+        have it (is still under construction)</string>
+    <string name="settings_intro">Finally, here you will be able to
+        change the application settings so it can fit your requirements</string>
+    <string name="rate_text_title">Rate Handwashing reminder</string>
+    <string name="rate_app_message">Do you enjoy Handwashing reminder?
+        Consider rating the application on Play Store and supporting
+        the development &#128516;. In this way you can help more
+        people! It only takes a few seconds &#128521;</string>
+    <string name="rate_text">Rate!</string>
+    <string name="rate_do_not_show">Don\'t ask again</string>
 </resources>
