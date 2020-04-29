@@ -23,8 +23,6 @@ import android.content.SharedPreferences
 import androidx.multidex.MultiDex
 import androidx.preference.PreferenceManager
 import com.google.android.play.core.splitcompat.SplitCompat
-import com.google.firebase.FirebaseApp
-import com.google.firebase.FirebaseOptions
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.javinator9889.handwashingreminder.gms.activity.ActivityHandler
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
@@ -72,11 +70,6 @@ class HandwashingApplication : BaseApplication() {
     private fun initFirebaseAppAsync(): Deferred<Unit> {
         return GlobalScope.async {
             withContext(Dispatchers.IO) {
-                FirebaseApp.initializeApp(
-                    this@HandwashingApplication,
-                    FirebaseOptions
-                        .fromResource(this@HandwashingApplication)!!
-                )
                 if (isDebuggable()) {
                     Timber.plant(Timber.DebugTree())
                     Timber.d("Application is in DEBUG mode")

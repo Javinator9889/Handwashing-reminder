@@ -80,10 +80,6 @@
 #data models
 -keep class com.javinator9889.handwashingreminder.collections.** { *;}
 
-# prevent Crashlytics obfuscation
--keep class com.google.firebase.crashlytics.** { *; }
--dontwarn com.google.firebase.crashlytics.**
-
 -keepclassmembers enum * {
     public static **[] values();
     public static ** valueOf(java.lang.String);
