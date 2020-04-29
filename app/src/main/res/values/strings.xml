@@ -286,4 +286,11 @@
         have it (is still under construction)</string>
     <string name="settings_intro">Finally, here you will be able to
         change the application settings so it can fit your requirements</string>
+    <string name="rate_text_title">Rate Handwashing reminder</string>
+    <string name="rate_app_message">Do you enjoy Handwashing reminder?
+        Consider rating the application on Play Store and supporting
+        the development &#128516;. In this way you can help more
+        people! It only takes a few seconds &#128521;</string>
+    <string name="rate_text">Rate!</string>
+    <string name="rate_do_not_show">Don\'t ask again</string>
 </resources>

@@ -258,4 +258,11 @@
         estarán disponibles (todavía está bajo desarrollo)</string>
     <string name="settings_intro">Finalmente, aquí podrás configurar la
         aplicación para que encaje con tus gustos y preferencias</string>
+    <string name="rate_text_title">Valorar Handwashing reminder</string>
+    <string name="rate_app_message">¿Estás disfrutando Handwashing reminder?
+        Valora la aplicación en la Play Store y apoya el desarrollo
+        &#128516;. ¡De esta manera podrás ayudar a más gente! Solo te llevará
+        unos segundos &#128521;</string>
+    <string name="rate_text">Valorar</string>
+    <string name="rate_do_not_show">No preguntar de nuevo</string>
 </resources>

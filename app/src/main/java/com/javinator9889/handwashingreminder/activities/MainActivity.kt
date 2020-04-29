@@ -40,7 +40,9 @@ import com.javinator9889.handwashingreminder.activities.views.fragments.diseases
 import com.javinator9889.handwashingreminder.activities.views.fragments.news.NewsFragment
 import com.javinator9889.handwashingreminder.activities.views.fragments.settings.SettingsView
 import com.javinator9889.handwashingreminder.activities.views.fragments.washinghands.WashingHandsFragment
+import com.javinator9889.handwashingreminder.custom.libraries.AppRate
 import com.javinator9889.handwashingreminder.utils.Preferences
+import com.javinator9889.handwashingreminder.utils.isDebuggable
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
 import com.mikepenz.iconics.typeface.library.ionicons.Ionicons
@@ -75,6 +77,7 @@ class MainActivity : ActionBarBase(),
             arrayOf(R.id.diseases, R.id.handwashing, R.id.news, R.id.settings)
         menu.setOnNavigationItemSelectedListener(this)
         loadTutorial()
+        suggestRating()
         if (savedInstanceState != null) {
             for (id in ids) {
                 val fragment = supportFragmentManager.getFragment(
@@ -252,6 +255,20 @@ class MainActivity : ActionBarBase(),
                     }
             }
             start()
+        }
+    }
+
+    private fun suggestRating() {
+        with(AppRate(this)) {
+            if (!isDebuggable()) {
+                setMinDaysUntilPrompt(2L)
+                setMinLaunchesUntilPrompt(5)
+            }
+            dialogTitle = R.string.rate_text_title
+            dialogMessage = R.string.rate_app_message
+            positiveButtonText = R.string.rate_text
+            negativeButtonText = R.string.rate_do_not_show
+            init()
         }
     }
 
