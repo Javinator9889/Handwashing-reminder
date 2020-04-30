@@ -21,6 +21,7 @@ package com.javinator9889.handwashingreminder.jobs
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import androidx.preference.PreferenceManager
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.jobs.alarms.AlarmHandler
 import com.javinator9889.handwashingreminder.utils.Preferences
@@ -29,8 +30,8 @@ import timber.log.Timber
 class BootCompletedJob : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == Intent.ACTION_BOOT_COMPLETED) {
-            val app = HandwashingApplication.getInstance()
-            val preferences = app.sharedPreferences
+            val app = HandwashingApplication.instance
+            val preferences = PreferenceManager.getDefaultSharedPreferences(context)
             if (preferences.getBoolean(
                     Preferences.ACTIVITY_TRACKING_ENABLED,
                     false

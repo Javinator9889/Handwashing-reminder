@@ -48,8 +48,7 @@ private const val LIVEDATA_KEY = "videomodel:livedata"
 class VideoModel(
     private val state: SavedStateHandle, private val position: Int
 ) : ViewModel() {
-    private val cachePath: File =
-        HandwashingApplication.getInstance().applicationContext.cacheDir
+    private val cachePath: File = HandwashingApplication.instance.applicationContext.cacheDir
     val videos: LiveData<String> = liveData {
         emitSource(state.getLiveData(LIVEDATA_KEY, loadVideo()))
     }

@@ -27,7 +27,6 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.javinator9889.handwashingreminder.gms.activity.ActivityHandler
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
-import com.javinator9889.handwashingreminder.gms.vendor.BillingService
 import com.javinator9889.handwashingreminder.utils.LogReportTree
 import com.javinator9889.handwashingreminder.utils.isDebuggable
 import javinator9889.localemanager.application.BaseApplication
@@ -38,17 +37,11 @@ import timber.log.Timber
 
 class HandwashingApplication : BaseApplication() {
     var adLoader: AdLoader? = null
-    lateinit var billingService: BillingService
     lateinit var activityHandler: ActivityHandler
-    lateinit var sharedPreferences: SharedPreferences
     lateinit var firebaseInitDeferred: Deferred<Unit>
 
     companion object {
-        private lateinit var instance: HandwashingApplication
-
-        fun getInstance(): HandwashingApplication {
-            return this.instance
-        }
+        lateinit var instance: HandwashingApplication
     }
 
     override fun attachBaseContext(base: Context?) {
@@ -63,7 +56,6 @@ class HandwashingApplication : BaseApplication() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        sharedPreferences = getCustomSharedPreferences(this)
         activityHandler = ActivityHandler(this)
         firebaseInitDeferred = initFirebaseAppAsync()
     }

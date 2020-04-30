@@ -41,6 +41,7 @@ import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.emoji.EmojiLoader
 import com.javinator9889.handwashingreminder.gms.ads.AdsEnabler
 import com.javinator9889.handwashingreminder.gms.splitservice.SplitInstallService
+import com.javinator9889.handwashingreminder.gms.vendor.BillingService
 import com.javinator9889.handwashingreminder.jobs.alarms.Alarms
 import com.javinator9889.handwashingreminder.listeners.OnPurchaseFinishedListener
 import com.javinator9889.handwashingreminder.utils.*
@@ -62,11 +63,13 @@ class SettingsView : PreferenceFragmentCompat(),
     private lateinit var adsPreference: WeakReference<SwitchPreference>
     private lateinit var donationsPreference: WeakReference<ListPreference>
     private lateinit var emojiCompat: EmojiCompat
-    private val app = HandwashingApplication.getInstance()
+    private lateinit var billingService: BillingService
+    private val app = HandwashingApplication.instance
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requireActivity().setTheme(R.style.AppTheme_MaterialDialogs)
+        billingService = BillingService(requireContext())
     }
 
     override fun onCreatePreferences(
@@ -206,8 +209,7 @@ class SettingsView : PreferenceFragmentCompat(),
                 else
                     resources.getTextArray(R.array.in_app_donations)
                 it.icon = icon(Ionicons.Icon.ion_card)
-                app.billingService
-                    .addOnPurchaseFinishedListener(this@SettingsView)
+                billingService.addOnPurchaseFinishedListener(this@SettingsView)
                 donationsPreference = WeakReference(it)
             }
             translations?.let {
@@ -402,7 +404,7 @@ class SettingsView : PreferenceFragmentCompat(),
                 Timber.d("Purchase clicked - $newValue")
                 val purchaseId = newValue as String
                 if (isConnected())
-                    app.billingService.doPurchase(purchaseId, requireActivity())
+                    billingService.doPurchase(purchaseId, requireActivity())
                 else {
                     if (context == null)
                         return false

@@ -76,7 +76,7 @@ class WashingHandsModel(
     }
 
     private suspend fun processStringArray(@ArrayRes array: Int): CharSequence =
-        with(HandwashingApplication.getInstance()) {
+        with(HandwashingApplication.instance) {
             with(EmojiLoader.get(this)) {
                 try {
                     this.await()

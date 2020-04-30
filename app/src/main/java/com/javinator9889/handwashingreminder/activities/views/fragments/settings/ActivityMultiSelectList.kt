@@ -82,7 +82,7 @@ class ActivityMultiSelectList : MultiSelectListPreference {
     }
 
     private fun reloadActivityHandler() {
-        with(HandwashingApplication.getInstance()) {
+        with(HandwashingApplication.instance) {
             activityHandler.reload()
         }
     }

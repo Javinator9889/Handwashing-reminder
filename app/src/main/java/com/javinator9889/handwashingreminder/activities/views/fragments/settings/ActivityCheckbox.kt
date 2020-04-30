@@ -89,7 +89,7 @@ class ActivityCheckbox : CheckBoxPreference {
             firstCheck = false
             return
         }
-        with(HandwashingApplication.getInstance()) {
+        with(HandwashingApplication.instance) {
             if (checked) {
                 activityHandler.startTrackingActivity()
             } else {
