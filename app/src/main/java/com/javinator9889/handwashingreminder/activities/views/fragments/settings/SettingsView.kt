@@ -69,7 +69,6 @@ class SettingsView : PreferenceFragmentCompat(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requireActivity().setTheme(R.style.AppTheme_MaterialDialogs)
-        billingService = BillingService(requireContext())
     }
 
     override fun onCreatePreferences(
@@ -81,6 +80,7 @@ class SettingsView : PreferenceFragmentCompat(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        billingService = BillingService(view.context)
         viewLifecycleOwner.lifecycleScope.launch {
             val emojiLoader = EmojiLoader.get(view.context)
             val share = findPreference<Preference>("share")

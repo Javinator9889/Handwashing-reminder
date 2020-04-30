@@ -20,6 +20,7 @@ package com.javinator9889.handwashingreminder.activities
 
 import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -65,7 +66,7 @@ class LauncherActivity : AppCompatActivity() {
     private var launchOnInstall = false
     private var launchFromNotification = false
     private var canFinishActivity = false
-    private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+    private lateinit var sharedPreferences: SharedPreferences
     private lateinit var app: HandwashingApplication
     private lateinit var initDeferred: Deferred<Unit>
 
@@ -73,6 +74,8 @@ class LauncherActivity : AppCompatActivity() {
         lifecycleScope.launch {
             whenCreated {
                 app = HandwashingApplication.instance
+                sharedPreferences =
+                    PreferenceManager.getDefaultSharedPreferences(this@LauncherActivity)
                 with(intent) {
                     notNull {
                         launchFromNotification =
