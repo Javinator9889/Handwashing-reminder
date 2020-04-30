@@ -16,24 +16,34 @@
  *
  * Created by Javinator9889 on 19/04/20 - Handwashing reminder.
  */
-package com.javinator9889.handwashingreminder.collections
+package com.javinator9889.handwashingreminder.activities.views.fragments.diseases
 
 import android.os.Bundle
 import androidx.annotation.LayoutRes
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.BaseFragmentView
+import com.javinator9889.handwashingreminder.activities.views.fragments.washinghands.ARG_POSITION
 import com.javinator9889.handwashingreminder.activities.views.viewmodels.ParsedHTMLText
 import kotlinx.android.synthetic.main.simple_text_view.*
+import kotlin.properties.Delegates
 
 internal const val ARG_SYMPTOMS = "bundle:symptoms"
 internal const val ARG_PREVENTION = "bundle:prevention"
 
-class DiseaseExtraInformationFragment(
-    private val position: Int,
-    private val parsedHTMLText: ParsedHTMLText
-) : BaseFragmentView() {
+class DiseaseExtraInformationFragment : BaseFragmentView() {
     @get:LayoutRes
     override val layoutId: Int = R.layout.simple_text_view
+    private var position by Delegates.notNull<Int>()
+    private lateinit var parsedHTMLText: ParsedHTMLText
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (savedInstanceState != null || arguments != null) {
+            val data = savedInstanceState ?: arguments
+            position = data!!.getInt(ARG_POSITION)
+            parsedHTMLText = data.getParcelable(ARG_HTML_TEXT)!!
+        }
+    }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -41,18 +51,16 @@ class DiseaseExtraInformationFragment(
             outState.putCharSequence(ARG_SYMPTOMS, text.text)
         else if (position == 2)
             outState.putCharSequence(ARG_PREVENTION, text.text)
+        outState.putInt(ARG_POSITION, position)
+        outState.putParcelable(ARG_HTML_TEXT, parsedHTMLText)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         if (savedInstanceState != null)
             text.text = when (position) {
-                1 -> savedInstanceState.getCharSequence(
-                    ARG_SYMPTOMS
-                )
-                2 -> savedInstanceState.getCharSequence(
-                    ARG_PREVENTION
-                )
+                1 -> savedInstanceState.getCharSequence(ARG_SYMPTOMS)
+                2 -> savedInstanceState.getCharSequence(ARG_PREVENTION)
                 else -> ""
             }
         else
