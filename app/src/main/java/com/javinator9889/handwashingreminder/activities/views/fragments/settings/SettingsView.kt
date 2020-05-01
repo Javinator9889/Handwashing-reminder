@@ -50,7 +50,7 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.typeface.library.ionicons.Ionicons
 import com.mikepenz.iconics.utils.sizeDp
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import timber.log.Timber
 import java.lang.ref.WeakReference
 
@@ -111,226 +111,277 @@ class SettingsView : PreferenceFragmentCompat(),
             val suggestions = findPreference<Preference>("send_suggestions")
             val libraries = findPreference<Preference>("opensource_libs")
             val privacyAndTerms = findPreference<Preference>("tos_privacy")
-            share?.let {
-                it.icon = icon(Ionicons.Icon.ion_android_share)
-                it.setOnPreferenceClickListener {
-                    with(FirebaseAnalytics.getInstance(requireContext())) {
-                        logEvent(FirebaseAnalytics.Event.SHARE, null)
-                    }
-                    with(Intent.createChooser(Intent().apply {
-                        action = Intent.ACTION_SEND
-                        putExtra(
-                            Intent.EXTRA_TEXT,
-                            getText(R.string.share_text)
-                        )
-                        putExtra(
-                            Intent.EXTRA_TITLE,
-                            getText(R.string.share_title)
-                        )
-                        ClipData.Item(
-                            getUriFromRes(
-                                requireContext(),
-                                R.drawable.handwashing_app_logo
-                            )
-                        )
-                        clipData = ClipData(
-                            ClipDescription(
-                                getString(R.string.share_label),
-                                arrayOf("image/*")
-                            ),
-                            ClipData.Item(
-                                getUriFromRes(
-                                    requireContext(),
-                                    R.drawable.handwashing_app_logo
+            val deferreds = mutableListOf<Deferred<Unit?>>()
+            deferreds.add(
+                async(Dispatchers.Main) {
+                    share?.let {
+                        it.icon = icon(Ionicons.Icon.ion_android_share)
+                        it.setOnPreferenceClickListener {
+                            with(FirebaseAnalytics.getInstance(requireContext())) {
+                                logEvent(FirebaseAnalytics.Event.SHARE, null)
+                            }
+                            with(Intent.createChooser(Intent().apply {
+                                action = Intent.ACTION_SEND
+                                putExtra(
+                                    Intent.EXTRA_TEXT,
+                                    getText(R.string.share_text)
                                 )
-                            )
-                        )
-                        flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-                        type = "text/plain"
-                    }, null)) {
-                        startActivity(this)
-                    }
-                    true
-                }
-            }
-            playStore?.let {
-                it.icon = icon(Ionicons.Icon.ion_android_playstore)
-                it.setOnPreferenceClickListener {
-                    openWebsite(PLAYSTORE_URL, R.string.playstore_err)
-                    true
-                }
-            }
-            telegram?.let {
-                it.setOnPreferenceClickListener {
-                    openWebsite(TELEGRAM_URL, R.string.telegram_err)
-                    true
-                }
-            }
-            github?.let {
-                it.icon = icon(Ionicons.Icon.ion_social_github)
-                it.setOnPreferenceClickListener {
-                    openWebsite(GITHUB_URL, R.string.browser_err)
-                    true
-                }
-            }
-            twitter?.let {
-                it.icon = icon(Ionicons.Icon.ion_social_twitter)
-                it.setOnPreferenceClickListener {
-                    openWebsite(TWITTER_URL, R.string.twitter_err)
-                    true
-                }
-            }
-            linkedIn?.let {
-                it.icon = icon(Ionicons.Icon.ion_social_linkedin)
-                it.setOnPreferenceClickListener {
-                    openWebsite(LINKEDIN_URL, R.string.browser_err)
-                    true
-                }
-            }
-            firebaseAnalytics?.let {
-                it.onPreferenceChangeListener = this@SettingsView
-                it.icon = icon(Ionicons.Icon.ion_arrow_graph_up_right)
-                firebaseAnalyticsPreference = WeakReference(it)
-            }
-            firebasePerformance?.let {
-                it.onPreferenceChangeListener = this@SettingsView
-                it.icon = icon(Ionicons.Icon.ion_speedometer)
-                firebasePerformancePreference = WeakReference(it)
-            }
-            ads?.let {
-                it.onPreferenceChangeListener = this@SettingsView
-                it.icon = icon(Ionicons.Icon.ion_ios_barcode_outline)
-                adsPreference = WeakReference(it)
-            }
-            donations?.let {
-                it.onPreferenceChangeListener = this@SettingsView
-                it.entryValues = if (isDebuggable())
-                    resources.getTextArray(R.array.in_app_donations_debug)
-                else
-                    resources.getTextArray(R.array.in_app_donations)
-                it.icon = icon(Ionicons.Icon.ion_card)
-                billingService.addOnPurchaseFinishedListener(this@SettingsView)
-                donationsPreference = WeakReference(it)
-            }
-            translations?.let {
-                it.icon = icon(Ionicons.Icon.ion_chatbox_working)
-                it.setOnPreferenceClickListener {
-                    openWebsite(TRANSLATE_URL, R.string.browser_err)
-                    true
-                }
-            }
-            suggestions?.let {
-                it.setOnPreferenceClickListener {
-                    with(Intent(Intent.ACTION_SENDTO)) {
-                        type = "*/*"
-                        data = Uri.parse("mailto:")
-                        putExtra(Intent.EXTRA_EMAIL, arrayOf(Email.TO))
-                        putExtra(Intent.EXTRA_SUBJECT, Email.SUBJECT)
-                        putExtra(Intent.EXTRA_TEXT, getDeviceInfo())
-                        if (resolveActivity(requireContext().packageManager)
-                            != null
-                        ) {
-                            startActivity(this)
-                        } else {
-                            MaterialDialog(requireContext()).show {
-                                title(R.string.no_app)
-                                message(
-                                    text = getString(
-                                        R.string.no_app_long,
-                                        getString(R.string.sending_email)
+                                putExtra(
+                                    Intent.EXTRA_TITLE,
+                                    getText(R.string.share_title)
+                                )
+                                ClipData.Item(
+                                    getUriFromRes(
+                                        requireContext(),
+                                        R.drawable.handwashing_app_logo
                                     )
                                 )
-                                positiveButton(android.R.string.ok)
-                                cancelable(true)
-                                cancelOnTouchOutside(true)
+                                clipData = ClipData(
+                                    ClipDescription(
+                                        getString(R.string.share_label),
+                                        arrayOf("image/*")
+                                    ),
+                                    ClipData.Item(
+                                        getUriFromRes(
+                                            requireContext(),
+                                            R.drawable.handwashing_app_logo
+                                        )
+                                    )
+                                )
+                                flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                                type = "text/plain"
+                            }, null)) {
+                                startActivity(this)
                             }
+                            true
                         }
                     }
-                    true
-                }
-                it.icon = icon(Ionicons.Icon.ion_chatbubbles)
-            }
-            libraries?.let {
-                it.setOnPreferenceClickListener {
-                    val bundle = Bundle(1).apply {
-                        putString("view", "libs")
+                })
+            deferreds.add(
+                async(Dispatchers.Main) {
+                    playStore?.let {
+                        it.icon = icon(Ionicons.Icon.ion_android_playstore)
+                        it.setOnPreferenceClickListener {
+                            openWebsite(PLAYSTORE_URL, R.string.playstore_err)
+                            true
+                        }
                     }
-                    with(FirebaseAnalytics.getInstance(requireContext())) {
-                        logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle)
+                })
+            deferreds.add(
+                async(Dispatchers.Main) {
+                    telegram?.let {
+                        it.setOnPreferenceClickListener {
+                            openWebsite(TELEGRAM_URL, R.string.telegram_err)
+                            true
+                        }
                     }
-                    LibsBuilder()
-                        .withAutoDetect(true)
-                        .withFields(R.string::class.java.fields)
-                        .withCheckCachedDetection(true)
-                        .withSortEnabled(true)
-                        .withAboutVersionShown(true)
-                        .withAboutVersionShownCode(true)
-                        .withAboutVersionShownName(true)
-                        .withShowLoadingProgress(true)
-                        .withActivityTitle(getString(R.string.app_name))
-                        .start(requireContext())
-                    true
-                }
-                it.icon = icon(Ionicons.Icon.ion_code)
-            }
-            privacyAndTerms?.let {
-                it.setOnPreferenceClickListener {
-                    Intent(
-                        requireContext(),
-                        PrivacyTermsActivity::class.java
-                    ).run {
-                        startActivity(this)
+                })
+            deferreds.add(
+                async(Dispatchers.Main) {
+                    github?.let {
+                        it.icon = icon(Ionicons.Icon.ion_social_github)
+                        it.setOnPreferenceClickListener {
+                            openWebsite(GITHUB_URL, R.string.browser_err)
+                            true
+                        }
                     }
-                    true
-                }
-                it.icon = icon(Ionicons.Icon.ion_android_cloud_done)
-            }
-            emojiCompat = emojiLoader.await()
-            breakfast?.let {
-                it.icon = icon(Ionicons.Icon.ion_coffee)
-                it.alarm = Alarms.BREAKFAST_ALARM
-                try {
-                    it.title =
-                        emojiCompat.process(getText(R.string.breakfast_pref_title))
-                    it.summaryText =
-                        emojiCompat.process(getText(R.string.breakfast_pref_summ))
-                } catch (_: IllegalStateException) {
-                    it.title = getText(R.string.breakfast_pref_title)
-                    it.summaryText = getText(R.string.breakfast_pref_summ)
-                } finally {
-                    it.updateSummary()
-                }
-            }
-            lunch?.let {
-                it.icon = icon(Ionicons.Icon.ion_android_restaurant)
-                it.alarm = Alarms.LUNCH_ALARM
-                try {
-                    it.title =
-                        emojiCompat.process(getText(R.string.lunch_pref_title))
-                    it.summaryText =
-                        emojiCompat.process(getText(R.string.lunch_pref_summ))
-                } catch (_: IllegalStateException) {
-                    it.title = getText(R.string.lunch_pref_title)
-                    it.summaryText = getText(R.string.lunch_pref_summ)
-                } finally {
-                    it.updateSummary()
-                }
-            }
-            dinner?.let {
-                it.icon = icon(Ionicons.Icon.ion_ios_moon_outline)
-                it.alarm = Alarms.DINNER_ALARM
-                try {
-                    it.title =
-                        emojiCompat.process(getText(R.string.dinner_pref_title))
-                    it.summaryText =
-                        emojiCompat.process(getText(R.string.dinner_pref_summ))
-                } catch (_: IllegalStateException) {
-                    it.title = getText(R.string.dinner_pref_title)
-                    it.summaryText = getText(R.string.dinner_pref_summ)
-                } finally {
-                    it.updateSummary()
-                }
-            }
+                })
+            deferreds.add(
+                async(Dispatchers.Main) {
+                    twitter?.let {
+                        it.icon = icon(Ionicons.Icon.ion_social_twitter)
+                        it.setOnPreferenceClickListener {
+                            openWebsite(TWITTER_URL, R.string.twitter_err)
+                            true
+                        }
+                    }
+                })
+            deferreds.add(
+                async(Dispatchers.Main) {
+                    linkedIn?.let {
+                        it.icon = icon(Ionicons.Icon.ion_social_linkedin)
+                        it.setOnPreferenceClickListener {
+                            openWebsite(LINKEDIN_URL, R.string.browser_err)
+                            true
+                        }
+                    }
+                })
+            deferreds.add(
+                async(Dispatchers.Main) {
+                    firebaseAnalytics?.let {
+                        it.onPreferenceChangeListener = this@SettingsView
+                        it.icon = icon(Ionicons.Icon.ion_arrow_graph_up_right)
+                        firebaseAnalyticsPreference = WeakReference(it)
+                    }
+                })
+            deferreds.add(
+                async(Dispatchers.Main) {
+                    firebasePerformance?.let {
+                        it.onPreferenceChangeListener = this@SettingsView
+                        it.icon = icon(Ionicons.Icon.ion_speedometer)
+                        firebasePerformancePreference = WeakReference(it)
+                    }
+                })
+            deferreds.add(
+                async(Dispatchers.Main) {
+                    ads?.let {
+                        it.onPreferenceChangeListener = this@SettingsView
+                        it.icon = icon(Ionicons.Icon.ion_ios_barcode_outline)
+                        adsPreference = WeakReference(it)
+                    }
+                })
+            deferreds.add(
+                async(Dispatchers.Main) {
+                    donations?.let {
+                        it.onPreferenceChangeListener = this@SettingsView
+                        it.entryValues = if (isDebuggable())
+                            resources.getTextArray(R.array.in_app_donations_debug)
+                        else
+                            resources.getTextArray(R.array.in_app_donations)
+                        it.icon = icon(Ionicons.Icon.ion_card)
+                        billingService.addOnPurchaseFinishedListener(this@SettingsView)
+                        donationsPreference = WeakReference(it)
+                    }
+                })
+            deferreds.add(
+                async(Dispatchers.Main) {
+                    translations?.let {
+                        it.icon = icon(Ionicons.Icon.ion_chatbox_working)
+                        it.setOnPreferenceClickListener {
+                            openWebsite(TRANSLATE_URL, R.string.browser_err)
+                            true
+                        }
+                    }
+                })
+            deferreds.add(
+                async(Dispatchers.Main) {
+                    suggestions?.let {
+                        it.setOnPreferenceClickListener {
+                            with(Intent(Intent.ACTION_SENDTO)) {
+                                type = "*/*"
+                                data = Uri.parse("mailto:")
+                                putExtra(Intent.EXTRA_EMAIL, arrayOf(Email.TO))
+                                putExtra(Intent.EXTRA_SUBJECT, Email.SUBJECT)
+                                putExtra(Intent.EXTRA_TEXT, getDeviceInfo())
+                                if (resolveActivity(requireContext().packageManager)
+                                    != null
+                                ) {
+                                    startActivity(this)
+                                } else {
+                                    MaterialDialog(requireContext()).show {
+                                        title(R.string.no_app)
+                                        message(
+                                            text = getString(
+                                                R.string.no_app_long,
+                                                getString(R.string.sending_email)
+                                            )
+                                        )
+                                        positiveButton(android.R.string.ok)
+                                        cancelable(true)
+                                        cancelOnTouchOutside(true)
+                                    }
+                                }
+                            }
+                            true
+                        }
+                        it.icon = icon(Ionicons.Icon.ion_chatbubbles)
+                    }
+                })
+            deferreds.add(
+                async(Dispatchers.Main) {
+                    libraries?.let {
+                        it.setOnPreferenceClickListener {
+                            val bundle = Bundle(1).apply {
+                                putString("view", "libs")
+                            }
+                            with(FirebaseAnalytics.getInstance(requireContext())) {
+                                logEvent(
+                                    FirebaseAnalytics.Event.VIEW_ITEM,
+                                    bundle
+                                )
+                            }
+                            LibsBuilder()
+                                .withAutoDetect(true)
+                                .withFields(R.string::class.java.fields)
+                                .withCheckCachedDetection(true)
+                                .withSortEnabled(true)
+                                .withAboutVersionShown(true)
+                                .withAboutVersionShownCode(true)
+                                .withAboutVersionShownName(true)
+                                .withShowLoadingProgress(true)
+                                .withActivityTitle(getString(R.string.app_name))
+                                .start(requireContext())
+                            true
+                        }
+                        it.icon = icon(Ionicons.Icon.ion_code)
+                    }
+                })
+            deferreds.add(
+                async(Dispatchers.Main) {
+                    privacyAndTerms?.let {
+                        it.setOnPreferenceClickListener {
+                            Intent(
+                                requireContext(),
+                                PrivacyTermsActivity::class.java
+                            ).run {
+                                startActivity(this)
+                            }
+                            true
+                        }
+                        it.icon = icon(Ionicons.Icon.ion_android_cloud_done)
+                    }
+                })
+            deferreds.add(
+                async(Dispatchers.Main) {
+                    emojiCompat = emojiLoader.await()
+                    breakfast?.let {
+                        it.icon = icon(Ionicons.Icon.ion_coffee)
+                        it.alarm = Alarms.BREAKFAST_ALARM
+                        try {
+                            it.title =
+                                emojiCompat.process(getText(R.string.breakfast_pref_title))
+                            it.summaryText =
+                                emojiCompat.process(getText(R.string.breakfast_pref_summ))
+                        } catch (_: IllegalStateException) {
+                            it.title = getText(R.string.breakfast_pref_title)
+                            it.summaryText =
+                                getText(R.string.breakfast_pref_summ)
+                        } finally {
+                            it.updateSummary()
+                        }
+                    }
+                    lunch?.let {
+                        it.icon = icon(Ionicons.Icon.ion_android_restaurant)
+                        it.alarm = Alarms.LUNCH_ALARM
+                        try {
+                            it.title =
+                                emojiCompat.process(getText(R.string.lunch_pref_title))
+                            it.summaryText =
+                                emojiCompat.process(getText(R.string.lunch_pref_summ))
+                        } catch (_: IllegalStateException) {
+                            it.title = getText(R.string.lunch_pref_title)
+                            it.summaryText = getText(R.string.lunch_pref_summ)
+                        } finally {
+                            it.updateSummary()
+                        }
+                    }
+                    dinner?.let {
+                        it.icon = icon(Ionicons.Icon.ion_ios_moon_outline)
+                        it.alarm = Alarms.DINNER_ALARM
+                        try {
+                            it.title =
+                                emojiCompat.process(getText(R.string.dinner_pref_title))
+                            it.summaryText =
+                                emojiCompat.process(getText(R.string.dinner_pref_summ))
+                        } catch (_: IllegalStateException) {
+                            it.title = getText(R.string.dinner_pref_title)
+                            it.summaryText = getText(R.string.dinner_pref_summ)
+                        } finally {
+                            it.updateSummary()
+                        }
+                    }
+                })
+            deferreds.awaitAll()
         }
     }
 
