@@ -40,6 +40,11 @@ class DiseaseDescriptionFragment : BaseFragmentView() {
     private lateinit var parsedHTMLText: ParsedHTMLText
     private var animId by Delegates.notNull<Int>()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        retainInstance = true
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putCharSequence(ARG_TITLE, title.text)

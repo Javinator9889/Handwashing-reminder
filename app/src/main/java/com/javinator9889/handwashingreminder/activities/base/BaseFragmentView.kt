@@ -29,11 +29,6 @@ abstract class BaseFragmentView : BaseFragment() {
     @get:LayoutRes
     protected abstract val layoutId: Int
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        retainInstance = true
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

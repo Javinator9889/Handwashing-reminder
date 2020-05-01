@@ -36,6 +36,11 @@ class DiseaseExtraInformationFragment : BaseFragmentView() {
     private var position by Delegates.notNull<Int>()
     private lateinit var parsedHTMLText: ParsedHTMLText
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        retainInstance = true
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         if (position == 1)
