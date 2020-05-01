@@ -125,9 +125,14 @@ class MainActivity : ActionBarBase(),
             menu.selectedItemId = R.id.diseases
             onNavigationItemSelected(menu.menu.findItem(R.id.diseases))
         } else {
-            if (activeFragment == R.id.diseases)
+            if (activeFragment == R.id.diseases) {
+                with(fragments[activeFragment].get()!! as DiseasesFragment) {
+                    onBackPressed()
+                }
+                fragments.clear()
                 super.onBackPressed()
-            else {
+                finish()
+            } else {
                 val washingHandsFragment = fragments[activeFragment].get()
                     ?: createFragmentForId(R.id.handwashing)
                             as WashingHandsFragment
