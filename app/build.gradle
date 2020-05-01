@@ -42,7 +42,7 @@ android {
         applicationId "com.javinator9889.handwashingreminder"
         minSdkVersion 17
         targetSdkVersion 29
-        versionCode 120
+        versionCode 121
         versionName "1.1.2-${gitCommitHash}"
         multiDexEnabled true
         resConfigs "en", "es"
@@ -78,6 +78,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             multiDexEnabled = true
             signingConfig signingConfigs.release
+            versionNameSuffix "-stable"
 
             debuggable false
             jniDebuggable false
