@@ -43,6 +43,7 @@ import com.mikepenz.fastadapter.listeners.ClickEventHook
 import kotlinx.android.synthetic.main.diseases_list.*
 import kotlinx.android.synthetic.main.diseases_list.view.*
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class DiseasesFragment : BaseFragmentView() {
     override val layoutId: Int = R.layout.diseases_list
@@ -93,6 +94,23 @@ class DiseasesFragment : BaseFragmentView() {
             adapter = fastAdapter
         }
         fastAdapter.addEventHook(DiseaseClickEventHook())
+        fastAdapter.withSavedInstanceState(savedInstanceState)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        fastAdapter.saveInstanceState(outState)
+    }
+
+    fun onBackPressed() {
+        try {
+            diseasesContainer.adapter = null
+            diseasesAdapter.clear()
+        } catch (e: Exception) {
+            Timber.w(e, "Exception when calling 'onBackPressed'")
+        } finally {
+            onDestroy()
+        }
     }
 
     private inner class DiseaseClickEventHook : ClickEventHook<Disease>() {

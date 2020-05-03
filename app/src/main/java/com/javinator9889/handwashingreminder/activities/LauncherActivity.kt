@@ -20,6 +20,7 @@ package com.javinator9889.handwashingreminder.activities
 
 import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -27,6 +28,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenCreated
 import androidx.lifecycle.whenStarted
+import androidx.preference.PreferenceManager
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.play.core.splitcompat.SplitCompat
@@ -41,7 +43,6 @@ import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.emoji.EmojiLoader
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
 import com.javinator9889.handwashingreminder.gms.ads.AdsEnabler
-import com.javinator9889.handwashingreminder.gms.vendor.BillingService
 import com.javinator9889.handwashingreminder.jobs.alarms.AlarmHandler
 import com.javinator9889.handwashingreminder.utils.*
 import com.javinator9889.handwashingreminder.utils.Preferences.Companion.ADS_ENABLED
@@ -65,13 +66,16 @@ class LauncherActivity : AppCompatActivity() {
     private var launchOnInstall = false
     private var launchFromNotification = false
     private var canFinishActivity = false
+    private lateinit var sharedPreferences: SharedPreferences
     private lateinit var app: HandwashingApplication
     private lateinit var initDeferred: Deferred<Unit>
 
     init {
         lifecycleScope.launch {
             whenCreated {
-                app = HandwashingApplication.getInstance()
+                app = HandwashingApplication.instance
+                sharedPreferences =
+                    PreferenceManager.getDefaultSharedPreferences(this@LauncherActivity)
                 with(intent) {
                     notNull {
                         launchFromNotification =
@@ -141,7 +145,7 @@ class LauncherActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == DYNAMIC_FEATURE_INSTALL_RESULT_CODE) {
             EmojiLoader.get(this)
-            if (app.sharedPreferences.getBoolean(ADS_ENABLED, true)) {
+            if (sharedPreferences.getBoolean(ADS_ENABLED, true)) {
                 when (resultCode) {
                     Activity.RESULT_OK -> {
                         initAds()
@@ -183,9 +187,9 @@ class LauncherActivity : AppCompatActivity() {
     private fun installRequiredModules() {
         val modules = ArrayList<String>(MODULE_COUNT)
         val googleApi = GoogleApiAvailability.getInstance()
-        if (app.sharedPreferences.getBoolean(ADS_ENABLED, true))
+        if (sharedPreferences.getBoolean(ADS_ENABLED, true))
             modules += Ads.MODULE_NAME
-        if (!app.sharedPreferences.getBoolean(APP_INIT_KEY, false)) {
+        if (!sharedPreferences.getBoolean(APP_INIT_KEY, false)) {
             modules += AppIntro.MODULE_NAME
             launchOnInstall = true
         }
@@ -247,7 +251,7 @@ class LauncherActivity : AppCompatActivity() {
         Timber.d("Setting-up security providers")
         Security.insertProviderAt(Conscrypt.newProvider(), 1)
         Timber.d("Setting-up activity recognition")
-        if (app.sharedPreferences.getBoolean(
+        if (sharedPreferences.getBoolean(
                 Preferences.ACTIVITY_TRACKING_ENABLED, false
             ) && with(GoogleApiAvailability.getInstance()) {
                 isGooglePlayServicesAvailable(this@LauncherActivity) ==
@@ -258,8 +262,6 @@ class LauncherActivity : AppCompatActivity() {
         } else {
             app.activityHandler.disableActivityTracker()
         }
-        Timber.d("Initializing Billing Service")
-        app.billingService = BillingService(this)
         with(AlarmHandler(this)) {
             scheduleAllAlarms()
         }
@@ -306,13 +308,13 @@ class LauncherActivity : AppCompatActivity() {
             }
         }
         firebaseAnalytics.setAnalyticsCollectionEnabled(
-            app.sharedPreferences.getBoolean(
+            sharedPreferences.getBoolean(
                 Preferences.ANALYTICS_ENABLED,
                 true
             )
         )
         firebasePerformance.isPerformanceCollectionEnabled =
-            app.sharedPreferences.getBoolean(
+            sharedPreferences.getBoolean(
                 Preferences.PERFORMANCE_ENABLED,
                 true
             )

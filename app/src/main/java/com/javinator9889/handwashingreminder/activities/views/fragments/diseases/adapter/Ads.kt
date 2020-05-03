@@ -33,7 +33,7 @@ class Ads : AbstractItem<Ads.ViewHolder>() {
     override fun getViewHolder(v: View): ViewHolder = ViewHolder(v)
 
     class ViewHolder(v: View) : FastAdapter.ViewHolder<Ads>(v) {
-        private val ads = HandwashingApplication.getInstance().adLoader
+        private val ads = HandwashingApplication.instance.adLoader
         private val container = v.findViewById<FrameLayout>(R.id.adsContainer)
 
         override fun bindView(item: Ads, payloads: List<Any>) {

@@ -46,7 +46,7 @@ class PrivacyTermsCollectionAdapter(fm: FragmentActivity) :
 
 }
 
-private const val ARG_POSITION = "item:position"
+internal const val ARG_POSITION = "item:position"
 
 class PolicyTextViewFragment : BaseFragment() {
     override fun onCreateView(

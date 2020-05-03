@@ -42,7 +42,7 @@ android {
         applicationId "com.javinator9889.handwashingreminder"
         minSdkVersion 17
         targetSdkVersion 29
-        versionCode 118
+        versionCode 121
         versionName "1.1.2-${gitCommitHash}"
         multiDexEnabled true
         resConfigs "en", "es"
@@ -78,6 +78,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             multiDexEnabled = true
             signingConfig signingConfigs.release
+            versionNameSuffix "-stable"
 
             debuggable false
             jniDebuggable false
@@ -171,7 +172,7 @@ dependencies {
     // https://developer.android.com/jetpack/androidx/releases/lifecycle#declaring_dependencies
     implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.2.0'
     // https://developer.android.com/reference/kotlin/androidx/preference/package-summary
-    implementation 'androidx.preference:preference:1.1.1'
+    api 'androidx.preference:preference-ktx:1.1.1'
     // https://github.com/bumptech/glide
     api 'com.github.bumptech.glide:glide:4.11.0'
     kapt 'com.github.bumptech.glide:compiler:4.11.0'

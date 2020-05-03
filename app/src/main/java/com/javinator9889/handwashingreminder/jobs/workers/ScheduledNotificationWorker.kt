@@ -72,7 +72,7 @@ abstract class ScheduledNotificationWorker(context: Context) {
                     .currentTimeMillis() - startTime}ms"
             )
         } catch (e: Exception) {
-            with(HandwashingApplication.getInstance()) {
+            with(HandwashingApplication.instance) {
                 // Don't use so much resources, wait at most half a second until
                 // Firebase initializes or continue with execution.
                 // Firebase is only needed for Timber (Crashlytics) so until

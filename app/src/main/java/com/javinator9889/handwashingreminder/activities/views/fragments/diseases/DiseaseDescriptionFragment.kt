@@ -16,7 +16,7 @@
  *
  * Created by Javinator9889 on 19/04/20 - Handwashing reminder.
  */
-package com.javinator9889.handwashingreminder.collections
+package com.javinator9889.handwashingreminder.activities.views.fragments.diseases
 
 import android.os.Bundle
 import androidx.annotation.LayoutRes
@@ -24,19 +24,26 @@ import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.BaseFragmentView
 import com.javinator9889.handwashingreminder.activities.views.viewmodels.ParsedHTMLText
 import kotlinx.android.synthetic.main.disease_description.*
+import kotlin.properties.Delegates
 
 internal const val ARG_TITLE = "bundle:title"
 internal const val ARG_SDESC = "bundle:description:short"
 internal const val ARG_LDESC = "bundle:description:long"
 internal const val ARG_PROVIDER = "bundle:provider"
 internal const val ARG_WEBSITE = "bundle:website"
+internal const val ARG_ANIMATION_ID = "bundle:animation:id"
+internal const val ARG_HTML_TEXT = "bundle:text:html"
 
-class DiseaseDescriptionFragment(
-    private val parsedHTMLText: ParsedHTMLText,
-    private val animId: Int
-) : BaseFragmentView() {
+class DiseaseDescriptionFragment : BaseFragmentView() {
     @get:LayoutRes
     override val layoutId: Int = R.layout.disease_description
+    private lateinit var parsedHTMLText: ParsedHTMLText
+    private var animId by Delegates.notNull<Int>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        retainInstance = true
+    }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -45,26 +52,26 @@ class DiseaseDescriptionFragment(
         outState.putCharSequence(ARG_LDESC, longDescription.text)
         outState.putCharSequence(ARG_PROVIDER, provider.text)
         outState.putCharSequence(ARG_WEBSITE, website.text)
+        outState.putParcelable(ARG_HTML_TEXT, parsedHTMLText)
+        outState.putInt(ARG_ANIMATION_ID, animId)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        animatedView.setAnimation(animId)
-        if (savedInstanceState != null) {
-            title.text = savedInstanceState.getCharSequence(ARG_TITLE)
-            shortDescription.text =
-                savedInstanceState.getCharSequence(ARG_SDESC)
-            longDescription.text = savedInstanceState.getCharSequence(ARG_LDESC)
-            provider.text = savedInstanceState.getCharSequence(ARG_PROVIDER)
-            website.text = savedInstanceState.getCharSequence(ARG_WEBSITE)
-        } else {
-            title.text = parsedHTMLText.name
-            shortDescription.text = parsedHTMLText.shortDescription
-            longDescription.text = parsedHTMLText.longDescription
-            provider.text =
-                getString(R.string.written_by, parsedHTMLText.provider)
-            website.text =
-                getString(R.string.available_at, parsedHTMLText.website)
+        if (savedInstanceState != null || arguments != null) {
+            val data = (savedInstanceState ?: arguments)!!
+            parsedHTMLText = data.getParcelable(ARG_HTML_TEXT)!!
+            animId = data.getInt(ARG_ANIMATION_ID)
+            animatedView.setAnimation(animId)
+            title.text = data.getCharSequence(ARG_TITLE) ?: parsedHTMLText.name
+            shortDescription.text = data.getCharSequence(ARG_SDESC)
+                ?: parsedHTMLText.shortDescription
+            longDescription.text = data.getCharSequence(ARG_LDESC)
+                ?: parsedHTMLText.longDescription
+            provider.text = data.getCharSequence(ARG_PROVIDER)
+                ?: getString(R.string.written_by, parsedHTMLText.provider)
+            website.text = data.getCharSequence(ARG_WEBSITE)
+                ?: getString(R.string.available_at, parsedHTMLText.website)
         }
     }
 }

@@ -27,7 +27,7 @@ import com.javinator9889.handwashingreminder.application.HandwashingApplication
  * @return A float value to represent px equivalent to dp depending on device density
  */
 fun dpToPx(dp: Float): Float {
-    val context = HandwashingApplication.getInstance().applicationContext
+    val context = HandwashingApplication.instance.applicationContext
     return dp * context.resources.displayMetrics.density
 }
 
@@ -38,6 +38,6 @@ fun dpToPx(dp: Float): Float {
  * @return A float value to represent dp equivalent to px value
  */
 fun pxToDp(px: Float): Float {
-    val context = HandwashingApplication.getInstance().applicationContext
+    val context = HandwashingApplication.instance.applicationContext
     return px / context.resources.displayMetrics.density
 }

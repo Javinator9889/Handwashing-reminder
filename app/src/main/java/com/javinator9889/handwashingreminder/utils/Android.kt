@@ -45,7 +45,7 @@ fun isAtLeast(version: AndroidVersion): Boolean =
     Build.VERSION.SDK_INT >= version.code
 
 fun isHighPerformingDevice(): Boolean {
-    with(HandwashingApplication.getInstance()) {
+    with(HandwashingApplication.instance) {
         val activityManager =
             getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         val isLowRamDevice =
@@ -59,7 +59,7 @@ fun isHighPerformingDevice(): Boolean {
 }
 
 fun isConnected(): Boolean {
-    val connectivityManager = HandwashingApplication.getInstance()
+    val connectivityManager = HandwashingApplication.instance
         .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     if (isAtLeast(AndroidVersion.M)) {
         val network = connectivityManager.activeNetwork ?: return false
@@ -79,7 +79,7 @@ fun isConnected(): Boolean {
 }
 
 fun isDebuggable(): Boolean =
-    (0 != HandwashingApplication.getInstance().applicationInfo.flags and
+    (0 != HandwashingApplication.instance.applicationInfo.flags and
             ApplicationInfo.FLAG_DEBUGGABLE)
 
 fun getDeviceInfo(): String = with(StringBuilder()) {

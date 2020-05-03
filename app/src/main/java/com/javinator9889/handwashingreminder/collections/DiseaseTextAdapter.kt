@@ -18,22 +18,33 @@
  */
 package com.javinator9889.handwashingreminder.collections
 
+import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.javinator9889.handwashingreminder.activities.views.fragments.diseases.ARG_ANIMATION_ID
+import com.javinator9889.handwashingreminder.activities.views.fragments.diseases.ARG_HTML_TEXT
+import com.javinator9889.handwashingreminder.activities.views.fragments.diseases.ARG_POSITION
+import com.javinator9889.handwashingreminder.activities.views.fragments.diseases.DiseaseDescriptionFragment
+import com.javinator9889.handwashingreminder.activities.views.fragments.diseases.DiseaseExtraInformationFragment
 import com.javinator9889.handwashingreminder.activities.views.viewmodels.ParsedHTMLText
 
 class DiseaseTextAdapter(
     fm: FragmentActivity,
     private val animId: Int,
     private val parsedHTMLText: ParsedHTMLText
-) :
-    FragmentStateAdapter(fm) {
+) : FragmentStateAdapter(fm) {
     override fun getItemCount(): Int = 3
 
     override fun createFragment(position: Int): Fragment = when (position) {
-        0 -> DiseaseDescriptionFragment(parsedHTMLText, animId)
-        1, 2 -> DiseaseExtraInformationFragment(position, parsedHTMLText)
+        0 -> DiseaseDescriptionFragment()
+        1, 2 -> DiseaseExtraInformationFragment()
         else -> Fragment()
+    }.apply {
+        val bundle = Bundle(3)
+        bundle.putInt(ARG_POSITION, position)
+        bundle.putInt(ARG_ANIMATION_ID, animId)
+        bundle.putParcelable(ARG_HTML_TEXT, parsedHTMLText)
+        arguments = bundle
     }
 }

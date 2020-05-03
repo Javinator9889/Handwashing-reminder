@@ -28,7 +28,10 @@ Currently, the application supports:
 
 + Send notifications at specific time. This feature was developed using
   the Android's
-  [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager).
+  [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager)
+  but because the notifications were not working as expected (they were almost
+  always delayed) the app now uses AlarmManager for waking the device at
+  specific time, even if it is in Doze mode.
 + Detect user activity and send a notification when ends an specific
   one. For example, if he gets out of a vehicle, or has just finished
   running, etc. This was developed using Google's [Activity Recognition

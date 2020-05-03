@@ -30,6 +30,7 @@ import androidx.annotation.Keep
 import androidx.core.content.edit
 import androidx.core.util.set
 import androidx.fragment.app.Fragment
+import androidx.preference.PreferenceManager
 import com.github.paolorotolo.appintro.AppIntro2
 import com.github.paolorotolo.appintro.AppIntroViewPager
 import com.google.android.gms.common.ConnectionResult.SUCCESS
@@ -165,8 +166,8 @@ class IntroActivity : AppIntro2(),
 
     override fun onDonePressed(currentFragment: Fragment?) {
         super.onDonePressed(currentFragment)
-        val app = HandwashingApplication.getInstance()
-        val sharedPreferences = app.sharedPreferences
+        val app = HandwashingApplication.instance
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         sharedPreferences.edit(commit = true) {
             timeConfigSlide.itemAdapter.adapterItems.forEach { item ->
                 val time = "${item.hours}:${item.minutes}"
