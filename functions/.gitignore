@@ -6,3 +6,6 @@
 typings/
 
 node_modules/
+
+handwashing-firebase-adminsdk.json
+.runtimeconfig.json

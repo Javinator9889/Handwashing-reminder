@@ -1,21 +1,22 @@
-import { NewsriverData } from "./newsriver";
+// import { NewsriverData } from "./newsriver";
 import firebaseHelper = require("firebase-functions-helper");
+import XMLHttpRequest = require('xhr2');
 
-class Updater {
+export class Updater {
   db: FirebaseFirestore.Firestore;
   collectionName: string;
   interval: number;
   searchTerms: Array<string>;
   language: string;
-  url: string | undefined;
   auth: string;
+  url: string | undefined;
 
   constructor(db: FirebaseFirestore.Firestore,
-              collectionName: string,
-              searchTerms: Array<string>,
-              auth: string,
-              language: string = 'en',
-              intervalMins: number = 15) {
+    collectionName: string,
+    searchTerms: Array<string>,
+    auth: string,
+    language: string = 'en',
+    intervalMins: number = 15) {
     this.db = db;
     this.collectionName = collectionName;
     this.searchTerms = searchTerms;
@@ -29,21 +30,42 @@ class Updater {
   schedule(): NodeJS.Timer {
     return setInterval(() => {
       const httpRequest = new XMLHttpRequest();
-      httpRequest.setRequestHeader('Authorization', this.auth);
+      const that = this;
+      console.log('Requesting news');
+      while (this.url === undefined);
+      console.log(`URL: ${this.url}`);
       httpRequest.open('GET', this.url);
-      httpRequest.onreadystatechange = _ => {
-        this.updateData(httpRequest.responseText);
+      httpRequest.setRequestHeader('Authorization', this.auth);
+      httpRequest.send();
+      httpRequest.onreadystatechange = () => {
+        console.log('Callback called');
+        if (httpRequest.status === 200) {
+          console.log('Response is OK');
+          that.updateData(httpRequest.responseText);
+        }
+      };
+      httpRequest.onerror = (error) => {
+        console.log(`error ocurred during process ${error}`)
       }
     }, this.interval);
   }
 
   async updateData(content: string) {
-    const response: Array<NewsriverData> = JSON.parse(content);
-    response.forEach(element => {
-      if (!firebaseHelper.firestore.checkDocumentExists(this.db, this.collectionName, element.id)) {
-        firebaseHelper.firestore.createDocumentWithID(this.db, this.collectionName, element.id, element);
-      }
-    });
+    try {
+      console.log(content);
+      const response = JSON.parse(content);
+      console.log(`Got response: ${response}`);
+
+      return;
+
+      response.forEach(element => {
+        if (!firebaseHelper.firestore.checkDocumentExists(this.db, this.collectionName, element.id)) {
+          firebaseHelper.firestore.createDocumentWithID(this.db, this.collectionName, element.id, element);
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   buildURL(): Promise<string> {
@@ -51,18 +73,18 @@ class Updater {
       const parts = ['https://api.newsriver.io/v2/search?query='];
       this.searchTerms.forEach((term, i, _) => {
         if (i !== 0)
-          parts.push[' '];
-        parts.push[`title:${term} OR text:${term}`];
+          parts.push(encodeURI(' OR '));
+        parts.push(encodeURI(`title:${term} OR text:${term}`));
       });
       let language: string;
-      switch(this.language) {
+      switch (this.language) {
         case 'es': language = 'ES'; break;
         default: language = 'EN'; break;
       }
-      parts.push[` AND language:${language}`];
-      parts.push['&sortBy=discoverDate'];
-      parts.push['&sortOrder=DESC'];
-      parts.push['&limit=200'];
+      parts.push(encodeURI(` AND language:${language}`));
+      parts.push(encodeURI('&sortBy=discoverDate'));
+      parts.push(encodeURI('&sortOrder=DESC'));
+      parts.push(encodeURI('&limit=10'));
       resolve(parts.join(''));
     });
   }
