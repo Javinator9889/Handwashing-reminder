@@ -3,15 +3,14 @@ import * as admin from 'firebase-admin';
 import * as firebaseHelper from 'firebase-functions-helper';
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
-import { RemoteConfigData } from "./rcdata";
-import { Updater } from "./updater";
+import { RemoteConfigData } from './rcdata';
+import { Updater } from './updater';
 
-
-const serviceAccount = require("../handwashing-firebase-adminsdk.json");
+const serviceAccount = require('../handwashing-firebase-adminsdk.json');
 const firebaseApp = admin.initializeApp(
   {
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://handwashing.firebaseio.com"
+    databaseURL: 'https://handwashing.firebaseio.com'
   }
 );
 const newsCollection = 'news';
@@ -49,10 +48,5 @@ app.get('/', async (req, res) => {
     res.status(400).send('Data must contain langauge');
   }
 });
-// // Start writing Firebase Functions
-// // https://firebase.google.com/docs/functions/typescript
-//
-// export const helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
 
+module.exports = app;

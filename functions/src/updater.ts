@@ -1,6 +1,6 @@
 // import { NewsriverData } from "./newsriver";
-import firebaseHelper = require("firebase-functions-helper");
-import XMLHttpRequest = require('xhr2');
+import * as firebaseHelper from 'firebase-functions-helper';
+import * as XMLHttpRequest from 'xhr2';
 
 export class Updater {
   db: FirebaseFirestore.Firestore;
