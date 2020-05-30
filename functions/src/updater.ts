@@ -1,22 +1,37 @@
-// import { NewsriverData } from "./newsriver";
+import {NewsriverData} from "./newsriver";
 import * as firebaseHelper from 'firebase-functions-helper';
-import * as XMLHttpRequest from 'xhr2';
+import * as fetch from 'node-fetch';
 
 export class Updater {
-  db: FirebaseFirestore.Firestore;
-  collectionName: string;
-  interval: number;
-  searchTerms: Array<string>;
-  language: string;
-  auth: string;
-  url: string | undefined;
+  private readonly db: FirebaseFirestore.Firestore;
+  private readonly collectionName: string;
+  private readonly interval: number;
+  private readonly searchTerms: Array<string>;
+  private readonly language: string;
+  private readonly auth: string;
+  private _url: string | undefined;
 
-  constructor(db: FirebaseFirestore.Firestore,
-    collectionName: string,
-    searchTerms: Array<string>,
-    auth: string,
-    language: string = 'en',
-    intervalMins: number = 15) {
+  // @ts-ignore
+  set url(value: string) {
+    this._url = value;
+  }
+
+  // @ts-ignore
+  get url(): Promise<string> {
+    while (this._url === undefined) ;
+    return Promise.resolve(this._url);
+  }
+
+  get collection(): FirebaseFirestore.CollectionReference {
+    return this.db.collection(this.collectionName);
+  }
+
+  constructor(db: FirebaseFirestore.Firestore | null,
+              collectionName: string | null,
+              searchTerms: Array<string>,
+              auth: string,
+              language: string = 'en',
+              intervalMins: number = 15) {
     this.db = db;
     this.collectionName = collectionName;
     this.searchTerms = searchTerms;
@@ -24,47 +39,41 @@ export class Updater {
     this.auth = auth;
     this.interval = intervalMins * 60 * 1000;
     this.buildURL()
+      // @ts-ignore
       .then(url => this.url = url);
   }
 
   schedule(): NodeJS.Timer {
     return setInterval(() => {
-      const httpRequest = new XMLHttpRequest();
       const that = this;
-      console.log('Requesting news');
-      while (this.url === undefined);
-      console.log(`URL: ${this.url}`);
-      httpRequest.open('GET', this.url);
-      httpRequest.setRequestHeader('Authorization', this.auth);
-      httpRequest.send();
-      httpRequest.onreadystatechange = () => {
-        console.log('Callback called');
-        if (httpRequest.status === 200) {
-          console.log('Response is OK');
-          that.updateData(httpRequest.responseText);
-        }
-      };
-      httpRequest.onerror = (error) => {
-        console.log(`error ocurred during process ${error}`)
-      }
+      this.request()
+        .then(response => {
+          that.updateData(response)
+            .catch(error => console.error(`error occurred while updating firebase data ${error}`));
+        })
+        .catch(error => console.log(`error occurred during process ${error}`));
     }, this.interval);
   }
 
-  async updateData(content: string) {
+  async updateData(content: Array<NewsriverData>) {
     try {
-      console.log(content);
-      const response = JSON.parse(content);
-      console.log(`Got response: ${response}`);
-
-      return;
-
-      response.forEach(element => {
+      content.forEach(element => {
         if (!firebaseHelper.firestore.checkDocumentExists(this.db, this.collectionName, element.id)) {
           firebaseHelper.firestore.createDocumentWithID(this.db, this.collectionName, element.id, element);
         }
       });
     } catch (error) {
       console.error(error);
+    }
+  }
+
+  async request(): Promise<Array<NewsriverData>> {
+    try {
+      const requestUrl = await this.url;
+      const response = await fetch(requestUrl, {method: 'GET', headers: {'Authorization': this.auth}});
+      return response.json() as Array<NewsriverData>;
+    } catch (e) {
+      return e.message;
     }
   }
 
@@ -78,8 +87,12 @@ export class Updater {
       });
       let language: string;
       switch (this.language) {
-        case 'es': language = 'ES'; break;
-        default: language = 'EN'; break;
+        case 'es':
+          language = 'ES';
+          break;
+        default:
+          language = 'EN';
+          break;
       }
       parts.push(encodeURI(` AND language:${language}`));
       parts.push(encodeURI('&sortBy=discoverDate'));

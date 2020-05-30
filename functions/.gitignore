@@ -9,3 +9,6 @@ node_modules/
 
 handwashing-firebase-adminsdk.json
 .runtimeconfig.json
+
+# Log files
+*.log

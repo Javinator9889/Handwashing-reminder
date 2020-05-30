@@ -1,16 +1,16 @@
-import { expressApp } from "../app";
-import * as http from 'http2';
+import { app } from "../app";
+import * as http from 'http';
 
 /**
  * Get port from environment and store in Express
  */
 const port = normalizePort(process.env.PORT || '3000');
-expressApp.set('port', port);
+app.set('port', port);
 
 /**
  * Create the http server
  */
-const server = http.createServer(expressApp);
+const server = http.createServer(app);
 
 /**
  * Listen on a provided port, on all network interfaces

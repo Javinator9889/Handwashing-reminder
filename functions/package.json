@@ -7,11 +7,14 @@
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log"
+    "logs": "firebase functions:log",
+    "server": "npm run build && node lib/bin/www.js"
+  },
+  "engines": {
+    "node": "8"
   },
   "main": "lib/bin/www.js",
   "dependencies": {
-    "@types/request-promise": "^4.1.46",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "firebase-admin": "^8.10.0",
@@ -19,9 +22,8 @@
     "firebase-functions-helper": "^0.7.5",
     "http-errors": "^1.7.3",
     "morgan": "^1.10.0",
-    "pug": "^3.0.0",
-    "request-promise": "^4.2.5",
-    "xhr2": "^0.2.0"
+    "node-fetch": "^2.6.0",
+    "pug": "^3.0.0"
   },
   "devDependencies": {
     "tslint": "^5.12.0",
