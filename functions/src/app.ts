@@ -1,11 +1,10 @@
-import * as functions from "firebase-functions";
-
-const createError = require('http-errors');
-const apiRouter = require('./routes/api');
-const express = require('express');
-const logger = require('morgan');
-const updater = require('./updater');
-const path = require('path');
+import * as path from 'path';
+import * as logger from 'morgan';
+import * as express from 'express';
+// import * as admin from 'firebase-admin;'
+import * as apiRouter from './routes/api';
+import * as createError from 'http-errors';
+import * as functions from 'firebase-functions';
 
 export const app = express();
 
@@ -30,10 +29,13 @@ app.use(express.static(path.join(__dirname, 'public')));
  * ---------------
  */
 
+// @ts-ignore
 app.use(apiRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => next(createError(404)));
+
+export const webApi = functions.https.onRequest(app);
 
 // error handler
 app.use((err, req, res, next) => {

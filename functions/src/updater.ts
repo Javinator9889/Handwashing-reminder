@@ -6,7 +6,7 @@ export class Updater {
   private readonly db: FirebaseFirestore.Firestore;
   private readonly collectionName: string;
   private readonly interval: number;
-  private readonly searchTerms: Array<string>;
+  private _searchTerms: Array<string>;
   private readonly language: string;
   private readonly auth: string;
   private _url: string | undefined;
@@ -20,6 +20,18 @@ export class Updater {
   get url(): Promise<string> {
     while (this._url === undefined) ;
     return Promise.resolve(this._url);
+  }
+
+  set searchTerms(value: Array<string>) {
+    this._searchTerms = value;
+    this.url = undefined;
+    this.buildURL()
+      // @ts-ignore
+      .then(url => this.url = url);
+  }
+
+  get searchTerms() {
+    return this._searchTerms;
   }
 
   get collection(): FirebaseFirestore.CollectionReference {

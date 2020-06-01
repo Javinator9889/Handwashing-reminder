@@ -2,15 +2,16 @@ import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 
 import {ProjectProperties} from '../interfaces/projectProperties';
-import {Dictionary} from '../interfaces/dictionary';
 import {RemoteConfigData} from '../rcdata';
 import {Updater} from '../updater';
+import {NewsriverData} from '../newsriver';
 
 class Api {
   properties: ProjectProperties;
   remoteConfig: RemoteConfigData;
   languages: Array<string>;
-  updaters: Dictionary<Updater | undefined>;
+  updaters: Record<string, Updater | undefined>;
+  timers: Set<NodeJS.Timer>;
 
   constructor(properties: ProjectProperties,
               remoteConfig: RemoteConfigData,
@@ -22,6 +23,7 @@ class Api {
     for (const language in languages) {
       this.updaters[language] = undefined;
     }
+    this.timers = new Set<NodeJS.Timer>();
   }
 
   async init() {
@@ -36,21 +38,28 @@ class Api {
             language
           );
           this.updaters[language] = updater;
-          updater.schedule();
+          this.timers.add(updater.schedule());
         });
     });
+    this.remoteConfig.subscribeUpdaters(this.updaters);
   }
 
-  newsForLanguage(language: string) {
-    if (language !in this.languages)
+  async newsForLanguage(language: string): Promise<Array<NewsriverData>> {
+    if (language ! in this.languages)
       language = 'en';
     const collection = this.updaters[language].collection;
-    collection.get()
-      .then(snapshot => {
-        snapshot.forEach(doc => {
-          console.log(`${doc.id} => ${doc.data()}`);
-        });
-      });
+    const snapshot = await collection.get();
+    const data = Array<NewsriverData>(snapshot.size);
+    snapshot.forEach(item => {
+      data.push(item.data() as NewsriverData);
+    });
+    return data;
+  }
+
+  finish() {
+    for (const timer of this.timers) {
+      clearInterval(timer);
+    }
   }
 }
 
