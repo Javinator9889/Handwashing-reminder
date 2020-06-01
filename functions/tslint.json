@@ -111,5 +111,5 @@
     "trailing-comma": {"severity": "warning"}
   },
 
-  "defaultSeverity": "error"
+  "defaultSeverity": "warn"
 }

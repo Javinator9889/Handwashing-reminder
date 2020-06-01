@@ -68,14 +68,14 @@ const firebaseApp = admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: 'https://handwashing.firebaseio.com'
 });
-const properties: ProjectProperties = {
+const projectProperties: ProjectProperties = {
   collection: 'news',
   database: admin.firestore(),
   authToken: functions.config().newsriver.key
 };
-const languages = ['es', 'en'];
-const remoteConfig = new RemoteConfigData(firebaseApp);
+const projectLanguages = ['es', 'en'];
+const remoteConfigConnector = new RemoteConfigData(firebaseApp);
 
-export const api = new Api(properties, remoteConfig, languages)
+export const api = new Api(projectProperties, remoteConfigConnector, projectLanguages)
 api.init()
   .catch(reason => console.error(`API initialization failed: ${reason}`));
