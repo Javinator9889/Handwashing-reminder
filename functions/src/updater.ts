@@ -18,8 +18,10 @@ export class Updater {
 
   // @ts-ignore
   get url(): Promise<string> {
-    while (this._url === undefined) ;
-    return Promise.resolve(this._url);
+    return new Promise<string>(resolve => {
+      while (this._url === undefined) ;
+      return resolve(this._url);
+    });
   }
 
   set searchTerms(value: Array<string>) {
@@ -43,7 +45,7 @@ export class Updater {
               searchTerms: Array<string>,
               auth: string,
               language: string = 'en',
-              intervalMins: number = 15) {
+              intervalMins: number = 60) {
     this.db = db;
     this.collectionName = collectionName;
     this.searchTerms = searchTerms;
@@ -53,6 +55,12 @@ export class Updater {
     this.buildURL()
       // @ts-ignore
       .then(url => this.url = url);
+    this.request()
+      .then(response => {
+        this.updateData(response)
+          .catch(ignored => {
+          });
+      })
   }
 
   schedule(): NodeJS.Timer {
@@ -63,7 +71,7 @@ export class Updater {
           that.updateData(response)
             .catch(error => console.error(`error occurred while updating firebase data ${error}`));
         })
-        .catch(error => console.log(`error occurred during process ${error}`));
+        .catch(error => console.error(`error occurred during process ${error}`));
     }, this.interval);
   }
 
@@ -75,7 +83,7 @@ export class Updater {
         }
       });
     } catch (error) {
-      console.error(error);
+      throw error;
     }
   }
 
@@ -83,9 +91,11 @@ export class Updater {
     try {
       const requestUrl = await this.url;
       const response = await fetch(requestUrl, {method: 'GET', headers: {'Authorization': this.auth}});
-      return response.json() as Array<NewsriverData>;
+      const body = await response.json();
+      return body as Array<NewsriverData>;
     } catch (e) {
-      return e.message;
+      console.error(`Captured error ${e}`);
+      throw e;
     }
   }
 

@@ -63,9 +63,14 @@ class Api {
   }
 }
 
-const serviceAccount = require('../../handwashing-firebase-adminsdk.json');
+const sdkInfo = functions.config().sdk;
 const firebaseApp = admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
+  projectId: sdkInfo.project_id,
+  credential: admin.credential.cert({
+    projectId: sdkInfo.project_id,
+    clientEmail: sdkInfo.client_email,
+    privateKey: sdkInfo.private_key
+  }),
   databaseURL: 'https://handwashing.firebaseio.com'
 });
 const projectProperties: ProjectProperties = {
