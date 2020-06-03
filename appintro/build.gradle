@@ -43,6 +43,4 @@ dependencies {
 
     // https://github.com/AppIntro/AppIntro
     implementation 'com.github.AppIntro:AppIntro:5.1.0'
-    // https://github.com/mikepenz/FastAdapter
-    implementation "com.mikepenz:fastadapter:${latestFastAdapterRelease}"
 }

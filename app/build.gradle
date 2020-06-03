@@ -42,8 +42,8 @@ android {
         applicationId "com.javinator9889.handwashingreminder"
         minSdkVersion 17
         targetSdkVersion 29
-        versionCode 121
-        versionName "1.1.2-${gitCommitHash}"
+        versionCode 122
+        versionName "1.2.0-${gitCommitHash}"
         multiDexEnabled true
         resConfigs "en", "es"
 
@@ -107,7 +107,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     api 'androidx.appcompat:appcompat:1.1.0'
-    api 'androidx.core:core-ktx:1.2.0'
+    api 'androidx.core:core-ktx:1.3.0'
     api 'androidx.legacy:legacy-support-v4:1.0.0'
     api 'androidx.constraintlayout:constraintlayout:1.1.3'
     testImplementation 'junit:junit:4.13'
@@ -138,7 +138,7 @@ dependencies {
     implementation "com.mikepenz:aboutlibraries-core:${latestAboutLibsRelease}"
     implementation "com.mikepenz:aboutlibraries:${latestAboutLibsRelease}"
     // https://developer.android.com/kotlin/ktx#play-core
-    api 'com.google.android.play:core:1.7.2'
+    api 'com.google.android.play:core:1.7.3'
     api 'com.google.android.play:core-ktx:1.7.0'
     // https://developer.android.com/kotlin/ktx#collection
     implementation 'androidx.collection:collection-ktx:1.1.0'
@@ -146,7 +146,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     // https://firebase.google.com/docs/android/setup#add-sdks
     api 'com.google.firebase:firebase-common-ktx:19.3.0'
-    api 'com.google.firebase:firebase-analytics:17.4.0'
+    api 'com.google.firebase:firebase-analytics:17.4.2'
     api 'com.google.firebase:firebase-crashlytics:17.0.0'
     api 'com.google.firebase:firebase-perf:19.0.7'
     // http://airbnb.io/lottie/#/android?id=getting-started
@@ -158,7 +158,7 @@ dependencies {
     api 'androidx.emoji:emoji:1.0.0'
     api 'androidx.emoji:emoji-appcompat:1.0.0'
     // https://github.com/mikepenz/FastAdapter
-    implementation "com.mikepenz:fastadapter:${latestFastAdapterRelease}"
+    api "com.mikepenz:fastadapter:${latestFastAdapterRelease}"
     // https://developer.android.com/kotlin/ktx#lifecycle
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.2.0'
     // https://developer.android.com/kotlin/ktx#viewmodel
@@ -179,8 +179,8 @@ dependencies {
     // https://github.com/afollestad/material-dialogs/
     implementation 'com.afollestad.material-dialogs:core:3.3.0'
     // https://developer.android.com/google/play/billing/billing_library_overview
-    implementation 'com.android.billingclient:billing:2.2.0'
-    implementation 'com.android.billingclient:billing-ktx:2.2.0'
+    implementation 'com.android.billingclient:billing:2.2.1'
+    implementation 'com.android.billingclient:billing-ktx:2.2.1'
     // https://github.com/cbeust/klaxon
     implementation 'com.beust:klaxon:5.2'
     // https://github.com/SufficientlySecure/html-textview
