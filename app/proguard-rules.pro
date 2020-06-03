@@ -70,6 +70,8 @@
 -keep class com.bumptech.glide.load.data.ParcelFileDescriptorRewinder$InternalRewinder {
   *** rewind();
 }
+-keep class com.bumptech.glide.integration.okhttp3.OkHttpGlideModule
+
 -dontwarn com.bumptech.glide.load.resource.bitmap.VideoDecoder
 # Klaxon
 -keep public class kotlin.reflect.jvm.internal.impl.** { public *; }

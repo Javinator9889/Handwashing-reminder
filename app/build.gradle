@@ -177,6 +177,7 @@ dependencies {
     api 'androidx.preference:preference-ktx:1.1.1'
     // https://github.com/bumptech/glide
     api 'com.github.bumptech.glide:glide:4.11.0'
+    api 'com.github.bumptech.glide:okhttp3-integration:4.11.0'
     kapt 'com.github.bumptech.glide:compiler:4.11.0'
     // https://github.com/afollestad/material-dialogs/
     implementation 'com.afollestad.material-dialogs:core:3.3.0'
@@ -187,6 +188,8 @@ dependencies {
     implementation 'com.beust:klaxon:5.2'
     // https://github.com/SufficientlySecure/html-textview
     implementation 'org.sufficientlysecure:html-textview:3.9'
+    // https://github.com/square/okhttp/tree/okhttp_3.12.x
+    implementation 'com.squareup.okhttp3:okhttp:3.12.1'
     // https://square.github.io/okio/#releases
     implementation 'com.squareup.okio:okio:2.5.0'
     // https://github.com/google/conscrypt/
