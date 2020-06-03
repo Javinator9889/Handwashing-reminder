@@ -22,8 +22,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.beust.klaxon.JsonReader
 import com.beust.klaxon.Klaxon
-import com.javinator9889.handwashingreminder.collections.NewsData
-import com.javinator9889.handwashingreminder.collections.newsStrategy
+import com.javinator9889.handwashingreminder.collections.*
 import com.javinator9889.handwashingreminder.network.HttpDownloader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -34,20 +33,26 @@ class NewsViewModel : ViewModel() {
 
     suspend fun populateData(from: Int = 0, amount: Int = 10) {
         val httpRequest = HttpDownloader()
-        val klaxon = Klaxon().propertyStrategy(newsStrategy)
+        val klaxon = with(Klaxon()) {
+            propertyStrategy(newsStrategy)
+            fieldConverter(KlaxonDate::class, dateConverter)
+            fieldConverter(KlaxonElements::class, elementConverter)
+        }
         var requestReader: Reader? = null
         withContext(Dispatchers.IO) {
-            requestReader = httpRequest.json("http://10.0.2.2:3000/api/v1/")
+            requestReader = httpRequest.json(
+                "http://10.0.2.2:3000/api/v1?from=$from&amount=$amount"
+            )
         }
         withContext(Dispatchers.Default) {
             JsonReader(requestReader!!).use { reader ->
                 var position = 0
                 reader.beginArray {
                     while (reader.hasNext()) {
-                        if (position < from)
-                            continue
-                        if (position > from + amount)
-                            break
+//                        if (position < from)
+//                            continue
+//                        if (position > from + amount)
+//                            break
                         newsData.postValue(klaxon.parse<NewsData>(reader))
                         position++
                     }

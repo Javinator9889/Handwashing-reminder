@@ -18,25 +18,26 @@
  */
 package com.javinator9889.handwashingreminder.collections
 
-import com.beust.klaxon.PropertyStrategy
-//import java.util.*
+import com.beust.klaxon.*
+import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.reflect.KProperty
 
 data class NewsData(
     val id: String,
-    val publishDate: String,
+    @KlaxonDate
+    val publishDate: Date? = null,
     val title: String,
-    val language: String,
     val text: String,
     val url: String,
-    val elements: List<Elements>,
-    val website: Website?
+    @Json(name = "elements")
+    @KlaxonElements
+    val imageUrl: String? = null,
+    val website: Website? = null
 )
 
-data class Elements(
-    val type: String,
-    val url: String?
-)
+data class Elements(val url: String?)
 
 data class Website(
     val name: String,
@@ -44,18 +45,51 @@ data class Website(
     val iconURL: String?
 )
 
+@Target(AnnotationTarget.FIELD)
+annotation class KlaxonDate
+
+val dateConverter = object : Converter {
+    override fun canConvert(cls: Class<*>) = cls == Date::class.java
+
+    override fun fromJson(jv: JsonValue) =
+        if (jv.string != null) {
+            val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm", Locale.US)
+            format.parse(jv.string!!)
+        } else throw KlaxonException("Couldn't parse date: ${jv.string}")
+
+    override fun toJson(value: Any) = """ { "date": $value } """
+}
+
+@Target(AnnotationTarget.FIELD)
+annotation class KlaxonElements
+
+val elementConverter = object : Converter {
+    override fun canConvert(cls: Class<*>) = cls == String::class.java
+
+    override fun fromJson(jv: JsonValue) =
+        if (jv.array != null) {
+            val elements = jv.array!!
+            try {
+                (elements[0] as Elements).url
+            } catch (e: Exception) {
+                Timber.w(e, "Captured exception while parsing Klaxon value")
+                null
+            }
+        } else throw KlaxonException("Couldn't parse array ${jv.array}")
+
+    override fun toJson(value: Any) = """ { "imageUrl": "$value" } """
+}
+
 val newsStrategy = object : PropertyStrategy {
     private val acceptedProperties =
         setOf(
             "id",
             "publishDate",
             "title",
-            "language",
             "text",
             "url",
             "elements",
             "website",
-            "type",
             "url",
             "name",
             "hostName",

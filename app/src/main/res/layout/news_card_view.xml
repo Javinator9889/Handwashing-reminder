@@ -5,6 +5,9 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    android:clickable="true"
+    android:focusable="true"
     app:cardCornerRadius="8dp"
     app:cardElevation="4dp">
 
@@ -21,10 +24,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.javinator9889.handwashingreminder.graphics.RecyclingImageView
+            <com.javinator9889.handwashingreminder.graphics.LottieAdaptedPerformanceAnimationView
                 android:id="@+id/imageHeader"
                 android:layout_width="0dp"
                 android:layout_height="150dp"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/downloading"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -49,7 +55,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/raleway_bold"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                    android:textSize="24sp"
+                    android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -135,7 +141,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 app:iiv_color="@color/dkgray"
-                app:iiv_icon="ion_share"
+                app:iiv_icon="ion_android_share_alt"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

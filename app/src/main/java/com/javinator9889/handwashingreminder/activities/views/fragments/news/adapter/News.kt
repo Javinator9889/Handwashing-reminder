@@ -27,14 +27,14 @@ import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.graphics.GlideApp
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
-import java.text.SimpleDateFormat
+import java.text.DateFormat
 import java.util.*
 
 data class News(
     val title: String,
     val short: String,
     val url: String,
-    val publishDate: String,
+    val publishDate: Date?,
     val imageUrl: String?,
     val website: String?,
     val websiteImageUrl: String?,
@@ -56,13 +56,13 @@ data class News(
 
         @SuppressLint("SetTextI18n")
         override fun bindView(item: News, payloads: List<Any>) {
-            val formatter =
-                SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault())
+            val formatter = DateFormat.getDateTimeInstance()
             title.text = item.title
             description.text = item.short
             if (item.imageUrl != null) {
                 GlideApp.with(view)
                     .load(item.imageUrl)
+                    .placeholder(R.drawable.ic_handwashing_icon)
                     .centerCrop()
                     .into(imageHeader)
             } else imageHeader.visibility = View.GONE
@@ -75,7 +75,10 @@ data class News(
             if (item.website != null)
                 websiteName.text = item.website
             else websiteName.visibility = View.GONE
-            publishDate.text = formatter.format(item.publishDate)
+            if (item.publishDate != null)
+                publishDate.text = formatter.format(item.publishDate)
+            else
+                publishDate.visibility = View.GONE
         }
 
         override fun unbindView(item: News) {

@@ -24,6 +24,7 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.whenResumed
 import androidx.lifecycle.whenStarted
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,6 +44,7 @@ import kotlinx.android.synthetic.main.loading_recycler_view.*
 import kotlinx.android.synthetic.main.loading_recycler_view.view.*
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class NewsFragment : BaseFragmentView() {
     @LayoutRes
@@ -62,10 +64,10 @@ class NewsFragment : BaseFragmentView() {
                     if (it.id !in activeItems) {
                         val newsObject = News(
                             title = it.title,
-                            short = "${it.text.take(100)}…",
+                            short = "${it.text.take(200)}…",
                             url = it.url,
                             publishDate = it.publishDate,
-                            imageUrl = it.elements[0].url,
+                            imageUrl = it.imageUrl,
                             website = it.website?.name,
                             websiteImageUrl = it.website?.iconURL
                         )
@@ -78,6 +80,9 @@ class NewsFragment : BaseFragmentView() {
                     }
                 })
             }
+            whenResumed {
+                Timber.d("OnResumed - lifecycle")
+            }
         }
     }
 
@@ -89,14 +94,17 @@ class NewsFragment : BaseFragmentView() {
         val scrollListener =
             object : EndlessRecyclerOnScrollListener(footerAdapter) {
                 override fun onLoadMore(currentPage: Int) {
-                    footerAdapter.clear()
-                    val progressItem = ProgressItem()
-                    progressItem.isEnabled = true
-                    footerAdapter.add(progressItem)
-                    lifecycleScope.async {
-                        newsViewModel.populateData(
-                            from = newsAdapter.adapterItemCount
-                        )
+                    view.container.post {
+                        footerAdapter.clear()
+                        Timber.d("Loading more")
+                        val progressItem = ProgressItem()
+                        progressItem.isEnabled = true
+                        footerAdapter.add(progressItem)
+                        lifecycleScope.async {
+                            newsViewModel.populateData(
+                                from = newsAdapter.adapterItemCount
+                            )
+                        }
                     }
                 }
             }
