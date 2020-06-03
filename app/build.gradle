@@ -135,8 +135,8 @@ dependencies {
     api 'com.mikepenz:google-material-typeface:3.0.1.4.original-kotlin@aar'
     api 'com.mikepenz:ionicons-typeface:2.0.1.5-kotlin@aar'
     // https://github.com/mikepenz/AboutLibraries
-    implementation "com.mikepenz:aboutlibraries-core:${latestAboutLibsRelease}"
-    implementation "com.mikepenz:aboutlibraries:${latestAboutLibsRelease}"
+    implementation "com.mikepenz:aboutlibraries-core:$latestAboutLibsRelease"
+    implementation "com.mikepenz:aboutlibraries:$latestAboutLibsRelease"
     // https://developer.android.com/kotlin/ktx#play-core
     api 'com.google.android.play:core:1.7.3'
     api 'com.google.android.play:core-ktx:1.7.0'
@@ -158,7 +158,9 @@ dependencies {
     api 'androidx.emoji:emoji:1.0.0'
     api 'androidx.emoji:emoji-appcompat:1.0.0'
     // https://github.com/mikepenz/FastAdapter
-    api "com.mikepenz:fastadapter:${latestFastAdapterRelease}"
+    api "com.mikepenz:fastadapter:$latestFastAdapterRelease"
+    implementation "com.mikepenz:fastadapter-extensions-scroll:$latestFastAdapterRelease"
+    implementation "com.mikepenz:fastadapter-extensions-ui:$latestFastAdapterRelease"
     // https://developer.android.com/kotlin/ktx#lifecycle
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.2.0'
     // https://developer.android.com/kotlin/ktx#viewmodel

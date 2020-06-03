@@ -21,37 +21,126 @@ package com.javinator9889.handwashingreminder.activities.views.fragments.news
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.LayoutRes
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.remoteconfig.ktx.remoteConfig
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.whenStarted
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.BaseFragmentView
-import com.javinator9889.handwashingreminder.utils.RemoteConfig
-import kotlinx.android.synthetic.main.under_construction.*
-
-private const val ARG_UNDER_CONSTRUCTION_TEXT = "news:text:content"
+import com.javinator9889.handwashingreminder.activities.views.fragments.news.adapter.News
+import com.javinator9889.handwashingreminder.activities.views.viewmodels.NewsViewModel
+import com.mikepenz.fastadapter.FastAdapter
+import com.mikepenz.fastadapter.GenericItem
+import com.mikepenz.fastadapter.adapters.GenericItemAdapter
+import com.mikepenz.fastadapter.adapters.ItemAdapter
+import com.mikepenz.fastadapter.listeners.ClickEventHook
+import com.mikepenz.fastadapter.scroll.EndlessRecyclerOnScrollListener
+import com.mikepenz.fastadapter.ui.items.ProgressItem
+import kotlinx.android.synthetic.main.loading_recycler_view.*
+import kotlinx.android.synthetic.main.loading_recycler_view.view.*
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 class NewsFragment : BaseFragmentView() {
     @LayoutRes
-    override val layoutId: Int = R.layout.under_construction
+    override val layoutId: Int = R.layout.loading_recycler_view
+    private lateinit var fastAdapter: FastAdapter<GenericItem>
+    private lateinit var footerAdapter: GenericItemAdapter
+    private val newsAdapter = ItemAdapter<News>()
+    private val newsViewModel: NewsViewModel by viewModels()
+    private val activeItems = mutableSetOf<String>()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        if (savedInstanceState != null) {
-            underConstructionText.text = savedInstanceState.getString(
-                ARG_UNDER_CONSTRUCTION_TEXT
-            )
-        } else {
-            with(Firebase.remoteConfig) {
-                underConstructionText.text =
-                    getString(RemoteConfig.WORK_IN_PROGRESS)
+    init {
+        lifecycleScope.launch {
+            whenStarted {
+                loading.visibility = View.VISIBLE
+                newsViewModel.newsData.observe(viewLifecycleOwner, Observer {
+                    if (it.id !in activeItems) {
+                        val newsObject = News(
+                            title = it.title,
+                            short = "${it.text.take(100)}…",
+                            url = it.url,
+                            publishDate = it.publishDate,
+                            imageUrl = it.elements[0].url,
+                            website = it.website?.name,
+                            websiteImageUrl = it.website?.iconURL
+                        )
+                        newsAdapter.add(newsObject)
+                        if (::footerAdapter.isInitialized)
+                            footerAdapter.clear()
+                        loading.visibility = View.INVISIBLE
+                        container.visibility = View.VISIBLE
+                        activeItems.add(it.id)
+                    }
+                })
             }
         }
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        footerAdapter = ItemAdapter.items()
+        fastAdapter = FastAdapter.with(listOf(newsAdapter, footerAdapter))
+        val rvManager = LinearLayoutManager(context)
+        val scrollListener =
+            object : EndlessRecyclerOnScrollListener(footerAdapter) {
+                override fun onLoadMore(currentPage: Int) {
+                    footerAdapter.clear()
+                    val progressItem = ProgressItem()
+                    progressItem.isEnabled = true
+                    footerAdapter.add(progressItem)
+                    lifecycleScope.async {
+                        newsViewModel.populateData(
+                            from = newsAdapter.adapterItemCount
+                        )
+                    }
+                }
+            }
+        with(view.container) {
+            layoutManager = rvManager
+            adapter = fastAdapter
+            itemAnimator = DefaultItemAnimator()
+            addOnScrollListener(scrollListener)
+        }
+        fastAdapter.addEventHooks(listOf(NewsClickHook(), ShareClickHook()))
+        fastAdapter.withSavedInstanceState(savedInstanceState)
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(
-            ARG_UNDER_CONSTRUCTION_TEXT, underConstructionText.text.toString()
-        )
+        fastAdapter.saveInstanceState(outState)
+    }
+
+    private inner class NewsClickHook : ClickEventHook<News>() {
+        override fun onBind(viewHolder: RecyclerView.ViewHolder) =
+            if (viewHolder is News.ViewHolder) viewHolder.cardContainer
+            else null
+
+        override fun onClick(
+            v: View,
+            position: Int,
+            fastAdapter: FastAdapter<News>,
+            item: News
+        ) {
+            TODO("Not yet implemented - open web browser")
+        }
+    }
+
+    private inner class ShareClickHook : ClickEventHook<News>() {
+        override fun onBind(viewHolder: RecyclerView.ViewHolder) =
+            if (viewHolder is News.ViewHolder) viewHolder.shareImage
+            else null
+
+        override fun onClick(
+            v: View,
+            position: Int,
+            fastAdapter: FastAdapter<News>,
+            item: News
+        ) {
+            TODO("Not yet implemented - share intent")
+        }
     }
 }

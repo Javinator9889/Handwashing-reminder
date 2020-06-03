@@ -23,6 +23,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okio.BufferedSource
 import java.io.IOException
+import java.io.Reader
 
 class HttpDownloader : OkHttpDownloader {
     private val client = OkHttpClient()
@@ -39,6 +40,21 @@ class HttpDownloader : OkHttpDownloader {
                 throw IOException("Unexpected code $this")
             }
             return body()!!.source()
+        }
+    }
+
+    fun json(url: String): Reader {
+        val request = with(Request.Builder()) {
+            url(url)
+            cacheControl(CacheControl.FORCE_NETWORK)
+            build()
+        }
+        with(client.newCall(request).execute()) {
+            if (!isSuccessful) {
+                close()
+                throw IOException("Unexpected code $this")
+            }
+            return body()!!.charStream()
         }
     }
 }

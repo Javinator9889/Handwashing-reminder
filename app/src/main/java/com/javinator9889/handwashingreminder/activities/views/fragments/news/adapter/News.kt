@@ -18,10 +18,16 @@
  */
 package com.javinator9889.handwashingreminder.activities.views.fragments.news.adapter
 
+import android.annotation.SuppressLint
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
+import com.google.android.material.card.MaterialCardView
 import com.javinator9889.handwashingreminder.R
+import com.javinator9889.handwashingreminder.graphics.GlideApp
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
+import java.text.SimpleDateFormat
 import java.util.*
 
 data class News(
@@ -30,22 +36,55 @@ data class News(
     val url: String,
     val publishDate: Date,
     val imageUrl: String?,
-    val website: String,
-    val websiteImageUrl: String,
+    val website: String?,
+    val websiteImageUrl: String?,
     override val layoutRes: Int = R.layout.news_card_view,
     override val type: Int = 1
 ) : AbstractItem<News.ViewHolder>() {
     override fun getViewHolder(v: View) = ViewHolder(v)
 
-    class ViewHolder(view: View) : FastAdapter.ViewHolder<News>(view) {
+    class ViewHolder(private val view: View) :
+        FastAdapter.ViewHolder<News>(view) {
+        private val title: TextView = view.findViewById(R.id.title)
+        private val description: TextView = view.findViewById(R.id.description)
+        private val imageHeader: ImageView = view.findViewById(R.id.imageHeader)
+        private val websiteLogo: ImageView = view.findViewById(R.id.ws_logo)
+        private val websiteName: TextView = view.findViewById(R.id.ws_name)
+        private val publishDate: TextView = view.findViewById(R.id.date)
+        val cardContainer: MaterialCardView = view.findViewById(R.id.root)
+        val shareImage: ImageView = view.findViewById(R.id.share)
 
+        @SuppressLint("SetTextI18n")
         override fun bindView(item: News, payloads: List<Any>) {
-            TODO("Not yet implemented")
+            val formatter =
+                SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault())
+            title.text = item.title
+            description.text = item.short
+            if (item.imageUrl != null) {
+                GlideApp.with(view)
+                    .load(item.imageUrl)
+                    .centerCrop()
+                    .into(imageHeader)
+            } else imageHeader.visibility = View.GONE
+            if (item.websiteImageUrl != null) {
+                GlideApp.with(view)
+                    .load(item.websiteImageUrl)
+                    .centerCrop()
+                    .into(websiteLogo)
+            } else websiteLogo.visibility = View.GONE
+            if (item.website != null)
+                websiteName.text = item.website
+            else websiteName.visibility = View.GONE
+            publishDate.text = formatter.format(item.publishDate)
         }
 
         override fun unbindView(item: News) {
-            TODO("Not yet implemented")
+            title.text = null
+            description.text = null
+            imageHeader.setImageDrawable(null)
+            websiteLogo.setImageDrawable(null)
+            websiteName.text = null
+            publishDate.text = null
         }
-
     }
 }
