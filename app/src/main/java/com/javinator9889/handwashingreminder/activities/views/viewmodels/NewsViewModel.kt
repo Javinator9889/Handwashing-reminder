@@ -37,7 +37,7 @@ class NewsViewModel : ViewModel() {
         val klaxon = Klaxon().propertyStrategy(newsStrategy)
         var requestReader: Reader? = null
         withContext(Dispatchers.IO) {
-            requestReader = httpRequest.json("http://0.0.0.0:3000/api/v1/")
+            requestReader = httpRequest.json("http://10.0.2.2:3000/api/v1/")
         }
         withContext(Dispatchers.Default) {
             JsonReader(requestReader!!).use { reader ->
@@ -48,7 +48,7 @@ class NewsViewModel : ViewModel() {
                             continue
                         if (position > from + amount)
                             break
-                        newsData.value = klaxon.parse<NewsData>(reader)
+                        newsData.postValue(klaxon.parse<NewsData>(reader))
                         position++
                     }
                 }

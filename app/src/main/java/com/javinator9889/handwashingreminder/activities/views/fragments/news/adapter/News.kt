@@ -34,7 +34,7 @@ data class News(
     val title: String,
     val short: String,
     val url: String,
-    val publishDate: Date,
+    val publishDate: String,
     val imageUrl: String?,
     val website: String?,
     val websiteImageUrl: String?,

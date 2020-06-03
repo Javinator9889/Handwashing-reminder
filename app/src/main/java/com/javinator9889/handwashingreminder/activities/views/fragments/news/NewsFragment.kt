@@ -57,6 +57,7 @@ class NewsFragment : BaseFragmentView() {
         lifecycleScope.launch {
             whenStarted {
                 loading.visibility = View.VISIBLE
+                async { newsViewModel.populateData() }
                 newsViewModel.newsData.observe(viewLifecycleOwner, Observer {
                     if (it.id !in activeItems) {
                         val newsObject = News(

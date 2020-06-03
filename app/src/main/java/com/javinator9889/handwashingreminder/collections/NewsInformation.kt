@@ -19,12 +19,12 @@
 package com.javinator9889.handwashingreminder.collections
 
 import com.beust.klaxon.PropertyStrategy
-import java.util.*
+//import java.util.*
 import kotlin.reflect.KProperty
 
 data class NewsData(
     val id: String,
-    val publishDate: Date,
+    val publishDate: String,
     val title: String,
     val language: String,
     val text: String,
@@ -63,5 +63,5 @@ val newsStrategy = object : PropertyStrategy {
         )
 
     override fun accept(property: KProperty<*>) =
-        property.name !in acceptedProperties
+        property.name in acceptedProperties
 }
