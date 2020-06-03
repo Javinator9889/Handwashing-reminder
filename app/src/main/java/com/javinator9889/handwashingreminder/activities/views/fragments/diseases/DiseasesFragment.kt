@@ -40,13 +40,13 @@ import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.GenericItem
 import com.mikepenz.fastadapter.adapters.ItemAdapter
 import com.mikepenz.fastadapter.listeners.ClickEventHook
-import kotlinx.android.synthetic.main.diseases_list.*
-import kotlinx.android.synthetic.main.diseases_list.view.*
+import kotlinx.android.synthetic.main.loading_recycler_view.*
+import kotlinx.android.synthetic.main.loading_recycler_view.view.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class DiseasesFragment : BaseFragmentView() {
-    override val layoutId: Int = R.layout.diseases_list
+    override val layoutId: Int = R.layout.loading_recycler_view
     private lateinit var parsedHTMLTexts: List<ParsedHTMLText>
     private lateinit var fastAdapter: FastAdapter<GenericItem>
     private val upperAdsAdapter: ItemAdapter<Ads> = ItemAdapter()
@@ -78,7 +78,7 @@ class DiseasesFragment : BaseFragmentView() {
                             )
                         }
                         loading.visibility = View.INVISIBLE
-                        diseasesContainer.visibility = View.VISIBLE
+                        container.visibility = View.VISIBLE
                     })
             }
         }
@@ -89,7 +89,7 @@ class DiseasesFragment : BaseFragmentView() {
         val adapters = listOf(upperAdsAdapter, diseasesAdapter, lowerAdsAdapter)
         fastAdapter = FastAdapter.with(adapters)
         val rvManager = LinearLayoutManager(context)
-        with(view.diseasesContainer) {
+        with(view.container) {
             layoutManager = rvManager
             adapter = fastAdapter
         }
@@ -104,7 +104,7 @@ class DiseasesFragment : BaseFragmentView() {
 
     fun onBackPressed() {
         try {
-            diseasesContainer.adapter = null
+            container.adapter = null
             diseasesAdapter.clear()
         } catch (e: Exception) {
             Timber.w(e, "Exception when calling 'onBackPressed'")
