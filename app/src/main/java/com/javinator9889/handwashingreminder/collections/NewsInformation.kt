@@ -26,15 +26,13 @@ import kotlin.reflect.KProperty
 
 data class NewsData(
     val id: String,
-    @Json(name = "discoverDate")
     @KlaxonDate
-    val date: Date,
+    val discoverDate: Date?,
     val title: String,
     val text: String,
     val url: String,
-    @Json(name = "elements")
     @KlaxonElements
-    val imageUrl: String? = null,
+    val elements: Elements? = null,
     val website: Website? = null
 )
 
@@ -52,32 +50,44 @@ annotation class KlaxonDate
 val dateConverter = object : Converter {
     override fun canConvert(cls: Class<*>) = cls == Date::class.java
 
-    override fun fromJson(jv: JsonValue) =
+    override fun fromJson(jv: JsonValue): Date? =
         if (jv.string != null) {
-            val format =
-                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.US)
-            format.parse(jv.string!!)
+            try {
+                with(
+                    SimpleDateFormat(
+                        "yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.US
+                    )
+                ) {
+                    parse(jv.string!!)
+                }
+            } catch (e: Exception) {
+                Timber.w(e, "Captured error while parsing date")
+                null
+            }
         } else throw KlaxonException("Couldn't parse date: ${jv.string}")
 
-    override fun toJson(value: Any) = """ { "date": $value } """
+    override fun toJson(value: Any) = """ { "discoverDate": $value } """
 }
 
 @Target(AnnotationTarget.FIELD)
 annotation class KlaxonElements
 
 val elementConverter = object : Converter {
-    override fun canConvert(cls: Class<*>) = cls == String::class.java
+    override fun canConvert(cls: Class<*>) = cls == Elements::class.java
 
-    override fun fromJson(jv: JsonValue) =
+    override fun fromJson(jv: JsonValue): Elements? {
+        Timber.d("Parsing 'KlaxonElements'")
         if (jv.array != null) {
+            Timber.d("Parsing 'Elements'")
             val elements = jv.array!!
-            try {
-                (elements[0] as Elements).url
+            return try {
+                Elements(url = (elements[0] as JsonObject)["url"] as String)
             } catch (e: Exception) {
                 Timber.w(e, "Captured exception while parsing Klaxon value")
                 null
             }
         } else throw KlaxonException("Couldn't parse array ${jv.array}")
+    }
 
     override fun toJson(value: Any) = """ { "imageUrl": "$value" } """
 }
@@ -86,7 +96,7 @@ val newsStrategy = object : PropertyStrategy {
     private val acceptedProperties =
         setOf(
             "id",
-            "publishDate",
+            "discoverDate",
             "title",
             "text",
             "url",

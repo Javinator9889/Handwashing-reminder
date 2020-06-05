@@ -24,7 +24,6 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.whenResumed
 import androidx.lifecycle.whenStarted
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -42,7 +41,6 @@ import com.mikepenz.fastadapter.scroll.EndlessRecyclerOnScrollListener
 import com.mikepenz.fastadapter.ui.items.ProgressItem
 import kotlinx.android.synthetic.main.loading_recycler_view.*
 import kotlinx.android.synthetic.main.loading_recycler_view.view.*
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -59,29 +57,27 @@ class NewsFragment : BaseFragmentView() {
         lifecycleScope.launch {
             whenStarted {
                 loading.visibility = View.VISIBLE
-                async { newsViewModel.populateData() }
+                launch { newsViewModel.populateData() }
                 newsViewModel.newsData.observe(viewLifecycleOwner, Observer {
+                    if (::footerAdapter.isInitialized)
+                        footerAdapter.clear()
                     if (it.id !in activeItems) {
                         val newsObject = News(
                             title = it.title,
                             short = "${it.text.take(200)}…",
                             url = it.url,
-                            discoverDate = it.date,
-                            imageUrl = it.imageUrl,
+                            discoverDate = it.discoverDate,
+                            imageUrl = it.elements?.url,
                             website = it.website?.name,
-                            websiteImageUrl = it.website?.iconURL
+                            websiteImageUrl = it.website?.iconURL,
+                            lifecycleScope = this@NewsFragment.lifecycleScope
                         )
                         newsAdapter.add(newsObject)
-                        if (::footerAdapter.isInitialized)
-                            footerAdapter.clear()
                         loading.visibility = View.INVISIBLE
                         container.visibility = View.VISIBLE
                         activeItems.add(it.id)
                     }
                 })
-            }
-            whenResumed {
-                Timber.d("OnResumed - lifecycle")
             }
         }
     }
@@ -100,9 +96,10 @@ class NewsFragment : BaseFragmentView() {
                         val progressItem = ProgressItem()
                         progressItem.isEnabled = true
                         footerAdapter.add(progressItem)
-                        lifecycleScope.async {
+                        lifecycleScope.launch {
                             newsViewModel.populateData(
-                                from = newsAdapter.adapterItemCount
+                                from = newsAdapter.adapterItemCount,
+                                amount = 20
                             )
                         }
                     }

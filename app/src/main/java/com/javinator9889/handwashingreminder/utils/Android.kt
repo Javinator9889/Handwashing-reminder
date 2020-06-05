@@ -50,9 +50,9 @@ fun isHighPerformingDevice(): Boolean {
             getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         val isLowRamDevice =
             if (isAtLeast(AndroidVersion.KITKAT_WATCH))
-                !activityManager.isLowRamDevice
+                activityManager.isLowRamDevice
             else true
-        return isLowRamDevice &&
+        return !isLowRamDevice &&
                 Runtime.getRuntime().availableProcessors() >= 4 &&
                 activityManager.memoryClass >= 128
     }

@@ -22,11 +22,15 @@ import android.annotation.SuppressLint
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.LifecycleCoroutineScope
+import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.card.MaterialCardView
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.graphics.GlideApp
+import com.javinator9889.handwashingreminder.utils.isHighPerformingDevice
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
+import kotlinx.coroutines.*
 import timber.log.Timber
 import java.text.DateFormat
 import java.util.*
@@ -39,6 +43,7 @@ data class News(
     val imageUrl: String?,
     val website: String?,
     val websiteImageUrl: String?,
+    val lifecycleScope: LifecycleCoroutineScope,
     override val layoutRes: Int = R.layout.news_card_view,
     override val type: Int = 1
 ) : AbstractItem<News.ViewHolder>() {
@@ -48,35 +53,54 @@ data class News(
         FastAdapter.ViewHolder<News>(view) {
         private val title: TextView = view.findViewById(R.id.title)
         private val description: TextView = view.findViewById(R.id.description)
-        private val imageHeader: ImageView = view.findViewById(R.id.imageHeader)
+        private val imageHeader: LottieAnimationView =
+            view.findViewById(R.id.imageHeader)
         private val websiteLogo: ImageView = view.findViewById(R.id.ws_logo)
         private val websiteName: TextView = view.findViewById(R.id.ws_name)
         private val publishDate: TextView = view.findViewById(R.id.date)
         val cardContainer: MaterialCardView = view.findViewById(R.id.root)
         val shareImage: ImageView = view.findViewById(R.id.share)
 
+        init {
+            setIsRecyclable(!isHighPerformingDevice())
+        }
+
         @SuppressLint("SetTextI18n")
         override fun bindView(item: News, payloads: List<Any>) {
-            Timber.d("Binding view")
             val formatter = DateFormat.getDateTimeInstance()
-            title.text = item.title
-            description.text = item.short
-            if (item.imageUrl != null) {
-                GlideApp.with(view)
-                    .load(item.imageUrl)
-                    .centerCrop()
-                    .into(imageHeader)
-            } else imageHeader.visibility = View.GONE
-            if (item.websiteImageUrl != null) {
-                GlideApp.with(view)
-                    .load(item.websiteImageUrl)
-                    .centerCrop()
-                    .into(websiteLogo)
-            } else websiteLogo.visibility = View.GONE
-            websiteName.text =
-                item.website ?: view.context.getString(R.string.no_website)
-            publishDate.text = item.discoverDate?.let { formatter.format(it) }
-                ?: view.context.getString(R.string.no_date)
+            val context = view.context
+            imageHeader.setAnimation(R.raw.downloading)
+            item.lifecycleScope.launch(context = Dispatchers.Main) {
+                title.text = item.title
+                description.text = item.short
+                val deferreds = mutableSetOf<Deferred<Any?>>()
+                if (item.imageUrl != null)
+                    deferreds.add(
+                        async {
+                            GlideApp.with(context)
+                                .load(item.imageUrl)
+                                .optionalCenterCrop()
+                                .into(imageHeader)
+                        }
+                    )
+                else imageHeader.visibility = View.GONE
+                if (item.websiteImageUrl != null)
+                    deferreds.add(
+                        async {
+                            GlideApp.with(context)
+                                .load(item.websiteImageUrl)
+                                .optionalCenterCrop()
+                                .into(websiteLogo)
+                        }
+                    )
+                else websiteLogo.visibility = View.GONE
+                websiteName.text = item.website
+                    ?: context.getString(R.string.no_website)
+                publishDate.text =
+                    item.discoverDate?.let { formatter.format(it) }
+                        ?: context.getString(R.string.no_date)
+                deferreds.awaitAll()
+            }
         }
 
         override fun unbindView(item: News) {
