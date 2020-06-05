@@ -90,7 +90,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/heading">
 
-            <com.javinator9889.handwashingreminder.graphics.RecyclingImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/ws_logo"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
@@ -134,17 +134,18 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="published on ..." />
 
-            <com.mikepenz.iconics.view.IconicsImageView
+            <com.mikepenz.iconics.view.IconicsImageButton
                 android:id="@+id/share"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:clickable="true"
                 android:focusable="true"
-                app:iiv_color="@color/dkgray"
-                app:iiv_icon="ion_android_share_alt"
+                android:text="{ion_android_share}"
+                android:background="@android:color/transparent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="HardcodedText" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

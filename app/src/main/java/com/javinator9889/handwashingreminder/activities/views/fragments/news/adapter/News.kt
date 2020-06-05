@@ -27,6 +27,7 @@ import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.graphics.GlideApp
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
+import timber.log.Timber
 import java.text.DateFormat
 import java.util.*
 
@@ -34,7 +35,7 @@ data class News(
     val title: String,
     val short: String,
     val url: String,
-    val publishDate: Date?,
+    val discoverDate: Date?,
     val imageUrl: String?,
     val website: String?,
     val websiteImageUrl: String?,
@@ -56,13 +57,13 @@ data class News(
 
         @SuppressLint("SetTextI18n")
         override fun bindView(item: News, payloads: List<Any>) {
+            Timber.d("Binding view")
             val formatter = DateFormat.getDateTimeInstance()
             title.text = item.title
             description.text = item.short
             if (item.imageUrl != null) {
                 GlideApp.with(view)
                     .load(item.imageUrl)
-                    .placeholder(R.drawable.ic_handwashing_icon)
                     .centerCrop()
                     .into(imageHeader)
             } else imageHeader.visibility = View.GONE
@@ -72,16 +73,14 @@ data class News(
                     .centerCrop()
                     .into(websiteLogo)
             } else websiteLogo.visibility = View.GONE
-            if (item.website != null)
-                websiteName.text = item.website
-            else websiteName.visibility = View.GONE
-            if (item.publishDate != null)
-                publishDate.text = formatter.format(item.publishDate)
-            else
-                publishDate.visibility = View.GONE
+            websiteName.text =
+                item.website ?: view.context.getString(R.string.no_website)
+            publishDate.text = item.discoverDate?.let { formatter.format(it) }
+                ?: view.context.getString(R.string.no_date)
         }
 
         override fun unbindView(item: News) {
+            Timber.d("Called 'unbind'")
             title.text = null
             description.text = null
             imageHeader.setImageDrawable(null)

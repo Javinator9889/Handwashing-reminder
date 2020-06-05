@@ -265,4 +265,6 @@
         unos segundos &#128521;</string>
     <string name="rate_text">Valorar</string>
     <string name="rate_do_not_show">No preguntar de nuevo</string>
+    <string name="no_website">Sitio no disponible</string>
+    <string name="no_date">Fecha no disponible</string>
 </resources>

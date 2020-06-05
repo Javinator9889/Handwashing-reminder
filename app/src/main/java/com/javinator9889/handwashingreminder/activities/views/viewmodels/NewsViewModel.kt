@@ -49,10 +49,6 @@ class NewsViewModel : ViewModel() {
                 var position = 0
                 reader.beginArray {
                     while (reader.hasNext()) {
-//                        if (position < from)
-//                            continue
-//                        if (position > from + amount)
-//                            break
                         newsData.postValue(klaxon.parse<NewsData>(reader))
                         position++
                     }

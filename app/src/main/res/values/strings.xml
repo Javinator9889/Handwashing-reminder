@@ -293,4 +293,6 @@
         people! It only takes a few seconds &#128521;</string>
     <string name="rate_text">Rate!</string>
     <string name="rate_do_not_show">Don\'t ask again</string>
+    <string name="no_website">Website not available</string>
+    <string name="no_date">Date not available</string>
 </resources>

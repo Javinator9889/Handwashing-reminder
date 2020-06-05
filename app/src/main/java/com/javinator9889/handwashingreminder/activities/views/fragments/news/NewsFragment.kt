@@ -66,7 +66,7 @@ class NewsFragment : BaseFragmentView() {
                             title = it.title,
                             short = "${it.text.take(200)}…",
                             url = it.url,
-                            publishDate = it.publishDate,
+                            discoverDate = it.date,
                             imageUrl = it.imageUrl,
                             website = it.website?.name,
                             websiteImageUrl = it.website?.iconURL

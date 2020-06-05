@@ -26,8 +26,9 @@ import kotlin.reflect.KProperty
 
 data class NewsData(
     val id: String,
+    @Json(name = "discoverDate")
     @KlaxonDate
-    val publishDate: Date? = null,
+    val date: Date,
     val title: String,
     val text: String,
     val url: String,
@@ -53,7 +54,8 @@ val dateConverter = object : Converter {
 
     override fun fromJson(jv: JsonValue) =
         if (jv.string != null) {
-            val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm", Locale.US)
+            val format =
+                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.US)
             format.parse(jv.string!!)
         } else throw KlaxonException("Couldn't parse date: ${jv.string}")
 
