@@ -3,18 +3,18 @@
   "scripts": {
     "lint": "tslint --project tsconfig.json",
     "build": "tsc",
-    "serve": "npm run build && firebase emulators:start --only functions",
+    "serve": "cross-env-shell RUN_SERVER=true RUN_DAEMON=true \"npm run build && firebase emulators:start --only functions\"",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log",
-    "server": "npm run build && node lib/bin/www.js",
-    "updater": "npm run build && firebase emulators:start --only functions"
+    "server": "cross-env-shell RUN_SERVER=true \"npm run build && firebase emulators:start --only functions\"",
+    "daemon": "cross-env-shell RUN_DAEMON=true \"npm run build && firebase emulators:start --only functions\""
   },
   "engines": {
     "node": "8"
   },
-  "main": "lib/bin/www.js",
+  "main": "lib/bin/index.js",
   "dependencies": {
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
@@ -27,9 +27,10 @@
     "pug": "^3.0.0"
   },
   "devDependencies": {
+    "cross-env": "^7.0.2",
+    "firebase-functions-test": "^0.2.0",
     "tslint": "^5.12.0",
-    "typescript": "^3.8.0",
-    "firebase-functions-test": "^0.2.0"
+    "typescript": "^3.8.0"
   },
   "private": true
 }
