@@ -6,7 +6,8 @@
     "serve": "cross-env-shell RUN_SERVER=true RUN_DAEMON=true \"npm run build && firebase emulators:start --only functions\"",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
-    "deploy": "firebase deploy --only functions",
+    "deploy": "cross-env-shell RUN_SERVER=true RUN_DAEMON=true firebase deploy --only functions",
+    "deploy-server": "cross-env-shell RUN_SERVER=true firebase deploy --only functions:www",
     "logs": "firebase functions:log",
     "server": "cross-env-shell RUN_SERVER=true \"npm run build && firebase emulators:start --only functions\"",
     "daemon": "cross-env-shell RUN_DAEMON=true \"npm run build && firebase emulators:start --only functions\""

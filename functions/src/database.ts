@@ -1,4 +1,4 @@
-class Database {
+export class Database {
   private readonly db: FirebaseFirestore.Firestore;
   private readonly collectionName: string;
 

@@ -28,10 +28,6 @@ export class Updater {
     this._url = undefined;
   }
 
-  get collection(): FirebaseFirestore.CollectionReference {
-    return this.db.collection(this.collectionName);
-  }
-
   constructor(db: FirebaseFirestore.Firestore | null,
               collectionName: string | null,
               searchTerms: Array<string>,
