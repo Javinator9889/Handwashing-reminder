@@ -1,13 +1,13 @@
 import {NewsriverData} from "./newsriver";
 import * as firebaseHelper from 'firebase-functions-helper';
 import * as fetch from 'node-fetch';
-import {Headers} from "node-fetch";
+import {Headers} from 'node-fetch';
 
 export class Updater {
   private readonly db: FirebaseFirestore.Firestore;
   private readonly collectionName: string;
   private readonly interval: number;
-  searchTerms: Array<string>;
+  private _searchTerms: Array<string>;
   private readonly language: string;
   private readonly auth: string;
   private _url: string | undefined;
@@ -17,6 +17,15 @@ export class Updater {
       return this.buildURL()
         .then(url => this._url = url);
     return Promise.resolve(this._url);
+  }
+
+  get searchTerms(): Array<string> {
+    return this._searchTerms;
+  }
+
+  set searchTerms(value) {
+    this._searchTerms = value;
+    this._url = undefined;
   }
 
   get collection(): FirebaseFirestore.CollectionReference {
@@ -64,7 +73,7 @@ export class Updater {
         console.log(`Created element with ID: ${element.id}`);
       });
     } catch (error) {
-      throw error;
+      console.error(`Unhandled error ${error}`);
     }
   }
 
