@@ -1,12 +1,12 @@
-import * as functions from 'firebase-functions';
-import * as admin from 'firebase-admin';
+// import * as functions from 'firebase-functions';
+// import * as admin from 'firebase-admin';
 
 import {ProjectProperties} from '../interfaces/projectProperties';
 import {RemoteConfigData} from '../rcdata';
 import {Updater} from '../updater';
 import {NewsriverData} from '../newsriver';
 
-class Api {
+export class Api {
   properties: ProjectProperties;
   remoteConfig: RemoteConfigData;
   languages: Array<string>;
@@ -62,25 +62,14 @@ class Api {
     }
   }
 }
-
-const sdkInfo = functions.config().sdk;
+/*const serviceAccount = require('../../handwashing-firebase-adminsdk.json');
 const firebaseApp = admin.initializeApp({
-  projectId: sdkInfo.project_id,
-  credential: admin.credential.cert({
-    projectId: sdkInfo.project_id,
-    clientEmail: sdkInfo.client_email,
-    privateKey: sdkInfo.private_key
-  }),
+  credential: admin.credential.cert(serviceAccount),
   databaseURL: 'https://handwashing.firebaseio.com'
-});
+});*/
+/*const firebaseApp = admin.initializeApp();
 const projectProperties: ProjectProperties = {
   collection: 'news',
   database: admin.firestore(),
   authToken: functions.config().newsriver.key
-};
-const projectLanguages = ['es', 'en'];
-const remoteConfigConnector = new RemoteConfigData(firebaseApp);
-
-export const api = new Api(projectProperties, remoteConfigConnector, projectLanguages)
-api.init()
-  .catch(reason => console.error(`API initialization failed: ${reason}`));
+};*/
