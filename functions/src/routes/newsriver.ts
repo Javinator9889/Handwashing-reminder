@@ -6,7 +6,6 @@ import admin = require("firebase-admin");
 const router = express.Router();
 
 apiController.apiModel.initialize()
-  .then(_ => apiController.apiModel.scheduleUpdates())
   .catch(e => {
       console.error(e);
       throw e;
@@ -32,16 +31,5 @@ router.get('/api/v1', (req, res, next) => {
   }
 });
 router.get('/api/v1', apiController.queryNewsForLanguage);
-router.get('/close', (req, res) => {
-  const authToken = req.get('Authorization');
-  if (authToken === undefined)
-    return res.sendStatus(403);
-  if (authToken === process.env.ADMIN_TOKEN) {
-    return apiController.apiModel.stopScheduling()
-      .then(_ => res.sendStatus(200))
-      .catch(_ => res.sendStatus(200));
-  } else
-    return res.sendStatus(403);
-});
 
 export = router;

@@ -12,23 +12,21 @@ export class RemoteConfigData {
     this.listenToRCChanges();
   }
 
-  getSearchTermsForLanguage(language: string): Promise<Array<string>> {
-    return new Promise<Array<string>>(resolve => {
-      this.remoteConfig.getTemplate()
-        .then(template => {
-          let condition: string;
-          switch (language) {
-            case 'es':
-              condition = 'Spanish users';
-              break;
-            default:
-              condition = 'Default language users';
-              break;
-          }
-          const values = JSON.parse(template.parameters['search_terms'].conditionalValues[condition]['value']);
-          resolve(values);
-        });
-    });
+  async getSearchTermsForLanguage(language: string) {
+    console.info('Getting template...');
+    const template = await this.remoteConfig.getTemplate();
+    console.debug('Checking condition');
+    let condition: string;
+    switch (language) {
+      case 'es':
+        condition = 'Spanish users';
+        break;
+      default:
+        condition = 'Default language users';
+        break;
+    }
+    console.debug('Parsing JSON');
+    return JSON.parse(template.parameters['search_terms'].conditionalValues[condition]['value']);
   }
 
   subscribeUpdaters(updaters: Record<string, Updater>) {

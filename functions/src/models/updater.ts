@@ -2,7 +2,6 @@ import {Updater} from '../updater';
 import {RemoteConfigData} from "../rcdata";
 import admin = require('firebase-admin');
 import properties = require('../common/properties');
-import {languages} from "../common/properties";
 
 
 const serviceAccount = require('../../handwashing-firebase-adminsdk.json');
@@ -16,32 +15,44 @@ const timers = new Set<NodeJS.Timer>();
 let initCalled = false;
 
 export async function initialize() {
-  initCalled = true;
-  const projectProperties = properties.projectProperties(firebaseApp);
-  for (const language of properties.languages) {
-    const terms = await remoteConfig.getSearchTermsForLanguage(language);
-    updaters[language] = new Updater(
-      projectProperties.database,
-      `${projectProperties.collection}_${language}`,
-      terms,
-      projectProperties.authToken,
-      language
-    );
+  try {
+    console.info('Updater is being initialized');
+    initCalled = true;
+    const projectProperties = properties.projectProperties(firebaseApp);
+    for (const language of properties.languages) {
+      console.debug(`Creating updater for language ${language}`);
+      const terms = await remoteConfig.getSearchTermsForLanguage(language);
+      console.debug(`Updater terms: ${terms}`);
+      updaters[language] = new Updater(
+        projectProperties.database,
+        `${projectProperties.collection}_${language}`,
+        terms,
+        projectProperties.authToken,
+        language
+      );
+    }
+    console.info('Updaters initialized')
+    remoteConfig.subscribeUpdaters(updaters);
+  } catch (e) {
+    console.error(`Error while initializing updaters - ${e}`);
+    console.error(e);
   }
-  remoteConfig.subscribeUpdaters(updaters);
 }
 
 export async function scheduleUpdates() {
   if (!initCalled)
     throw new Error('`initialize` not called');
-  for (const language of languages) {
+  console.info('Updater is scheduling updates')
+  for (const language of properties.languages) {
     timers.add(updaters[language].schedule());
   }
+  console.info('Schedules for updaters are done');
 }
 
 export async function stopScheduling() {
   if (!initCalled)
     throw new Error('`initialize` not called');
+  console.info('Updates are being cancelled');
   for (const timer of timers) {
     clearInterval(timer);
   }
