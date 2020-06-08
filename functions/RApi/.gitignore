@@ -1,0 +1,15 @@
+## Compiled JavaScript files
+**/*.js
+**/*.js.map
+
+# Typescript v1 declaration files
+typings/
+
+node_modules/
+
+handwashing-firebase-adminsdk.json
+.runtimeconfig.json
+
+# Log files
+*.log
+admin-sdk.json

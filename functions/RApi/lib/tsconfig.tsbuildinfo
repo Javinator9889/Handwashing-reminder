@@ -1,0 +1,2500 @@
+{
+  "program": {
+    "fileInfos": {
+      "../node_modules/typescript/lib/lib.es5.d.ts": {
+        "version": "70ae6416528e68c2ee7b62892200d2ca631759943d4429f8b779b947ff1e124d",
+        "signature": "70ae6416528e68c2ee7b62892200d2ca631759943d4429f8b779b947ff1e124d",
+        "affectsGlobalScope": true
+      },
+      "../node_modules/typescript/lib/lib.es2015.d.ts": {
+        "version": "dc47c4fa66b9b9890cf076304de2a9c5201e94b740cffdf09f87296d877d71f6",
+        "signature": "dc47c4fa66b9b9890cf076304de2a9c5201e94b740cffdf09f87296d877d71f6",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/typescript/lib/lib.es2016.d.ts": {
+        "version": "7a387c58583dfca701b6c85e0adaf43fb17d590fb16d5b2dc0a2fbd89f35c467",
+        "signature": "7a387c58583dfca701b6c85e0adaf43fb17d590fb16d5b2dc0a2fbd89f35c467",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/typescript/lib/lib.es2017.d.ts": {
+        "version": "8a12173c586e95f4433e0c6dc446bc88346be73ffe9ca6eec7aa63c8f3dca7f9",
+        "signature": "8a12173c586e95f4433e0c6dc446bc88346be73ffe9ca6eec7aa63c8f3dca7f9",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/typescript/lib/lib.dom.d.ts": {
+        "version": "9affb0a2ddc57df5b8174c0af96c288d697a262e5bc9ca1f544c999dc64a91e6",
+        "signature": "9affb0a2ddc57df5b8174c0af96c288d697a262e5bc9ca1f544c999dc64a91e6",
+        "affectsGlobalScope": true
+      },
+      "../node_modules/typescript/lib/lib.dom.iterable.d.ts": {
+        "version": "fb0c09b697dc42afa84d1587e3c994a2f554d2a45635e4f0618768d16a86b69a",
+        "signature": "fb0c09b697dc42afa84d1587e3c994a2f554d2a45635e4f0618768d16a86b69a",
+        "affectsGlobalScope": true
+      },
+      "../node_modules/typescript/lib/lib.webworker.importscripts.d.ts": {
+        "version": "7fac8cb5fc820bc2a59ae11ef1c5b38d3832c6d0dfaec5acdb5569137d09a481",
+        "signature": "7fac8cb5fc820bc2a59ae11ef1c5b38d3832c6d0dfaec5acdb5569137d09a481",
+        "affectsGlobalScope": true
+      },
+      "../node_modules/typescript/lib/lib.scripthost.d.ts": {
+        "version": "097a57355ded99c68e6df1b738990448e0bf170e606707df5a7c0481ff2427cd",
+        "signature": "097a57355ded99c68e6df1b738990448e0bf170e606707df5a7c0481ff2427cd",
+        "affectsGlobalScope": true
+      },
+      "../node_modules/typescript/lib/lib.es2015.core.d.ts": {
+        "version": "63e0cc12d0f77394094bd19e84464f9840af0071e5b9358ced30511efef1d8d2",
+        "signature": "63e0cc12d0f77394094bd19e84464f9840af0071e5b9358ced30511efef1d8d2",
+        "affectsGlobalScope": true
+      },
+      "../node_modules/typescript/lib/lib.es2015.collection.d.ts": {
+        "version": "43fb1d932e4966a39a41b464a12a81899d9ae5f2c829063f5571b6b87e6d2f9c",
+        "signature": "43fb1d932e4966a39a41b464a12a81899d9ae5f2c829063f5571b6b87e6d2f9c",
+        "affectsGlobalScope": true
+      },
+      "../node_modules/typescript/lib/lib.es2015.generator.d.ts": {
+        "version": "cdccba9a388c2ee3fd6ad4018c640a471a6c060e96f1232062223063b0a5ac6a",
+        "signature": "cdccba9a388c2ee3fd6ad4018c640a471a6c060e96f1232062223063b0a5ac6a",
+        "affectsGlobalScope": true
+      },
+      "../node_modules/typescript/lib/lib.es2015.iterable.d.ts": {
+        "version": "42f5e41e5893da663dbf0394268f54f1da4b43dc0ddd2ea4bf471fe5361d6faf",
+        "signature": "42f5e41e5893da663dbf0394268f54f1da4b43dc0ddd2ea4bf471fe5361d6faf",
+        "affectsGlobalScope": true
+      },
+      "../node_modules/typescript/lib/lib.es2015.promise.d.ts": {
+        "version": "0b7a905675e6cb4211c128f0a3aa47d414b275180a299a9aad5d3ec298abbfc4",
+        "signature": "0b7a905675e6cb4211c128f0a3aa47d414b275180a299a9aad5d3ec298abbfc4",
+        "affectsGlobalScope": true
+      },
+      "../node_modules/typescript/lib/lib.es2015.proxy.d.ts": {
+        "version": "dfff68b3c34338f6b307a25d4566de15eed7973b0dc5d69f9fde2bcac1c25315",
+        "signature": "dfff68b3c34338f6b307a25d4566de15eed7973b0dc5d69f9fde2bcac1c25315",
+        "affectsGlobalScope": true
+      },
+      "../node_modules/typescript/lib/lib.es2015.reflect.d.ts": {
+        "version": "cb609802a8698aa28b9c56331d4b53f590ca3c1c3a255350304ae3d06017779d",
+        "signature": "cb609802a8698aa28b9c56331d4b53f590ca3c1c3a255350304ae3d06017779d",
+        "affectsGlobalScope": true
+      },
+      "../node_modules/typescript/lib/lib.es2015.symbol.d.ts": {
+        "version": "3013574108c36fd3aaca79764002b3717da09725a36a6fc02eac386593110f93",
+        "signature": "3013574108c36fd3aaca79764002b3717da09725a36a6fc02eac386593110f93",
+        "affectsGlobalScope": true
+      },
+      "../node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts": {
+        "version": "4670208dd7da9d6c774ab1b75c1527a810388c7989c4905de6aaea8561cb9dce",
+        "signature": "4670208dd7da9d6c774ab1b75c1527a810388c7989c4905de6aaea8561cb9dce",
+        "affectsGlobalScope": true
+      },
+      "../node_modules/typescript/lib/lib.es2016.array.include.d.ts": {
+        "version": "3be5a1453daa63e031d266bf342f3943603873d890ab8b9ada95e22389389006",
+        "signature": "3be5a1453daa63e031d266bf342f3943603873d890ab8b9ada95e22389389006",
+        "affectsGlobalScope": true
+      },
+      "../node_modules/typescript/lib/lib.es2017.object.d.ts": {
+        "version": "17bb1fc99591b00515502d264fa55dc8370c45c5298f4a5c2083557dccba5a2a",
+        "signature": "17bb1fc99591b00515502d264fa55dc8370c45c5298f4a5c2083557dccba5a2a",
+        "affectsGlobalScope": true
+      },
+      "../node_modules/typescript/lib/lib.es2017.sharedmemory.d.ts": {
+        "version": "d0db416bccdb33975548baf09a42ee8c47eace1aac7907351a000f1e568e7232",
+        "signature": "d0db416bccdb33975548baf09a42ee8c47eace1aac7907351a000f1e568e7232",
+        "affectsGlobalScope": true
+      },
+      "../node_modules/typescript/lib/lib.es2017.string.d.ts": {
+        "version": "6a6b173e739a6a99629a8594bfb294cc7329bfb7b227f12e1f7c11bc163b8577",
+        "signature": "6a6b173e739a6a99629a8594bfb294cc7329bfb7b227f12e1f7c11bc163b8577",
+        "affectsGlobalScope": true
+      },
+      "../node_modules/typescript/lib/lib.es2017.intl.d.ts": {
+        "version": "12a310447c5d23c7d0d5ca2af606e3bd08afda69100166730ab92c62999ebb9d",
+        "signature": "12a310447c5d23c7d0d5ca2af606e3bd08afda69100166730ab92c62999ebb9d",
+        "affectsGlobalScope": true
+      },
+      "../node_modules/typescript/lib/lib.es2017.typedarrays.d.ts": {
+        "version": "b0124885ef82641903d232172577f2ceb5d3e60aed4da1153bab4221e1f6dd4e",
+        "signature": "b0124885ef82641903d232172577f2ceb5d3e60aed4da1153bab4221e1f6dd4e",
+        "affectsGlobalScope": true
+      },
+      "../node_modules/typescript/lib/lib.es2017.full.d.ts": {
+        "version": "d2f31f19e1ba6ed59be9259d660a239d9a3fcbbc8e038c6b2009bde34b175fed",
+        "signature": "d2f31f19e1ba6ed59be9259d660a239d9a3fcbbc8e038c6b2009bde34b175fed",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/node/inspector.d.ts": {
+        "version": "7e49dbf1543b3ee54853ade4c5e9fa460b6a4eca967efe6bf943e0c505d087ed",
+        "signature": "7e49dbf1543b3ee54853ade4c5e9fa460b6a4eca967efe6bf943e0c505d087ed",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/node/base.d.ts": {
+        "version": "39daac3cc4e13d9f1031c4b208c4cd10cb206782a381e71dbaa2353d170b41b4",
+        "signature": "39daac3cc4e13d9f1031c4b208c4cd10cb206782a381e71dbaa2353d170b41b4",
+        "affectsGlobalScope": true
+      },
+      "../node_modules/@types/node/ts3.2/index.d.ts": {
+        "version": "1de0ff6200b92798a5aef43f57029c79dbf69932037dee1c007fdd2c562db258",
+        "signature": "1de0ff6200b92798a5aef43f57029c79dbf69932037dee1c007fdd2c562db258",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/range-parser/index.d.ts": {
+        "version": "4e88b833be14c7f384e0dcd57bb30acd799e8e34d212635d693e41a75a71164b",
+        "signature": "4e88b833be14c7f384e0dcd57bb30acd799e8e34d212635d693e41a75a71164b",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/qs/index.d.ts": {
+        "version": "b9cd23278040e3d4ea73660829a5c0d25cc303e493f79668e605f69edaf6d7b7",
+        "signature": "b9cd23278040e3d4ea73660829a5c0d25cc303e493f79668e605f69edaf6d7b7",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/express-serve-static-core/index.d.ts": {
+        "version": "814f4d16f7e7c47feaba5979673dcc60b6d5f7e87b247ea5da1dbc83a6da9387",
+        "signature": "814f4d16f7e7c47feaba5979673dcc60b6d5f7e87b247ea5da1dbc83a6da9387",
+        "affectsGlobalScope": true
+      },
+      "../node_modules/@types/mime/index.d.ts": {
+        "version": "be27a64e821a3e5af838650e4aa25805c60f057d0c37a9762c378d19d364b3e6",
+        "signature": "be27a64e821a3e5af838650e4aa25805c60f057d0c37a9762c378d19d364b3e6",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/serve-static/index.d.ts": {
+        "version": "5b56da2c458a9522dbfec8ee94287abe037f52fc9dea766d87bd9aaf100cf14f",
+        "signature": "5b56da2c458a9522dbfec8ee94287abe037f52fc9dea766d87bd9aaf100cf14f",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/connect/index.d.ts": {
+        "version": "e6ffa74698f0a1d23e4223242ed7dcdb89d02bbbb063a1930e9f91d0385abe16",
+        "signature": "e6ffa74698f0a1d23e4223242ed7dcdb89d02bbbb063a1930e9f91d0385abe16",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/body-parser/index.d.ts": {
+        "version": "ebddbd167c2fabd0151f50e5df94ca6d845149c47521280d8867afe3429dd078",
+        "signature": "ebddbd167c2fabd0151f50e5df94ca6d845149c47521280d8867afe3429dd078",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/express/index.d.ts": {
+        "version": "ead1ed9dd4874f4907a506a31e4fe9c4e079b42816f6b7ea5016a6d5ddf2fde3",
+        "signature": "ead1ed9dd4874f4907a506a31e4fe9c4e079b42816f6b7ea5016a6d5ddf2fde3",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/event-target-shim/index.d.ts": {
+        "version": "2859adaa4f2db3d4f0fc37ad86f056045341496b58fba0dbc16a222f9d5d55b1",
+        "signature": "2859adaa4f2db3d4f0fc37ad86f056045341496b58fba0dbc16a222f9d5d55b1",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/abort-controller/dist/abort-controller.d.ts": {
+        "version": "655ed305e8f4cb95d3f578040301a4e4d6ace112b1bd8824cd32bda66c3677d1",
+        "signature": "655ed305e8f4cb95d3f578040301a4e4d6ace112b1bd8824cd32bda66c3677d1",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/google-auth-library/node_modules/gaxios/build/src/common.d.ts": {
+        "version": "a955fa0d2d8dbcfcb1296963e49b907a2ac501d02b5a8916108eb238afc19fc6",
+        "signature": "a955fa0d2d8dbcfcb1296963e49b907a2ac501d02b5a8916108eb238afc19fc6",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/google-auth-library/node_modules/gaxios/build/src/gaxios.d.ts": {
+        "version": "dc1a68ad8a9684ad4b452c03aa656d4d63bdde95b4010411e233a5c4326e6f6a",
+        "signature": "dc1a68ad8a9684ad4b452c03aa656d4d63bdde95b4010411e233a5c4326e6f6a",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/google-auth-library/node_modules/gaxios/build/src/index.d.ts": {
+        "version": "cb789da1f75dc9d53848949aed3bb1d521de13c6340e5792a6b3f2c5e0c53e29",
+        "signature": "cb789da1f75dc9d53848949aed3bb1d521de13c6340e5792a6b3f2c5e0c53e29",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/google-auth-library/build/src/transporters.d.ts": {
+        "version": "82b70e72d3e16b95c6f933b0d146240214ef01dfe8e270f6e50f349223b0615d",
+        "signature": "82b70e72d3e16b95c6f933b0d146240214ef01dfe8e270f6e50f349223b0615d",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/google-auth-library/build/src/crypto/crypto.d.ts": {
+        "version": "48426cea1f526c040f5e25b5b46c72dc58e28dbca236ecb2d2f3c23ee2f3147e",
+        "signature": "48426cea1f526c040f5e25b5b46c72dc58e28dbca236ecb2d2f3c23ee2f3147e",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/google-auth-library/build/src/auth/credentials.d.ts": {
+        "version": "683563004226b83f33e4759f7976b180fab13042224e319476669d833f9f1fe0",
+        "signature": "683563004226b83f33e4759f7976b180fab13042224e319476669d833f9f1fe0",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/google-auth-library/build/src/auth/authclient.d.ts": {
+        "version": "ee00a6280d0c2a54ca31bc935a678ec560ec47fdab207382b64290b06995e626",
+        "signature": "ee00a6280d0c2a54ca31bc935a678ec560ec47fdab207382b64290b06995e626",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/google-auth-library/build/src/auth/loginticket.d.ts": {
+        "version": "3da10acc144b58168388267b5bd91d0df6a4ca4a24badfd235d3947576d3f9a9",
+        "signature": "3da10acc144b58168388267b5bd91d0df6a4ca4a24badfd235d3947576d3f9a9",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/google-auth-library/build/src/auth/oauth2client.d.ts": {
+        "version": "1d40605771c09e1b999b87725e20b6fea9a117c4ff6832f41b19838ff2b95008",
+        "signature": "1d40605771c09e1b999b87725e20b6fea9a117c4ff6832f41b19838ff2b95008",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/google-auth-library/build/src/auth/computeclient.d.ts": {
+        "version": "615954e8fe193fb3a2a7b91c9bb46fe18aaf60d2014da08da3c4d9a610c83477",
+        "signature": "615954e8fe193fb3a2a7b91c9bb46fe18aaf60d2014da08da3c4d9a610c83477",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/google-auth-library/build/src/auth/idtokenclient.d.ts": {
+        "version": "01b8fe09ea0b18ceba458308fd349bd2545227995c1b370a6897ea7c8f4ae577",
+        "signature": "01b8fe09ea0b18ceba458308fd349bd2545227995c1b370a6897ea7c8f4ae577",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/google-auth-library/build/src/auth/envDetect.d.ts": {
+        "version": "ea9efc84288c02adb551e56f59235b5b3d613993acb0cbb74f1e1169a6ddaf23",
+        "signature": "ea9efc84288c02adb551e56f59235b5b3d613993acb0cbb74f1e1169a6ddaf23",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/google-auth-library/node_modules/gtoken/build/src/index.d.ts": {
+        "version": "645096a656964fdc919d68a791dc764c85eb9128fb164686a70c4f2d75fe1caa",
+        "signature": "645096a656964fdc919d68a791dc764c85eb9128fb164686a70c4f2d75fe1caa",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/google-auth-library/build/src/auth/jwtclient.d.ts": {
+        "version": "1445ef80723618786694bf663714c7cc1be265647d5b14299029554c9da115e1",
+        "signature": "1445ef80723618786694bf663714c7cc1be265647d5b14299029554c9da115e1",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/google-auth-library/build/src/auth/refreshclient.d.ts": {
+        "version": "e9203259c5f820618a0c10df0e0e28df87f2469770461540919b23d864b0e2f8",
+        "signature": "e9203259c5f820618a0c10df0e0e28df87f2469770461540919b23d864b0e2f8",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/google-auth-library/build/src/auth/googleauth.d.ts": {
+        "version": "d28ae5ca2e567db94cb2a19070820036bda8713fb1403fbb00bb239d2eb336b3",
+        "signature": "d28ae5ca2e567db94cb2a19070820036bda8713fb1403fbb00bb239d2eb336b3",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/google-auth-library/build/src/auth/iam.d.ts": {
+        "version": "925f03e0d23441ea93e30508a0b0c21ccbb06ed6af0fc19eed66729763849158",
+        "signature": "925f03e0d23441ea93e30508a0b0c21ccbb06ed6af0fc19eed66729763849158",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/google-auth-library/build/src/auth/jwtaccess.d.ts": {
+        "version": "bcea68b9bf0547a5b8ce7faf25cbbd7b7d0918e93c748d8e0e337a264440ad0d",
+        "signature": "bcea68b9bf0547a5b8ce7faf25cbbd7b7d0918e93c748d8e0e337a264440ad0d",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/google-auth-library/build/src/index.d.ts": {
+        "version": "b5f5fb8682b627fabd6173249639436577a19d93a36d09599879dd9dc104ac63",
+        "signature": "b5f5fb8682b627fabd6173249639436577a19d93a36d09599879dd9dc104ac63",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/teeny-request/build/src/index.d.ts": {
+        "version": "1ef82373a19bae276d64e230a668816d96562ffdf266bc67e0a91dd30bb20d0f",
+        "signature": "1ef82373a19bae276d64e230a668816d96562ffdf266bc67e0a91dd30bb20d0f",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@google-cloud/common/build/src/util.d.ts": {
+        "version": "6e2c8ed913b49e9c93cf0aa682e48c97347d3da54d60d81d2b0e11e09da2f953",
+        "signature": "6e2c8ed913b49e9c93cf0aa682e48c97347d3da54d60d81d2b0e11e09da2f953",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@google-cloud/common/build/src/service-object.d.ts": {
+        "version": "2931f8609009719078a11c85a1069470ff2a74ca01e19f2a46ff08cdecb22c28",
+        "signature": "2931f8609009719078a11c85a1069470ff2a74ca01e19f2a46ff08cdecb22c28",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@google-cloud/common/build/src/operation.d.ts": {
+        "version": "7b0dad26d8d3ea293d332162f563f1f60c35dd5b0d44850fa330a901e781ca5d",
+        "signature": "7b0dad26d8d3ea293d332162f563f1f60c35dd5b0d44850fa330a901e781ca5d",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@google-cloud/common/build/src/service.d.ts": {
+        "version": "27d8eb0ae5461fac42501d2fed4ff876414de3182dea7df38f465409b2ccb039",
+        "signature": "27d8eb0ae5461fac42501d2fed4ff876414de3182dea7df38f465409b2ccb039",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@google-cloud/common/build/src/index.d.ts": {
+        "version": "a673754b47203b9e1d15d95014c847593f00b3e33fb2ace08f76d9c3dca3f9ab",
+        "signature": "a673754b47203b9e1d15d95014c847593f00b3e33fb2ace08f76d9c3dca3f9ab",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@google-cloud/storage/build/src/acl.d.ts": {
+        "version": "4a16f63eab2003bf18f93d7c39c2cc582c75ebed56e64d382c427e22bcec509a",
+        "signature": "4a16f63eab2003bf18f93d7c39c2cc582c75ebed56e64d382c427e22bcec509a",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@google-cloud/storage/build/src/signer.d.ts": {
+        "version": "22977aa28fc8f6c082d2065d6d8b7fa4dcd416f8ae4dff6ed99ec5e1555fe298",
+        "signature": "22977aa28fc8f6c082d2065d6d8b7fa4dcd416f8ae4dff6ed99ec5e1555fe298",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@google-cloud/storage/build/src/file.d.ts": {
+        "version": "38878788e3023527bd860f1300650e246274cd214ad09eb689bc561fd7831719",
+        "signature": "38878788e3023527bd860f1300650e246274cd214ad09eb689bc561fd7831719",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@google-cloud/storage/build/src/hmacKey.d.ts": {
+        "version": "bd7f97a3fb993367447f8fbd7dedf0d9b4269a778404fef0ac5f398313b221a2",
+        "signature": "bd7f97a3fb993367447f8fbd7dedf0d9b4269a778404fef0ac5f398313b221a2",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@google-cloud/storage/build/src/storage.d.ts": {
+        "version": "07098b194f4ad45856fc01df2f3d7ce2f68956ed86e6299254b204eabcf5bac8",
+        "signature": "07098b194f4ad45856fc01df2f3d7ce2f68956ed86e6299254b204eabcf5bac8",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@google-cloud/storage/build/src/channel.d.ts": {
+        "version": "88e327017e5db7730f40e993f75fe947a8f4fdbf344d6176dba1a85490c824e4",
+        "signature": "88e327017e5db7730f40e993f75fe947a8f4fdbf344d6176dba1a85490c824e4",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@google-cloud/storage/build/src/iam.d.ts": {
+        "version": "15981245ba7b6481bfab67ef18725554e5031da8d90f5153bfadce62aeedbb9e",
+        "signature": "15981245ba7b6481bfab67ef18725554e5031da8d90f5153bfadce62aeedbb9e",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@google-cloud/storage/build/src/notification.d.ts": {
+        "version": "d3ff34f8218bcadd383b56f85f6ddf27f54f49abaf17ac05e58a04ff49bdcab7",
+        "signature": "d3ff34f8218bcadd383b56f85f6ddf27f54f49abaf17ac05e58a04ff49bdcab7",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@google-cloud/storage/build/src/bucket.d.ts": {
+        "version": "8662bdd582ba440517d194716cd779b615f661b9b6f939cc91381363334fb6bd",
+        "signature": "8662bdd582ba440517d194716cd779b615f661b9b6f939cc91381363334fb6bd",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@google-cloud/storage/build/src/index.d.ts": {
+        "version": "053ea839b135a17a15ad95c3635ab23fc1e12681082a86b91684df20c6e379df",
+        "signature": "053ea839b135a17a15ad95c3635ab23fc1e12681082a86b91684df20c6e379df",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@google-cloud/firestore/types/firestore.d.ts": {
+        "version": "b6bc9b6873b882ac3fa59e9c46dba66075296a6ff252727ae4bfefddc98e76be",
+        "signature": "b6bc9b6873b882ac3fa59e9c46dba66075296a6ff252727ae4bfefddc98e76be",
+        "affectsGlobalScope": true
+      },
+      "../node_modules/firebase-admin/lib/auth.d.ts": {
+        "version": "1163f9a573b30c6e62fd41a109f344e593c66fcd8c69769d6d9ee898037832d9",
+        "signature": "1163f9a573b30c6e62fd41a109f344e593c66fcd8c69769d6d9ee898037832d9",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/firebase-admin/lib/database.d.ts": {
+        "version": "45cc8779dc91edaa36e3873161b1bcf1147958bfda913e074a5e70524491dc14",
+        "signature": "45cc8779dc91edaa36e3873161b1bcf1147958bfda913e074a5e70524491dc14",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/firebase-admin/lib/messaging.d.ts": {
+        "version": "ff745567658097cfa143772fcc9b6c3f8b9c518260b38032da7ab8bc67de3f30",
+        "signature": "ff745567658097cfa143772fcc9b6c3f8b9c518260b38032da7ab8bc67de3f30",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/firebase-admin/lib/instance-id.d.ts": {
+        "version": "6ff4a3e66bf27360dfa01bbc4dca36531583afdec9a0d0fd3f4cf687f4d9895f",
+        "signature": "6ff4a3e66bf27360dfa01bbc4dca36531583afdec9a0d0fd3f4cf687f4d9895f",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/firebase-admin/lib/project-management.d.ts": {
+        "version": "48b9fdc7e89a788bb45fb37e59c7794051e5a16746a2ab237467c4b3df6f8593",
+        "signature": "48b9fdc7e89a788bb45fb37e59c7794051e5a16746a2ab237467c4b3df6f8593",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/firebase-admin/lib/security-rules.d.ts": {
+        "version": "1d457000b22888ba93c4e891df2b37470d2e15f0d6822fb504066560c23e4b3d",
+        "signature": "1d457000b22888ba93c4e891df2b37470d2e15f0d6822fb504066560c23e4b3d",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/firebase-admin/lib/index.d.ts": {
+        "version": "3779efe6a208b757ad4f02a20b39ed5d3a9181fd90d2fda8c479973ffd5f416d",
+        "signature": "3779efe6a208b757ad4f02a20b39ed5d3a9181fd90d2fda8c479973ffd5f416d",
+        "affectsGlobalScope": false
+      },
+      "../src/interfaces/projectProperties.ts": {
+        "version": "44177f7d98a63cd427e07d250c3d7116ee321716c62362096a8ae8340e34aacf",
+        "signature": "18a43c234d04ffd95f36e9f5d95b020c80ec051d059cfc4678ae61bfa3addc5f",
+        "affectsGlobalScope": false
+      },
+      "../src/newsriver.ts": {
+        "version": "a44bef4b3ef7750ed7d4abe5b7a1ce561b2cc04ac9a97f123e70464771ab0212",
+        "signature": "e6adb74b0adbeef9ea1da6803d1b5c3af7b9e961971eeb5ce8cf598d8b33c093",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/firebase-functions-helper/dist/firebase.d.ts": {
+        "version": "0c6f77926881e6b5444b3577c6d498a450721eaaf84c188b1e1fded3c2c4c415",
+        "signature": "0c6f77926881e6b5444b3577c6d498a450721eaaf84c188b1e1fded3c2c4c415",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/firebase-functions-helper/dist/firestore.d.ts": {
+        "version": "8d87f83b36fb5f55726dcfbb171b0faf85701323bb937ed1853c91298daf6897",
+        "signature": "8d87f83b36fb5f55726dcfbb171b0faf85701323bb937ed1853c91298daf6897",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/firebase-functions-helper/dist/realtime.d.ts": {
+        "version": "e2ade4e2e060488c0dda507dd28e718bcfd748f7f6dfa864e8c8b6d509d8d6bb",
+        "signature": "e2ade4e2e060488c0dda507dd28e718bcfd748f7f6dfa864e8c8b6d509d8d6bb",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/firebase-functions-helper/dist/index.d.ts": {
+        "version": "4f64b8107769278a6dada173dadb40afc975024b5551c3419f208677830a99c0",
+        "signature": "4f64b8107769278a6dada173dadb40afc975024b5551c3419f208677830a99c0",
+        "affectsGlobalScope": false
+      },
+      "../src/updater.ts": {
+        "version": "a95ed0ec52eb5fd158644846bdf7c4b5b97957c394e6d98d8d9d07df2c2c2669",
+        "signature": "468e09e13fd92c765047426e852c73d7064f2f2968097cc1a379fa52293bd1d4",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/firebase-functions/lib/function-configuration.d.ts": {
+        "version": "0853b3b64117e2f64f7489e4484c0fd87767f26e68f0cebeb766feb2d2ae0e49",
+        "signature": "0853b3b64117e2f64f7489e4484c0fd87767f26e68f0cebeb766feb2d2ae0e49",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/firebase-functions/lib/cloud-functions.d.ts": {
+        "version": "2b19546f07ff0901dc3acbe2230de54bff0816bc1182722d3584abbc2d31d825",
+        "signature": "2b19546f07ff0901dc3acbe2230de54bff0816bc1182722d3584abbc2d31d825",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/firebase-functions/lib/providers/analytics.d.ts": {
+        "version": "230f2776b970caf8e470648d09f4bf01d6cf1612d6aadef4d4783343a8b5c7b7",
+        "signature": "230f2776b970caf8e470648d09f4bf01d6cf1612d6aadef4d4783343a8b5c7b7",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/firebase-functions/lib/providers/auth.d.ts": {
+        "version": "8a5cec8e62bd0dcb6e933c76743d57fd5b712663b8fd28c2c21c098e8fe027a4",
+        "signature": "8a5cec8e62bd0dcb6e933c76743d57fd5b712663b8fd28c2c21c098e8fe027a4",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/firebase-functions/lib/providers/crashlytics.d.ts": {
+        "version": "3bdc88b3cd30892523ee658bbde13bc59b6171e4e61095b417be0c6cfa823b6b",
+        "signature": "3bdc88b3cd30892523ee658bbde13bc59b6171e4e61095b417be0c6cfa823b6b",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/firebase-functions/lib/apps.d.ts": {
+        "version": "074ac0dea7b1b926227b2b990a9b38c8a2b36b5b0fb16591fc2c28234e35829e",
+        "signature": "074ac0dea7b1b926227b2b990a9b38c8a2b36b5b0fb16591fc2c28234e35829e",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/firebase-functions/lib/providers/database.d.ts": {
+        "version": "342a94a0c459dac647aac37217a8f3d3276086e5fda5ebc970ef05c4f8d7d76d",
+        "signature": "342a94a0c459dac647aac37217a8f3d3276086e5fda5ebc970ef05c4f8d7d76d",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/firebase-functions/lib/providers/firestore.d.ts": {
+        "version": "7b96e9c9c8e0f799ddbb18968c0f71ba687261f4cac3fe9fc4df03838564aa5d",
+        "signature": "7b96e9c9c8e0f799ddbb18968c0f71ba687261f4cac3fe9fc4df03838564aa5d",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/firebase-functions/lib/providers/https.d.ts": {
+        "version": "ba2a150318f33e7d446842c0af63e548dfa3c8b90cfb378cdf08936523a438e6",
+        "signature": "ba2a150318f33e7d446842c0af63e548dfa3c8b90cfb378cdf08936523a438e6",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/firebase-functions/lib/providers/pubsub.d.ts": {
+        "version": "35663f87496f91f80e16eb8a35a7c7c8e8ee0c6d321c93b4b48648911e225228",
+        "signature": "35663f87496f91f80e16eb8a35a7c7c8e8ee0c6d321c93b4b48648911e225228",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/firebase-functions/lib/providers/remoteConfig.d.ts": {
+        "version": "c4c0261b12524279056993ee8223189a7025f85f29d51317d417623b0fa5c090",
+        "signature": "c4c0261b12524279056993ee8223189a7025f85f29d51317d417623b0fa5c090",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/firebase-functions/lib/providers/storage.d.ts": {
+        "version": "496d7fa3b5a354fbe298366e17ce6bc0ecec576df7fafb63bf12f22fc47d935b",
+        "signature": "496d7fa3b5a354fbe298366e17ce6bc0ecec576df7fafb63bf12f22fc47d935b",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/firebase-functions/lib/providers/testLab.d.ts": {
+        "version": "471805944a5f2b948be9b514ab4f1206bfdf285cf07ea9749820146750ffbfe1",
+        "signature": "471805944a5f2b948be9b514ab4f1206bfdf285cf07ea9749820146750ffbfe1",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/firebase-functions/lib/handler-builder.d.ts": {
+        "version": "720b6958371bbb4683ec48709096e489c51f926e54e884f0c214c66df50e41c6",
+        "signature": "720b6958371bbb4683ec48709096e489c51f926e54e884f0c214c66df50e41c6",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/firebase-functions/lib/config.d.ts": {
+        "version": "e6f78f98b64c3340ad0d49a455132fbc9c50954dd49de5651824962e458d33ed",
+        "signature": "e6f78f98b64c3340ad0d49a455132fbc9c50954dd49de5651824962e458d33ed",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/firebase-functions/lib/function-builder.d.ts": {
+        "version": "82f234207c0d3bc2ff82655f1dc3f4ef13d703c2262d32e4bc80461545923467",
+        "signature": "82f234207c0d3bc2ff82655f1dc3f4ef13d703c2262d32e4bc80461545923467",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/firebase-functions/lib/index.d.ts": {
+        "version": "194b7011603bac1a064e579d5e392a630244b8a64c4853ec30d987997e77a546",
+        "signature": "194b7011603bac1a064e579d5e392a630244b8a64c4853ec30d987997e77a546",
+        "affectsGlobalScope": false
+      },
+      "../src/rcdata.ts": {
+        "version": "bc02021ac0d0562d06c998d41192c133db6258baf68b1eb58f3fdf62a9931a40",
+        "signature": "9edfbbdc51de383c169c179f775a6f24a8c78c85e57516104f008cec0d1b58e2",
+        "affectsGlobalScope": false
+      },
+      "../src/models/api.ts": {
+        "version": "b1820d723a6942e1948ca962f917f78113bfd35e71ab878197ff1dccc4eed78e",
+        "signature": "968f2998b91af36726206957073a7bbbce81e7503bda7f9b8f0eba947a9cf478",
+        "affectsGlobalScope": false
+      },
+      "../src/controllers/api.ts": {
+        "version": "913c7d7b91c0f6a66a0c726cae7ec14d0c394c57afbad098bc76682a71fdabcb",
+        "signature": "6a7d540939495f5f26982f1978c294c6cb8e8353e3d35b2264f9a9e7dbf51686",
+        "affectsGlobalScope": false
+      },
+      "../src/routes/api.ts": {
+        "version": "f926d468e745b7e38a732aa5bcb944f6859ef9db1365630b5381d73068ce7512",
+        "signature": "df1a2e3e5f95ee7e85d28a0c12bc6a5cc3cef558deb67e90a523199f9f31703b",
+        "affectsGlobalScope": false
+      },
+      "../src/app.ts": {
+        "version": "b009d96946058a532521e9c3420f41d5d31160ba0e5f939f76b2a9b17a8b8695",
+        "signature": "5ab0082578d32976c6616ce01e0b4d85859b6f6749be207b2548bb5516623999",
+        "affectsGlobalScope": false
+      },
+      "../src/bin/www.ts": {
+        "version": "43eebc266d8211231172799d79011556a2023f03a2b43ac1f93fbae1f3b9837a",
+        "signature": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/fs-extra/index.d.ts": {
+        "version": "5171627120eeb3a7e8afb8ed04ea9be7f0b53ba09bb1fc95172483e0fbb0740c",
+        "signature": "5171627120eeb3a7e8afb8ed04ea9be7f0b53ba09bb1fc95172483e0fbb0740c",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/lodash/ts3.1/common/common.d.ts": {
+        "version": "4025cf62742c5bb3d383c8a62342481622c87e3397ea5e7b7baab18b9efd5798",
+        "signature": "4025cf62742c5bb3d383c8a62342481622c87e3397ea5e7b7baab18b9efd5798",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/lodash/ts3.1/common/array.d.ts": {
+        "version": "f6a75f23e42dc475bdd7fefa8c527a3c5ed502ad371900abe9d138a9010ad80a",
+        "signature": "f6a75f23e42dc475bdd7fefa8c527a3c5ed502ad371900abe9d138a9010ad80a",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/lodash/ts3.1/common/collection.d.ts": {
+        "version": "0c75b204aed9cf6ff1c7b4bed87a3ece0d9d6fc857a6350c0c95ed0c38c814e8",
+        "signature": "0c75b204aed9cf6ff1c7b4bed87a3ece0d9d6fc857a6350c0c95ed0c38c814e8",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/lodash/ts3.1/common/date.d.ts": {
+        "version": "187119ff4f9553676a884e296089e131e8cc01691c546273b1d0089c3533ce42",
+        "signature": "187119ff4f9553676a884e296089e131e8cc01691c546273b1d0089c3533ce42",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/lodash/ts3.1/common/function.d.ts": {
+        "version": "035b95793288bf4457a2b80bfe9b7500a29324ad62adcf9991277198e8833096",
+        "signature": "035b95793288bf4457a2b80bfe9b7500a29324ad62adcf9991277198e8833096",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/lodash/ts3.1/common/lang.d.ts": {
+        "version": "c2d47e5668f89ed8768d306919c42bb88d50d4029d68f58343141360895cfcc0",
+        "signature": "c2d47e5668f89ed8768d306919c42bb88d50d4029d68f58343141360895cfcc0",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/lodash/ts3.1/common/math.d.ts": {
+        "version": "65648639567d214f62c1b21d200c852807e68bdb08311f95ab6f526ef5b98995",
+        "signature": "65648639567d214f62c1b21d200c852807e68bdb08311f95ab6f526ef5b98995",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/lodash/ts3.1/common/number.d.ts": {
+        "version": "00baffbe8a2f2e4875367479489b5d43b5fc1429ecb4a4cc98cfc3009095f52a",
+        "signature": "00baffbe8a2f2e4875367479489b5d43b5fc1429ecb4a4cc98cfc3009095f52a",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/lodash/ts3.1/common/object.d.ts": {
+        "version": "7fc5a3d7cff296cea5c225911726a56283b663328709088fcc912d61f73682fc",
+        "signature": "7fc5a3d7cff296cea5c225911726a56283b663328709088fcc912d61f73682fc",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/lodash/ts3.1/common/seq.d.ts": {
+        "version": "3c92b6dfd43cc1c2485d9eba5ff0b74a19bb8725b692773ef1d66dac48cda4bd",
+        "signature": "3c92b6dfd43cc1c2485d9eba5ff0b74a19bb8725b692773ef1d66dac48cda4bd",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/lodash/ts3.1/common/string.d.ts": {
+        "version": "e34f3f6159b1e23de9bb5521382795aaa5aaed6f53b4702e70a2ec45bc76ddb5",
+        "signature": "e34f3f6159b1e23de9bb5521382795aaa5aaed6f53b4702e70a2ec45bc76ddb5",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/lodash/ts3.1/common/util.d.ts": {
+        "version": "2630a7cbb597e85d713b7ef47f2946d4280d3d4c02733282770741d40672b1a5",
+        "signature": "2630a7cbb597e85d713b7ef47f2946d4280d3d4c02733282770741d40672b1a5",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/lodash/ts3.1/index.d.ts": {
+        "version": "bbf144d4354e2aaa6439f32761f3ee798cc68d1600adab6e2a596f25269f106d",
+        "signature": "bbf144d4354e2aaa6439f32761f3ee798cc68d1600adab6e2a596f25269f106d",
+        "affectsGlobalScope": true
+      },
+      "../node_modules/@types/long/index.d.ts": {
+        "version": "e8465811693dfe4e96ef2b3dffda539d6edfe896961b7af37b44db2c0e48532b",
+        "signature": "e8465811693dfe4e96ef2b3dffda539d6edfe896961b7af37b44db2c0e48532b",
+        "affectsGlobalScope": false
+      }
+    },
+    "options": {
+      "module": 1,
+      "noImplicitReturns": true,
+      "noUnusedLocals": true,
+      "outDir": "./",
+      "sourceMap": true,
+      "strict": false,
+      "target": 4,
+      "incremental": true,
+      "configFilePath": "../tsconfig.json"
+    },
+    "referencedMap": {
+      "../node_modules/@google-cloud/common/build/src/index.d.ts": [
+        "../node_modules/@google-cloud/common/build/src/operation.d.ts",
+        "../node_modules/@google-cloud/common/build/src/service-object.d.ts",
+        "../node_modules/@google-cloud/common/build/src/service.d.ts",
+        "../node_modules/@google-cloud/common/build/src/util.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/google-auth-library/build/src/index.d.ts"
+      ],
+      "../node_modules/@google-cloud/common/build/src/operation.d.ts": [
+        "../node_modules/@google-cloud/common/build/src/service-object.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@google-cloud/common/build/src/service-object.d.ts": [
+        "../node_modules/@google-cloud/common/build/src/util.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/teeny-request/build/src/index.d.ts"
+      ],
+      "../node_modules/@google-cloud/common/build/src/service.d.ts": [
+        "../node_modules/@google-cloud/common/build/src/service-object.d.ts",
+        "../node_modules/@google-cloud/common/build/src/util.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/google-auth-library/build/src/index.d.ts",
+        "../node_modules/teeny-request/build/src/index.d.ts"
+      ],
+      "../node_modules/@google-cloud/common/build/src/util.d.ts": [
+        "../node_modules/@google-cloud/common/build/src/service-object.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/google-auth-library/build/src/index.d.ts",
+        "../node_modules/teeny-request/build/src/index.d.ts"
+      ],
+      "../node_modules/@google-cloud/firestore/types/firestore.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@google-cloud/storage/build/src/acl.d.ts": [
+        "../node_modules/@google-cloud/common/build/src/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@google-cloud/storage/build/src/bucket.d.ts": [
+        "../node_modules/@google-cloud/common/build/src/index.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/acl.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/channel.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/file.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/iam.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/notification.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/signer.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/storage.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@google-cloud/storage/build/src/channel.d.ts": [
+        "../node_modules/@google-cloud/common/build/src/index.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/storage.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@google-cloud/storage/build/src/file.d.ts": [
+        "../node_modules/@google-cloud/common/build/src/index.d.ts",
+        "../node_modules/@google-cloud/common/build/src/util.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/acl.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/bucket.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/signer.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/storage.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@google-cloud/storage/build/src/hmacKey.d.ts": [
+        "../node_modules/@google-cloud/common/build/src/index.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/storage.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@google-cloud/storage/build/src/iam.d.ts": [
+        "../node_modules/@google-cloud/common/build/src/index.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/bucket.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@google-cloud/storage/build/src/index.d.ts": [
+        "../node_modules/@google-cloud/storage/build/src/acl.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/bucket.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/channel.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/file.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/hmacKey.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/iam.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/notification.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/signer.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/storage.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@google-cloud/storage/build/src/notification.d.ts": [
+        "../node_modules/@google-cloud/common/build/src/index.d.ts",
+        "../node_modules/@google-cloud/common/build/src/util.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/bucket.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@google-cloud/storage/build/src/signer.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@google-cloud/storage/build/src/storage.d.ts": [
+        "../node_modules/@google-cloud/common/build/src/index.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/bucket.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/channel.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/file.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/hmacKey.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/body-parser/index.d.ts": [
+        "../node_modules/@types/connect/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/connect/index.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/express-serve-static-core/index.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/@types/qs/index.d.ts",
+        "../node_modules/@types/range-parser/index.d.ts"
+      ],
+      "../node_modules/@types/express/index.d.ts": [
+        "../node_modules/@types/body-parser/index.d.ts",
+        "../node_modules/@types/express-serve-static-core/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/@types/qs/index.d.ts",
+        "../node_modules/@types/serve-static/index.d.ts"
+      ],
+      "../node_modules/@types/fs-extra/index.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/lodash/ts3.1/common/array.d.ts": [
+        "../node_modules/@types/lodash/ts3.1/common/collection.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/common.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/date.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/function.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/lang.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/math.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/number.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/object.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/seq.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/string.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/util.d.ts",
+        "../node_modules/@types/lodash/ts3.1/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/lodash/ts3.1/common/collection.d.ts": [
+        "../node_modules/@types/lodash/ts3.1/common/array.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/common.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/date.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/function.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/lang.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/math.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/number.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/object.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/seq.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/string.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/util.d.ts",
+        "../node_modules/@types/lodash/ts3.1/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/lodash/ts3.1/common/common.d.ts": [
+        "../node_modules/@types/lodash/ts3.1/common/array.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/collection.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/date.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/function.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/lang.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/math.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/number.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/object.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/seq.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/string.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/util.d.ts",
+        "../node_modules/@types/lodash/ts3.1/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/lodash/ts3.1/common/date.d.ts": [
+        "../node_modules/@types/lodash/ts3.1/common/array.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/collection.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/common.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/function.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/lang.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/math.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/number.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/object.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/seq.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/string.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/util.d.ts",
+        "../node_modules/@types/lodash/ts3.1/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/lodash/ts3.1/common/function.d.ts": [
+        "../node_modules/@types/lodash/ts3.1/common/array.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/collection.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/common.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/date.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/lang.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/math.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/number.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/object.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/seq.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/string.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/util.d.ts",
+        "../node_modules/@types/lodash/ts3.1/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/lodash/ts3.1/common/lang.d.ts": [
+        "../node_modules/@types/lodash/ts3.1/common/array.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/collection.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/common.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/date.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/function.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/math.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/number.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/object.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/seq.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/string.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/util.d.ts",
+        "../node_modules/@types/lodash/ts3.1/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/lodash/ts3.1/common/math.d.ts": [
+        "../node_modules/@types/lodash/ts3.1/common/array.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/collection.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/common.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/date.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/function.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/lang.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/number.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/object.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/seq.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/string.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/util.d.ts",
+        "../node_modules/@types/lodash/ts3.1/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/lodash/ts3.1/common/number.d.ts": [
+        "../node_modules/@types/lodash/ts3.1/common/array.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/collection.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/common.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/date.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/function.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/lang.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/math.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/object.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/seq.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/string.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/util.d.ts",
+        "../node_modules/@types/lodash/ts3.1/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/lodash/ts3.1/common/object.d.ts": [
+        "../node_modules/@types/lodash/ts3.1/common/array.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/collection.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/common.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/date.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/function.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/lang.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/math.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/number.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/seq.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/string.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/util.d.ts",
+        "../node_modules/@types/lodash/ts3.1/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/lodash/ts3.1/common/seq.d.ts": [
+        "../node_modules/@types/lodash/ts3.1/common/array.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/collection.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/common.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/date.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/function.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/lang.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/math.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/number.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/object.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/string.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/util.d.ts",
+        "../node_modules/@types/lodash/ts3.1/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/lodash/ts3.1/common/string.d.ts": [
+        "../node_modules/@types/lodash/ts3.1/common/array.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/collection.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/common.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/date.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/function.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/lang.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/math.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/number.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/object.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/seq.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/util.d.ts",
+        "../node_modules/@types/lodash/ts3.1/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/lodash/ts3.1/common/util.d.ts": [
+        "../node_modules/@types/lodash/ts3.1/common/array.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/collection.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/common.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/date.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/function.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/lang.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/math.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/number.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/object.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/seq.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/string.d.ts",
+        "../node_modules/@types/lodash/ts3.1/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/lodash/ts3.1/index.d.ts": [
+        "../node_modules/@types/lodash/ts3.1/common/array.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/collection.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/common.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/date.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/function.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/lang.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/math.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/number.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/object.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/seq.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/string.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/util.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/long/index.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/mime/index.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/node/base.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/inspector.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/node/inspector.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/node/ts3.2/index.d.ts": [
+        "../node_modules/@types/node/base.d.ts"
+      ],
+      "../node_modules/@types/qs/index.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/range-parser/index.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/serve-static/index.d.ts": [
+        "../node_modules/@types/express-serve-static-core/index.d.ts",
+        "../node_modules/@types/mime/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/abort-controller/dist/abort-controller.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/event-target-shim/index.d.ts"
+      ],
+      "../node_modules/event-target-shim/index.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/firebase-admin/lib/auth.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-admin/lib/index.d.ts"
+      ],
+      "../node_modules/firebase-admin/lib/database.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-admin/lib/index.d.ts"
+      ],
+      "../node_modules/firebase-admin/lib/index.d.ts": [
+        "../node_modules/@google-cloud/firestore/types/firestore.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-admin/lib/auth.d.ts",
+        "../node_modules/firebase-admin/lib/database.d.ts",
+        "../node_modules/firebase-admin/lib/instance-id.d.ts",
+        "../node_modules/firebase-admin/lib/messaging.d.ts",
+        "../node_modules/firebase-admin/lib/project-management.d.ts",
+        "../node_modules/firebase-admin/lib/security-rules.d.ts"
+      ],
+      "../node_modules/firebase-admin/lib/instance-id.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-admin/lib/index.d.ts"
+      ],
+      "../node_modules/firebase-admin/lib/messaging.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-admin/lib/index.d.ts"
+      ],
+      "../node_modules/firebase-admin/lib/project-management.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-admin/lib/index.d.ts"
+      ],
+      "../node_modules/firebase-admin/lib/security-rules.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-admin/lib/index.d.ts"
+      ],
+      "../node_modules/firebase-functions-helper/dist/firebase.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-admin/lib/index.d.ts"
+      ],
+      "../node_modules/firebase-functions-helper/dist/firestore.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/firebase-functions-helper/dist/index.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-functions-helper/dist/firebase.d.ts",
+        "../node_modules/firebase-functions-helper/dist/firestore.d.ts",
+        "../node_modules/firebase-functions-helper/dist/realtime.d.ts"
+      ],
+      "../node_modules/firebase-functions-helper/dist/realtime.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/firebase-functions/lib/apps.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-admin/lib/index.d.ts"
+      ],
+      "../node_modules/firebase-functions/lib/cloud-functions.d.ts": [
+        "../node_modules/@types/express/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-functions/lib/function-configuration.d.ts"
+      ],
+      "../node_modules/firebase-functions/lib/config.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-admin/lib/index.d.ts"
+      ],
+      "../node_modules/firebase-functions/lib/function-builder.d.ts": [
+        "../node_modules/@types/express-serve-static-core/index.d.ts",
+        "../node_modules/@types/express/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-functions/lib/cloud-functions.d.ts",
+        "../node_modules/firebase-functions/lib/function-configuration.d.ts",
+        "../node_modules/firebase-functions/lib/providers/analytics.d.ts",
+        "../node_modules/firebase-functions/lib/providers/auth.d.ts",
+        "../node_modules/firebase-functions/lib/providers/crashlytics.d.ts",
+        "../node_modules/firebase-functions/lib/providers/database.d.ts",
+        "../node_modules/firebase-functions/lib/providers/firestore.d.ts",
+        "../node_modules/firebase-functions/lib/providers/https.d.ts",
+        "../node_modules/firebase-functions/lib/providers/pubsub.d.ts",
+        "../node_modules/firebase-functions/lib/providers/remoteConfig.d.ts",
+        "../node_modules/firebase-functions/lib/providers/storage.d.ts",
+        "../node_modules/firebase-functions/lib/providers/testLab.d.ts"
+      ],
+      "../node_modules/firebase-functions/lib/function-configuration.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/firebase-functions/lib/handler-builder.d.ts": [
+        "../node_modules/@types/express-serve-static-core/index.d.ts",
+        "../node_modules/@types/express/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-functions/lib/cloud-functions.d.ts",
+        "../node_modules/firebase-functions/lib/providers/analytics.d.ts",
+        "../node_modules/firebase-functions/lib/providers/auth.d.ts",
+        "../node_modules/firebase-functions/lib/providers/crashlytics.d.ts",
+        "../node_modules/firebase-functions/lib/providers/database.d.ts",
+        "../node_modules/firebase-functions/lib/providers/firestore.d.ts",
+        "../node_modules/firebase-functions/lib/providers/https.d.ts",
+        "../node_modules/firebase-functions/lib/providers/pubsub.d.ts",
+        "../node_modules/firebase-functions/lib/providers/remoteConfig.d.ts",
+        "../node_modules/firebase-functions/lib/providers/storage.d.ts",
+        "../node_modules/firebase-functions/lib/providers/testLab.d.ts"
+      ],
+      "../node_modules/firebase-functions/lib/index.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-functions/lib/apps.d.ts",
+        "../node_modules/firebase-functions/lib/cloud-functions.d.ts",
+        "../node_modules/firebase-functions/lib/config.d.ts",
+        "../node_modules/firebase-functions/lib/function-builder.d.ts",
+        "../node_modules/firebase-functions/lib/function-configuration.d.ts",
+        "../node_modules/firebase-functions/lib/handler-builder.d.ts",
+        "../node_modules/firebase-functions/lib/providers/analytics.d.ts",
+        "../node_modules/firebase-functions/lib/providers/auth.d.ts",
+        "../node_modules/firebase-functions/lib/providers/crashlytics.d.ts",
+        "../node_modules/firebase-functions/lib/providers/database.d.ts",
+        "../node_modules/firebase-functions/lib/providers/firestore.d.ts",
+        "../node_modules/firebase-functions/lib/providers/https.d.ts",
+        "../node_modules/firebase-functions/lib/providers/pubsub.d.ts",
+        "../node_modules/firebase-functions/lib/providers/remoteConfig.d.ts",
+        "../node_modules/firebase-functions/lib/providers/storage.d.ts",
+        "../node_modules/firebase-functions/lib/providers/testLab.d.ts"
+      ],
+      "../node_modules/firebase-functions/lib/providers/analytics.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-functions/lib/cloud-functions.d.ts",
+        "../node_modules/firebase-functions/lib/function-configuration.d.ts"
+      ],
+      "../node_modules/firebase-functions/lib/providers/auth.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-admin/lib/index.d.ts",
+        "../node_modules/firebase-functions/lib/cloud-functions.d.ts",
+        "../node_modules/firebase-functions/lib/function-configuration.d.ts"
+      ],
+      "../node_modules/firebase-functions/lib/providers/crashlytics.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-functions/lib/cloud-functions.d.ts",
+        "../node_modules/firebase-functions/lib/function-configuration.d.ts"
+      ],
+      "../node_modules/firebase-functions/lib/providers/database.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-admin/lib/index.d.ts",
+        "../node_modules/firebase-functions/lib/apps.d.ts",
+        "../node_modules/firebase-functions/lib/cloud-functions.d.ts",
+        "../node_modules/firebase-functions/lib/function-configuration.d.ts"
+      ],
+      "../node_modules/firebase-functions/lib/providers/firestore.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-admin/lib/index.d.ts",
+        "../node_modules/firebase-functions/lib/cloud-functions.d.ts",
+        "../node_modules/firebase-functions/lib/function-configuration.d.ts"
+      ],
+      "../node_modules/firebase-functions/lib/providers/https.d.ts": [
+        "../node_modules/@types/express/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-admin/lib/index.d.ts",
+        "../node_modules/firebase-functions/lib/cloud-functions.d.ts",
+        "../node_modules/firebase-functions/lib/function-configuration.d.ts"
+      ],
+      "../node_modules/firebase-functions/lib/providers/pubsub.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-functions/lib/cloud-functions.d.ts",
+        "../node_modules/firebase-functions/lib/function-configuration.d.ts"
+      ],
+      "../node_modules/firebase-functions/lib/providers/remoteConfig.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-functions/lib/cloud-functions.d.ts",
+        "../node_modules/firebase-functions/lib/function-configuration.d.ts"
+      ],
+      "../node_modules/firebase-functions/lib/providers/storage.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-functions/lib/cloud-functions.d.ts",
+        "../node_modules/firebase-functions/lib/function-configuration.d.ts"
+      ],
+      "../node_modules/firebase-functions/lib/providers/testLab.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-functions/lib/cloud-functions.d.ts"
+      ],
+      "../node_modules/google-auth-library/build/src/auth/authclient.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/credentials.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/oauth2client.d.ts",
+        "../node_modules/google-auth-library/build/src/transporters.d.ts",
+        "../node_modules/google-auth-library/node_modules/gaxios/build/src/index.d.ts"
+      ],
+      "../node_modules/google-auth-library/build/src/auth/computeclient.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/oauth2client.d.ts",
+        "../node_modules/google-auth-library/node_modules/gaxios/build/src/index.d.ts"
+      ],
+      "../node_modules/google-auth-library/build/src/auth/credentials.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/google-auth-library/build/src/auth/envDetect.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/google-auth-library/build/src/auth/googleauth.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/computeclient.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/credentials.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/envDetect.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/idtokenclient.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/jwtclient.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/oauth2client.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/refreshclient.d.ts",
+        "../node_modules/google-auth-library/build/src/transporters.d.ts",
+        "../node_modules/google-auth-library/node_modules/gaxios/build/src/index.d.ts"
+      ],
+      "../node_modules/google-auth-library/build/src/auth/iam.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/google-auth-library/build/src/auth/idtokenclient.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/oauth2client.d.ts"
+      ],
+      "../node_modules/google-auth-library/build/src/auth/jwtaccess.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/credentials.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/oauth2client.d.ts"
+      ],
+      "../node_modules/google-auth-library/build/src/auth/jwtclient.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/credentials.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/idtokenclient.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/oauth2client.d.ts",
+        "../node_modules/google-auth-library/node_modules/gtoken/build/src/index.d.ts"
+      ],
+      "../node_modules/google-auth-library/build/src/auth/loginticket.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/google-auth-library/build/src/auth/oauth2client.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/authclient.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/credentials.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/loginticket.d.ts",
+        "../node_modules/google-auth-library/build/src/crypto/crypto.d.ts",
+        "../node_modules/google-auth-library/build/src/transporters.d.ts",
+        "../node_modules/google-auth-library/node_modules/gaxios/build/src/index.d.ts"
+      ],
+      "../node_modules/google-auth-library/build/src/auth/refreshclient.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/credentials.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/oauth2client.d.ts"
+      ],
+      "../node_modules/google-auth-library/build/src/crypto/crypto.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/google-auth-library/build/src/index.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/computeclient.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/credentials.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/envDetect.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/googleauth.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/iam.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/idtokenclient.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/jwtaccess.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/jwtclient.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/loginticket.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/oauth2client.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/refreshclient.d.ts",
+        "../node_modules/google-auth-library/build/src/transporters.d.ts"
+      ],
+      "../node_modules/google-auth-library/build/src/transporters.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/google-auth-library/node_modules/gaxios/build/src/index.d.ts"
+      ],
+      "../node_modules/google-auth-library/node_modules/gaxios/build/src/common.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/abort-controller/dist/abort-controller.d.ts"
+      ],
+      "../node_modules/google-auth-library/node_modules/gaxios/build/src/gaxios.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/google-auth-library/node_modules/gaxios/build/src/common.d.ts"
+      ],
+      "../node_modules/google-auth-library/node_modules/gaxios/build/src/index.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/google-auth-library/node_modules/gaxios/build/src/common.d.ts",
+        "../node_modules/google-auth-library/node_modules/gaxios/build/src/gaxios.d.ts"
+      ],
+      "../node_modules/google-auth-library/node_modules/gtoken/build/src/index.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/teeny-request/build/src/index.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.dom.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.dom.iterable.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2015.collection.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2015.core.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2015.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2015.generator.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2015.iterable.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2015.promise.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2015.proxy.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2015.reflect.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2015.symbol.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2016.array.include.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2016.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2017.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2017.full.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2017.intl.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2017.object.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2017.sharedmemory.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2017.string.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2017.typedarrays.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es5.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.scripthost.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.webworker.importscripts.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../src/app.ts": [
+        "../node_modules/@types/express/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-admin/lib/index.d.ts",
+        "../node_modules/firebase-functions/lib/index.d.ts",
+        "../src/controllers/api.ts",
+        "../src/interfaces/projectProperties.ts",
+        "../src/models/api.ts",
+        "../src/rcdata.ts",
+        "../src/routes/api.ts"
+      ],
+      "../src/bin/www.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../src/app.ts"
+      ],
+      "../src/controllers/api.ts": [
+        "../node_modules/@types/express/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../src/models/api.ts"
+      ],
+      "../src/interfaces/projectProperties.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../src/models/api.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../src/interfaces/projectProperties.ts",
+        "../src/newsriver.ts",
+        "../src/rcdata.ts",
+        "../src/updater.ts"
+      ],
+      "../src/newsriver.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../src/rcdata.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-admin/lib/index.d.ts",
+        "../node_modules/firebase-functions/lib/index.d.ts",
+        "../src/updater.ts"
+      ],
+      "../src/routes/api.ts": [
+        "../node_modules/@types/express/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-admin/lib/index.d.ts",
+        "../src/controllers/api.ts",
+        "../src/models/api.ts"
+      ],
+      "../src/updater.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-functions-helper/dist/index.d.ts",
+        "../src/newsriver.ts"
+      ]
+    },
+    "exportedModulesMap": {
+      "../node_modules/@google-cloud/common/build/src/index.d.ts": [
+        "../node_modules/@google-cloud/common/build/src/operation.d.ts",
+        "../node_modules/@google-cloud/common/build/src/service-object.d.ts",
+        "../node_modules/@google-cloud/common/build/src/service.d.ts",
+        "../node_modules/@google-cloud/common/build/src/util.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/google-auth-library/build/src/index.d.ts"
+      ],
+      "../node_modules/@google-cloud/common/build/src/operation.d.ts": [
+        "../node_modules/@google-cloud/common/build/src/service-object.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@google-cloud/common/build/src/service-object.d.ts": [
+        "../node_modules/@google-cloud/common/build/src/util.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/teeny-request/build/src/index.d.ts"
+      ],
+      "../node_modules/@google-cloud/common/build/src/service.d.ts": [
+        "../node_modules/@google-cloud/common/build/src/service-object.d.ts",
+        "../node_modules/@google-cloud/common/build/src/util.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/google-auth-library/build/src/index.d.ts",
+        "../node_modules/teeny-request/build/src/index.d.ts"
+      ],
+      "../node_modules/@google-cloud/common/build/src/util.d.ts": [
+        "../node_modules/@google-cloud/common/build/src/service-object.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/google-auth-library/build/src/index.d.ts",
+        "../node_modules/teeny-request/build/src/index.d.ts"
+      ],
+      "../node_modules/@google-cloud/firestore/types/firestore.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@google-cloud/storage/build/src/acl.d.ts": [
+        "../node_modules/@google-cloud/common/build/src/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@google-cloud/storage/build/src/bucket.d.ts": [
+        "../node_modules/@google-cloud/common/build/src/index.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/acl.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/channel.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/file.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/iam.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/notification.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/signer.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/storage.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@google-cloud/storage/build/src/channel.d.ts": [
+        "../node_modules/@google-cloud/common/build/src/index.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/storage.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@google-cloud/storage/build/src/file.d.ts": [
+        "../node_modules/@google-cloud/common/build/src/index.d.ts",
+        "../node_modules/@google-cloud/common/build/src/util.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/acl.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/bucket.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/signer.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/storage.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@google-cloud/storage/build/src/hmacKey.d.ts": [
+        "../node_modules/@google-cloud/common/build/src/index.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/storage.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@google-cloud/storage/build/src/iam.d.ts": [
+        "../node_modules/@google-cloud/common/build/src/index.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/bucket.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@google-cloud/storage/build/src/index.d.ts": [
+        "../node_modules/@google-cloud/storage/build/src/acl.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/bucket.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/channel.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/file.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/hmacKey.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/iam.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/notification.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/signer.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/storage.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@google-cloud/storage/build/src/notification.d.ts": [
+        "../node_modules/@google-cloud/common/build/src/index.d.ts",
+        "../node_modules/@google-cloud/common/build/src/util.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/bucket.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@google-cloud/storage/build/src/signer.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@google-cloud/storage/build/src/storage.d.ts": [
+        "../node_modules/@google-cloud/common/build/src/index.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/bucket.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/channel.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/file.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/hmacKey.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/body-parser/index.d.ts": [
+        "../node_modules/@types/connect/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/connect/index.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/express-serve-static-core/index.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/@types/qs/index.d.ts",
+        "../node_modules/@types/range-parser/index.d.ts"
+      ],
+      "../node_modules/@types/express/index.d.ts": [
+        "../node_modules/@types/body-parser/index.d.ts",
+        "../node_modules/@types/express-serve-static-core/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/@types/qs/index.d.ts",
+        "../node_modules/@types/serve-static/index.d.ts"
+      ],
+      "../node_modules/@types/fs-extra/index.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/lodash/ts3.1/common/array.d.ts": [
+        "../node_modules/@types/lodash/ts3.1/common/collection.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/common.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/date.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/function.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/lang.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/math.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/number.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/object.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/seq.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/string.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/util.d.ts",
+        "../node_modules/@types/lodash/ts3.1/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/lodash/ts3.1/common/collection.d.ts": [
+        "../node_modules/@types/lodash/ts3.1/common/array.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/common.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/date.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/function.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/lang.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/math.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/number.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/object.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/seq.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/string.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/util.d.ts",
+        "../node_modules/@types/lodash/ts3.1/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/lodash/ts3.1/common/common.d.ts": [
+        "../node_modules/@types/lodash/ts3.1/common/array.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/collection.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/date.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/function.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/lang.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/math.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/number.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/object.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/seq.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/string.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/util.d.ts",
+        "../node_modules/@types/lodash/ts3.1/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/lodash/ts3.1/common/date.d.ts": [
+        "../node_modules/@types/lodash/ts3.1/common/array.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/collection.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/common.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/function.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/lang.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/math.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/number.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/object.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/seq.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/string.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/util.d.ts",
+        "../node_modules/@types/lodash/ts3.1/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/lodash/ts3.1/common/function.d.ts": [
+        "../node_modules/@types/lodash/ts3.1/common/array.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/collection.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/common.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/date.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/lang.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/math.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/number.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/object.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/seq.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/string.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/util.d.ts",
+        "../node_modules/@types/lodash/ts3.1/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/lodash/ts3.1/common/lang.d.ts": [
+        "../node_modules/@types/lodash/ts3.1/common/array.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/collection.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/common.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/date.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/function.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/math.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/number.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/object.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/seq.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/string.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/util.d.ts",
+        "../node_modules/@types/lodash/ts3.1/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/lodash/ts3.1/common/math.d.ts": [
+        "../node_modules/@types/lodash/ts3.1/common/array.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/collection.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/common.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/date.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/function.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/lang.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/number.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/object.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/seq.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/string.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/util.d.ts",
+        "../node_modules/@types/lodash/ts3.1/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/lodash/ts3.1/common/number.d.ts": [
+        "../node_modules/@types/lodash/ts3.1/common/array.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/collection.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/common.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/date.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/function.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/lang.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/math.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/object.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/seq.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/string.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/util.d.ts",
+        "../node_modules/@types/lodash/ts3.1/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/lodash/ts3.1/common/object.d.ts": [
+        "../node_modules/@types/lodash/ts3.1/common/array.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/collection.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/common.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/date.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/function.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/lang.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/math.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/number.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/seq.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/string.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/util.d.ts",
+        "../node_modules/@types/lodash/ts3.1/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/lodash/ts3.1/common/seq.d.ts": [
+        "../node_modules/@types/lodash/ts3.1/common/array.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/collection.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/common.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/date.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/function.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/lang.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/math.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/number.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/object.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/string.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/util.d.ts",
+        "../node_modules/@types/lodash/ts3.1/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/lodash/ts3.1/common/string.d.ts": [
+        "../node_modules/@types/lodash/ts3.1/common/array.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/collection.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/common.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/date.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/function.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/lang.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/math.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/number.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/object.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/seq.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/util.d.ts",
+        "../node_modules/@types/lodash/ts3.1/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/lodash/ts3.1/common/util.d.ts": [
+        "../node_modules/@types/lodash/ts3.1/common/array.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/collection.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/common.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/date.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/function.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/lang.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/math.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/number.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/object.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/seq.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/string.d.ts",
+        "../node_modules/@types/lodash/ts3.1/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/lodash/ts3.1/index.d.ts": [
+        "../node_modules/@types/lodash/ts3.1/common/array.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/collection.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/common.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/date.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/function.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/lang.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/math.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/number.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/object.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/seq.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/string.d.ts",
+        "../node_modules/@types/lodash/ts3.1/common/util.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/long/index.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/mime/index.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/node/base.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/inspector.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/node/inspector.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/node/ts3.2/index.d.ts": [
+        "../node_modules/@types/node/base.d.ts"
+      ],
+      "../node_modules/@types/qs/index.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/range-parser/index.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/@types/serve-static/index.d.ts": [
+        "../node_modules/@types/express-serve-static-core/index.d.ts",
+        "../node_modules/@types/mime/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/abort-controller/dist/abort-controller.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/event-target-shim/index.d.ts"
+      ],
+      "../node_modules/event-target-shim/index.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/firebase-admin/lib/auth.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-admin/lib/index.d.ts"
+      ],
+      "../node_modules/firebase-admin/lib/database.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-admin/lib/index.d.ts"
+      ],
+      "../node_modules/firebase-admin/lib/index.d.ts": [
+        "../node_modules/@google-cloud/firestore/types/firestore.d.ts",
+        "../node_modules/@google-cloud/storage/build/src/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-admin/lib/auth.d.ts",
+        "../node_modules/firebase-admin/lib/database.d.ts",
+        "../node_modules/firebase-admin/lib/instance-id.d.ts",
+        "../node_modules/firebase-admin/lib/messaging.d.ts",
+        "../node_modules/firebase-admin/lib/project-management.d.ts",
+        "../node_modules/firebase-admin/lib/security-rules.d.ts"
+      ],
+      "../node_modules/firebase-admin/lib/instance-id.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-admin/lib/index.d.ts"
+      ],
+      "../node_modules/firebase-admin/lib/messaging.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-admin/lib/index.d.ts"
+      ],
+      "../node_modules/firebase-admin/lib/project-management.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-admin/lib/index.d.ts"
+      ],
+      "../node_modules/firebase-admin/lib/security-rules.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-admin/lib/index.d.ts"
+      ],
+      "../node_modules/firebase-functions-helper/dist/firebase.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-admin/lib/index.d.ts"
+      ],
+      "../node_modules/firebase-functions-helper/dist/firestore.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/firebase-functions-helper/dist/index.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-functions-helper/dist/firebase.d.ts",
+        "../node_modules/firebase-functions-helper/dist/firestore.d.ts",
+        "../node_modules/firebase-functions-helper/dist/realtime.d.ts"
+      ],
+      "../node_modules/firebase-functions-helper/dist/realtime.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/firebase-functions/lib/apps.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-admin/lib/index.d.ts"
+      ],
+      "../node_modules/firebase-functions/lib/cloud-functions.d.ts": [
+        "../node_modules/@types/express/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-functions/lib/function-configuration.d.ts"
+      ],
+      "../node_modules/firebase-functions/lib/config.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-admin/lib/index.d.ts"
+      ],
+      "../node_modules/firebase-functions/lib/function-builder.d.ts": [
+        "../node_modules/@types/express-serve-static-core/index.d.ts",
+        "../node_modules/@types/express/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-functions/lib/cloud-functions.d.ts",
+        "../node_modules/firebase-functions/lib/function-configuration.d.ts",
+        "../node_modules/firebase-functions/lib/providers/analytics.d.ts",
+        "../node_modules/firebase-functions/lib/providers/auth.d.ts",
+        "../node_modules/firebase-functions/lib/providers/crashlytics.d.ts",
+        "../node_modules/firebase-functions/lib/providers/database.d.ts",
+        "../node_modules/firebase-functions/lib/providers/firestore.d.ts",
+        "../node_modules/firebase-functions/lib/providers/https.d.ts",
+        "../node_modules/firebase-functions/lib/providers/pubsub.d.ts",
+        "../node_modules/firebase-functions/lib/providers/remoteConfig.d.ts",
+        "../node_modules/firebase-functions/lib/providers/storage.d.ts",
+        "../node_modules/firebase-functions/lib/providers/testLab.d.ts"
+      ],
+      "../node_modules/firebase-functions/lib/function-configuration.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/firebase-functions/lib/handler-builder.d.ts": [
+        "../node_modules/@types/express-serve-static-core/index.d.ts",
+        "../node_modules/@types/express/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-functions/lib/cloud-functions.d.ts",
+        "../node_modules/firebase-functions/lib/providers/analytics.d.ts",
+        "../node_modules/firebase-functions/lib/providers/auth.d.ts",
+        "../node_modules/firebase-functions/lib/providers/crashlytics.d.ts",
+        "../node_modules/firebase-functions/lib/providers/database.d.ts",
+        "../node_modules/firebase-functions/lib/providers/firestore.d.ts",
+        "../node_modules/firebase-functions/lib/providers/https.d.ts",
+        "../node_modules/firebase-functions/lib/providers/pubsub.d.ts",
+        "../node_modules/firebase-functions/lib/providers/remoteConfig.d.ts",
+        "../node_modules/firebase-functions/lib/providers/storage.d.ts",
+        "../node_modules/firebase-functions/lib/providers/testLab.d.ts"
+      ],
+      "../node_modules/firebase-functions/lib/index.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-functions/lib/apps.d.ts",
+        "../node_modules/firebase-functions/lib/cloud-functions.d.ts",
+        "../node_modules/firebase-functions/lib/config.d.ts",
+        "../node_modules/firebase-functions/lib/function-builder.d.ts",
+        "../node_modules/firebase-functions/lib/function-configuration.d.ts",
+        "../node_modules/firebase-functions/lib/handler-builder.d.ts",
+        "../node_modules/firebase-functions/lib/providers/analytics.d.ts",
+        "../node_modules/firebase-functions/lib/providers/auth.d.ts",
+        "../node_modules/firebase-functions/lib/providers/crashlytics.d.ts",
+        "../node_modules/firebase-functions/lib/providers/database.d.ts",
+        "../node_modules/firebase-functions/lib/providers/firestore.d.ts",
+        "../node_modules/firebase-functions/lib/providers/https.d.ts",
+        "../node_modules/firebase-functions/lib/providers/pubsub.d.ts",
+        "../node_modules/firebase-functions/lib/providers/remoteConfig.d.ts",
+        "../node_modules/firebase-functions/lib/providers/storage.d.ts",
+        "../node_modules/firebase-functions/lib/providers/testLab.d.ts"
+      ],
+      "../node_modules/firebase-functions/lib/providers/analytics.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-functions/lib/cloud-functions.d.ts",
+        "../node_modules/firebase-functions/lib/function-configuration.d.ts"
+      ],
+      "../node_modules/firebase-functions/lib/providers/auth.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-admin/lib/index.d.ts",
+        "../node_modules/firebase-functions/lib/cloud-functions.d.ts",
+        "../node_modules/firebase-functions/lib/function-configuration.d.ts"
+      ],
+      "../node_modules/firebase-functions/lib/providers/crashlytics.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-functions/lib/cloud-functions.d.ts",
+        "../node_modules/firebase-functions/lib/function-configuration.d.ts"
+      ],
+      "../node_modules/firebase-functions/lib/providers/database.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-admin/lib/index.d.ts",
+        "../node_modules/firebase-functions/lib/apps.d.ts",
+        "../node_modules/firebase-functions/lib/cloud-functions.d.ts",
+        "../node_modules/firebase-functions/lib/function-configuration.d.ts"
+      ],
+      "../node_modules/firebase-functions/lib/providers/firestore.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-admin/lib/index.d.ts",
+        "../node_modules/firebase-functions/lib/cloud-functions.d.ts",
+        "../node_modules/firebase-functions/lib/function-configuration.d.ts"
+      ],
+      "../node_modules/firebase-functions/lib/providers/https.d.ts": [
+        "../node_modules/@types/express/index.d.ts",
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-admin/lib/index.d.ts",
+        "../node_modules/firebase-functions/lib/cloud-functions.d.ts",
+        "../node_modules/firebase-functions/lib/function-configuration.d.ts"
+      ],
+      "../node_modules/firebase-functions/lib/providers/pubsub.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-functions/lib/cloud-functions.d.ts",
+        "../node_modules/firebase-functions/lib/function-configuration.d.ts"
+      ],
+      "../node_modules/firebase-functions/lib/providers/remoteConfig.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-functions/lib/cloud-functions.d.ts",
+        "../node_modules/firebase-functions/lib/function-configuration.d.ts"
+      ],
+      "../node_modules/firebase-functions/lib/providers/storage.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-functions/lib/cloud-functions.d.ts",
+        "../node_modules/firebase-functions/lib/function-configuration.d.ts"
+      ],
+      "../node_modules/firebase-functions/lib/providers/testLab.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/firebase-functions/lib/cloud-functions.d.ts"
+      ],
+      "../node_modules/google-auth-library/build/src/auth/authclient.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/credentials.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/oauth2client.d.ts",
+        "../node_modules/google-auth-library/build/src/transporters.d.ts",
+        "../node_modules/google-auth-library/node_modules/gaxios/build/src/index.d.ts"
+      ],
+      "../node_modules/google-auth-library/build/src/auth/computeclient.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/oauth2client.d.ts",
+        "../node_modules/google-auth-library/node_modules/gaxios/build/src/index.d.ts"
+      ],
+      "../node_modules/google-auth-library/build/src/auth/credentials.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/google-auth-library/build/src/auth/envDetect.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/google-auth-library/build/src/auth/googleauth.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/computeclient.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/credentials.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/envDetect.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/idtokenclient.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/jwtclient.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/oauth2client.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/refreshclient.d.ts",
+        "../node_modules/google-auth-library/build/src/transporters.d.ts",
+        "../node_modules/google-auth-library/node_modules/gaxios/build/src/index.d.ts"
+      ],
+      "../node_modules/google-auth-library/build/src/auth/iam.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/google-auth-library/build/src/auth/idtokenclient.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/oauth2client.d.ts"
+      ],
+      "../node_modules/google-auth-library/build/src/auth/jwtaccess.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/credentials.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/oauth2client.d.ts"
+      ],
+      "../node_modules/google-auth-library/build/src/auth/jwtclient.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/credentials.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/idtokenclient.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/oauth2client.d.ts",
+        "../node_modules/google-auth-library/node_modules/gtoken/build/src/index.d.ts"
+      ],
+      "../node_modules/google-auth-library/build/src/auth/loginticket.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/google-auth-library/build/src/auth/oauth2client.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/authclient.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/credentials.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/loginticket.d.ts",
+        "../node_modules/google-auth-library/build/src/crypto/crypto.d.ts",
+        "../node_modules/google-auth-library/build/src/transporters.d.ts",
+        "../node_modules/google-auth-library/node_modules/gaxios/build/src/index.d.ts"
+      ],
+      "../node_modules/google-auth-library/build/src/auth/refreshclient.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/credentials.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/oauth2client.d.ts"
+      ],
+      "../node_modules/google-auth-library/build/src/crypto/crypto.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/google-auth-library/build/src/index.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/computeclient.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/credentials.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/envDetect.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/googleauth.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/iam.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/idtokenclient.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/jwtaccess.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/jwtclient.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/loginticket.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/oauth2client.d.ts",
+        "../node_modules/google-auth-library/build/src/auth/refreshclient.d.ts",
+        "../node_modules/google-auth-library/build/src/transporters.d.ts"
+      ],
+      "../node_modules/google-auth-library/build/src/transporters.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/google-auth-library/node_modules/gaxios/build/src/index.d.ts"
+      ],
+      "../node_modules/google-auth-library/node_modules/gaxios/build/src/common.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/abort-controller/dist/abort-controller.d.ts"
+      ],
+      "../node_modules/google-auth-library/node_modules/gaxios/build/src/gaxios.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/google-auth-library/node_modules/gaxios/build/src/common.d.ts"
+      ],
+      "../node_modules/google-auth-library/node_modules/gaxios/build/src/index.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts",
+        "../node_modules/google-auth-library/node_modules/gaxios/build/src/common.d.ts",
+        "../node_modules/google-auth-library/node_modules/gaxios/build/src/gaxios.d.ts"
+      ],
+      "../node_modules/google-auth-library/node_modules/gtoken/build/src/index.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/teeny-request/build/src/index.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.dom.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.dom.iterable.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2015.collection.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2015.core.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2015.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2015.generator.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2015.iterable.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2015.promise.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2015.proxy.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2015.reflect.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2015.symbol.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2016.array.include.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2016.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2017.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2017.full.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2017.intl.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2017.object.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2017.sharedmemory.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2017.string.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es2017.typedarrays.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.es5.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.scripthost.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../node_modules/typescript/lib/lib.webworker.importscripts.d.ts": [
+        "../node_modules/@types/node/base.d.ts",
+        "../node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../src/app.ts": [
+        "../node_modules/@types/express-serve-static-core/index.d.ts"
+      ],
+      "../src/controllers/api.ts": [
+        "../node_modules/@types/express/index.d.ts",
+        "../src/models/api.ts"
+      ],
+      "../src/models/api.ts": [
+        "../src/interfaces/projectProperties.ts",
+        "../src/newsriver.ts",
+        "../src/rcdata.ts",
+        "../src/updater.ts"
+      ],
+      "../src/rcdata.ts": [
+        "../node_modules/firebase-admin/lib/index.d.ts",
+        "../src/updater.ts"
+      ],
+      "../src/routes/api.ts": [
+        "../node_modules/@types/express/index.d.ts",
+        "../node_modules/firebase-admin/lib/index.d.ts",
+        "../src/controllers/api.ts",
+        "../src/models/api.ts"
+      ],
+      "../src/updater.ts": [
+        "../src/newsriver.ts"
+      ]
+    },
+    "semanticDiagnosticsPerFile": [
+      "../node_modules/@google-cloud/common/build/src/index.d.ts",
+      "../node_modules/@google-cloud/common/build/src/operation.d.ts",
+      "../node_modules/@google-cloud/common/build/src/service-object.d.ts",
+      "../node_modules/@google-cloud/common/build/src/service.d.ts",
+      "../node_modules/@google-cloud/common/build/src/util.d.ts",
+      "../node_modules/@google-cloud/firestore/types/firestore.d.ts",
+      "../node_modules/@google-cloud/storage/build/src/acl.d.ts",
+      "../node_modules/@google-cloud/storage/build/src/bucket.d.ts",
+      "../node_modules/@google-cloud/storage/build/src/channel.d.ts",
+      "../node_modules/@google-cloud/storage/build/src/file.d.ts",
+      "../node_modules/@google-cloud/storage/build/src/hmacKey.d.ts",
+      "../node_modules/@google-cloud/storage/build/src/iam.d.ts",
+      "../node_modules/@google-cloud/storage/build/src/index.d.ts",
+      "../node_modules/@google-cloud/storage/build/src/notification.d.ts",
+      "../node_modules/@google-cloud/storage/build/src/signer.d.ts",
+      "../node_modules/@google-cloud/storage/build/src/storage.d.ts",
+      "../node_modules/@types/body-parser/index.d.ts",
+      "../node_modules/@types/connect/index.d.ts",
+      "../node_modules/@types/express-serve-static-core/index.d.ts",
+      "../node_modules/@types/express/index.d.ts",
+      "../node_modules/@types/fs-extra/index.d.ts",
+      "../node_modules/@types/lodash/ts3.1/common/array.d.ts",
+      "../node_modules/@types/lodash/ts3.1/common/collection.d.ts",
+      "../node_modules/@types/lodash/ts3.1/common/common.d.ts",
+      "../node_modules/@types/lodash/ts3.1/common/date.d.ts",
+      "../node_modules/@types/lodash/ts3.1/common/function.d.ts",
+      "../node_modules/@types/lodash/ts3.1/common/lang.d.ts",
+      "../node_modules/@types/lodash/ts3.1/common/math.d.ts",
+      "../node_modules/@types/lodash/ts3.1/common/number.d.ts",
+      "../node_modules/@types/lodash/ts3.1/common/object.d.ts",
+      "../node_modules/@types/lodash/ts3.1/common/seq.d.ts",
+      "../node_modules/@types/lodash/ts3.1/common/string.d.ts",
+      "../node_modules/@types/lodash/ts3.1/common/util.d.ts",
+      "../node_modules/@types/lodash/ts3.1/index.d.ts",
+      "../node_modules/@types/long/index.d.ts",
+      "../node_modules/@types/mime/index.d.ts",
+      "../node_modules/@types/node/base.d.ts",
+      "../node_modules/@types/node/inspector.d.ts",
+      "../node_modules/@types/node/ts3.2/index.d.ts",
+      "../node_modules/@types/qs/index.d.ts",
+      "../node_modules/@types/range-parser/index.d.ts",
+      "../node_modules/@types/serve-static/index.d.ts",
+      "../node_modules/abort-controller/dist/abort-controller.d.ts",
+      "../node_modules/event-target-shim/index.d.ts",
+      "../node_modules/firebase-admin/lib/auth.d.ts",
+      "../node_modules/firebase-admin/lib/database.d.ts",
+      "../node_modules/firebase-admin/lib/index.d.ts",
+      "../node_modules/firebase-admin/lib/instance-id.d.ts",
+      "../node_modules/firebase-admin/lib/messaging.d.ts",
+      "../node_modules/firebase-admin/lib/project-management.d.ts",
+      "../node_modules/firebase-admin/lib/security-rules.d.ts",
+      "../node_modules/firebase-functions-helper/dist/firebase.d.ts",
+      "../node_modules/firebase-functions-helper/dist/firestore.d.ts",
+      "../node_modules/firebase-functions-helper/dist/index.d.ts",
+      "../node_modules/firebase-functions-helper/dist/realtime.d.ts",
+      "../node_modules/firebase-functions/lib/apps.d.ts",
+      "../node_modules/firebase-functions/lib/cloud-functions.d.ts",
+      "../node_modules/firebase-functions/lib/config.d.ts",
+      "../node_modules/firebase-functions/lib/function-builder.d.ts",
+      "../node_modules/firebase-functions/lib/function-configuration.d.ts",
+      "../node_modules/firebase-functions/lib/handler-builder.d.ts",
+      "../node_modules/firebase-functions/lib/index.d.ts",
+      "../node_modules/firebase-functions/lib/providers/analytics.d.ts",
+      "../node_modules/firebase-functions/lib/providers/auth.d.ts",
+      "../node_modules/firebase-functions/lib/providers/crashlytics.d.ts",
+      "../node_modules/firebase-functions/lib/providers/database.d.ts",
+      "../node_modules/firebase-functions/lib/providers/firestore.d.ts",
+      "../node_modules/firebase-functions/lib/providers/https.d.ts",
+      "../node_modules/firebase-functions/lib/providers/pubsub.d.ts",
+      "../node_modules/firebase-functions/lib/providers/remoteConfig.d.ts",
+      "../node_modules/firebase-functions/lib/providers/storage.d.ts",
+      "../node_modules/firebase-functions/lib/providers/testLab.d.ts",
+      "../node_modules/google-auth-library/build/src/auth/authclient.d.ts",
+      "../node_modules/google-auth-library/build/src/auth/computeclient.d.ts",
+      "../node_modules/google-auth-library/build/src/auth/credentials.d.ts",
+      "../node_modules/google-auth-library/build/src/auth/envDetect.d.ts",
+      "../node_modules/google-auth-library/build/src/auth/googleauth.d.ts",
+      "../node_modules/google-auth-library/build/src/auth/iam.d.ts",
+      "../node_modules/google-auth-library/build/src/auth/idtokenclient.d.ts",
+      "../node_modules/google-auth-library/build/src/auth/jwtaccess.d.ts",
+      "../node_modules/google-auth-library/build/src/auth/jwtclient.d.ts",
+      "../node_modules/google-auth-library/build/src/auth/loginticket.d.ts",
+      "../node_modules/google-auth-library/build/src/auth/oauth2client.d.ts",
+      "../node_modules/google-auth-library/build/src/auth/refreshclient.d.ts",
+      "../node_modules/google-auth-library/build/src/crypto/crypto.d.ts",
+      "../node_modules/google-auth-library/build/src/index.d.ts",
+      "../node_modules/google-auth-library/build/src/transporters.d.ts",
+      "../node_modules/google-auth-library/node_modules/gaxios/build/src/common.d.ts",
+      "../node_modules/google-auth-library/node_modules/gaxios/build/src/gaxios.d.ts",
+      "../node_modules/google-auth-library/node_modules/gaxios/build/src/index.d.ts",
+      "../node_modules/google-auth-library/node_modules/gtoken/build/src/index.d.ts",
+      "../node_modules/teeny-request/build/src/index.d.ts",
+      "../node_modules/typescript/lib/lib.dom.d.ts",
+      "../node_modules/typescript/lib/lib.dom.iterable.d.ts",
+      "../node_modules/typescript/lib/lib.es2015.collection.d.ts",
+      "../node_modules/typescript/lib/lib.es2015.core.d.ts",
+      "../node_modules/typescript/lib/lib.es2015.d.ts",
+      "../node_modules/typescript/lib/lib.es2015.generator.d.ts",
+      "../node_modules/typescript/lib/lib.es2015.iterable.d.ts",
+      "../node_modules/typescript/lib/lib.es2015.promise.d.ts",
+      "../node_modules/typescript/lib/lib.es2015.proxy.d.ts",
+      "../node_modules/typescript/lib/lib.es2015.reflect.d.ts",
+      "../node_modules/typescript/lib/lib.es2015.symbol.d.ts",
+      "../node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts",
+      "../node_modules/typescript/lib/lib.es2016.array.include.d.ts",
+      "../node_modules/typescript/lib/lib.es2016.d.ts",
+      "../node_modules/typescript/lib/lib.es2017.d.ts",
+      "../node_modules/typescript/lib/lib.es2017.full.d.ts",
+      "../node_modules/typescript/lib/lib.es2017.intl.d.ts",
+      "../node_modules/typescript/lib/lib.es2017.object.d.ts",
+      "../node_modules/typescript/lib/lib.es2017.sharedmemory.d.ts",
+      "../node_modules/typescript/lib/lib.es2017.string.d.ts",
+      "../node_modules/typescript/lib/lib.es2017.typedarrays.d.ts",
+      "../node_modules/typescript/lib/lib.es5.d.ts",
+      "../node_modules/typescript/lib/lib.scripthost.d.ts",
+      "../node_modules/typescript/lib/lib.webworker.importscripts.d.ts",
+      "../src/app.ts",
+      "../src/bin/www.ts",
+      "../src/controllers/api.ts",
+      "../src/interfaces/projectProperties.ts",
+      "../src/models/api.ts",
+      "../src/newsriver.ts",
+      "../src/rcdata.ts",
+      "../src/routes/api.ts",
+      "../src/updater.ts"
+    ]
+  },
+  "version": "3.9.3"
+}
