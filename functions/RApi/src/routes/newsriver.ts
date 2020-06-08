@@ -1,6 +1,5 @@
 import apiController = require("../controllers/newsriver");
 import express = require("express");
-// import admin = require("firebase-admin");
 
 
 const router = express.Router();

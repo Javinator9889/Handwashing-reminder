@@ -1,7 +1,7 @@
 import {NewsriverData} from "./newsriver";
 import * as firebaseHelper from 'firebase-functions-helper';
 import * as fetch from 'node-fetch';
-import {Headers} from 'node-fetch';
+
 
 export class Updater {
   private readonly db: FirebaseFirestore.Firestore;
@@ -81,7 +81,7 @@ export class Updater {
     try {
       const requestUrl = await this.url;
       const response = await fetch(requestUrl, {
-        method: 'GET', headers: new Headers({
+        method: 'GET', headers: new fetch.Headers({
           'Authorization': this.auth,
           'Content-Type': 'application/json'
         })
