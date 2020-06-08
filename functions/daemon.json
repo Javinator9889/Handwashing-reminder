@@ -3,7 +3,7 @@
     {
       "name": "Newsriver-daemon",
       "script": "npm",
-      "args": "run updater"
+      "args": "run daemon"
     }
   ]
 }
