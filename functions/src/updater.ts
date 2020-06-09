@@ -33,7 +33,7 @@ export class Updater {
               searchTerms: Array<string>,
               auth: string,
               language: string = 'en',
-              intervalMins: number = 15) {
+              intervalMins: number = 30) {
     this.db = db;
     this.collectionName = collectionName;
     this.searchTerms = searchTerms;
@@ -74,6 +74,7 @@ export class Updater {
           console.warn(`Error while creating/updating document - ${err}`);
         }
       }
+      console.info(`Updated approximately ${content.length} element(s)`);
     } catch (error) {
       console.error(`Unhandled error ${error}`);
     }
