@@ -18,8 +18,7 @@ const server = http.createServer(app);
  */
 server.on('error', onError);
 server.on('listening', onListening);
-if (process.env.RUN_SERVER)
-  exports.webApi = functions.https.onRequest(app);
+exports.webApi = functions.https.onRequest(app);
 
 /**
  * Normalize a port into a number, string or false

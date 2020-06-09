@@ -13,10 +13,10 @@
       "**/.*",
       "**/node_modules/**"
     ],
-   "rewrites": [
+    "rewrites": [
       {
         "source": "/api/v1/**",
-        "function": "wwww.webApi"
+        "function": "www-webApi"
       }
     ]
   }

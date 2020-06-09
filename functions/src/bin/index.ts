@@ -1,5 +1,7 @@
-const runServer = process.env.RUN_SERVER;
-const runDaemon = process.env.RUN_DAEMON;
+import functions = require('firebase-functions');
+
+const runServer = process.env.RUN_SERVER || functions.config().execution.run_server;
+const runDaemon = process.env.RUN_DAEMON || functions.config().execution.run_daemon;
 
 if (runServer === undefined && runDaemon === undefined) {
   exports.www = require('./www');
