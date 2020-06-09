@@ -19,6 +19,7 @@
 package com.javinator9889.handwashingreminder.network
 
 import okhttp3.CacheControl
+import okhttp3.Headers
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okio.BufferedSource
@@ -43,10 +44,11 @@ class HttpDownloader : OkHttpDownloader {
         }
     }
 
-    fun json(url: String): Reader {
+    fun json(url: String, headers: Headers? = null): Reader {
         val request = with(Request.Builder()) {
             url(url)
             cacheControl(CacheControl.FORCE_NETWORK)
+            headers?.let { headers(it) }
             build()
         }
         with(client.newCall(request).execute()) {

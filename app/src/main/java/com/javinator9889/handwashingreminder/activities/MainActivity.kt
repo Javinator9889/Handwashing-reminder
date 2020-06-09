@@ -41,6 +41,7 @@ import com.javinator9889.handwashingreminder.activities.views.fragments.news.New
 import com.javinator9889.handwashingreminder.activities.views.fragments.settings.SettingsView
 import com.javinator9889.handwashingreminder.activities.views.fragments.washinghands.WashingHandsFragment
 import com.javinator9889.handwashingreminder.custom.libraries.AppRate
+import com.javinator9889.handwashingreminder.firebase.Auth
 import com.javinator9889.handwashingreminder.utils.Preferences
 import com.javinator9889.handwashingreminder.utils.isDebuggable
 import com.mikepenz.iconics.IconicsDrawable
@@ -92,6 +93,14 @@ class MainActivity : ActionBarBase(),
                 createFragmentForId(id)
             activeFragment = R.id.diseases
             initFragmentView()
+        }
+    }
+
+    override fun onDestroy() {
+        try {
+            Auth.logout()
+        } finally {
+            super.onDestroy()
         }
     }
 

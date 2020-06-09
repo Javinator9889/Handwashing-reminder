@@ -23,15 +23,24 @@ import androidx.lifecycle.ViewModel
 import com.beust.klaxon.JsonReader
 import com.beust.klaxon.Klaxon
 import com.javinator9889.handwashingreminder.collections.*
+import com.javinator9889.handwashingreminder.firebase.Auth
 import com.javinator9889.handwashingreminder.network.HttpDownloader
+import com.javinator9889.handwashingreminder.utils.API_URL
+import javinator9889.localemanager.utils.languagesupport.LanguagesSupport.Language
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.Headers
+import timber.log.Timber
 import java.io.Reader
 
 class NewsViewModel : ViewModel() {
     val newsData: MutableLiveData<NewsData> = MutableLiveData()
 
-    suspend fun populateData(from: Int = 0, amount: Int = 10) {
+    suspend fun populateData(
+        from: Int = 0,
+        amount: Int = 10,
+        @Language language: String = Language.ENGLISH
+    ) {
         val httpRequest = HttpDownloader()
         val klaxon = with(Klaxon()) {
             propertyStrategy(newsStrategy)
@@ -39,9 +48,13 @@ class NewsViewModel : ViewModel() {
             fieldConverter(KlaxonElements::class, elementConverter)
         }
         var requestReader: Reader? = null
+        Auth.init()
+        val token = Auth.token()
+        Timber.d("Auth token: $token")
         withContext(Dispatchers.IO) {
             requestReader = httpRequest.json(
-                "http://10.0.2.2:3000/api/v1?from=$from&amount=$amount"
+                "${API_URL}/api/v1?from=$from&amount=$amount&lang=$language",
+                headers = Headers.of(mapOf("Authorization" to "Bearer $token"))
             )
         }
         withContext(Dispatchers.Default) {

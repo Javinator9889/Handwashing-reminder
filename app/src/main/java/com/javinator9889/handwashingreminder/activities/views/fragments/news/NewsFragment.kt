@@ -32,6 +32,7 @@ import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.BaseFragmentView
 import com.javinator9889.handwashingreminder.activities.views.fragments.news.adapter.News
 import com.javinator9889.handwashingreminder.activities.views.viewmodels.NewsViewModel
+import com.javinator9889.handwashingreminder.data.UserProperties
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.GenericItem
 import com.mikepenz.fastadapter.adapters.GenericItemAdapter
@@ -57,7 +58,7 @@ class NewsFragment : BaseFragmentView() {
         lifecycleScope.launch {
             whenStarted {
                 loading.visibility = View.VISIBLE
-                launch { newsViewModel.populateData() }
+                launch { newsViewModel.populateData(language = UserProperties.language) }
                 newsViewModel.newsData.observe(viewLifecycleOwner, Observer {
                     if (::footerAdapter.isInitialized)
                         footerAdapter.clear()
@@ -99,7 +100,8 @@ class NewsFragment : BaseFragmentView() {
                         lifecycleScope.launch {
                             newsViewModel.populateData(
                                 from = newsAdapter.adapterItemCount,
-                                amount = 20
+                                amount = 20,
+                                language = UserProperties.language
                             )
                         }
                     }

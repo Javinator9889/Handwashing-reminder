@@ -25,10 +25,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.network.HttpDownloader
-import com.javinator9889.handwashingreminder.utils.Videos.URI.FILENAME
-import com.javinator9889.handwashingreminder.utils.Videos.URI.HASH
-import com.javinator9889.handwashingreminder.utils.Videos.URI.URL
-import com.javinator9889.handwashingreminder.utils.Videos.URI.VideoList
+import com.javinator9889.handwashingreminder.utils.Videos.FILENAME
+import com.javinator9889.handwashingreminder.utils.Videos.HASH
+import com.javinator9889.handwashingreminder.utils.Videos.URL
+import com.javinator9889.handwashingreminder.utils.Videos.VideoList
 import com.javinator9889.handwashingreminder.utils.isConnected
 import com.javinator9889.handwashingreminder.utils.trace
 import kotlinx.coroutines.Dispatchers

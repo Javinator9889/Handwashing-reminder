@@ -32,7 +32,7 @@ import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.javinator9889.handwashingreminder.collections.DiseasesInformation
 import com.javinator9889.handwashingreminder.collections.DiseasesList
 import com.javinator9889.handwashingreminder.collections.DiseasesListWrapper
-import com.javinator9889.handwashingreminder.utils.RemoteConfig.Keys.DISEASES_JSON
+import com.javinator9889.handwashingreminder.utils.RemoteConfig.DISEASES_JSON
 import kotlinx.coroutines.*
 import org.sufficientlysecure.htmltextview.HtmlFormatter
 import org.sufficientlysecure.htmltextview.HtmlFormatterBuilder

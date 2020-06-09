@@ -40,23 +40,22 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
+import com.javinator9889.handwashingreminder.data.UserProperties
 import com.javinator9889.handwashingreminder.emoji.EmojiLoader
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
 import com.javinator9889.handwashingreminder.gms.ads.AdsEnabler
 import com.javinator9889.handwashingreminder.jobs.alarms.AlarmHandler
 import com.javinator9889.handwashingreminder.utils.*
-import com.javinator9889.handwashingreminder.utils.Preferences.Companion.ADS_ENABLED
-import com.javinator9889.handwashingreminder.utils.Preferences.Companion.APP_INIT_KEY
-import com.javinator9889.handwashingreminder.utils.RemoteConfig.Keys.SPECIAL_EVENT
+import com.javinator9889.handwashingreminder.utils.Preferences.ADS_ENABLED
+import com.javinator9889.handwashingreminder.utils.Preferences.APP_INIT_KEY
+import com.javinator9889.handwashingreminder.utils.RemoteConfig.SPECIAL_EVENT
 import com.mikepenz.iconics.Iconics
-import javinator9889.localemanager.utils.languagesupport.LanguagesSupport
+import javinator9889.localemanager.utils.languagesupport.LanguagesSupport.Language
 import kotlinx.android.synthetic.main.splash_screen.*
 import kotlinx.coroutines.*
 import org.conscrypt.Conscrypt
 import timber.log.Timber
 import java.security.Security
-import java.util.*
-import kotlin.collections.ArrayList
 import com.javinator9889.handwashingreminder.utils.Firebase as FirebaseConf
 
 internal const val FAST_START_KEY = "intent:fast_start"
@@ -283,18 +282,18 @@ class LauncherActivity : AppCompatActivity() {
             Timber.d("Initializing Firebase Remote Config")
             setConfigSettingsAsync(config)
             setDefaultsAsync(
-                when (Locale.getDefault().language) {
-                    Locale(LanguagesSupport.Language.SPANISH).language -> {
+                when (UserProperties.language) {
+                    Language.SPANISH -> {
                         firebaseAnalytics.setUserProperty(
                             FirebaseConf.Properties.LANGUAGE,
-                            LanguagesSupport.Language.SPANISH
+                            Language.SPANISH
                         )
                         R.xml.remote_config_defaults_es
                     }
                     else -> {
                         firebaseAnalytics.setUserProperty(
                             FirebaseConf.Properties.LANGUAGE,
-                            LanguagesSupport.Language.ENGLISH
+                            Language.ENGLISH
                         )
                         R.xml.remote_config_defaults
                     }
