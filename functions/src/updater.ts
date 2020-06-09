@@ -63,16 +63,17 @@ export class Updater {
 
   async updateData(content: Array<NewsriverData>) {
     try {
-      content.forEach(element => {
-        firebaseHelper.firestore.checkDocumentExists(this.db, this.collectionName, element.id)
-          .then(exists => {
-            if (!exists)
-              firebaseHelper.firestore.createDocumentWithID(this.db, this.collectionName, element.id, element);
-            else
-              firebaseHelper.firestore.updateDocument(this.db, this.collectionName, element.id, element);
-          })
-        console.log(`Created element with ID: ${element.id}`);
-      });
+      for (const element of content) {
+        try {
+          const exists = await firebaseHelper.firestore.checkDocumentExists(this.db, this.collectionName, element.id);
+          if (!exists)
+            await firebaseHelper.firestore.createDocumentWithID(this.db, this.collectionName, element.id, element);
+          else
+            await firebaseHelper.firestore.updateDocument(this.db, this.collectionName, element.id, element);
+        } catch (err) {
+          console.warn(`Error while creating/updating document - ${err}`);
+        }
+      }
     } catch (error) {
       console.error(`Unhandled error ${error}`);
     }

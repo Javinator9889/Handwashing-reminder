@@ -13,7 +13,7 @@
     "daemon": "cross-env-shell RUN_DAEMON=true \"npm run build && firebase emulators:start --only functions\""
   },
   "engines": {
-    "node": "10"
+    "node": "8"
   },
   "main": "lib/bin/index.js",
   "dependencies": {

@@ -36,6 +36,7 @@ export class RemoteConfigData {
   listenToRCChanges() {
     functions.remoteConfig.onUpdate(_ => {
       return admin.credential.applicationDefault().getAccessToken()
+        // tslint:disable-next-line:no-shadowed-variable
         .then(_ => {
           this.remoteConfig.getTemplate()
             .then(template => {
@@ -51,7 +52,8 @@ export class RemoteConfigData {
                   console.warn(`Updaters are not set yet - ${e}`);
                 }
               }
-            });
+            })
+            .catch(err => console.warn(`Error while obtaining the template - ${err}`));
         })
         .catch(err => console.error(`Error while obtaining data from RC: ${err}`));
     });

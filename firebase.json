@@ -15,7 +15,11 @@
     ],
     "rewrites": [
       {
-        "source": "/api/v1/**",
+        "source": "/{,**}",
+        "destination": "/api/v1"
+      },
+      {
+        "source": "/api/v1**",
         "function": "www-webApi"
       }
     ]

@@ -20,9 +20,7 @@ export async function initialize() {
     initCalled = true;
     const projectProperties = properties.projectProperties(firebaseApp);
     for (const language of properties.languages) {
-      console.debug(`Creating updater for language ${language}`);
       const terms = await remoteConfig.getSearchTermsForLanguage(language);
-      console.debug(`Updater terms: ${terms}`);
       updaters[language] = new Updater(
         projectProperties.database,
         `${projectProperties.collection}_${language}`,
@@ -42,7 +40,7 @@ export async function initialize() {
 export async function scheduleUpdates() {
   if (!initCalled)
     throw new Error('`initialize` not called');
-  console.info('Updater is scheduling updates')
+  console.info('Updaters are scheduling updates')
   for (const language of properties.languages) {
     timers.add(updaters[language].schedule());
   }
