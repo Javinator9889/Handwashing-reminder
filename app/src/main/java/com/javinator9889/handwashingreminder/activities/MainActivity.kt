@@ -28,11 +28,13 @@ import androidx.core.util.set
 import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.whenCreated
+import androidx.lifecycle.whenStarted
 import androidx.preference.PreferenceManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.perf.metrics.AddTrace
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.support.ActionBarBase
@@ -44,19 +46,22 @@ import com.javinator9889.handwashingreminder.custom.libraries.AppRate
 import com.javinator9889.handwashingreminder.firebase.Auth
 import com.javinator9889.handwashingreminder.utils.Preferences
 import com.javinator9889.handwashingreminder.utils.isDebuggable
+import com.javinator9889.handwashingreminder.utils.notNull
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
 import com.mikepenz.iconics.typeface.library.ionicons.Ionicons
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.how_to_wash_hands_layout.*
+import kotlinx.coroutines.*
 import timber.log.Timber
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig
 import java.lang.ref.WeakReference
-import kotlin.concurrent.thread
 import kotlin.properties.Delegates
 
 internal const val ARG_CURRENT_ITEM = "bundle:args:current_item"
+internal val IDS =
+    arrayOf(R.id.diseases, R.id.handwashing, R.id.news, R.id.settings)
 
 class MainActivity : ActionBarBase(),
     BottomNavigationView.OnNavigationItemSelectedListener {
@@ -64,35 +69,41 @@ class MainActivity : ActionBarBase(),
     private val fragments: SparseArray<WeakReference<Fragment>> = SparseArray(4)
     private var activeFragment by Delegates.notNull<@IdRes Int>()
 
-    @AddTrace(name = "onCreateMainView")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        with(FirebaseAnalytics.getInstance(this)) {
-            setCurrentScreen(this@MainActivity, "Main view", null)
+    init {
+        lifecycleScope.launch {
+            whenCreated {
+                val deferreds = mutableSetOf<Deferred<Any>>()
+                with(Firebase.remoteConfig) { fetchAndActivate() }
+                deferreds.add(async { delegateMenuIcons(menu) })
+                menu.setOnNavigationItemSelectedListener(this@MainActivity)
+                deferreds.add(async { loadTutorial() })
+                deferreds.add(async { suggestRating() })
+                for (id in IDS)
+                    deferreds.add(async { createFragmentForId(id) })
+                activeFragment = R.id.diseases
+                deferreds.awaitAll()
+            }
+            whenStarted {
+                with(FirebaseAnalytics.getInstance(this@MainActivity)) {
+                    setCurrentScreen(this@MainActivity, "Main view", null)
+                }
+                withContext(Dispatchers.Main) {
+                    initFragmentView()
+                }
+            }
         }
-        with(Firebase.remoteConfig) {
-            fetchAndActivate()
-        }
-        delegateMenuIcons(menu)
-        val ids =
-            arrayOf(R.id.diseases, R.id.handwashing, R.id.news, R.id.settings)
-        menu.setOnNavigationItemSelectedListener(this)
-        loadTutorial()
-        suggestRating()
-        if (savedInstanceState != null) {
-            for (id in ids) {
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        savedInstanceState.notNull {
+            for (id in IDS) {
                 val fragment = supportFragmentManager.getFragment(
-                    savedInstanceState,
-                    id.toString()
+                    savedInstanceState, id.toString()
                 ) ?: createFragmentForId(id)
                 fragments[id] = WeakReference(fragment)
             }
             activeFragment = savedInstanceState.getInt(ARG_CURRENT_ITEM)
-        } else {
-            for (id in ids)
-                createFragmentForId(id)
-            activeFragment = R.id.diseases
-            initFragmentView()
         }
     }
 
@@ -104,25 +115,25 @@ class MainActivity : ActionBarBase(),
         }
     }
 
-    protected fun delegateMenuIcons(menu: BottomNavigationView) {
-        thread(start = true) {
-            menu.menu.forEach { item ->
-                val icon = when (item.itemId) {
-                    R.id.diseases ->
-                        IconicsDrawable(
-                            this, Ionicons.Icon.ion_ios_medkit
-                        )
-                    R.id.news ->
-                        IconicsDrawable(
-                            this, GoogleMaterial.Icon.gmd_chrome_reader_mode
-                        )
-                    R.id.settings ->
-                        IconicsDrawable(
-                            this, Ionicons.Icon.ion_android_settings
-                        )
-                    else -> null
-                }
-                icon?.let { runOnUiThread { item.icon = it } }
+    private suspend fun delegateMenuIcons(menu: BottomNavigationView) {
+        menu.menu.forEach { item ->
+            val icon = when (item.itemId) {
+                R.id.diseases ->
+                    IconicsDrawable(
+                        this, Ionicons.Icon.ion_ios_medkit
+                    )
+                R.id.news ->
+                    IconicsDrawable(
+                        this, GoogleMaterial.Icon.gmd_chrome_reader_mode
+                    )
+                R.id.settings ->
+                    IconicsDrawable(
+                        this, Ionicons.Icon.ion_android_settings
+                    )
+                else -> null
+            }
+            withContext(Dispatchers.Main) {
+                icon?.let { item.icon = it }
             }
         }
     }
@@ -203,9 +214,8 @@ class MainActivity : ActionBarBase(),
                 hide(fragment)
             }
             show(
-                fragments[activeFragment].get() ?: createFragmentForId(
-                    activeFragment
-                )
+                fragments[activeFragment].get()
+                    ?: createFragmentForId(activeFragment)
             )
             commit()
         }
@@ -225,7 +235,7 @@ class MainActivity : ActionBarBase(),
         }.commit()
     }
 
-    private fun loadTutorial() {
+    private suspend fun loadTutorial() {
         val preferences =
             with(PreferenceManager.getDefaultSharedPreferences(this)) {
                 if (getBoolean(Preferences.INITIAL_TUTORIAL_DONE, false))
@@ -268,21 +278,25 @@ class MainActivity : ActionBarBase(),
                         putBoolean(Preferences.INITIAL_TUTORIAL_DONE, true)
                     }
             }
-            start()
+            withContext(Dispatchers.Main) {
+                start()
+            }
         }
     }
 
-    private fun suggestRating() {
-        with(AppRate(this)) {
-            if (!isDebuggable()) {
-                setMinDaysUntilPrompt(2L)
-                setMinLaunchesUntilPrompt(5)
+    private suspend fun suggestRating() {
+        withContext(Dispatchers.Main) {
+            with(AppRate(this@MainActivity)) {
+                if (!isDebuggable()) {
+                    setMinDaysUntilPrompt(2L)
+                    setMinLaunchesUntilPrompt(5)
+                }
+                dialogTitle = R.string.rate_text_title
+                dialogMessage = R.string.rate_app_message
+                positiveButtonText = R.string.rate_text
+                negativeButtonText = R.string.rate_do_not_show
+                init()
             }
-            dialogTitle = R.string.rate_text_title
-            dialogMessage = R.string.rate_app_message
-            positiveButtonText = R.string.rate_text
-            negativeButtonText = R.string.rate_do_not_show
-            init()
         }
     }
 
