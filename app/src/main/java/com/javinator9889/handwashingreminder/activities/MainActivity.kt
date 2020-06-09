@@ -18,12 +18,11 @@
  */
 package com.javinator9889.handwashingreminder.activities
 
-import android.os.Bundle
 import android.util.SparseArray
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.annotation.IdRes
 import androidx.core.content.edit
-import androidx.core.util.forEach
 import androidx.core.util.set
 import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
@@ -42,11 +41,12 @@ import com.javinator9889.handwashingreminder.activities.views.fragments.diseases
 import com.javinator9889.handwashingreminder.activities.views.fragments.news.NewsFragment
 import com.javinator9889.handwashingreminder.activities.views.fragments.settings.SettingsView
 import com.javinator9889.handwashingreminder.activities.views.fragments.washinghands.WashingHandsFragment
+import com.javinator9889.handwashingreminder.activities.views.viewmodels.MainActivityViewModel
+import com.javinator9889.handwashingreminder.activities.views.viewmodels.SavedViewModelFactory
 import com.javinator9889.handwashingreminder.custom.libraries.AppRate
 import com.javinator9889.handwashingreminder.firebase.Auth
 import com.javinator9889.handwashingreminder.utils.Preferences
 import com.javinator9889.handwashingreminder.utils.isDebuggable
-import com.javinator9889.handwashingreminder.utils.notNull
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
 import com.mikepenz.iconics.typeface.library.ionicons.Ionicons
@@ -57,7 +57,6 @@ import timber.log.Timber
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig
 import java.lang.ref.WeakReference
-import kotlin.properties.Delegates
 
 internal const val ARG_CURRENT_ITEM = "bundle:args:current_item"
 internal val IDS =
@@ -67,20 +66,26 @@ class MainActivity : ActionBarBase(),
     BottomNavigationView.OnNavigationItemSelectedListener {
     override val layoutId: Int = R.layout.activity_main
     private val fragments: SparseArray<WeakReference<Fragment>> = SparseArray(4)
-    private var activeFragment by Delegates.notNull<@IdRes Int>()
+//    private var activeFragment by Delegates.notNull<@IdRes Int>()
+    private val activityViewModel by viewModels<MainActivityViewModel> {
+        SavedViewModelFactory(MainActivityViewModel.Factory, this)
+    }
 
     init {
         lifecycleScope.launch {
             whenCreated {
                 val deferreds = mutableSetOf<Deferred<Any>>()
                 with(Firebase.remoteConfig) { fetchAndActivate() }
-                deferreds.add(async { delegateMenuIcons(menu) })
+                deferreds.add(async {
+                    activityViewModel.setMenuIcons(menu, this@MainActivity)
+                })
+//                deferreds.add(async { delegateMenuIcons(menu) })
                 menu.setOnNavigationItemSelectedListener(this@MainActivity)
                 deferreds.add(async { loadTutorial() })
                 deferreds.add(async { suggestRating() })
-                for (id in IDS)
+                /*for (id in IDS)
                     deferreds.add(async { createFragmentForId(id) })
-                activeFragment = R.id.diseases
+                activeFragment = R.id.diseases*/
                 deferreds.awaitAll()
             }
             whenStarted {
@@ -94,7 +99,7 @@ class MainActivity : ActionBarBase(),
         }
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+    /*override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         savedInstanceState.notNull {
             for (id in IDS) {
@@ -105,7 +110,7 @@ class MainActivity : ActionBarBase(),
             }
             activeFragment = savedInstanceState.getInt(ARG_CURRENT_ITEM)
         }
-    }
+    }*/
 
     override fun onDestroy() {
         try {
@@ -139,23 +144,22 @@ class MainActivity : ActionBarBase(),
     }
 
     override fun onBackPressed() {
-        if (activeFragment != R.id.diseases &&
-            activeFragment != R.id.handwashing
+        if (activityViewModel.activeFragmentId != R.id.diseases &&
+            activityViewModel.activeFragmentId != R.id.handwashing
         ) {
             menu.selectedItemId = R.id.diseases
             onNavigationItemSelected(menu.menu.findItem(R.id.diseases))
         } else {
-            if (activeFragment == R.id.diseases) {
-                with(fragments[activeFragment].get()!! as DiseasesFragment) {
+            if (activityViewModel.activeFragmentId == R.id.diseases) {
+                with(activityViewModel.activeFragment as DiseasesFragment) {
                     onBackPressed()
                 }
                 fragments.clear()
                 super.onBackPressed()
                 finish()
             } else {
-                val washingHandsFragment = fragments[activeFragment].get()
-                    ?: createFragmentForId(R.id.handwashing)
-                            as WashingHandsFragment
+                val washingHandsFragment =
+                    activityViewModel.activeFragment as WashingHandsFragment
                 if (washingHandsFragment.pager.currentItem != 0)
                     washingHandsFragment.pager.currentItem--
                 else {
@@ -180,7 +184,7 @@ class MainActivity : ActionBarBase(),
         return onItemSelected(item.itemId)
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
+    /*override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         fragments.forEach { id, reference ->
             reference.get()?.let {
@@ -190,7 +194,7 @@ class MainActivity : ActionBarBase(),
             }
         }
         outState.putInt(ARG_CURRENT_ITEM, activeFragment)
-    }
+    }*/
 
     protected fun onItemSelected(@IdRes id: Int): Boolean {
         return try {
@@ -208,28 +212,26 @@ class MainActivity : ActionBarBase(),
 
     private fun initFragmentView() {
         with(supportFragmentManager.beginTransaction()) {
-            fragments.forEach { id, reference ->
-                val fragment = reference.get() ?: createFragmentForId(id)
-                add(R.id.mainContent, fragment)
-                hide(fragment)
+            for (id in IDS) {
+                activityViewModel.loadFragment(id).also {
+                    if (supportFragmentManager.findFragmentByTag(id.toString()) == null) {
+                        add(R.id.mainContent, it, id.toString())
+                        hide(it)
+                    }
+                }
             }
-            show(
-                fragments[activeFragment].get()
-                    ?: createFragmentForId(activeFragment)
-            )
+            show(activityViewModel.activeFragment)
             commit()
         }
     }
 
     private fun loadFragment(@IdRes id: Int) {
-        if (id == activeFragment)
+        if (id == activityViewModel.activeFragmentId)
             return
-        val fragment = fragments[id].get() ?: return
-        val displayedFragment = fragments[activeFragment].get()!!
         with(supportFragmentManager.beginTransaction()) {
-            show(fragment)
-            hide(displayedFragment)
-            activeFragment = id
+            show(activityViewModel.loadFragment(id))
+            hide(activityViewModel.activeFragment)
+            activityViewModel.activeFragmentId = id
             setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
             disallowAddToBackStack()
         }.commit()

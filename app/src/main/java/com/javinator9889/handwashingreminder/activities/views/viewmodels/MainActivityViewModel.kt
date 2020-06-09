@@ -51,10 +51,16 @@ class MainActivityViewModel(private val handle: SavedStateHandle) :
             ?: SparseArray(4)
 
     @IdRes
-    private var privateActiveFragment: Int =
+    var activeFragmentId: Int =
         handle.get(ARG_CURRENT_ITEM) ?: R.id.diseases
+        set(@IdRes id) {
+            if (id !in IDS)
+                throw IllegalArgumentException("id not in ids")
+            field = id
+            handle.set(ARG_CURRENT_ITEM, activeFragmentId)
+        }
     val activeFragment: Fragment
-        get() = loadFragment(privateActiveFragment)
+        get() = loadFragment(activeFragmentId)
 
     init {
         for (id in IDS)
@@ -91,13 +97,6 @@ class MainActivityViewModel(private val handle: SavedStateHandle) :
 
     fun loadFragment(@IdRes id: Int) =
         fragments[id, null]?.get() ?: createFragmentForId(id)
-
-    fun setActiveFragment(@IdRes id: Int) {
-        if (id !in IDS)
-            throw IllegalArgumentException("id not in ids")
-        privateActiveFragment = id
-        handle.set(ARG_CURRENT_ITEM, privateActiveFragment)
-    }
 
     private fun createFragmentForId(@IdRes id: Int): Fragment {
         val fragment = when (id) {
