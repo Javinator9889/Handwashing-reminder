@@ -1,4 +1,4 @@
-FROM node:10
+FROM node:lts-alpine
 # app directory
 WORKDIR /usr/src/app
 # Copy neccessary files
