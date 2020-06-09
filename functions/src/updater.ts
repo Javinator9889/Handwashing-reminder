@@ -47,6 +47,7 @@ export class Updater {
           .catch(ignored => {
           });
       })
+      .catch(err => console.warn(`Unable to update data due to exception: ${err}`));
   }
 
   schedule(): NodeJS.Timer {

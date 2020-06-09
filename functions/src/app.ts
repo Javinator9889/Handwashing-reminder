@@ -16,17 +16,6 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
-/**
- * -------------
- * Test purposes
- * -------------
- const testUpdater = new updater.Updater(null, null, ['covid-19', 'enfermedad'], functions.config().newsriver.key, 'es');
- app.get('/api', (req, res) =>
- testUpdater.request()
- .then(it => res.json(it))
- );
- * ---------------
- */
 app.use(router);
 // catch 404 and forward to error handler
 app.use((req, res, next) => next(createError(404)));
