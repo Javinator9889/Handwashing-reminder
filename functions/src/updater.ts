@@ -74,6 +74,7 @@ export class Updater {
           console.warn(`Error while creating/updating document - ${err}`);
         }
       }
+      console.info(`Updated approximately ${content.length} element(s)`);
     } catch (error) {
       console.error(`Unhandled error ${error}`);
     }
