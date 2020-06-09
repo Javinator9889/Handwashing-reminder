@@ -9,8 +9,8 @@
     "deploy": "cross-env-shell RUN_SERVER=true RUN_DAEMON=true firebase deploy --only functions",
     "deploy-server": "cross-env-shell RUN_SERVER=true \"firebase deploy --only functions\"",
     "logs": "firebase functions:log",
-    "server": "cross-env-shell RUN_SERVER=true \"npm run build && firebase emulators:start --only functions\"",
-    "daemon": "cross-env-shell RUN_DAEMON=true \"npm run build && firebase emulators:start --only functions\""
+    "server": "cross-env-shell RUN_SERVER=true RUNNING_LOCAL=true \"npm run build && firebase emulators:start --only functions\"",
+    "daemon": "cross-env-shell RUN_DAEMON=true RUNNING_LOCAL=true \"npm run build && firebase emulators:start --only functions\""
   },
   "engines": {
     "node": "8"

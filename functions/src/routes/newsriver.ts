@@ -1,6 +1,7 @@
 import apiController = require("../controllers/newsriver");
 import express = require("express");
 import admin = require("firebase-admin");
+import properties = require('../common/properties');
 
 
 const router = express.Router();
@@ -14,8 +15,8 @@ apiController.apiModel.initialize()
 router.get('/api/v1', (req, res, next) => {
   try {
     const language = req.query.lang;
-    const tokenId = req.get('Authorization').split('Bearer')[0];
-    admin.auth(apiController.apiModel.firebaseApp).verifyIdToken(tokenId)
+    const tokenId = req.headers.authorization.split(' ')[1];
+    admin.auth(properties.firebaseApp).verifyIdToken(tokenId)
       .then(_ => {
         if (language === undefined)
           res.status(403).send('lang must be given [?lang=...]');

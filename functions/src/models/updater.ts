@@ -1,16 +1,10 @@
 import {Updater} from '../updater';
 import {RemoteConfigData} from "../rcdata";
-import admin = require('firebase-admin');
 import properties = require('../common/properties');
 
 
-const serviceAccount = require('../../handwashing-firebase-adminsdk.json');
-export const firebaseApp = admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: properties.databaseURL
-});
 const updaters: Record<string, Updater> = {};
-const remoteConfig = new RemoteConfigData(firebaseApp);
+const remoteConfig = new RemoteConfigData(properties.firebaseApp);
 const timers = new Set<NodeJS.Timer>();
 let initCalled = false;
 
@@ -18,7 +12,7 @@ export async function initialize() {
   try {
     console.info('Updater is being initialized');
     initCalled = true;
-    const projectProperties = properties.projectProperties(firebaseApp);
+    const projectProperties = properties.projectProperties(properties.firebaseApp);
     for (const language of properties.languages) {
       const terms = await remoteConfig.getSearchTermsForLanguage(language);
       updaters[language] = new Updater(

@@ -11,8 +11,8 @@ export async function queryNewsForLanguage(req: Request, res: Response) {
     if (fromParam === undefined && amountParam === undefined) {
       res.json(newsData);
     } else {
-      const from = fromParam === undefined ? Number(fromParam) : 0;
-      const amount = amountParam === undefined ? Number(amountParam) : 0;
+      const from = fromParam !== undefined ? Number(fromParam) : 0;
+      const amount = amountParam !== undefined ? Number(amountParam) : newsData.length;
 
       res.json(newsData.slice(from, from + amount));
     }

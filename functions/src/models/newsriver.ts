@@ -1,18 +1,14 @@
-import admin = require('firebase-admin');
 import {NewsriverData} from "../newsriver";
 import {Database} from "../database";
 import properties = require('../common/properties');
 
 
-export const firebaseApp = admin.initializeApp({
-  databaseURL: properties.databaseURL
-});
 const databases: Record<string, Database> = {};
 let initCalled = false;
 
 export async function initialize() {
   initCalled = true;
-  const projectProperties = properties.projectProperties(firebaseApp);
+  const projectProperties = properties.projectProperties(properties.firebaseApp);
   for (const language of properties.languages) {
     databases[language] = new Database(
       projectProperties.database,
