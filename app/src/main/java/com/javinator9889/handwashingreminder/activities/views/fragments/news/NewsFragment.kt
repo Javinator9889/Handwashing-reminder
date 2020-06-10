@@ -18,6 +18,8 @@
  */
 package com.javinator9889.handwashingreminder.activities.views.fragments.news
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.LayoutRes
@@ -28,6 +30,7 @@ import androidx.lifecycle.whenStarted
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.afollestad.materialdialogs.MaterialDialog
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.BaseFragmentView
 import com.javinator9889.handwashingreminder.activities.views.fragments.news.adapter.News
@@ -137,7 +140,25 @@ class NewsFragment : BaseFragmentView() {
             fastAdapter: FastAdapter<News>,
             item: News
         ) {
-            TODO("Not yet implemented - open web browser")
+            val website = Uri.parse(item.url)
+            with(Intent(Intent.ACTION_VIEW, website)) {
+                if (resolveActivity(requireContext().packageManager) != null)
+                    startActivity(this)
+                else {
+                    MaterialDialog(requireContext()).show {
+                        title(R.string.no_app)
+                        message(
+                            text = getString(
+                                R.string.no_app_long,
+                                getString(R.string.browser_err)
+                            )
+                        )
+                        positiveButton(android.R.string.ok)
+                        cancelable(true)
+                        cancelOnTouchOutside(true)
+                    }
+                }
+            }
         }
     }
 
@@ -152,7 +173,19 @@ class NewsFragment : BaseFragmentView() {
             fastAdapter: FastAdapter<News>,
             item: News
         ) {
-            TODO("Not yet implemented - share intent")
+            with(Intent.createChooser(Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(
+                    Intent.EXTRA_TEXT,
+                    "${item.title} — ${item.url} via Handwashing Reminder"
+                )
+                putExtra(Intent.EXTRA_TITLE, item.title)
+                item.imageUrl?.let { data = Uri.parse(it) }
+                flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                type = "text/plain"
+            }, null)) {
+                startActivity(this)
+            }
         }
     }
 }
