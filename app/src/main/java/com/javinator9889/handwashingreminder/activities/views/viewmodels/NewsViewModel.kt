@@ -33,8 +33,11 @@ import okhttp3.Headers
 import timber.log.Timber
 import java.io.Reader
 
+internal const val ARG_NEWS_DATA = "args:newsmodel:data"
+
 class NewsViewModel : ViewModel() {
     val newsData: MutableLiveData<NewsData> = MutableLiveData()
+//    val activeItems = mutableSetOf<String>()
 
     suspend fun populateData(
         from: Int = 0,
@@ -59,11 +62,9 @@ class NewsViewModel : ViewModel() {
         }
         withContext(Dispatchers.Default) {
             JsonReader(requestReader!!).use { reader ->
-                var position = 0
                 reader.beginArray {
                     while (reader.hasNext()) {
                         newsData.postValue(klaxon.parse<NewsData>(reader))
-                        position++
                     }
                 }
             }

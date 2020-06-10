@@ -18,9 +18,9 @@
  */
 package com.javinator9889.handwashingreminder.activities
 
+import android.os.Bundle
 import android.util.SparseArray
 import android.view.MenuItem
-import androidx.activity.viewModels
 import androidx.annotation.IdRes
 import androidx.core.content.edit
 import androidx.core.util.set
@@ -37,16 +37,16 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.support.ActionBarBase
+import com.javinator9889.handwashingreminder.activities.views.data.MainActivityDataHandler
 import com.javinator9889.handwashingreminder.activities.views.fragments.diseases.DiseasesFragment
 import com.javinator9889.handwashingreminder.activities.views.fragments.news.NewsFragment
 import com.javinator9889.handwashingreminder.activities.views.fragments.settings.SettingsView
 import com.javinator9889.handwashingreminder.activities.views.fragments.washinghands.WashingHandsFragment
-import com.javinator9889.handwashingreminder.activities.views.viewmodels.MainActivityViewModel
-import com.javinator9889.handwashingreminder.activities.views.viewmodels.SavedViewModelFactory
 import com.javinator9889.handwashingreminder.custom.libraries.AppRate
 import com.javinator9889.handwashingreminder.firebase.Auth
 import com.javinator9889.handwashingreminder.utils.Preferences
 import com.javinator9889.handwashingreminder.utils.isDebuggable
+import com.javinator9889.handwashingreminder.utils.notNull
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
 import com.mikepenz.iconics.typeface.library.ionicons.Ionicons
@@ -58,18 +58,16 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig
 import java.lang.ref.WeakReference
 
-internal const val ARG_CURRENT_ITEM = "bundle:args:current_item"
-internal val IDS =
-    arrayOf(R.id.diseases, R.id.handwashing, R.id.news, R.id.settings)
-
 class MainActivity : ActionBarBase(),
     BottomNavigationView.OnNavigationItemSelectedListener {
     override val layoutId: Int = R.layout.activity_main
     private val fragments: SparseArray<WeakReference<Fragment>> = SparseArray(4)
-//    private var activeFragment by Delegates.notNull<@IdRes Int>()
-    private val activityViewModel by viewModels<MainActivityViewModel> {
+
+    //    private var activeFragment by Delegates.notNull<@IdRes Int>()
+    /*private val activityViewModel by viewModels<MainActivityViewModel> {
         SavedViewModelFactory(MainActivityViewModel.Factory, this)
-    }
+    }*/
+    private val dataHandler = MainActivityDataHandler()
 
     init {
         lifecycleScope.launch {
@@ -77,26 +75,36 @@ class MainActivity : ActionBarBase(),
                 val deferreds = mutableSetOf<Deferred<Any>>()
                 with(Firebase.remoteConfig) { fetchAndActivate() }
                 deferreds.add(async {
-                    activityViewModel.setMenuIcons(menu, this@MainActivity)
+                    dataHandler.setMenuIcons(menu, this@MainActivity)
                 })
-//                deferreds.add(async { delegateMenuIcons(menu) })
                 menu.setOnNavigationItemSelectedListener(this@MainActivity)
                 deferreds.add(async { loadTutorial() })
                 deferreds.add(async { suggestRating() })
-                /*for (id in IDS)
-                    deferreds.add(async { createFragmentForId(id) })
-                activeFragment = R.id.diseases*/
                 deferreds.awaitAll()
             }
             whenStarted {
                 with(FirebaseAnalytics.getInstance(this@MainActivity)) {
                     setCurrentScreen(this@MainActivity, "Main view", null)
                 }
-                withContext(Dispatchers.Main) {
+                /*withContext(Dispatchers.Main) {
                     initFragmentView()
-                }
+                }*/
             }
         }
+    }
+
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
+        savedInstanceState.notNull {
+            Timber.d("Activity recreated")
+        }
+        if (savedInstanceState == null)
+            dataHandler.loadFragmentView(supportFragmentManager)
+    }
+
+    override fun onDestroy() {
+        dataHandler.clear()
+        super.onDestroy()
     }
 
     /*override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -112,11 +120,24 @@ class MainActivity : ActionBarBase(),
         }
     }*/
 
-    override fun onDestroy() {
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        dataHandler.onRestoreInstanceState(
+            savedInstanceState,
+            supportFragmentManager
+        )
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        dataHandler.onSaveInstanceState(outState, supportFragmentManager)
+    }
+
+    override fun finish() {
         try {
             Auth.logout()
         } finally {
-            super.onDestroy()
+            super.finish()
         }
     }
 
@@ -144,28 +165,25 @@ class MainActivity : ActionBarBase(),
     }
 
     override fun onBackPressed() {
-        if (activityViewModel.activeFragmentId != R.id.diseases &&
-            activityViewModel.activeFragmentId != R.id.handwashing
-        ) {
-            menu.selectedItemId = R.id.diseases
-            onNavigationItemSelected(menu.menu.findItem(R.id.diseases))
-        } else {
-            if (activityViewModel.activeFragmentId == R.id.diseases) {
-                with(activityViewModel.activeFragment as DiseasesFragment) {
-                    onBackPressed()
-                }
-                fragments.clear()
+        when (dataHandler.activeFragmentId) {
+            R.id.diseases -> {
+                (dataHandler.activeFragment as DiseasesFragment).onBackPressed()
                 super.onBackPressed()
                 finish()
-            } else {
+            }
+            R.id.handwashing -> {
                 val washingHandsFragment =
-                    activityViewModel.activeFragment as WashingHandsFragment
+                    dataHandler.activeFragment as WashingHandsFragment
                 if (washingHandsFragment.pager.currentItem != 0)
                     washingHandsFragment.pager.currentItem--
                 else {
                     menu.selectedItemId = R.id.diseases
-                    onNavigationItemSelected(menu.menu.findItem(R.id.diseases))
+                    onItemSelected(R.id.diseases)
                 }
+            }
+            else -> {
+                menu.selectedItemId = R.id.diseases
+                onItemSelected(R.id.diseases)
             }
         }
     }
@@ -210,28 +228,31 @@ class MainActivity : ActionBarBase(),
         }
     }
 
-    private fun initFragmentView() {
+    /*private fun initFragmentView() {
         with(supportFragmentManager.beginTransaction()) {
             for (id in IDS) {
                 activityViewModel.loadFragment(id).also {
-                    if (supportFragmentManager.findFragmentByTag(id.toString()) == null) {
-                        add(R.id.mainContent, it, id.toString())
-                        hide(it)
-                    }
+//                    if (supportFragmentManager.findFragmentByTag(id.toString()) == null) {
+                    add(R.id.mainContent, it)
+                    hide(it)
+//                    }
                 }
             }
             show(activityViewModel.activeFragment)
             commit()
         }
-    }
+    }*/
 
     private fun loadFragment(@IdRes id: Int) {
-        if (id == activityViewModel.activeFragmentId)
+        Timber.d("$id - ${dataHandler.activeFragmentId} | ${id == dataHandler.activeFragmentId}")
+        if (id == dataHandler.activeFragmentId)
             return
         with(supportFragmentManager.beginTransaction()) {
-            show(activityViewModel.loadFragment(id))
-            hide(activityViewModel.activeFragment)
-            activityViewModel.activeFragmentId = id
+            show(dataHandler[id])
+            Timber.d("Showing fragment: ${dataHandler[id]}")
+            hide(dataHandler.activeFragment)
+            Timber.d("Hiding fragment: ${dataHandler.activeFragment}")
+            dataHandler.activeFragmentId = id
             setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
             disallowAddToBackStack()
         }.commit()

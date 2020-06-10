@@ -58,7 +58,6 @@ class NewsFragment : BaseFragmentView() {
         lifecycleScope.launch {
             whenStarted {
                 loading.visibility = View.VISIBLE
-                launch { newsViewModel.populateData(language = UserProperties.language) }
                 newsViewModel.newsData.observe(viewLifecycleOwner, Observer {
                     if (::footerAdapter.isInitialized)
                         footerAdapter.clear()
@@ -115,6 +114,11 @@ class NewsFragment : BaseFragmentView() {
         }
         fastAdapter.addEventHooks(listOf(NewsClickHook(), ShareClickHook()))
         fastAdapter.withSavedInstanceState(savedInstanceState)
+        if (savedInstanceState == null) {
+            lifecycleScope.launch {
+                newsViewModel.populateData(language = UserProperties.language)
+            }
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
