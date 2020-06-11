@@ -16,12 +16,13 @@
  *
  * Created by Javinator9889 on 9/06/20 - Handwashing reminder.
  */
-package com.javinator9889.handwashingreminder.activities.views.data
+package com.javinator9889.handwashingreminder.data
 
 import android.content.Context
 import android.os.Bundle
 import android.util.SparseArray
 import android.view.MenuItem
+import android.view.View
 import androidx.annotation.IdRes
 import androidx.core.util.forEach
 import androidx.core.util.set
@@ -30,6 +31,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.javinator9889.handwashingreminder.R
+import com.javinator9889.handwashingreminder.activities.base.LayoutVisibilityChange
 import com.javinator9889.handwashingreminder.activities.views.fragments.diseases.DiseasesFragment
 import com.javinator9889.handwashingreminder.activities.views.fragments.news.NewsFragment
 import com.javinator9889.handwashingreminder.activities.views.fragments.settings.SettingsView
@@ -48,7 +50,8 @@ internal val IDS =
 
 
 class MainActivityDataHandler(@IdRes var activeFragmentId: Int = R.id.diseases) {
-    private val fragments = SparseArray<WeakReference<Fragment>>(4)
+    private val fragments =
+        SparseArray<WeakReference<Fragment>>(4)
     val activeFragment: Fragment
         get() = this[activeFragmentId]
 
@@ -116,11 +119,18 @@ class MainActivityDataHandler(@IdRes var activeFragmentId: Int = R.id.diseases) 
                 }
             }
             show(activeFragment)
+            onShow(activeFragmentId)
             commit()
         }
     }
 
     fun clear() = fragments.clear()
+
+    fun onShow(@IdRes id: Int) =
+        (this[id] as LayoutVisibilityChange).onVisibilityChanged(View.VISIBLE)
+
+    fun onHide(@IdRes id: Int) =
+        (this[id] as LayoutVisibilityChange).onVisibilityChanged(View.INVISIBLE)
 
     private fun createFragmentForId(@IdRes id: Int): Fragment {
         if (id !in IDS)

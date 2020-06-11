@@ -23,7 +23,7 @@ import kotlin.Comparator
 import kotlin.collections.ArrayList
 import kotlin.math.abs
 
-fun <T> Array<T>?.notEmpty(f: (it: Array<T>) -> Unit) {
+fun <T> Collection<T>?.notEmpty(f: (it: Collection<T>) -> Unit) {
     if (!this.isNullOrEmpty()) f(this)
 }
 

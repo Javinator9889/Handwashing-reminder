@@ -19,13 +19,9 @@
 package com.javinator9889.handwashingreminder.activities
 
 import android.os.Bundle
-import android.util.SparseArray
 import android.view.MenuItem
 import androidx.annotation.IdRes
 import androidx.core.content.edit
-import androidx.core.util.set
-import androidx.core.view.forEach
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenCreated
@@ -37,36 +33,25 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.support.ActionBarBase
-import com.javinator9889.handwashingreminder.activities.views.data.MainActivityDataHandler
 import com.javinator9889.handwashingreminder.activities.views.fragments.diseases.DiseasesFragment
-import com.javinator9889.handwashingreminder.activities.views.fragments.news.NewsFragment
-import com.javinator9889.handwashingreminder.activities.views.fragments.settings.SettingsView
 import com.javinator9889.handwashingreminder.activities.views.fragments.washinghands.WashingHandsFragment
 import com.javinator9889.handwashingreminder.custom.libraries.AppRate
+import com.javinator9889.handwashingreminder.data.MainActivityDataHandler
 import com.javinator9889.handwashingreminder.firebase.Auth
 import com.javinator9889.handwashingreminder.utils.Preferences
 import com.javinator9889.handwashingreminder.utils.isDebuggable
 import com.javinator9889.handwashingreminder.utils.notNull
-import com.mikepenz.iconics.IconicsDrawable
-import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
-import com.mikepenz.iconics.typeface.library.ionicons.Ionicons
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.how_to_wash_hands_layout.*
 import kotlinx.coroutines.*
 import timber.log.Timber
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig
-import java.lang.ref.WeakReference
+
 
 class MainActivity : ActionBarBase(),
     BottomNavigationView.OnNavigationItemSelectedListener {
     override val layoutId: Int = R.layout.activity_main
-    private val fragments: SparseArray<WeakReference<Fragment>> = SparseArray(4)
-
-    //    private var activeFragment by Delegates.notNull<@IdRes Int>()
-    /*private val activityViewModel by viewModels<MainActivityViewModel> {
-        SavedViewModelFactory(MainActivityViewModel.Factory, this)
-    }*/
     private val dataHandler = MainActivityDataHandler()
 
     init {
@@ -86,9 +71,6 @@ class MainActivity : ActionBarBase(),
                 with(FirebaseAnalytics.getInstance(this@MainActivity)) {
                     setCurrentScreen(this@MainActivity, "Main view", null)
                 }
-                /*withContext(Dispatchers.Main) {
-                    initFragmentView()
-                }*/
             }
         }
     }
@@ -106,19 +88,6 @@ class MainActivity : ActionBarBase(),
         dataHandler.clear()
         super.onDestroy()
     }
-
-    /*override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        savedInstanceState.notNull {
-            for (id in IDS) {
-                val fragment = supportFragmentManager.getFragment(
-                    savedInstanceState, id.toString()
-                ) ?: createFragmentForId(id)
-                fragments[id] = WeakReference(fragment)
-            }
-            activeFragment = savedInstanceState.getInt(ARG_CURRENT_ITEM)
-        }
-    }*/
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
@@ -138,29 +107,6 @@ class MainActivity : ActionBarBase(),
             Auth.logout()
         } finally {
             super.finish()
-        }
-    }
-
-    private suspend fun delegateMenuIcons(menu: BottomNavigationView) {
-        menu.menu.forEach { item ->
-            val icon = when (item.itemId) {
-                R.id.diseases ->
-                    IconicsDrawable(
-                        this, Ionicons.Icon.ion_ios_medkit
-                    )
-                R.id.news ->
-                    IconicsDrawable(
-                        this, GoogleMaterial.Icon.gmd_chrome_reader_mode
-                    )
-                R.id.settings ->
-                    IconicsDrawable(
-                        this, Ionicons.Icon.ion_android_settings
-                    )
-                else -> null
-            }
-            withContext(Dispatchers.Main) {
-                icon?.let { item.icon = it }
-            }
         }
     }
 
@@ -202,19 +148,7 @@ class MainActivity : ActionBarBase(),
         return onItemSelected(item.itemId)
     }
 
-    /*override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        fragments.forEach { id, reference ->
-            reference.get()?.let {
-                supportFragmentManager.putFragment(
-                    outState, id.toString(), it
-                )
-            }
-        }
-        outState.putInt(ARG_CURRENT_ITEM, activeFragment)
-    }*/
-
-    protected fun onItemSelected(@IdRes id: Int): Boolean {
+    private fun onItemSelected(@IdRes id: Int): Boolean {
         return try {
             loadFragment(id)
             if (id == R.id.handwashing)
@@ -228,29 +162,16 @@ class MainActivity : ActionBarBase(),
         }
     }
 
-    /*private fun initFragmentView() {
-        with(supportFragmentManager.beginTransaction()) {
-            for (id in IDS) {
-                activityViewModel.loadFragment(id).also {
-//                    if (supportFragmentManager.findFragmentByTag(id.toString()) == null) {
-                    add(R.id.mainContent, it)
-                    hide(it)
-//                    }
-                }
-            }
-            show(activityViewModel.activeFragment)
-            commit()
-        }
-    }*/
-
     private fun loadFragment(@IdRes id: Int) {
         Timber.d("$id - ${dataHandler.activeFragmentId} | ${id == dataHandler.activeFragmentId}")
         if (id == dataHandler.activeFragmentId)
             return
         with(supportFragmentManager.beginTransaction()) {
             show(dataHandler[id])
+            dataHandler.onShow(id)
             Timber.d("Showing fragment: ${dataHandler[id]}")
             hide(dataHandler.activeFragment)
+            dataHandler.onHide(id)
             Timber.d("Hiding fragment: ${dataHandler.activeFragment}")
             dataHandler.activeFragmentId = id
             setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
@@ -321,17 +242,5 @@ class MainActivity : ActionBarBase(),
                 init()
             }
         }
-    }
-
-    private fun createFragmentForId(@IdRes id: Int): Fragment {
-        val fragment = when (id) {
-            R.id.diseases -> DiseasesFragment()
-            R.id.handwashing -> WashingHandsFragment()
-            R.id.news -> NewsFragment()
-            R.id.settings -> SettingsView()
-            else -> Fragment()  // this should never happen
-        }
-        fragments[id] = WeakReference(fragment)
-        return fragment
     }
 }

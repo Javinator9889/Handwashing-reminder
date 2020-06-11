@@ -33,11 +33,9 @@ import okhttp3.Headers
 import timber.log.Timber
 import java.io.Reader
 
-internal const val ARG_NEWS_DATA = "args:newsmodel:data"
 
 class NewsViewModel : ViewModel() {
     val newsData: MutableLiveData<NewsData> = MutableLiveData()
-//    val activeItems = mutableSetOf<String>()
 
     suspend fun populateData(
         from: Int = 0,

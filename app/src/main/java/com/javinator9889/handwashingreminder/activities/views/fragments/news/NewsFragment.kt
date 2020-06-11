@@ -33,6 +33,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.BaseFragmentView
+import com.javinator9889.handwashingreminder.activities.base.LayoutVisibilityChange
 import com.javinator9889.handwashingreminder.activities.views.fragments.news.adapter.News
 import com.javinator9889.handwashingreminder.activities.views.viewmodels.NewsViewModel
 import com.javinator9889.handwashingreminder.data.UserProperties
@@ -48,7 +49,7 @@ import kotlinx.android.synthetic.main.loading_recycler_view.view.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class NewsFragment : BaseFragmentView() {
+class NewsFragment : BaseFragmentView(), LayoutVisibilityChange {
     @LayoutRes
     override val layoutId: Int = R.layout.loading_recycler_view
     private lateinit var fastAdapter: FastAdapter<GenericItem>
@@ -160,6 +161,10 @@ class NewsFragment : BaseFragmentView() {
                 }
             }
         }
+    }
+
+    override fun onVisibilityChanged(visibility: Int) {
+        TODO("Not yet implemented")
     }
 
     private inner class ShareClickHook : ClickEventHook<News>() {

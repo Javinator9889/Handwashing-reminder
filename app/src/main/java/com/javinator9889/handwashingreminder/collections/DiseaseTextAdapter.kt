@@ -27,7 +27,7 @@ import com.javinator9889.handwashingreminder.activities.views.fragments.diseases
 import com.javinator9889.handwashingreminder.activities.views.fragments.diseases.ARG_POSITION
 import com.javinator9889.handwashingreminder.activities.views.fragments.diseases.DiseaseDescriptionFragment
 import com.javinator9889.handwashingreminder.activities.views.fragments.diseases.DiseaseExtraInformationFragment
-import com.javinator9889.handwashingreminder.activities.views.viewmodels.ParsedHTMLText
+import com.javinator9889.handwashingreminder.data.ParsedHTMLText
 
 class DiseaseTextAdapter(
     fm: FragmentActivity,

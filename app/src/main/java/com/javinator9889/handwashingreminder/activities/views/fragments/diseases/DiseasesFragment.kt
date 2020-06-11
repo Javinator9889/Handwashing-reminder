@@ -30,12 +30,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.BaseFragmentView
+import com.javinator9889.handwashingreminder.activities.base.LayoutVisibilityChange
 import com.javinator9889.handwashingreminder.activities.views.fragments.diseases.adapter.Ads
 import com.javinator9889.handwashingreminder.activities.views.fragments.diseases.adapter.Disease
-import com.javinator9889.handwashingreminder.activities.views.viewmodels.DiseaseInformationFactory
 import com.javinator9889.handwashingreminder.activities.views.viewmodels.DiseaseInformationViewModel
-import com.javinator9889.handwashingreminder.activities.views.viewmodels.ParsedHTMLText
 import com.javinator9889.handwashingreminder.activities.views.viewmodels.SavedViewModelFactory
+import com.javinator9889.handwashingreminder.data.ParsedHTMLText
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.GenericItem
 import com.mikepenz.fastadapter.adapters.ItemAdapter
@@ -45,16 +45,16 @@ import kotlinx.android.synthetic.main.loading_recycler_view.view.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class DiseasesFragment : BaseFragmentView() {
+class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange {
     override val layoutId: Int = R.layout.loading_recycler_view
+
     private lateinit var parsedHTMLTexts: List<ParsedHTMLText>
     private lateinit var fastAdapter: FastAdapter<GenericItem>
     private val upperAdsAdapter: ItemAdapter<Ads> = ItemAdapter()
     private val lowerAdsAdapter: ItemAdapter<Ads> = ItemAdapter()
     private val diseasesAdapter: ItemAdapter<Disease> = ItemAdapter()
-    private val informationFactory = DiseaseInformationFactory()
     private val informationViewModel: DiseaseInformationViewModel by viewModels {
-        SavedViewModelFactory(informationFactory, this)
+        SavedViewModelFactory(DiseaseInformationViewModel.Factory, this)
     }
 
     init {
@@ -63,6 +63,8 @@ class DiseasesFragment : BaseFragmentView() {
                 loading.visibility = View.VISIBLE
                 informationViewModel.parsedHTMLText
                     .observe(viewLifecycleOwner, Observer {
+                        if (it.isEmpty())
+                            return@Observer
                         parsedHTMLTexts = it
                         upperAdsAdapter.add(Ads())
                         lowerAdsAdapter.add(Ads())
@@ -111,6 +113,11 @@ class DiseasesFragment : BaseFragmentView() {
         } finally {
             onDestroy()
         }
+    }
+
+    override fun onVisibilityChanged(visibility: Int) {
+        if (visibility == View.VISIBLE)
+            lifecycleScope.launchWhenCreated { informationViewModel.parseHtml() }
     }
 
     private inner class DiseaseClickEventHook : ClickEventHook<Disease>() {

@@ -23,8 +23,8 @@ import android.os.Bundle
 import com.google.android.material.tabs.TabLayoutMediator
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.support.ActionBarBase
-import com.javinator9889.handwashingreminder.activities.views.viewmodels.ParsedHTMLText
 import com.javinator9889.handwashingreminder.collections.DiseaseTextAdapter
+import com.javinator9889.handwashingreminder.data.ParsedHTMLText
 import kotlinx.android.synthetic.main.disease_view_expanded.*
 import kotlin.properties.Delegates
 

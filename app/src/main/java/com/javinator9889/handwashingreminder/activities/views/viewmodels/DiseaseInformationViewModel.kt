@@ -18,21 +18,19 @@
  */
 package com.javinator9889.handwashingreminder.activities.views.viewmodels
 
-import android.os.Parcel
-import android.os.Parcelable
 import android.text.Spanned
-import android.text.TextUtils
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
+import androidx.lifecycle.viewModelScope
 import com.beust.klaxon.Klaxon
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.javinator9889.handwashingreminder.collections.DiseasesInformation
 import com.javinator9889.handwashingreminder.collections.DiseasesList
-import com.javinator9889.handwashingreminder.collections.DiseasesListWrapper
+import com.javinator9889.handwashingreminder.data.ParsedHTMLText
 import com.javinator9889.handwashingreminder.utils.RemoteConfig.DISEASES_JSON
+import com.javinator9889.handwashingreminder.utils.notNull
 import kotlinx.coroutines.*
 import org.sufficientlysecure.htmltextview.HtmlFormatter
 import org.sufficientlysecure.htmltextview.HtmlFormatterBuilder
@@ -43,61 +41,68 @@ private const val PARSED_JSON_KEY = "text:json:parsed"
 class DiseaseInformationViewModel(
     private val state: SavedStateHandle
 ) : ViewModel() {
-    val parsedHTMLText: LiveData<List<ParsedHTMLText>> = liveData {
-        emitSource(state.getLiveData(DATA_KEY, parseHTML()))
+    private val informationList: DiseasesList = loadHtmlData()
+    val parsedHTMLText: MutableLiveData<List<ParsedHTMLText>> =
+        state.getLiveData(DATA_KEY, emptyList())
+
+    private fun loadHtmlData(): DiseasesList {
+        if (state.contains(PARSED_JSON_KEY) &&
+            state.get<List<DiseasesInformation>>(PARSED_JSON_KEY) != null
+        )
+            return DiseasesList(state.get(PARSED_JSON_KEY)!!)
+        val diseasesString = with(Firebase.remoteConfig) {
+            getString(DISEASES_JSON)
+        }
+        return Klaxon().parse<DiseasesList>(diseasesString)
+            ?: DiseasesList(emptyList())
     }
 
-    private suspend fun parseHTML(): List<ParsedHTMLText> {
-        val informationList = withContext(Dispatchers.IO) {
-            if (state.contains(PARSED_JSON_KEY) &&
-                state.get<List<DiseasesInformation>>(PARSED_JSON_KEY) != null
-            )
-                DiseasesList(
-                    state.get<List<DiseasesInformation>>(PARSED_JSON_KEY)!!
-                )
-            val diseasesString =
-                with(Firebase.remoteConfig) {
-                    getString(DISEASES_JSON)
-                }
-            Klaxon().parse<DiseasesList>(diseasesString)
-        } ?: return emptyList()
-        state.set(
-            PARSED_JSON_KEY,
-            DiseasesListWrapper(informationList.diseases)
-        )
-        return withContext(Dispatchers.Default) {
+    fun parseHtml() {
+        viewModelScope.launch {
+            if (!state.get<List<ParsedHTMLText>>(DATA_KEY).isNullOrEmpty())
+                return@launch
             val parsedItemsList =
                 ArrayList<ParsedHTMLText>(informationList.diseases.size)
-            val deferreds =
-                ArrayList<List<Deferred<Spanned>>>(informationList.diseases.size)
-            informationList.diseases.forEach { information ->
-                val htmlDef = listOf(
-                    async { createHTML(information.name) },
-                    async { createHTML(information.shortDescription) },
-                    async { createHTML(information.longDescription) },
-                    async { createHTML(information.provider) },
-                    async { createHTML(information.website) },
-                    async { createHTML(information.symptoms) },
-                    async { createHTML(information.prevention) }
-                )
-                deferreds.add(htmlDef)
-            }
-            deferreds.forEachIndexed { i, infoList ->
-                val data = infoList.awaitAll()
-                parsedItemsList.add(
-                    i, ParsedHTMLText(
-                        data[0],
-                        data[1],
-                        data[2],
-                        data[3],
-                        data[4],
-                        data[5],
-                        data[6]
+            val deferreds = mutableListOf<Collection<Deferred<Spanned>>>()
+            informationList.diseases.forEach { disease ->
+                deferreds.add(
+                    listOf(
+                        async { createHTML(disease.name) },
+                        async { createHTML(disease.shortDescription) },
+                        async { createHTML(disease.longDescription) },
+                        async { createHTML(disease.provider) },
+                        async { createHTML(disease.website) },
+                        async { createHTML(disease.symptoms) },
+                        async { createHTML(disease.prevention) }
                     )
                 )
             }
-            state.set(DATA_KEY, parsedItemsList)
-            parsedItemsList
+            deferreds.forEachIndexed { i, htmlData ->
+                launch {
+                    val data = htmlData.awaitAll()
+                    parsedItemsList.add(
+                        i, ParsedHTMLText(
+                            name = data[0],
+                            shortDescription = data[1],
+                            longDescription = data[2],
+                            provider = data[3],
+                            website = data[4],
+                            symptoms = data[5],
+                            prevention = data[6]
+                        )
+                    )
+                    withContext(Dispatchers.Main) {
+                        state[DATA_KEY] = parsedItemsList
+                    }
+                }.invokeOnCompletion {
+                    it.notNull {
+                        viewModelScope.launch(context = Dispatchers.Main) {
+                            state[DATA_KEY] = parsedItemsList
+                            parsedHTMLText.value = parsedItemsList
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -107,54 +112,10 @@ class DiseaseInformationViewModel(
             isRemoveTrailingWhiteSpace = true
             HtmlFormatter.formatHtml(this)
         }
-}
 
-class DiseaseInformationFactory :
-    ViewModelAssistedFactory<DiseaseInformationViewModel> {
-    override fun create(handle: SavedStateHandle) =
-        DiseaseInformationViewModel(handle)
-}
-
-data class ParsedHTMLText(
-    val name: CharSequence,
-    val shortDescription: CharSequence,
-    val longDescription: CharSequence,
-    val provider: CharSequence,
-    val website: CharSequence,
-    val symptoms: CharSequence,
-    val prevention: CharSequence
-) : Parcelable {
-    constructor(parcel: Parcel) : this(
-        TextUtils.CHAR_SEQUENCE_CREATOR.createFromParcel(parcel),
-        TextUtils.CHAR_SEQUENCE_CREATOR.createFromParcel(parcel),
-        TextUtils.CHAR_SEQUENCE_CREATOR.createFromParcel(parcel),
-        TextUtils.CHAR_SEQUENCE_CREATOR.createFromParcel(parcel),
-        TextUtils.CHAR_SEQUENCE_CREATOR.createFromParcel(parcel),
-        TextUtils.CHAR_SEQUENCE_CREATOR.createFromParcel(parcel),
-        TextUtils.CHAR_SEQUENCE_CREATOR.createFromParcel(parcel)
-    )
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        TextUtils.writeToParcel(name, parcel, flags)
-        TextUtils.writeToParcel(shortDescription, parcel, flags)
-        TextUtils.writeToParcel(longDescription, parcel, flags)
-        TextUtils.writeToParcel(provider, parcel, flags)
-        TextUtils.writeToParcel(website, parcel, flags)
-        TextUtils.writeToParcel(symptoms, parcel, flags)
-        TextUtils.writeToParcel(prevention, parcel, flags)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<ParsedHTMLText> {
-        override fun createFromParcel(parcel: Parcel): ParsedHTMLText {
-            return ParsedHTMLText(parcel)
-        }
-
-        override fun newArray(size: Int): Array<ParsedHTMLText?> {
-            return arrayOfNulls(size)
-        }
+    companion object Factory :
+        ViewModelAssistedFactory<DiseaseInformationViewModel> {
+        override fun create(handle: SavedStateHandle) =
+            DiseaseInformationViewModel(handle)
     }
 }

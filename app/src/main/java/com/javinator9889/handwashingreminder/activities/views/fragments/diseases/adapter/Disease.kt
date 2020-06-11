@@ -24,7 +24,7 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.RawRes
 import com.google.android.material.card.MaterialCardView
 import com.javinator9889.handwashingreminder.R
-import com.javinator9889.handwashingreminder.activities.views.viewmodels.ParsedHTMLText
+import com.javinator9889.handwashingreminder.data.ParsedHTMLText
 import com.javinator9889.handwashingreminder.graphics.LottieAdaptedPerformanceAnimationView
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem

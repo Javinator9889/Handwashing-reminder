@@ -27,6 +27,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.BaseFragmentView
+import com.javinator9889.handwashingreminder.activities.base.LayoutVisibilityChange
 import kotlinx.android.synthetic.main.how_to_wash_hands_layout.view.*
 import kotlinx.android.synthetic.main.privacy_terms.*
 import timber.log.Timber
@@ -34,7 +35,7 @@ import java.lang.ref.WeakReference
 
 internal const val NUM_PAGES = 8
 
-class WashingHandsFragment : BaseFragmentView() {
+class WashingHandsFragment : BaseFragmentView(), LayoutVisibilityChange {
     override val layoutId: Int = R.layout.how_to_wash_hands_layout
     private val items = arrayOfNulls<WeakReference<Fragment>>(NUM_PAGES)
 
@@ -90,5 +91,9 @@ class WashingHandsFragment : BaseFragmentView() {
                 return this
             }
         }
+    }
+
+    override fun onVisibilityChanged(visibility: Int) {
+        TODO("Not yet implemented")
     }
 }
