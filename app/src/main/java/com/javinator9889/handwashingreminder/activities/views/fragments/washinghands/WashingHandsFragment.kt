@@ -93,7 +93,5 @@ class WashingHandsFragment : BaseFragmentView(), LayoutVisibilityChange {
         }
     }
 
-    override fun onVisibilityChanged(visibility: Int) {
-        TODO("Not yet implemented")
-    }
+    override fun onVisibilityChanged(visibility: Int) {}
 }

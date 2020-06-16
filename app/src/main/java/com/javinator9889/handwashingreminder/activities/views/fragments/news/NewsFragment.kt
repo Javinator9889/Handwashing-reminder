@@ -54,6 +54,7 @@ class NewsFragment : BaseFragmentView(), LayoutVisibilityChange {
     override val layoutId: Int = R.layout.loading_recycler_view
     private lateinit var fastAdapter: FastAdapter<GenericItem>
     private lateinit var footerAdapter: GenericItemAdapter
+    private var viewCreated = false
     private val newsAdapter = ItemAdapter<News>()
     private val newsViewModel: NewsViewModel by viewModels()
     private val activeItems = mutableSetOf<String>()
@@ -118,11 +119,7 @@ class NewsFragment : BaseFragmentView(), LayoutVisibilityChange {
         }
         fastAdapter.addEventHooks(listOf(NewsClickHook(), ShareClickHook()))
         fastAdapter.withSavedInstanceState(savedInstanceState)
-        if (savedInstanceState == null) {
-            lifecycleScope.launch {
-                newsViewModel.populateData(language = UserProperties.language)
-            }
-        }
+        viewCreated = savedInstanceState == null
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -164,7 +161,12 @@ class NewsFragment : BaseFragmentView(), LayoutVisibilityChange {
     }
 
     override fun onVisibilityChanged(visibility: Int) {
-        TODO("Not yet implemented")
+        if (visibility == View.VISIBLE && viewCreated) {
+            lifecycleScope.launch {
+                newsViewModel.populateData(language = UserProperties.language)
+            }
+            viewCreated = false
+        }
     }
 
     private inner class ShareClickHook : ClickEventHook<News>() {
