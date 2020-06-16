@@ -145,7 +145,7 @@ class SettingsLoader(
                 ).let { deferreds.add(it) }
                 setupPreferenceAsync(
                     Preferences.PERFORMANCE_ENABLED,
-                    Ionicons.Icon.ion_ios_speedometer,
+                    Ionicons.Icon.ion_ios_speedometer_outline,
                     onChangeListener = this@with,
                     onInitialized = { it, _ ->
                         firebasePerformancePreference = WeakReference(it)

@@ -21,12 +21,11 @@ package com.javinator9889.handwashingreminder.activities
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.annotation.IdRes
-import androidx.core.content.edit
 import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenCreated
 import androidx.lifecycle.whenStarted
-import androidx.preference.PreferenceManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.ktx.Firebase
@@ -38,51 +37,70 @@ import com.javinator9889.handwashingreminder.activities.views.fragments.washingh
 import com.javinator9889.handwashingreminder.custom.libraries.AppRate
 import com.javinator9889.handwashingreminder.data.MainActivityDataHandler
 import com.javinator9889.handwashingreminder.firebase.Auth
-import com.javinator9889.handwashingreminder.utils.Preferences
-import com.javinator9889.handwashingreminder.utils.isDebuggable
-import com.javinator9889.handwashingreminder.utils.notNull
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.how_to_wash_hands_layout.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence
-import uk.co.deanwild.materialshowcaseview.ShowcaseConfig
 
 
 class MainActivity : ActionBarBase(),
     BottomNavigationView.OnNavigationItemSelectedListener {
     override val layoutId: Int = R.layout.activity_main
     private val dataHandler = MainActivityDataHandler()
+    private lateinit var deferredRating: Deferred<AppRate>
+    private lateinit var deferredShowcase: Deferred<MaterialShowcaseSequence?>
 
     init {
         lifecycleScope.launch {
             whenCreated {
-                val deferreds = mutableSetOf<Deferred<Any>>()
                 with(Firebase.remoteConfig) { fetchAndActivate() }
-                deferreds.add(async {
-                    dataHandler.setMenuIcons(menu, this@MainActivity)
-                })
+                launch { dataHandler.setMenuIcons(menu, this@MainActivity) }
                 menu.setOnNavigationItemSelectedListener(this@MainActivity)
-                deferreds.add(async { loadTutorial() })
-                deferreds.add(async { suggestRating() })
-                deferreds.awaitAll()
+                deferredShowcase = dataHandler.asyncLoadShowcase(
+                    activity = this@MainActivity,
+                    lifecycleOwner = this@MainActivity
+                )
+                deferredRating = dataHandler.asyncSuggestRating(
+                    activity = this@MainActivity,
+                    lifecycleOwner = this@MainActivity
+                )
             }
             whenStarted {
                 with(FirebaseAnalytics.getInstance(this@MainActivity)) {
                     setCurrentScreen(this@MainActivity, "Main view", null)
                 }
+                deferredShowcase.await()?.let {
+                    withContext(Dispatchers.Main) {
+                        it.start()
+                    }
+                }
+                deferredRating.await().run {
+                    withContext(Dispatchers.Main) {
+                        init()
+                    }
+                }
             }
         }
     }
 
-    override fun onPostCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (savedInstanceState == null)
+            dataHandler.loadFragmentView(supportFragmentManager)
+    }
+
+    /*override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         savedInstanceState.notNull {
             Timber.d("Activity recreated")
         }
         if (savedInstanceState == null)
             dataHandler.loadFragmentView(supportFragmentManager)
-    }
+    }*/
 
     override fun onDestroy() {
         dataHandler.clear()
@@ -166,7 +184,7 @@ class MainActivity : ActionBarBase(),
         Timber.d("$id - ${dataHandler.activeFragmentId} | ${id == dataHandler.activeFragmentId}")
         if (id == dataHandler.activeFragmentId)
             return
-        with(supportFragmentManager.beginTransaction()) {
+        supportFragmentManager.commit {
             show(dataHandler[id])
             dataHandler.onShow(id)
             Timber.d("Showing fragment: ${dataHandler[id]}")
@@ -176,71 +194,6 @@ class MainActivity : ActionBarBase(),
             dataHandler.activeFragmentId = id
             setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
             disallowAddToBackStack()
-        }.commit()
-    }
-
-    private suspend fun loadTutorial() {
-        val preferences =
-            with(PreferenceManager.getDefaultSharedPreferences(this)) {
-                if (getBoolean(Preferences.INITIAL_TUTORIAL_DONE, false))
-                    return
-                else this
-            }
-        val config = ShowcaseConfig()
-        config.delay = 500L
-        with(MaterialShowcaseSequence(this)) {
-            setConfig(config)
-            val dismissText = getString(R.string.got_it)
-            val diseasesText = getString(R.string.diseases_intro)
-            val handwashingText = getString(R.string.handwashing_intro)
-            val newsText = getString(R.string.news_intro)
-            val settingsText = getString(R.string.settings_intro)
-            addSequenceItem(
-                findViewById(R.id.diseases),
-                diseasesText,
-                dismissText
-            )
-            addSequenceItem(
-                findViewById(R.id.handwashing),
-                handwashingText,
-                dismissText
-            )
-            addSequenceItem(
-                findViewById(R.id.news),
-                newsText,
-                dismissText
-            )
-            addSequenceItem(
-                findViewById(R.id.settings),
-                settingsText,
-                dismissText
-            )
-            var itemCount = 0
-            setOnItemDismissedListener { _, _ ->
-                if (itemCount++ == 3)
-                    preferences.edit {
-                        putBoolean(Preferences.INITIAL_TUTORIAL_DONE, true)
-                    }
-            }
-            withContext(Dispatchers.Main) {
-                start()
-            }
-        }
-    }
-
-    private suspend fun suggestRating() {
-        withContext(Dispatchers.Main) {
-            with(AppRate(this@MainActivity)) {
-                if (!isDebuggable()) {
-                    setMinDaysUntilPrompt(2L)
-                    setMinLaunchesUntilPrompt(5)
-                }
-                dialogTitle = R.string.rate_text_title
-                dialogMessage = R.string.rate_app_message
-                positiveButtonText = R.string.rate_text
-                negativeButtonText = R.string.rate_do_not_show
-                init()
-            }
         }
     }
 }

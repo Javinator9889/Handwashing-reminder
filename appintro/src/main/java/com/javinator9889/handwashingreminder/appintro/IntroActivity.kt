@@ -19,6 +19,7 @@
 package com.javinator9889.handwashingreminder.appintro
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
@@ -30,6 +31,7 @@ import androidx.annotation.Keep
 import androidx.core.content.edit
 import androidx.core.util.set
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import com.github.paolorotolo.appintro.AppIntro2
 import com.github.paolorotolo.appintro.AppIntroViewPager
@@ -52,6 +54,7 @@ import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.jobs.alarms.AlarmHandler
 import com.javinator9889.handwashingreminder.utils.*
 import kotlinx.android.synthetic.main.animated_intro.*
+import kotlinx.coroutines.*
 import timber.log.Timber
 import com.javinator9889.handwashingreminder.appintro.R as RIntro
 
@@ -72,6 +75,7 @@ class IntroActivity : AppIntro2(),
         SplitCompat.installActivity(this)
     }
 
+    @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -164,87 +168,111 @@ class IntroActivity : AppIntro2(),
         }
     }
 
+    @SuppressLint("MissingPermission")
     override fun onDonePressed(currentFragment: Fragment?) {
         super.onDonePressed(currentFragment)
-        val app = HandwashingApplication.instance
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-        sharedPreferences.edit(commit = true) {
-            timeConfigSlide.itemAdapter.adapterItems.forEach { item ->
-                val time = "${item.hours}:${item.minutes}"
-                when (item.id) {
-                    TimeConfig.BREAKFAST_ID ->
-                        putString(Preferences.BREAKFAST_TIME, time)
-                    TimeConfig.LUNCH_ID ->
-                        putString(Preferences.LUNCH_TIME, time)
-                    TimeConfig.DINNER_ID ->
-                        putString(Preferences.DINNER_TIME, time)
+        lifecycleScope.launch {
+            val deferreds = mutableSetOf<Deferred<Any>>()
+            val app = HandwashingApplication.instance
+            val sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(this@IntroActivity)
+            sharedPreferences.edit {
+                timeConfigSlide.itemAdapter.adapterItems.forEach { item ->
+                        val time = "${item.hours}:${item.minutes}"
+                        when (item.id) {
+                            TimeConfig.BREAKFAST_ID ->
+                                putString(Preferences.BREAKFAST_TIME, time)
+                            TimeConfig.LUNCH_ID ->
+                                putString(Preferences.LUNCH_TIME, time)
+                            TimeConfig.DINNER_ID ->
+                                putString(Preferences.DINNER_TIME, time)
+                        }
+                    }
+                putBoolean(
+                    Preferences.ANALYTICS_ENABLED,
+                    policySlide.firebaseAnalytics.isChecked
+                )
+                putBoolean(
+                    Preferences.PERFORMANCE_ENABLED,
+                    policySlide.firebasePerformance.isChecked
+                )
+                putBoolean(
+                    Preferences.ADS_ENABLED,
+                    sharedPreferences.getBoolean(Preferences.ADS_ENABLED, true)
+                )
+                if (!isAtLeast(AndroidVersion.Q))
+                    activityRecognitionPermissionGranted = true
+                putBoolean(
+                    Preferences.ACTIVITY_TRACKING_ENABLED,
+                    activityRecognitionPermissionGranted
+                )
+                if (activityRecognitionPermissionGranted) {
+                    putStringSet(
+                        Preferences.ACTIVITIES_ENABLED,
+                        Preferences.DEFAULT_ACTIVITY_SET
+                    )
                 }
+                putBoolean(Preferences.APP_INIT_KEY, true)
             }
-            putBoolean(
-                Preferences.ANALYTICS_ENABLED,
-                policySlide.firebaseAnalytics.isChecked
-            )
-            putBoolean(
-                Preferences.PERFORMANCE_ENABLED,
-                policySlide.firebasePerformance.isChecked
-            )
-            putBoolean(
-                Preferences.ADS_ENABLED,
-                sharedPreferences.getBoolean(Preferences.ADS_ENABLED, true)
-            )
-            if (!isAtLeast(AndroidVersion.Q))
-                activityRecognitionPermissionGranted = true
-            putBoolean(
-                Preferences.ACTIVITY_TRACKING_ENABLED,
-                activityRecognitionPermissionGranted
-            )
-            if (activityRecognitionPermissionGranted) {
-                putStringSet(
-                    Preferences.ACTIVITIES_ENABLED,
-                    Preferences.DEFAULT_ACTIVITY_SET
+            val splitInstallManager =
+                SplitInstallManagerFactory.create(this@IntroActivity)
+            splitInstallManager.deferredUninstall(listOf(AppIntro.MODULE_NAME))
+            async {
+                if (activityRecognitionPermissionGranted)
+                    app.activityHandler.startTrackingActivity()
+                else
+                    app.activityHandler.disableActivityTracker()
+                with(AlarmHandler(this@IntroActivity)) {
+                    scheduleAllAlarms()
+                }
+                Timber.d("Finished starting activity recognition and scheduling alarms")
+            }.also { deferreds.add(it) }
+            async(context = Dispatchers.IO) {
+                cacheDir.run { deleteRecursively() }
+                Timber.d("Finished cleaning cache")
+            }.also { deferreds.add(it) }
+            val firebaseAnalytics =
+                FirebaseAnalytics.getInstance(this@IntroActivity)
+            with(Bundle(2)) {
+                putBoolean(
+                    "analytics_enabled",
+                    policySlide.firebaseAnalytics.isChecked
+                )
+                putBoolean(
+                    "performance_enabled",
+                    policySlide.firebasePerformance.isChecked
+                )
+                firebaseAnalytics.logEvent(
+                    FirebaseAnalytics.Event.SELECT_ITEM,
+                    this
                 )
             }
-            putBoolean(Preferences.APP_INIT_KEY, true)
-        }
-        val splitInstallManager = SplitInstallManagerFactory.create(this)
-        splitInstallManager.deferredUninstall(listOf(AppIntro.MODULE_NAME))
-        if (activityRecognitionPermissionGranted)
-            app.activityHandler.startTrackingActivity()
-        else
-            app.activityHandler.disableActivityTracker()
-        with(AlarmHandler(this)) {
-            scheduleAllAlarms()
-        }
-        cacheDir.run { deleteRecursively() }
-        val firebaseAnalytics = FirebaseAnalytics.getInstance(this)
-        with(Bundle(2)) {
-            putBoolean(
-                "analytics_enabled",
-                policySlide.firebaseAnalytics.isChecked
-            )
-            putBoolean(
-                "performance_enabled",
-                policySlide.firebasePerformance.isChecked
-            )
-            firebaseAnalytics.logEvent(
-                FirebaseAnalytics.Event.SELECT_ITEM,
-                this
-            )
-        }
-        firebaseAnalytics.logEvent(
-            FirebaseAnalytics.Event.TUTORIAL_COMPLETE, null
-        )
-        if (!policySlide.firebaseAnalytics.isChecked) {
-            firebaseAnalytics.setCurrentScreen(this, null, null)
-            firebaseAnalytics.setAnalyticsCollectionEnabled(false)
-        }
-        with(FirebasePerformance.getInstance()) {
-            isPerformanceCollectionEnabled =
-                policySlide.firebasePerformance.isChecked
+            async(context = Dispatchers.IO) {
+                firebaseAnalytics.logEvent(
+                    FirebaseAnalytics.Event.TUTORIAL_COMPLETE, null
+                )
+                if (!policySlide.firebaseAnalytics.isChecked) {
+                    firebaseAnalytics.setCurrentScreen(
+                        this@IntroActivity,
+                        null,
+                        null
+                    )
+                    firebaseAnalytics.setAnalyticsCollectionEnabled(false)
+                }
+                with(FirebasePerformance.getInstance()) {
+                    isPerformanceCollectionEnabled =
+                        policySlide.firebasePerformance.isChecked
+                }
+                Timber.d("Finished setting-up Firebase")
+            }.also { deferreds.add(it) }
+            deferreds.awaitAll()
+            Timber.d("All async processes finished - finishing Intro")
+            this@IntroActivity.finish()
+            Timber.d("Intro finished!")
         }
         val intent = Intent(this, MainActivity::class.java)
+        Timber.d("Starting MainActivity")
         startActivity(intent)
-        this.finish()
     }
 
     override fun onActivityResult(
@@ -260,7 +288,7 @@ class IntroActivity : AppIntro2(),
             val position = data.getIntExtra("position", 0)
             val hours = data.getStringExtra("hours")
             val minutes = data.getStringExtra("minutes")
-            val titleText = when(id) {
+            val titleText = when (id) {
                 TimeConfig.BREAKFAST_ID -> getString(RIntro.string.breakfast)
                 TimeConfig.LUNCH_ID -> getString(RIntro.string.lunch)
                 TimeConfig.DINNER_ID -> getString(RIntro.string.dinner)
@@ -371,10 +399,9 @@ class IntroActivity : AppIntro2(),
 
     override fun onClick(v: View?) {
         when (v) {
-            nextButton -> {
+            nextButton ->
                 if (onCanRequestNextPage())
                     changeSlide()
-            }
         }
     }
 

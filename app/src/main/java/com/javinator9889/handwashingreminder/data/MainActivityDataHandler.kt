@@ -18,17 +18,23 @@
  */
 package com.javinator9889.handwashingreminder.data
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.util.SparseArray
 import android.view.MenuItem
 import android.view.View
 import androidx.annotation.IdRes
+import androidx.core.content.edit
 import androidx.core.util.forEach
 import androidx.core.util.set
 import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.commit
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import androidx.preference.PreferenceManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.LayoutVisibilityChange
@@ -36,12 +42,19 @@ import com.javinator9889.handwashingreminder.activities.views.fragments.diseases
 import com.javinator9889.handwashingreminder.activities.views.fragments.news.NewsFragment
 import com.javinator9889.handwashingreminder.activities.views.fragments.settings.SettingsView
 import com.javinator9889.handwashingreminder.activities.views.fragments.washinghands.WashingHandsFragment
+import com.javinator9889.handwashingreminder.custom.libraries.AppRate
+import com.javinator9889.handwashingreminder.utils.Preferences
+import com.javinator9889.handwashingreminder.utils.isDebuggable
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
 import com.mikepenz.iconics.typeface.library.ionicons.Ionicons
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig
 import java.lang.ref.WeakReference
 
 internal const val ARG_CURRENT_ITEM = "bundle:args:current_item"
@@ -111,16 +124,12 @@ class MainActivityDataHandler(@IdRes var activeFragmentId: Int = R.id.diseases) 
     }
 
     fun loadFragmentView(fragmentManager: FragmentManager) {
-        with(fragmentManager.beginTransaction()) {
+        fragmentManager.commit {
             IDS.forEach { id ->
-                get(id).also {
-                    add(R.id.mainContent, it)
-                    hide(it)
-                }
+                get(id).also { add(R.id.mainContent, it); hide(it) }
             }
             show(activeFragment)
             onShow(activeFragmentId)
-            commit()
         }
     }
 
@@ -131,6 +140,76 @@ class MainActivityDataHandler(@IdRes var activeFragmentId: Int = R.id.diseases) 
 
     fun onHide(@IdRes id: Int) =
         (this[id] as LayoutVisibilityChange).onVisibilityChanged(View.INVISIBLE)
+
+    fun asyncLoadShowcase(
+        activity: Activity,
+        lifecycleOwner: LifecycleOwner
+    ): Deferred<MaterialShowcaseSequence?> =
+        lifecycleOwner.lifecycleScope.async {
+            val preferences =
+                with(PreferenceManager.getDefaultSharedPreferences(activity)) {
+                    if (getBoolean(Preferences.INITIAL_TUTORIAL_DONE, false))
+                        return@async null
+                    else this
+                }
+
+            val config = ShowcaseConfig()
+            config.delay = 500L
+            with(MaterialShowcaseSequence(activity)) {
+                setConfig(config)
+                val dismissText = activity.getString(R.string.got_it)
+                val diseasesText = activity.getString(R.string.diseases_intro)
+                val handwashingText =
+                    activity.getString(R.string.handwashing_intro)
+                val newsText = activity.getString(R.string.news_intro)
+                val settingsText = activity.getString(R.string.settings_intro)
+                addSequenceItem(
+                    activity.findViewById(R.id.diseases),
+                    diseasesText,
+                    dismissText
+                )
+                addSequenceItem(
+                    activity.findViewById(R.id.handwashing),
+                    handwashingText,
+                    dismissText
+                )
+                addSequenceItem(
+                    activity.findViewById(R.id.news),
+                    newsText,
+                    dismissText
+                )
+                addSequenceItem(
+                    activity.findViewById(R.id.settings),
+                    settingsText,
+                    dismissText
+                )
+                var itemCount = 0
+                setOnItemDismissedListener { _, _ ->
+                    if (itemCount++ == 3)
+                        preferences.edit {
+                            putBoolean(Preferences.INITIAL_TUTORIAL_DONE, true)
+                        }
+                }
+                this
+            }
+        }
+
+    fun asyncSuggestRating(
+        activity: Activity,
+        lifecycleOwner: LifecycleOwner
+    ): Deferred<AppRate> = lifecycleOwner.lifecycleScope.async {
+        with(AppRate(activity)) {
+            if (!isDebuggable()) {
+                setMinDaysUntilPrompt(2L)
+                setMinLaunchesUntilPrompt(5)
+            }
+            dialogTitle = R.string.rate_text_title
+            dialogMessage = R.string.rate_app_message
+            positiveButtonText = R.string.rate_text
+            negativeButtonText = R.string.rate_do_not_show
+            this
+        }
+    }
 
     private fun createFragmentForId(@IdRes id: Int): Fragment {
         if (id !in IDS)

@@ -42,7 +42,7 @@ android {
         applicationId "com.javinator9889.handwashingreminder"
         minSdkVersion 17
         targetSdkVersion 29
-        versionCode 122
+        versionCode 125
         versionName "1.2.0-${gitCommitHash}"
         multiDexEnabled true
         resConfigs "en", "es"
@@ -167,7 +167,7 @@ dependencies {
     // https://developer.android.com/kotlin/ktx#viewmodel
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
     // https://developer.android.com/kotlin/ktx#fragment
-    implementation 'androidx.fragment:fragment-ktx:1.2.4'
+    implementation 'androidx.fragment:fragment-ktx:1.2.5'
     // https://developer.android.com/kotlin/ktx#livedata
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
     // https://github.com/JakeWharton/timber
@@ -183,8 +183,8 @@ dependencies {
     // https://github.com/afollestad/material-dialogs/
     implementation 'com.afollestad.material-dialogs:core:3.3.0'
     // https://developer.android.com/google/play/billing/billing_library_overview
-    implementation 'com.android.billingclient:billing:2.2.1'
-    implementation 'com.android.billingclient:billing-ktx:2.2.1'
+    implementation 'com.android.billingclient:billing:3.0.0'
+    implementation 'com.android.billingclient:billing-ktx:3.0.0'
     // https://github.com/cbeust/klaxon
     implementation 'com.beust:klaxon:5.2'
     // https://github.com/SufficientlySecure/html-textview
