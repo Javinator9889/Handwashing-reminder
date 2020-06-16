@@ -32,6 +32,7 @@ import com.google.firebase.perf.FirebasePerformance
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.LayoutVisibilityChange
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
+import com.javinator9889.handwashingreminder.data.SettingsLoader
 import com.javinator9889.handwashingreminder.gms.ads.AdsEnabler
 import com.javinator9889.handwashingreminder.gms.splitservice.SplitInstallService
 import com.javinator9889.handwashingreminder.gms.vendor.BillingService
@@ -52,6 +53,7 @@ class SettingsView : PreferenceFragmentCompat(),
     lateinit var donationsPreference: WeakReference<ListPreference>
     private lateinit var emojiCompat: EmojiCompat
     lateinit var billingService: BillingService
+    private val loader = SettingsLoader(view = this, lifecycleOwner =  this)
     private val app = HandwashingApplication.instance
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,7 +71,6 @@ class SettingsView : PreferenceFragmentCompat(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         billingService = BillingService(view.context)
-//        viewLifecycleOwner.lifecycleScope.launch {
     }
 
     override fun onPreferenceChange(
@@ -219,6 +220,7 @@ class SettingsView : PreferenceFragmentCompat(),
     }
 
     override fun onVisibilityChanged(visibility: Int) {
-        TODO("Not yet implemented")
+        if (visibility == View.VISIBLE)
+            loader.loadViews()
     }
 }

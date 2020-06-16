@@ -99,6 +99,9 @@ fun getDeviceInfo(): String = with(StringBuilder()) {
     toString()
 }
 
+fun getDeviceInfoHTML(): String =
+    getDeviceInfo().replace(Regex("(\r\n|\n)"), "<br />")
+
 fun getUriFromRes(context: Context, @AnyRes resId: Int): Uri =
     with(context.resources) {
         Uri.Builder()
