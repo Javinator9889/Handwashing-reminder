@@ -36,12 +36,15 @@ import timber.log.Timber
 
 
 class HandwashingApplication : BaseApplication() {
+    private val scope = CoroutineScope(Dispatchers.Default)
     var adLoader: AdLoader? = null
     lateinit var activityHandler: ActivityHandler
     lateinit var firebaseInitDeferred: Deferred<Unit>
 
     companion object {
         lateinit var instance: HandwashingApplication
+        val scope: CoroutineScope
+            get() = instance.scope
     }
 
     override fun attachBaseContext(base: Context?) {
@@ -61,7 +64,7 @@ class HandwashingApplication : BaseApplication() {
     }
 
     private fun initFirebaseAppAsync(): Deferred<Unit> {
-        return GlobalScope.async {
+        return scope.async {
             withContext(Dispatchers.IO) {
                 FirebaseApp.initializeApp(this@HandwashingApplication)
                 if (isDebuggable()) {

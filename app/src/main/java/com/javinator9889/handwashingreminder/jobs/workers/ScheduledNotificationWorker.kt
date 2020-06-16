@@ -43,7 +43,7 @@ abstract class ScheduledNotificationWorker(context: Context) {
     suspend fun doWork() = coroutineScope {
         try {
             val startTime = System.currentTimeMillis()
-            val emojiLoader = EmojiLoader.get(context)
+            val emojiLoader = EmojiLoader.loadAsync(context)
             val notificationsHandler = NotificationsHandler(
                 context = context,
                 channelId = TIME_CHANNEL_ID,

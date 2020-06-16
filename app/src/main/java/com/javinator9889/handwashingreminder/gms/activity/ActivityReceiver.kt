@@ -31,7 +31,7 @@ import com.javinator9889.handwashingreminder.emoji.EmojiLoader
 import com.javinator9889.handwashingreminder.notifications.NotificationsHandler
 import com.javinator9889.handwashingreminder.utils.ACTIVITY_CHANNEL_ID
 import com.javinator9889.handwashingreminder.utils.goAsync
-import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -41,7 +41,7 @@ class ActivityReceiver : BroadcastReceiver() {
      */
     override fun onReceive(context: Context, intent: Intent) {
         if (ActivityTransitionResult.hasResult(intent)) {
-            val emojiLoader = EmojiLoader.get(context)
+            val emojiLoader = EmojiLoader.loadAsync(context)
             val result = ActivityTransitionResult.extractResult(intent)!!
             for (event in result.transitionEvents) {
                 if (event.transitionType !=
@@ -74,7 +74,7 @@ class ActivityReceiver : BroadcastReceiver() {
 
     private suspend fun putNotification(
         notificationsHandler: NotificationsHandler,
-        emojiLoader: CompletableDeferred<EmojiCompat>,
+        emojiLoader: Deferred<EmojiCompat>,
         detectedActivity: Int,
         context: Context
     ) {

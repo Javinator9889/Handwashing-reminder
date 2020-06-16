@@ -100,4 +100,4 @@
 -keep class kotlin.Metadata { *; }
 
 #data models
--keep class com.javinator9889.handwashingreminder.collections.** { *;}
+#-keep class com.javinator9889.handwashingreminder.collections.** { *;}

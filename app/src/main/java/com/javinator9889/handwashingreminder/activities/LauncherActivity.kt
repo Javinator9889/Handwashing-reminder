@@ -143,7 +143,7 @@ class LauncherActivity : AppCompatActivity() {
     ) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == DYNAMIC_FEATURE_INSTALL_RESULT_CODE) {
-            EmojiLoader.get(this)
+            EmojiLoader.loadAsync(this)
             if (sharedPreferences.getBoolean(ADS_ENABLED, true)) {
                 when (resultCode) {
                     Activity.RESULT_OK -> {

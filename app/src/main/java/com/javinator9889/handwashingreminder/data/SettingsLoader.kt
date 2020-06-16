@@ -50,7 +50,7 @@ class SettingsLoader(
     private val view: SettingsView,
     private val lifecycleOwner: LifecycleOwner
 ) {
-    private lateinit var emojiLoader: CompletableDeferred<EmojiCompat>
+    private lateinit var emojiLoader: Deferred<EmojiCompat>
     private lateinit var emojiCompat: EmojiCompat
     private var arePreferencesInitialized = AtomicBoolean(false)
 
@@ -58,7 +58,7 @@ class SettingsLoader(
         if (arePreferencesInitialized.get())
             return
         val deferreds = mutableSetOf<Deferred<Any?>>()
-        emojiLoader = EmojiLoader.get(view.requireContext())
+        emojiLoader = EmojiLoader.loadAsync(view.requireContext())
         with(view) {
             lifecycleOwner.lifecycleScope.launch {
                 setupPreferenceAsync(
@@ -67,7 +67,7 @@ class SettingsLoader(
                     onClickListener = {
                         openWebsite(PLAYSTORE_URL, R.string.playstore_err)
                         true
-                    }).let { deferreds.add(it) }
+                    }).also { deferreds.add(it) }
                 setupPreferenceAsync(
                     "share",
                     Ionicons.Icon.ion_android_share,
@@ -109,32 +109,32 @@ class SettingsLoader(
                             startActivity(this)
                         }
                         true
-                    }).let { deferreds.add(it) }
+                    }).also { deferreds.add(it) }
                 setupPreferenceAsync("telegram", onClickListener = {
                     openWebsite(TELEGRAM_URL, R.string.telegram_err)
                     true
-                }).let { deferreds.add(it) }
+                }).also { deferreds.add(it) }
                 setupPreferenceAsync(
                     "github",
                     Ionicons.Icon.ion_social_github,
                     onClickListener = {
                         openWebsite(GITHUB_URL, R.string.browser_err)
                         true
-                    }).let { deferreds.add(it) }
+                    }).also { deferreds.add(it) }
                 setupPreferenceAsync(
                     "twitter",
                     Ionicons.Icon.ion_social_twitter,
                     onClickListener = {
                         openWebsite(TWITTER_URL, R.string.twitter_err)
                         true
-                    }).let { deferreds.add(it) }
+                    }).also { deferreds.add(it) }
                 setupPreferenceAsync(
                     "linkedin",
                     Ionicons.Icon.ion_social_linkedin,
                     onClickListener = {
                         openWebsite(LINKEDIN_URL, R.string.browser_err)
                         true
-                    }).let { deferreds.add(it) }
+                    }).also { deferreds.add(it) }
                 setupPreferenceAsync(
                     Preferences.ANALYTICS_ENABLED,
                     Ionicons.Icon.ion_arrow_graph_up_right,
@@ -142,7 +142,7 @@ class SettingsLoader(
                     onInitialized = { it, _ ->
                         firebaseAnalyticsPreference = WeakReference(it)
                     }
-                ).let { deferreds.add(it) }
+                ).also { deferreds.add(it) }
                 setupPreferenceAsync(
                     Preferences.PERFORMANCE_ENABLED,
                     Ionicons.Icon.ion_ios_speedometer_outline,
@@ -150,7 +150,7 @@ class SettingsLoader(
                     onInitialized = { it, _ ->
                         firebasePerformancePreference = WeakReference(it)
                     }
-                ).let { deferreds.add(it) }
+                ).also { deferreds.add(it) }
                 setupPreferenceAsync(
                     Preferences.ADS_ENABLED,
                     Ionicons.Icon.ion_ios_barcode_outline,
@@ -158,7 +158,7 @@ class SettingsLoader(
                     onInitialized = { it, _ ->
                         adsPreference = WeakReference(it)
                     }
-                ).let { deferreds.add(it) }
+                ).also { deferreds.add(it) }
                 setupPreferenceAsync(
                     Preferences.DONATIONS,
                     Ionicons.Icon.ion_card,
@@ -172,7 +172,7 @@ class SettingsLoader(
                         billingService.addOnPurchaseFinishedListener(this@with)
                         donationsPreference = WeakReference(it)
                     }
-                ).let { deferreds.add(it) }
+                ).also { deferreds.add(it) }
                 setupPreferenceAsync(
                     "translate",
                     Ionicons.Icon.ion_chatbox_working,
@@ -183,7 +183,7 @@ class SettingsLoader(
                         )
                         true
                     }
-                ).let { deferreds.add(it) }
+                ).also { deferreds.add(it) }
                 setupPreferenceAsync(
                     "send_suggestions",
                     Ionicons.Icon.ion_chatbubbles,
@@ -215,7 +215,7 @@ class SettingsLoader(
                         }
                         true
                     }
-                ).let { deferreds.add(it) }
+                ).also { deferreds.add(it) }
                 setupPreferenceAsync(
                     "opensource_libs",
                     Ionicons.Icon.ion_code,
@@ -239,7 +239,7 @@ class SettingsLoader(
                             .start(requireContext())
                         true
                     }
-                ).let { deferreds.add(it) }
+                ).also { deferreds.add(it) }
                 setupPreferenceAsync(
                     "tos_privacy",
                     Ionicons.Icon.ion_android_cloud_done,
@@ -250,7 +250,7 @@ class SettingsLoader(
                         ).run { startActivity(this) }
                         true
                     }
-                ).let { deferreds.add(it) }
+                ).also { deferreds.add(it) }
                 setupPreferenceAsync(
                     Preferences.BREAKFAST_TIME,
                     Ionicons.Icon.ion_coffee,
@@ -260,7 +260,7 @@ class SettingsLoader(
                         "summary" to getText(R.string.breakfast_pref_summ)
                     ),
                     dispatcher = Dispatchers.Main
-                ).let { deferreds.add(it) }
+                ).also { deferreds.add(it) }
                 setupPreferenceAsync(
                     Preferences.LUNCH_TIME,
                     Ionicons.Icon.ion_android_restaurant,
@@ -270,7 +270,7 @@ class SettingsLoader(
                         "summary" to getText(R.string.lunch_pref_summ)
                     ),
                     dispatcher = Dispatchers.Main
-                ).let { deferreds.add(it) }
+                ).also { deferreds.add(it) }
                 setupPreferenceAsync(
                     Preferences.DINNER_TIME,
                     Ionicons.Icon.ion_ios_moon_outline,
@@ -280,7 +280,7 @@ class SettingsLoader(
                         "summary" to getText(R.string.dinner_pref_summ)
                     ),
                     dispatcher = Dispatchers.Main
-                ).let { deferreds.add(it) }
+                ).also { deferreds.add(it) }
                 deferreds.awaitAll()
                 arePreferencesInitialized.set(true)
             }
