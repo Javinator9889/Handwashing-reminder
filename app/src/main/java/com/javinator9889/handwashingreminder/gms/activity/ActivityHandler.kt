@@ -21,25 +21,42 @@ package com.javinator9889.handwashingreminder.gms.activity
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
 import com.google.android.gms.location.ActivityRecognition
 import com.google.android.gms.location.ActivityTransition
 import com.google.android.gms.location.ActivityTransitionRequest
 import com.google.android.gms.tasks.Task
+import com.javinator9889.handwashingreminder.BuildConfig
 import com.javinator9889.handwashingreminder.utils.Preferences
 import timber.log.Timber
 
+internal const val ACTIVITY_REQUEST_CODE = 64
+internal const val TRANSITIONS_RECEIVER_ACTION =
+    "${BuildConfig.APPLICATION_ID}/TRANSITIONS_RECEIVER_ACTION"
 
-class ActivityHandler(private val context: Context) {
-    private val requestCode = 51824210
+class ActivityHandler private constructor(private val context: Context) {
     private val transitions: MutableList<ActivityTransition> = mutableListOf()
     private var pendingIntent: PendingIntent
     private var activityRegistered = false
+    private val transitionsReceiver = ActivityReceiver()
 
     init {
         val activitiesSet = createSetOfTransitions()
         addTransitions(activitiesSet, transitions)
+        registerActivityReceiver()
         pendingIntent = createPendingIntent()
+    }
+
+    companion object {
+        private var instance: ActivityHandler? = null
+
+        fun getInstance(context: Context): ActivityHandler {
+            instance?.let { return it }
+            instance = ActivityHandler(context)
+            return instance!!
+        }
     }
 
     fun startTrackingActivity() {
@@ -60,28 +77,28 @@ class ActivityHandler(private val context: Context) {
         if (!activityRegistered)
             return null
         return ActivityRecognition.getClient(context)
-            .removeActivityTransitionUpdates(pendingIntent).apply {
-                addOnSuccessListener { pendingIntent.cancel() }
-                addOnFailureListener { e: Exception -> Timber.e(e) }
+            .removeActivityTransitionUpdates(pendingIntent).also {
+                it.addOnSuccessListener {
+                    pendingIntent.cancel(); activityRegistered = false
+                }
+                it.addOnFailureListener { e: Exception -> Timber.e(e) }
             }
     }
 
-    fun reload() {
-        with(createSetOfTransitions()) {
-            transitions.clear()
-            addTransitions(this, transitions)
-            disableActivityTracker()?.let {
-                it.addOnSuccessListener {
-                    pendingIntent = createPendingIntent()
-                    startTrackingActivity()
-                }
+    fun reload() = with(createSetOfTransitions()) {
+        transitions.clear()
+        addTransitions(this, transitions)
+        disableActivityTracker()?.let {
+            it.addOnCompleteListener {
+                pendingIntent = createPendingIntent()
+                startTrackingActivity()
             }
         }
     }
 
     private fun createSetOfTransitions(): Set<Int> {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-        with(hashSetOf<Int>()) {
+        with(mutableSetOf<Int>()) {
             preferences.getStringSet(
                 Preferences.ACTIVITIES_ENABLED,
                 Preferences.DEFAULT_ACTIVITY_SET
@@ -105,11 +122,13 @@ class ActivityHandler(private val context: Context) {
         }
     }
 
-    private fun createPendingIntent(): PendingIntent {
-        with(Intent(context, ActivityReceiver::class.java)) {
-            return PendingIntent.getBroadcast(
-                context, requestCode, this, PendingIntent.FLAG_UPDATE_CURRENT
-            )
+    private fun createPendingIntent(): PendingIntent =
+        with(Intent(TRANSITIONS_RECEIVER_ACTION)) {
+            PendingIntent.getBroadcast(context, ACTIVITY_REQUEST_CODE, this, 0)
         }
-    }
+
+    private fun registerActivityReceiver() =
+        LocalBroadcastManager.getInstance(context).registerReceiver(
+            transitionsReceiver, IntentFilter(TRANSITIONS_RECEIVER_ACTION)
+        )
 }

@@ -22,7 +22,7 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.preference.MultiSelectListPreference
 import com.javinator9889.handwashingreminder.R
-import com.javinator9889.handwashingreminder.application.HandwashingApplication
+import com.javinator9889.handwashingreminder.gms.activity.ActivityHandler
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.ionicons.Ionicons
 import com.mikepenz.iconics.utils.sizeDp
@@ -82,8 +82,8 @@ class ActivityMultiSelectList : MultiSelectListPreference {
     }
 
     private fun reloadActivityHandler() {
-        with(HandwashingApplication.instance) {
-            activityHandler.reload()
+        with(ActivityHandler.getInstance(context)) {
+            reload()
         }
     }
 }

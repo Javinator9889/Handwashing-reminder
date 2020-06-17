@@ -59,7 +59,7 @@ class HandwashingApplication : BaseApplication() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        activityHandler = ActivityHandler(this)
+        activityHandler = ActivityHandler.getInstance(this)
         firebaseInitDeferred = initFirebaseAppAsync()
     }
 

@@ -42,6 +42,7 @@ import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.data.UserProperties
 import com.javinator9889.handwashingreminder.emoji.EmojiLoader
+import com.javinator9889.handwashingreminder.gms.activity.ActivityHandler
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
 import com.javinator9889.handwashingreminder.gms.ads.AdsEnabler
 import com.javinator9889.handwashingreminder.jobs.alarms.AlarmHandler
@@ -250,6 +251,7 @@ class LauncherActivity : AppCompatActivity() {
         Timber.d("Setting-up security providers")
         Security.insertProviderAt(Conscrypt.newProvider(), 1)
         Timber.d("Setting-up activity recognition")
+        val activityHandler = ActivityHandler.getInstance(this)
         if (sharedPreferences.getBoolean(
                 Preferences.ACTIVITY_TRACKING_ENABLED, false
             ) && with(GoogleApiAvailability.getInstance()) {
@@ -257,9 +259,9 @@ class LauncherActivity : AppCompatActivity() {
                         ConnectionResult.SUCCESS
             }
         ) {
-            app.activityHandler.startTrackingActivity()
+            activityHandler.startTrackingActivity()
         } else {
-            app.activityHandler.disableActivityTracker()
+            activityHandler.disableActivityTracker()
         }
         with(AlarmHandler(this)) {
             scheduleAllAlarms()

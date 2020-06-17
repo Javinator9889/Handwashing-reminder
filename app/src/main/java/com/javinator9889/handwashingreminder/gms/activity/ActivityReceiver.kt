@@ -21,6 +21,7 @@ package com.javinator9889.handwashingreminder.gms.activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.text.TextUtils
 import androidx.annotation.StringRes
 import androidx.emoji.text.EmojiCompat
 import com.google.android.gms.location.ActivityTransition
@@ -40,7 +41,8 @@ class ActivityReceiver : BroadcastReceiver() {
      * {@inheritDoc}
      */
     override fun onReceive(context: Context, intent: Intent) {
-        if (ActivityTransitionResult.hasResult(intent)) {
+        if (ActivityTransitionResult.hasResult(intent)
+            && TextUtils.equals(TRANSITIONS_RECEIVER_ACTION, intent.action)) {
             val emojiLoader = EmojiLoader.loadAsync(context)
             val result = ActivityTransitionResult.extractResult(intent)!!
             for (event in result.transitionEvents) {
@@ -103,10 +105,10 @@ class ActivityReceiver : BroadcastReceiver() {
                 "Activity not recognized"
             )
         }
-        val emojiCompat = emojiLoader.await()
         var title = context.getText(notificationContent.title)
         var content = context.getText(notificationContent.content)
         try {
+            val emojiCompat = emojiLoader.await()
             title = emojiCompat.process(title)
             content = emojiCompat.process(content)
         } catch (_: IllegalStateException) {

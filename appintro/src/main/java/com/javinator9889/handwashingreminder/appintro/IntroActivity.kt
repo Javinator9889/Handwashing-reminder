@@ -28,6 +28,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
 import androidx.annotation.Keep
+import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.util.set
 import androidx.fragment.app.Fragment
@@ -50,7 +51,7 @@ import com.javinator9889.handwashingreminder.appintro.fragments.TimeConfigIntroF
 import com.javinator9889.handwashingreminder.appintro.fragments.TimeContainer
 import com.javinator9889.handwashingreminder.appintro.timeconfig.TimeConfigItem
 import com.javinator9889.handwashingreminder.appintro.utils.AnimatedResources
-import com.javinator9889.handwashingreminder.application.HandwashingApplication
+import com.javinator9889.handwashingreminder.gms.activity.ActivityHandler
 import com.javinator9889.handwashingreminder.jobs.alarms.AlarmHandler
 import com.javinator9889.handwashingreminder.utils.*
 import kotlinx.android.synthetic.main.animated_intro.*
@@ -173,21 +174,22 @@ class IntroActivity : AppIntro2(),
         super.onDonePressed(currentFragment)
         lifecycleScope.launch {
             val deferreds = mutableSetOf<Deferred<Any>>()
-            val app = HandwashingApplication.instance
+            val activityHandler =
+                ActivityHandler.getInstance(this@IntroActivity)
             val sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(this@IntroActivity)
             sharedPreferences.edit {
                 timeConfigSlide.itemAdapter.adapterItems.forEach { item ->
-                        val time = "${item.hours}:${item.minutes}"
-                        when (item.id) {
-                            TimeConfig.BREAKFAST_ID ->
-                                putString(Preferences.BREAKFAST_TIME, time)
-                            TimeConfig.LUNCH_ID ->
-                                putString(Preferences.LUNCH_TIME, time)
-                            TimeConfig.DINNER_ID ->
-                                putString(Preferences.DINNER_TIME, time)
-                        }
+                    val time = "${item.hours}:${item.minutes}"
+                    when (item.id) {
+                        TimeConfig.BREAKFAST_ID ->
+                            putString(Preferences.BREAKFAST_TIME, time)
+                        TimeConfig.LUNCH_ID ->
+                            putString(Preferences.LUNCH_TIME, time)
+                        TimeConfig.DINNER_ID ->
+                            putString(Preferences.DINNER_TIME, time)
                     }
+                }
                 putBoolean(
                     Preferences.ANALYTICS_ENABLED,
                     policySlide.firebaseAnalytics.isChecked
@@ -200,8 +202,8 @@ class IntroActivity : AppIntro2(),
                     Preferences.ADS_ENABLED,
                     sharedPreferences.getBoolean(Preferences.ADS_ENABLED, true)
                 )
-                if (!isAtLeast(AndroidVersion.Q))
-                    activityRecognitionPermissionGranted = true
+                activityRecognitionPermissionGranted =
+                    activityRecognitionPermissionApproved()
                 putBoolean(
                     Preferences.ACTIVITY_TRACKING_ENABLED,
                     activityRecognitionPermissionGranted
@@ -219,9 +221,9 @@ class IntroActivity : AppIntro2(),
             splitInstallManager.deferredUninstall(listOf(AppIntro.MODULE_NAME))
             async {
                 if (activityRecognitionPermissionGranted)
-                    app.activityHandler.startTrackingActivity()
+                    activityHandler.startTrackingActivity()
                 else
-                    app.activityHandler.disableActivityTracker()
+                    activityHandler.disableActivityTracker()
                 with(AlarmHandler(this@IntroActivity)) {
                     scheduleAllAlarms()
                 }
@@ -384,9 +386,8 @@ class IntroActivity : AppIntro2(),
     ) {
         if (requestCode == PERMISSIONS_REQUEST_CODE) {
             activityRecognitionPermissionGranted =
-                (grantResults.isNotEmpty() &&
-                        grantResults[0] == PERMISSION_GRANTED) ||
-                        !isAtLeast(AndroidVersion.Q)
+                (grantResults.isNotEmpty() && grantResults[0] == PERMISSION_GRANTED)
+                        || !isAtLeast(AndroidVersion.Q)
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
@@ -417,4 +418,14 @@ class IntroActivity : AppIntro2(),
             Timber.e("Requested next slide illegally (not exists)")
         }
     }
+
+    private fun activityRecognitionPermissionApproved(): Boolean =
+        if (!isAtLeast(AndroidVersion.Q))
+            true
+        else {
+            activityRecognitionPermissionGranted
+                    || PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(
+                this, Manifest.permission.ACTIVITY_RECOGNITION
+            )
+        }
 }
