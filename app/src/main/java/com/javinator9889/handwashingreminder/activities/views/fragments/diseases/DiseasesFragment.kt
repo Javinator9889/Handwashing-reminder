@@ -22,15 +22,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.observe
 import androidx.lifecycle.whenStarted
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
-import com.github.mikephil.charting.data.BarEntry
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.BaseFragmentView
 import com.javinator9889.handwashingreminder.activities.base.LayoutVisibilityChange
@@ -39,10 +40,15 @@ import com.javinator9889.handwashingreminder.activities.views.fragments.diseases
 import com.javinator9889.handwashingreminder.activities.views.viewmodels.DiseaseInformationViewModel
 import com.javinator9889.handwashingreminder.activities.views.viewmodels.SavedViewModelFactory
 import com.javinator9889.handwashingreminder.data.ParsedHTMLText
+import com.javinator9889.handwashingreminder.data.room.entities.Handwashing
+import com.javinator9889.handwashingreminder.data.viewmodels.HandwashingViewModel
+import com.javinator9889.handwashingreminder.utils.calendar.CalendarUtils
+import com.javinator9889.handwashingreminder.utils.toBarEntry
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.GenericItem
 import com.mikepenz.fastadapter.adapters.ItemAdapter
 import com.mikepenz.fastadapter.listeners.ClickEventHook
+import kotlinx.android.synthetic.main.handwash_count.*
 import kotlinx.android.synthetic.main.handwash_count.view.*
 import kotlinx.android.synthetic.main.loading_recycler_view.*
 import kotlinx.android.synthetic.main.loading_recycler_view.view.*
@@ -52,7 +58,6 @@ import timber.log.Timber
 
 class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange {
     override val layoutId: Int = R.layout.main_disease_view
-//    override val layoutId: Int = R.layout.loading_recycler_view
 
     private lateinit var parsedHTMLTexts: List<ParsedHTMLText>
     private lateinit var fastAdapter: FastAdapter<GenericItem>
@@ -62,6 +67,7 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange {
     private val informationViewModel: DiseaseInformationViewModel by viewModels {
         SavedViewModelFactory(DiseaseInformationViewModel.Factory, this)
     }
+    private val handwashingViewModel: HandwashingViewModel by activityViewModels()
 
     init {
         lifecycleScope.launch {
@@ -88,6 +94,20 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange {
                         loading.visibility = View.INVISIBLE
                         container.visibility = View.VISIBLE
                     })
+                handwashingViewModel.allData.observe(viewLifecycleOwner) {
+                    val dataSet = BarDataSet(it.toBarEntry(), "label")
+                    countChart.data = BarData(dataSet)
+                    countChart.notifyDataSetChanged()
+                    countChart.setVisibleXRangeMaximum(7F)
+                    countChart.moveViewToX(0F)
+                    val todayAmount =
+                        handwashingViewModel.getAsync(CalendarUtils.today.time)
+                    lifecycleScope.launch {
+                        val count = todayAmount.await()?.amount ?: return@launch
+                        countDailyTextView.text =
+                            "Today you washed your hands $count times"
+                    }
+                }
             }
         }
     }
@@ -103,28 +123,26 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange {
         }
         fastAdapter.addEventHook(DiseaseClickEventHook())
         fastAdapter.withSavedInstanceState(savedInstanceState)
-        val entries = listOf(
-            BarEntry(0F, 12F),
-            BarEntry(-1F, 16F),
-            BarEntry(-2F, 11F),
-            BarEntry(-3F, 11F),
-            BarEntry(-4F, 13F),
-            BarEntry(-5F, 3F),
-            BarEntry(-6F, 8F),
-            BarEntry(-7F, 1F),
-            BarEntry(-8F, 20F),
-            BarEntry(-9F, 12F),
-            BarEntry(-10F, 8F)
-        )
-        val barDataSet = BarDataSet(entries, "label")
-        view.countChart.data = BarData(barDataSet)
         view.countChart.setDrawGridBackground(false)
-        view.countChart.setVisibleXRangeMaximum(7F)
-        view.countChart.moveViewToX(0F)
         view.countChart.axisLeft.setDrawGridLines(false)
         view.countChart.axisRight.setDrawGridLines(false)
         view.countChart.xAxis.setDrawGridLines(false)
         view.countChart.invalidate()
+        view.countUpButton.setOnClickListener {
+            lifecycleScope.launch {
+                val createdItem =
+                    handwashingViewModel.getAsync(CalendarUtils.today.time)
+                        .await()
+                if (createdItem == null)
+                    handwashingViewModel.create(
+                        Handwashing(
+                            CalendarUtils.today.time,
+                            0
+                        )
+                    )
+                handwashingViewModel.increment(CalendarUtils.today.time)
+            }
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
