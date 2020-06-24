@@ -27,7 +27,6 @@ import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.card.MaterialCardView
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.graphics.GlideApp
-import com.javinator9889.handwashingreminder.utils.isHighPerformingDevice
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
 import kotlinx.coroutines.*
@@ -61,9 +60,9 @@ data class News(
         val cardContainer: MaterialCardView = view.findViewById(R.id.root)
         val shareImage: ImageView = view.findViewById(R.id.share)
 
-        init {
+        /*init {
             setIsRecyclable(!isHighPerformingDevice())
-        }
+        }*/
 
         @SuppressLint("SetTextI18n")
         override fun bindView(item: News, payloads: List<Any>) {

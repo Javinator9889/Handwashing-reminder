@@ -33,6 +33,7 @@ import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.support.ActionBarBase
 import com.javinator9889.handwashingreminder.activities.views.fragments.diseases.DiseasesFragment
+import com.javinator9889.handwashingreminder.activities.views.fragments.news.NewsFragment
 import com.javinator9889.handwashingreminder.activities.views.fragments.washinghands.WashingHandsFragment
 import com.javinator9889.handwashingreminder.custom.libraries.AppRate
 import com.javinator9889.handwashingreminder.data.MainActivityDataHandler
@@ -48,7 +49,8 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence
 
 
 class MainActivity : ActionBarBase(),
-    BottomNavigationView.OnNavigationItemSelectedListener {
+    BottomNavigationView.OnNavigationItemSelectedListener,
+    BottomNavigationView.OnNavigationItemReselectedListener {
     override val layoutId: Int = R.layout.activity_main
     private val dataHandler = MainActivityDataHandler()
     private lateinit var deferredRating: Deferred<AppRate>
@@ -60,6 +62,7 @@ class MainActivity : ActionBarBase(),
                 with(Firebase.remoteConfig) { fetchAndActivate() }
                 launch { dataHandler.setMenuIcons(menu, this@MainActivity) }
                 menu.setOnNavigationItemSelectedListener(this@MainActivity)
+                menu.setOnNavigationItemReselectedListener(this@MainActivity)
                 deferredShowcase = dataHandler.asyncLoadShowcase(
                     activity = this@MainActivity,
                     lifecycleOwner = this@MainActivity
@@ -92,15 +95,6 @@ class MainActivity : ActionBarBase(),
         if (savedInstanceState == null)
             dataHandler.loadFragmentView(supportFragmentManager)
     }
-
-    /*override fun onPostCreate(savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
-        savedInstanceState.notNull {
-            Timber.d("Activity recreated")
-        }
-        if (savedInstanceState == null)
-            dataHandler.loadFragmentView(supportFragmentManager)
-    }*/
 
     override fun onDestroy() {
         dataHandler.clear()
@@ -164,6 +158,14 @@ class MainActivity : ActionBarBase(),
             setCurrentScreen(this@MainActivity, screenTitle, null)
         }
         return onItemSelected(item.itemId)
+    }
+
+    override fun onNavigationItemReselected(item: MenuItem) {
+        when (item.itemId) {
+            R.id.news -> with(dataHandler.activeFragment as NewsFragment) {
+                goTop()
+            }
+        }
     }
 
     private fun onItemSelected(@IdRes id: Int): Boolean {

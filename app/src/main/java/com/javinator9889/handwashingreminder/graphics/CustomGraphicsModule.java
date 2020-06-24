@@ -29,6 +29,8 @@ import com.bumptech.glide.load.engine.cache.InternalCacheDiskCacheFactory;
 import com.bumptech.glide.module.AppGlideModule;
 import com.bumptech.glide.request.RequestOptions;
 
+import static com.javinator9889.handwashingreminder.utils.AndroidKt.isHighPerformingDevice;
+
 @GlideModule
 public final class CustomGraphicsModule extends AppGlideModule {
     @Override
@@ -37,7 +39,9 @@ public final class CustomGraphicsModule extends AppGlideModule {
                 new RequestOptions()
                         .format(DecodeFormat.PREFER_ARGB_8888)
         );
-        int diskCacheSizeBytes = 1024 * 1024 * 20; // 20 MB
+        int diskCacheSizeBytes = isHighPerformingDevice()
+                ? (2 << 20) * 200
+                : (2 << 20) * 20; // 200 MB or 20 MB
         builder.setDiskCache(
                 new InternalCacheDiskCacheFactory(context, diskCacheSizeBytes)
         );
