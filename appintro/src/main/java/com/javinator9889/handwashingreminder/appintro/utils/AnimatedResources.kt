@@ -20,10 +20,11 @@ package com.javinator9889.handwashingreminder.appintro.utils
 
 import androidx.annotation.RawRes
 import com.javinator9889.handwashingreminder.appintro.R
+import com.javinator9889.handwashingreminder.R as RBase
 
 
 enum class AnimatedResources(@RawRes val res: Int) {
-    WASH_HANDS(R.raw.wash_your_hands),
+    WASH_HANDS(RBase.raw.wash_your_hands),
     TIMER(R.raw.pending_timer),
     ACTIVITY(R.raw.travelers_walking),
     PRIVACY(R.raw.padlock_animation)

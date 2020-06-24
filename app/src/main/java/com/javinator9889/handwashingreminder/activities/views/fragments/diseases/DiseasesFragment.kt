@@ -28,6 +28,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenStarted
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.BaseFragmentView
 import com.javinator9889.handwashingreminder.activities.base.LayoutVisibilityChange
@@ -40,13 +43,16 @@ import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.GenericItem
 import com.mikepenz.fastadapter.adapters.ItemAdapter
 import com.mikepenz.fastadapter.listeners.ClickEventHook
+import kotlinx.android.synthetic.main.handwash_count.view.*
 import kotlinx.android.synthetic.main.loading_recycler_view.*
 import kotlinx.android.synthetic.main.loading_recycler_view.view.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
+
 class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange {
-    override val layoutId: Int = R.layout.loading_recycler_view
+    override val layoutId: Int = R.layout.main_disease_view
+//    override val layoutId: Int = R.layout.loading_recycler_view
 
     private lateinit var parsedHTMLTexts: List<ParsedHTMLText>
     private lateinit var fastAdapter: FastAdapter<GenericItem>
@@ -97,6 +103,28 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange {
         }
         fastAdapter.addEventHook(DiseaseClickEventHook())
         fastAdapter.withSavedInstanceState(savedInstanceState)
+        val entries = listOf(
+            BarEntry(0F, 12F),
+            BarEntry(-1F, 16F),
+            BarEntry(-2F, 11F),
+            BarEntry(-3F, 11F),
+            BarEntry(-4F, 13F),
+            BarEntry(-5F, 3F),
+            BarEntry(-6F, 8F),
+            BarEntry(-7F, 1F),
+            BarEntry(-8F, 20F),
+            BarEntry(-9F, 12F),
+            BarEntry(-10F, 8F)
+        )
+        val barDataSet = BarDataSet(entries, "label")
+        view.countChart.data = BarData(barDataSet)
+        view.countChart.setDrawGridBackground(false)
+        view.countChart.setVisibleXRangeMaximum(7F)
+        view.countChart.moveViewToX(0F)
+        view.countChart.axisLeft.setDrawGridLines(false)
+        view.countChart.axisRight.setDrawGridLines(false)
+        view.countChart.xAxis.setDrawGridLines(false)
+        view.countChart.invalidate()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
