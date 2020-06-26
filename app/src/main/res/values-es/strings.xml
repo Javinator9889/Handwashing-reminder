@@ -267,4 +267,14 @@
     <string name="rate_do_not_show">No preguntar de nuevo</string>
     <string name="no_website">Sitio no disponible</string>
     <string name="no_date">Fecha no disponible</string>
+    <string name="how_many_wash">¿Cuántas veces te has lavado las manos? &#128166;&#128079;</string>
+    <string name="today_washed">Hoy te has lavado las manos %1$s &#128079;</string>
+    <string name="week_washed">Esta semana te has lavado las manos %1$s &#129303;</string>
+    <string name="month_washed">Este mes te has lavado las manos %1$s &#128561;</string>
+    <plurals name="times">
+        <item quantity="one">%d vez</item>
+        <item quantity="other">%d veces</item>
+    </plurals>
+    <string name="add_another">¡Añade otra más! &#128588;</string>
+    <string name="reduce_count">Bueno, quizás una menos &#128517;</string>
 </resources>

@@ -55,7 +55,7 @@ class HandwashingViewModel(application: Application) :
     fun update(handwashing: Handwashing) =
         viewModelScope.launch(Dispatchers.IO) { repository.update(handwashing) }
 
-    fun getAsync(date: Date) =
+    fun getAsync(date: Date = CalendarUtils.today.time) =
         viewModelScope.async(Dispatchers.IO) { repository.get(date) }
 
     fun getBetweenAsync(from: Date, to: Date) =
@@ -70,6 +70,10 @@ class HandwashingViewModel(application: Application) :
         from = CalendarUtils.lastMonth.time,
         to = CalendarUtils.today.time
     )
+
+    fun getTodayCountAsync() = viewModelScope.async {
+        return@async getAsync().await()?.amount
+    }
 
     fun getWeeklyCountAsync() = viewModelScope.async {
         val weeklyData = getWeeklyAsync().await()

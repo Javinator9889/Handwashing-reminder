@@ -43,7 +43,7 @@ interface HandwashingDao {
     @Query("UPDATE handwashing SET amount = amount + 1 WHERE date == :date")
     suspend fun increment(date: Date)
 
-    @Query("UPDATE handwashing SET amount = amount - 1 WHERE date == :date")
+    @Query("UPDATE handwashing SET amount = CASE WHEN (amount == 0) THEN 0 ELSE amount - 1 END WHERE date == :date")
     suspend fun decrement(date: Date)
 
     @Query("DELETE FROM handwashing WHERE date == :date")

@@ -34,6 +34,7 @@ import com.javinator9889.handwashingreminder.utils.notNull
 import kotlinx.coroutines.*
 import org.sufficientlysecure.htmltextview.HtmlFormatter
 import org.sufficientlysecure.htmltextview.HtmlFormatterBuilder
+import timber.log.Timber
 
 private const val DATA_KEY = "text:html:text"
 private const val PARSED_JSON_KEY = "text:json:parsed"
@@ -57,49 +58,48 @@ class DiseaseInformationViewModel(
             ?: DiseasesList(emptyList())
     }
 
-    fun parseHtml() {
-        viewModelScope.launch {
-            if (!state.get<List<ParsedHTMLText>>(DATA_KEY).isNullOrEmpty())
-                return@launch
-            val parsedItemsList =
-                ArrayList<ParsedHTMLText>(informationList.diseases.size)
-            val deferreds = mutableListOf<Collection<Deferred<Spanned>>>()
-            informationList.diseases.forEach { disease ->
-                deferreds.add(
-                    listOf(
-                        async { createHTML(disease.name) },
-                        async { createHTML(disease.shortDescription) },
-                        async { createHTML(disease.longDescription) },
-                        async { createHTML(disease.provider) },
-                        async { createHTML(disease.website) },
-                        async { createHTML(disease.symptoms) },
-                        async { createHTML(disease.prevention) }
+    fun parseHtml() = viewModelScope.launch {
+        Timber.d("Parsing HTML")
+        if (!state.get<List<ParsedHTMLText>>(DATA_KEY).isNullOrEmpty())
+            return@launch
+        val parsedItemsList =
+            ArrayList<ParsedHTMLText>(informationList.diseases.size)
+        val deferreds = mutableListOf<Collection<Deferred<Spanned>>>()
+        informationList.diseases.forEach { disease ->
+            deferreds.add(
+                listOf(
+                    async { createHTML(disease.name) },
+                    async { createHTML(disease.shortDescription) },
+                    async { createHTML(disease.longDescription) },
+                    async { createHTML(disease.provider) },
+                    async { createHTML(disease.website) },
+                    async { createHTML(disease.symptoms) },
+                    async { createHTML(disease.prevention) }
+                )
+            )
+        }
+        deferreds.forEachIndexed { i, htmlData ->
+            launch {
+                val data = htmlData.awaitAll()
+                parsedItemsList.add(
+                    i, ParsedHTMLText(
+                        name = data[0],
+                        shortDescription = data[1],
+                        longDescription = data[2],
+                        provider = data[3],
+                        website = data[4],
+                        symptoms = data[5],
+                        prevention = data[6]
                     )
                 )
-            }
-            deferreds.forEachIndexed { i, htmlData ->
-                launch {
-                    val data = htmlData.awaitAll()
-                    parsedItemsList.add(
-                        i, ParsedHTMLText(
-                            name = data[0],
-                            shortDescription = data[1],
-                            longDescription = data[2],
-                            provider = data[3],
-                            website = data[4],
-                            symptoms = data[5],
-                            prevention = data[6]
-                        )
-                    )
-                    withContext(Dispatchers.Main) {
+                withContext(Dispatchers.Main) {
+                    state[DATA_KEY] = parsedItemsList
+                }
+            }.invokeOnCompletion {
+                it.notNull {
+                    viewModelScope.launch(context = Dispatchers.Main) {
                         state[DATA_KEY] = parsedItemsList
-                    }
-                }.invokeOnCompletion {
-                    it.notNull {
-                        viewModelScope.launch(context = Dispatchers.Main) {
-                            state[DATA_KEY] = parsedItemsList
-                            parsedHTMLText.value = parsedItemsList
-                        }
+                        parsedHTMLText.value = parsedItemsList
                     }
                 }
             }
