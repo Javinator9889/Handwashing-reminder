@@ -54,9 +54,7 @@ import com.mikepenz.iconics.Iconics
 import javinator9889.localemanager.utils.languagesupport.LanguagesSupport.Language
 import kotlinx.android.synthetic.main.splash_screen.*
 import kotlinx.coroutines.*
-import org.conscrypt.Conscrypt
 import timber.log.Timber
-import java.security.Security
 import com.javinator9889.handwashingreminder.utils.Firebase as FirebaseConf
 
 internal const val FAST_START_KEY = "intent:fast_start"
@@ -248,8 +246,8 @@ class LauncherActivity : AppCompatActivity() {
         Timber.d("Firebase initialized correctly")
         Timber.d("Initializing Iconics")
         Iconics.init(this)
-        Timber.d("Setting-up security providers")
-        Security.insertProviderAt(Conscrypt.newProvider(), 1)
+//        Timber.d("Setting-up security providers")
+//        Security.insertProviderAt(Conscrypt.newProvider(), 1)
         Timber.d("Setting-up activity recognition")
         val activityHandler = ActivityHandler.getInstance(this)
         if (sharedPreferences.getBoolean(
