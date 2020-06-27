@@ -29,14 +29,21 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.ListPreference
 import androidx.preference.Preference
+import androidx.preference.SwitchPreference
 import com.afollestad.materialdialogs.MaterialDialog
+import com.android.billingclient.api.BillingClient
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.perf.FirebasePerformance
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.PrivacyTermsActivity
 import com.javinator9889.handwashingreminder.activities.views.fragments.settings.SettingsView
 import com.javinator9889.handwashingreminder.activities.views.fragments.settings.TimePickerPreference
+import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.emoji.EmojiLoader
+import com.javinator9889.handwashingreminder.gms.ads.AdsEnabler
+import com.javinator9889.handwashingreminder.gms.splitservice.SplitInstallService
 import com.javinator9889.handwashingreminder.jobs.alarms.Alarms
+import com.javinator9889.handwashingreminder.listeners.OnPurchaseFinishedListener
 import com.javinator9889.handwashingreminder.utils.*
 import com.mikepenz.aboutlibraries.LibsBuilder
 import com.mikepenz.iconics.IconicsDrawable
@@ -44,13 +51,14 @@ import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.typeface.library.ionicons.Ionicons
 import com.mikepenz.iconics.utils.sizeDp
 import kotlinx.coroutines.*
+import timber.log.Timber
 import java.lang.ref.WeakReference
 import java.util.concurrent.atomic.AtomicBoolean
 
 class SettingsLoader(
     private val view: SettingsView,
     private val lifecycleOwner: LifecycleOwner
-) {
+) : OnPurchaseFinishedListener, Preference.OnPreferenceChangeListener {
     private lateinit var emojiLoader: Deferred<EmojiCompat>
     private lateinit var emojiCompat: EmojiCompat
     private var arePreferencesInitialized = AtomicBoolean(false)
@@ -170,7 +178,7 @@ class SettingsLoader(
                             requireContext().resources.getTextArray(R.array.in_app_donations_debug)
                         else
                             requireContext().resources.getTextArray(R.array.in_app_donations)
-                        billingService.addOnPurchaseFinishedListener(this@with)
+                        billingService.addOnPurchaseFinishedListener(this@SettingsLoader)
                         donationsPreference = WeakReference(it)
                     }
                 ).also { deferreds.add(it) }
@@ -291,6 +299,66 @@ class SettingsLoader(
         }
     }
 
+    override fun onPurchaseFinished(token: String, resultCode: Int) {
+        if (view.context == null)
+            return
+        val context = view.requireContext()
+        if (!::emojiCompat.isInitialized)
+            runBlocking { emojiCompat = emojiLoader.await() }
+        when (resultCode) {
+            BillingClient.BillingResponseCode.OK -> {
+                try {
+                    MaterialDialog(context)
+                        .title(R.string.donation_thanks)
+                        .message(
+                            text = emojiCompat
+                                .process(context.getText(R.string.donation_desc))
+                        )
+                        .positiveButton(android.R.string.ok)
+                } catch (_: IllegalStateException) {
+                    MaterialDialog(context)
+                        .title(R.string.donation_thanks)
+                        .message(R.string.donation_desc)
+                        .positiveButton(android.R.string.ok)
+                }
+            }
+            BillingClient.BillingResponseCode.USER_CANCELED -> {
+                try {
+                    MaterialDialog(context)
+                        .title(R.string.donation_cancelled)
+                        .message(
+                            text = emojiCompat.process(
+                                context.getText(R.string.donation_cancelled_desc)
+                            )
+                        )
+                        .positiveButton(android.R.string.ok)
+                } catch (_: IllegalStateException) {
+                    MaterialDialog(context)
+                        .title(R.string.donation_cancelled)
+                        .message(R.string.donation_cancelled_desc)
+                        .positiveButton(android.R.string.ok)
+                }
+            }
+            else -> {
+                try {
+                    MaterialDialog(context)
+                        .title(R.string.donation_error)
+                        .message(
+                            text = emojiCompat.process(
+                                context.getText(R.string.donation_error_desc)
+                            )
+                        )
+                        .positiveButton(android.R.string.ok)
+                } catch (_: IllegalStateException) {
+                    MaterialDialog(context)
+                        .title(R.string.donation_error)
+                        .message(R.string.donation_error_desc)
+                        .positiveButton(android.R.string.ok)
+                }
+            }
+        }.show()
+    }
+
     private fun setupPreferenceAsync(
         name: String,
         icon: IIcon? = null,
@@ -381,4 +449,88 @@ class SettingsLoader(
                 }
         }
     }
+
+    override fun onPreferenceChange(
+        preference: Preference?,
+        newValue: Any?
+    ): Boolean =
+        when (preference) {
+            view.firebaseAnalyticsPreference.get() -> {
+                val enabled = newValue as Boolean
+                with(FirebaseAnalytics.getInstance(view.requireContext())) {
+                    setAnalyticsCollectionEnabled(enabled)
+                    if (!enabled)
+                        setCurrentScreen(view.requireActivity(), null, null)
+                }
+                true
+            }
+            view.firebasePerformancePreference.get() -> {
+                val enabled = newValue as Boolean
+                with(FirebasePerformance.getInstance()) {
+                    isPerformanceCollectionEnabled = enabled
+                }
+                true
+            }
+            view.adsPreference.get() -> {
+                val enabled = newValue as Boolean
+                var ret = false
+                val adEnabler = AdsEnabler(HandwashingApplication.instance)
+                if (enabled) {
+                    adEnabler.enableAds()
+                    with(SplitInstallService.getInstance(view.requireContext())) {
+                        deferredInstall(Ads.MODULE_NAME)
+                    }
+                    ret = true
+                } else {
+                    MaterialDialog(view.requireContext()).show {
+                        title(R.string.ads_explanation_title)
+                        try {
+                            message(
+                                text = emojiCompat.process(
+                                    context.getText(R.string.ads_explanation_desc)
+                                )
+                            )
+                        } catch (_: IllegalStateException) {
+                            message(R.string.ads_explanation_desc)
+                        }
+                        positiveButton(android.R.string.cancel) {
+                            ret = false
+                        }
+                        negativeButton(R.string.disable) {
+                            ret = true
+                            adEnabler.disableAds()
+                            HandwashingApplication.instance.adLoader = null
+                            with(SplitInstallService.getInstance(view.context)) {
+                                deferredUninstall(Ads.MODULE_NAME)
+                            }
+                            (preference as SwitchPreference).isChecked =
+                                false
+                        }
+                        cancelOnTouchOutside(false)
+                        cancelable(false)
+                    }
+                }
+                ret
+            }
+            view.donationsPreference.get() -> {
+                Timber.d("Purchase clicked - $newValue")
+                val purchaseId = newValue as String
+                if (isConnected())
+                    view.billingService.doPurchase(
+                        purchaseId,
+                        view.requireActivity()
+                    )
+                else {
+                    MaterialDialog(view.requireContext()).show {
+                        title(R.string.no_internet_connection)
+                        message(R.string.no_internet_connection_long)
+                        positiveButton(android.R.string.ok)
+                        cancelable(true)
+                        cancelOnTouchOutside(true)
+                    }
+                }
+                false
+            }
+            else -> true
+        }
 }
