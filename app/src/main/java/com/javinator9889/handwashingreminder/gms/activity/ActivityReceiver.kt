@@ -102,7 +102,7 @@ class ActivityReceiver : BroadcastReceiver() {
                     R.string.activity_notification_vehicle_content
                 )
             else -> throw IllegalArgumentException(
-                "Activity not recognized"
+                "Activity not recognized - $detectedActivity"
             )
         }
         var title = context.getText(notificationContent.title)

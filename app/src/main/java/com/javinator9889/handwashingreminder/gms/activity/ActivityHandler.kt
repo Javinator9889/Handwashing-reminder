@@ -19,6 +19,7 @@
 package com.javinator9889.handwashingreminder.gms.activity
 
 import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -88,6 +89,7 @@ class ActivityHandler private constructor(private val context: Context) {
     fun reload() = with(createSetOfTransitions()) {
         transitions.clear()
         addTransitions(this, transitions)
+        Timber.d("Reloading activity recognition - transitions: $transitions")
         disableActivityTracker()?.let {
             it.addOnCompleteListener {
                 pendingIntent = createPendingIntent()
@@ -124,7 +126,12 @@ class ActivityHandler private constructor(private val context: Context) {
 
     private fun createPendingIntent(): PendingIntent =
         with(Intent(TRANSITIONS_RECEIVER_ACTION)) {
-            PendingIntent.getBroadcast(context, ACTIVITY_REQUEST_CODE, this, 0)
+            PendingIntent.getBroadcast(
+                context,
+                ACTIVITY_REQUEST_CODE,
+                this,
+                FLAG_UPDATE_CURRENT
+            )
         }
 
     private fun registerActivityReceiver() =
