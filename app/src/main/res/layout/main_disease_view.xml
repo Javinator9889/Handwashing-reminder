@@ -4,16 +4,16 @@
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clipToPadding="false"
-    android:animateLayoutChanges="true">
+    android:animateLayoutChanges="true"
+    android:clipToPadding="false">
 
     <LinearLayout
         android:id="@+id/handwashingLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="60dp"
         android:background="@android:color/white"
-        android:orientation="vertical"
-        android:layout_marginBottom="32dp">
+        android:orientation="vertical">
 
         <include layout="@layout/handwash_count" />
     </LinearLayout>
@@ -23,22 +23,22 @@
         android:id="@+id/contentLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:layout_above="@+id/handwashingLayout"
         android:background="@android:color/white"
         android:clipToPadding="false"
-        android:layout_above="@+id/handwashingLayout"
-        app:behavior_peekHeight="32dp"
+        android:orientation="vertical"
+        app:behavior_peekHeight="65dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <LinearLayout
             android:id="@+id/backdrop"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="65dp"
             android:background="@drawable/shadowed_divider"
             android:clickable="true"
             android:focusable="true"
             android:gravity="center"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:padding="16dp">
 
             <!--        <View style="@style/Divider" />-->
@@ -46,6 +46,17 @@
                 android:layout_width="32dp"
                 android:layout_height="4dp"
                 android:background="@drawable/divider_shape" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/diseaseInformationHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/raleway_bold"
+                android:gravity="center"
+                android:layout_marginTop="8dp"
+                android:text="@string/diseases_info"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textSize="18sp" />
 
         </LinearLayout>
 

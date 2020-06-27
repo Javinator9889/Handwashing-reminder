@@ -96,6 +96,7 @@ class LauncherActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.splash_screen)
+        progressBar.show()
     }
 
     private suspend fun displayWelcomeScreen() {
@@ -179,11 +180,12 @@ class LauncherActivity : AppCompatActivity() {
 
     override fun finish() {
         Timber.d("Calling finish")
+        progressBar.hide()
         super.finish()
     }
 
     private fun installRequiredModules() {
-        val modules = ArrayList<String>(MODULE_COUNT)
+        val modules = mutableListOf<String>()
         val googleApi = GoogleApiAvailability.getInstance()
         if (sharedPreferences.getBoolean(ADS_ENABLED, true))
             modules += Ads.MODULE_NAME
@@ -201,7 +203,6 @@ class LauncherActivity : AppCompatActivity() {
             with(SplitInstallManagerFactory.create(this)) {
                 deferredUninstall(listOf(BundledEmoji.MODULE_NAME))
             }
-        modules.trimToSize()
         val intent = if (launchOnInstall) {
             createDynamicFeatureActivityIntent(
                 modules.toTypedArray(),
@@ -246,19 +247,15 @@ class LauncherActivity : AppCompatActivity() {
         Timber.d("Firebase initialized correctly")
         Timber.d("Initializing Iconics")
         Iconics.init(this)
-//        Timber.d("Setting-up security providers")
-//        Security.insertProviderAt(Conscrypt.newProvider(), 1)
         Timber.d("Setting-up activity recognition")
         val activityHandler = ActivityHandler.getInstance(this)
         if (sharedPreferences.getBoolean(
-                Preferences.ACTIVITY_TRACKING_ENABLED, false
-            ) && with(GoogleApiAvailability.getInstance()) {
-                isGooglePlayServicesAvailable(this@LauncherActivity) ==
-                        ConnectionResult.SUCCESS
-            }
+                Preferences.ACTIVITY_TRACKING_ENABLED, false)
         ) {
+            Timber.d("Tracking is enabled and Play Services are available so starting tracking")
             activityHandler.startTrackingActivity()
         } else {
+            Timber.d("Tracking is not enabled or Play Services are not available so starting tracking")
             activityHandler.disableActivityTracker()
         }
         with(AlarmHandler(this)) {

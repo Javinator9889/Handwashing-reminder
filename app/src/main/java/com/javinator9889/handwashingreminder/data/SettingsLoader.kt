@@ -36,6 +36,7 @@ import com.javinator9889.handwashingreminder.activities.PrivacyTermsActivity
 import com.javinator9889.handwashingreminder.activities.views.fragments.settings.SettingsView
 import com.javinator9889.handwashingreminder.activities.views.fragments.settings.TimePickerPreference
 import com.javinator9889.handwashingreminder.emoji.EmojiLoader
+import com.javinator9889.handwashingreminder.jobs.alarms.Alarms
 import com.javinator9889.handwashingreminder.utils.*
 import com.mikepenz.aboutlibraries.LibsBuilder
 import com.mikepenz.iconics.IconicsDrawable
@@ -257,7 +258,8 @@ class SettingsLoader(
                     onInitialized = ::setupTimePickerDialog,
                     onInitializedArgs = setOf(
                         "title" to getText(R.string.breakfast_pref_title),
-                        "summary" to getText(R.string.breakfast_pref_summ)
+                        "summary" to getText(R.string.breakfast_pref_summ),
+                        "alarm" to Alarms.BREAKFAST_ALARM
                     ),
                     dispatcher = Dispatchers.Main
                 ).also { deferreds.add(it) }
@@ -267,7 +269,8 @@ class SettingsLoader(
                     onInitialized = ::setupTimePickerDialog,
                     onInitializedArgs = setOf(
                         "title" to getText(R.string.lunch_pref_title),
-                        "summary" to getText(R.string.lunch_pref_summ)
+                        "summary" to getText(R.string.lunch_pref_summ),
+                        "alarm" to Alarms.LUNCH_ALARM
                     ),
                     dispatcher = Dispatchers.Main
                 ).also { deferreds.add(it) }
@@ -277,7 +280,8 @@ class SettingsLoader(
                     onInitialized = ::setupTimePickerDialog,
                     onInitializedArgs = setOf(
                         "title" to getText(R.string.dinner_pref_title),
-                        "summary" to getText(R.string.dinner_pref_summ)
+                        "summary" to getText(R.string.dinner_pref_summ),
+                        "alarm" to Alarms.DINNER_ALARM
                     ),
                     dispatcher = Dispatchers.Main
                 ).also { deferreds.add(it) }
@@ -321,12 +325,14 @@ class SettingsLoader(
             return
         var title: CharSequence? = null
         var summary: CharSequence? = null
+        var alarm: Alarms? = null
         for (arg in args)
             when (arg.first) {
                 "title" -> title = arg.second as CharSequence
                 "summary" -> summary = arg.second as CharSequence
+                "alarm" -> alarm = arg.second as Alarms
             }
-        if (title == null || summary == null)
+        if (title == null || summary == null || alarm == null)
             return
         if (!::emojiCompat.isInitialized)
             emojiCompat = emojiLoader.await()
@@ -338,6 +344,7 @@ class SettingsLoader(
             preference.title = title
             preference.summaryText = summary
         } finally {
+            preference.alarm = alarm
             preference.updateSummary()
         }
     }

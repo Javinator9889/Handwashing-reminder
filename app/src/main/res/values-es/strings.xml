@@ -277,4 +277,5 @@
     </plurals>
     <string name="add_another">¡Añade otra más! &#128588;</string>
     <string name="reduce_count">Bueno, quizás una menos &#128517;</string>
+    <string name="diseases_info">Información de enfermedades</string>
 </resources>

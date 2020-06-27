@@ -117,6 +117,8 @@ class MainActivity : ActionBarBase(),
     override fun finish() {
         try {
             Auth.logout()
+        } catch (e: IllegalStateException) {
+          Timber.w(e, "Auth client was not initialized")
         } finally {
             super.finish()
         }

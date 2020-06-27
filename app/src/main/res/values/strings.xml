@@ -305,4 +305,5 @@
     </plurals>
     <string name="add_another">Add another! &#128588;</string>
     <string name="reduce_count">Well, maybe one less &#128517;</string>
+    <string name="diseases_info">Diseases information</string>
 </resources>

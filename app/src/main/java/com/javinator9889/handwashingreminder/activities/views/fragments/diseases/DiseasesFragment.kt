@@ -24,7 +24,6 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.annotation.StringRes
 import androidx.core.app.ActivityCompat
-import androidx.core.view.ViewCompat
 import androidx.emoji.text.EmojiCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -85,7 +84,6 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange {
             loading.visibility = View.VISIBLE
             countLoader.visibility = View.VISIBLE
             informationViewModel.parsedHTMLText.observe(viewLifecycleOwner) {
-                Timber.d("Parsed HTML text changed - $it | ${it.isEmpty()}")
                     if (it.isEmpty())
                         return@observe
                     parsedHTMLTexts = it
@@ -158,10 +156,6 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange {
         view.countChart.axisRight.setDrawGridLines(false)
         view.countChart.xAxis.setDrawGridLines(false)
         view.countChart.invalidate()
-        ViewCompat.setElevation(
-            view.contentLayout,
-            resources.getDimension(R.dimen.menu_elevation)
-        )
         view.countUpButton.setOnClickListener {
             lifecycleScope.launch {
                 val createdItem =
