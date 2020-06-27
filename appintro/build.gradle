@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    viewBinding.enabled = true
+    buildFeatures.viewBinding = true
     compileSdkVersion 29
 
     android.defaultConfig.vectorDrawables.useSupportLibrary = true
