@@ -40,7 +40,7 @@ android {
         applicationId "com.javinator9889.handwashingreminder"
         minSdkVersion 17
         targetSdkVersion 29
-        versionCode 131
+        versionCode 132
         versionName "1.2.0-${gitCommitHash}"
         multiDexEnabled true
         resConfigs "en", "es"
@@ -151,13 +151,13 @@ dependencies {
     api 'com.google.firebase:firebase-perf:19.0.7'
     implementation 'com.google.firebase:firebase-auth:19.3.1'
     // http://airbnb.io/lottie/#/android?id=getting-started
-    api "com.airbnb.android:lottie:3.4.1"
+    api 'com.airbnb.android:lottie:3.4.1'
     // https://firebase.google.com/docs/remote-config/use-config-android
     implementation 'com.google.firebase:firebase-config:19.1.4'
     implementation 'com.google.firebase:firebase-config-ktx:19.1.4'
-    // https://mvnrepository.com/artifact/androidx.emoji/emoji/1.0.0
-    api 'androidx.emoji:emoji:1.0.0'
-    api 'androidx.emoji:emoji-appcompat:1.0.0'
+    // https://mvnrepository.com/artifact/androidx.emoji/emoji/
+    api 'androidx.emoji:emoji:1.1.0'
+    api 'androidx.emoji:emoji-appcompat:1.1.0'
     // https://github.com/mikepenz/FastAdapter
     api "com.mikepenz:fastadapter:$latestFastAdapterRelease"
     implementation "com.mikepenz:fastadapter-extensions-scroll:$latestFastAdapterRelease"
