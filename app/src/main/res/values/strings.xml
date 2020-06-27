@@ -156,8 +156,8 @@
     the access to your activity. Enable it from settings</string>
     <string name="activity_disabled">You will not receive any activity
         notifications</string>
-    <string name="activity_enabled">You will receive notifications for
-        the activities selected below</string>
+    <string name="activity_enabled">You will receive notifications after having
+        a walk, going cycling, leaving a vehicle or running</string>
     <string name="activity_recognition">Enable activity recognition</string>
     <string name="activities_to_enable">When you will receive
         notifications?</string>

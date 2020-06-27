@@ -33,6 +33,7 @@ import com.javinator9889.handwashingreminder.utils.isAtLeast
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.ionicons.Ionicons
 import com.mikepenz.iconics.utils.sizeDp
+import timber.log.Timber
 
 class ActivityCheckbox : CheckBoxPreference {
     constructor(context: Context) : super(context)
@@ -91,8 +92,10 @@ class ActivityCheckbox : CheckBoxPreference {
         }
         with(HandwashingApplication.instance) {
             if (checked) {
+                Timber.d("Activity is checked so starting tracking")
                 activityHandler.startTrackingActivity()
             } else {
+                Timber.d("Activity is not checked so disable tracking")
                 activityHandler.disableActivityTracker()
             }
         }

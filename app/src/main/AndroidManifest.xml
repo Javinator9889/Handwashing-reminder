@@ -40,8 +40,6 @@
         <activity
             android:name=".activities.DynamicFeatureProgress" />
         <activity
-            android:name=".activities.views.fragments.washinghands.WashingHandsFragment" />
-        <activity
             android:name=".activities.views.fragments.diseases.DiseaseExpandedView" />
 
         <meta-data

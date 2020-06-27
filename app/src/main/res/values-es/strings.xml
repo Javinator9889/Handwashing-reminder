@@ -154,7 +154,7 @@
     <string name="activity_disabled">No recibirás notificaciones de ninguna
         actividad</string>
     <string name="activity_enabled">Recibirás notificaciones de las
-        actividades seleccionadas debajo</string>
+        actividades después de pasear, ir en bici, bajarte de un vehículo o correr</string>
     <string name="activity_recognition">Habilitar reconocimiento de la
         actividad</string>
     <string name="activities_to_enable">¿Cuándo recibirás notificaciones?</string>

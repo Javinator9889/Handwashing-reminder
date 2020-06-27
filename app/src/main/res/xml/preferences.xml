@@ -57,14 +57,6 @@
             android:key="activity:gms:tracking"
             android:title="@string/activity_recognition"
             app:summary="For enabling the activity recognition, you need both Google Play Services and permissions" />
-
-        <com.javinator9889.handwashingreminder.activities.views.fragments.settings.ActivityMultiSelectList
-            android:defaultValue="@array/empty_array"
-            android:dependency="activity:gms:tracking"
-            android:entries="@array/activities"
-            android:entryValues="@array/activity_values"
-            android:key="activity:gms:activities:enabled"
-            android:title="@string/activities_to_enable" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/data_sharing_category">
 

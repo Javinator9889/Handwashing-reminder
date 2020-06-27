@@ -111,8 +111,7 @@ class ActivityReceiver : BroadcastReceiver() {
             val emojiCompat = emojiLoader.await()
             title = emojiCompat.process(title)
             content = emojiCompat.process(content)
-        } catch (_: IllegalStateException) {
-        }
+        } catch (_: IllegalStateException) { }
         withContext(Dispatchers.Main) {
             notificationsHandler.createNotification(
                 iconDrawable = R.drawable.ic_stat_handwashing,

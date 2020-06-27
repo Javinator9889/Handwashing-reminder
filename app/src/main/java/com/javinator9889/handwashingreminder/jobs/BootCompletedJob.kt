@@ -36,10 +36,13 @@ class BootCompletedJob : BroadcastReceiver() {
                     Preferences.ACTIVITY_TRACKING_ENABLED,
                     false
                 )
-            )
+            ) {
+                Timber.d("Device rebooted so starting activity as it's enabled")
                 activityHandler.startTrackingActivity()
-            else
+            } else {
+                Timber.d("Device rebooted but not starting activity as it isn't enabled")
                 activityHandler.disableActivityTracker()
+            }
             Timber.d("Enqueuing notifications as the device has rebooted")
             with(AlarmHandler(context)) {
                 scheduleAllAlarms()
