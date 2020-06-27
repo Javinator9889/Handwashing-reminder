@@ -49,7 +49,11 @@
         <receiver
             android:name=".gms.activity.ActivityReceiver"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.javinator9889.handwashingreminder.TRANSITIONS_RECEIVER_ACTION" />
+            </intent-filter>
+        </receiver>
 
         <receiver
             android:name=".jobs.UpdateReceiver"

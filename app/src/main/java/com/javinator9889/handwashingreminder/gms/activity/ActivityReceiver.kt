@@ -21,7 +21,6 @@ package com.javinator9889.handwashingreminder.gms.activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.text.TextUtils
 import androidx.annotation.StringRes
 import androidx.emoji.text.EmojiCompat
 import com.google.android.gms.location.ActivityTransition
@@ -35,42 +34,45 @@ import com.javinator9889.handwashingreminder.utils.goAsync
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class ActivityReceiver : BroadcastReceiver() {
     /**
      * {@inheritDoc}
      */
     override fun onReceive(context: Context, intent: Intent) {
-        if (ActivityTransitionResult.hasResult(intent)
-            && TextUtils.equals(TRANSITIONS_RECEIVER_ACTION, intent.action)) {
+        Timber.d("Detected user activity - ${intent.action}")
+        if (ActivityTransitionResult.hasResult(intent)) {
             val emojiLoader = EmojiLoader.loadAsync(context)
-            val result = ActivityTransitionResult.extractResult(intent)!!
-            for (event in result.transitionEvents) {
-                if (event.transitionType !=
-                    ActivityTransition.ACTIVITY_TRANSITION_EXIT ||
-                    event.activityType == DetectedActivity.UNKNOWN
-                )
-                    continue
-                val notificationHandler = NotificationsHandler(
-                    context,
-                    ACTIVITY_CHANNEL_ID,
-                    context.getString(
-                        R.string.activity_notification_channel_name
-                    ),
-                    context.getString(
-                        R.string.activity_notification_channel_desc
+            val result = ActivityTransitionResult.extractResult(intent)
+            result?.let {
+                for (event in result.transitionEvents) {
+                    if (event.transitionType !=
+                        ActivityTransition.ACTIVITY_TRANSITION_EXIT ||
+                        event.activityType == DetectedActivity.UNKNOWN
                     )
-                )
-                goAsync {
-                    putNotification(
-                        notificationHandler,
-                        emojiLoader,
-                        event.activityType,
-                        context
+                        continue
+                    val notificationHandler = NotificationsHandler(
+                        context,
+                        ACTIVITY_CHANNEL_ID,
+                        context.getString(
+                            R.string.activity_notification_channel_name
+                        ),
+                        context.getString(
+                            R.string.activity_notification_channel_desc
+                        )
                     )
+                    goAsync {
+                        putNotification(
+                            notificationHandler,
+                            emojiLoader,
+                            event.activityType,
+                            context
+                        )
+                    }
+                    break
                 }
-                break
-            }
+            } ?: Timber.w("Received unmatched activity - $intent")
         }
     }
 
