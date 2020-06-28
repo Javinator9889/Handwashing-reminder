@@ -13,19 +13,19 @@
     "daemon": "cross-env-shell RUN_DAEMON=true RUNNING_LOCAL=true \"npm run build && firebase emulators:start --only functions\""
   },
   "engines": {
-    "node": "8"
+    "node": "10"
   },
   "main": "lib/bin/index.js",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "cross-env": "^7.0.2",
     "express": "^4.17.1",
     "firebase-admin": "^8.10.0",
-    "firebase-functions": "^3.6.1",
+    "firebase-functions": "^3.7.0",
     "firebase-functions-helper": "^0.7.5",
     "http-errors": "^1.7.3",
     "morgan": "^1.10.0",
     "node-fetch": "^2.6.0",
-    "cross-env": "^7.0.2",
     "pug": "^3.0.0"
   },
   "devDependencies": {
