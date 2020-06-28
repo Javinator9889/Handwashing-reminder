@@ -16,4 +16,6 @@ process.on('SIGINT', () => {
     .catch(err => console.warn(`Error while finishing the schedules - ${err}`));
 });
 
-exports.updater = functions.https.onRequest((req, resp) => resp.sendStatus(200));
+exports.updater = functions.https.onRequest(async (req, resp) => {
+  resp.sendStatus(200);
+});
