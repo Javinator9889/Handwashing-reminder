@@ -97,10 +97,12 @@ class DynamicFeatureProgress : SplitCompatBaseActivity(),
 
     private fun setResultWithIntent(resultCode: Int) {
         val intent = if (launchOnInstall)
-            Intent().setClassName(
-                BuildConfig.APPLICATION_ID,
-                launchActivityName
-            )
+            Intent().apply {
+                setClassName(
+                    BuildConfig.APPLICATION_ID,
+                    launchActivityName
+                )
+            }
         else
             null
         setResult(resultCode, intent)
@@ -117,7 +119,8 @@ class DynamicFeatureProgress : SplitCompatBaseActivity(),
             SplitInstallSessionStatus.FAILED -> {
                 Toast.makeText(
                     this, getString(
-                        R.string.dynamic_module_loading_error, state.errorCode),
+                        R.string.dynamic_module_loading_error, state.errorCode
+                    ),
                     Toast.LENGTH_LONG
                 ).show()
                 Timber.e(
