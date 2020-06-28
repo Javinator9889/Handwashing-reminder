@@ -33,6 +33,7 @@ import com.google.android.gms.ads.*
 import com.google.android.gms.ads.formats.NativeAdOptions
 import com.google.android.gms.ads.formats.UnifiedNativeAd
 import com.google.android.gms.ads.formats.UnifiedNativeAdView
+import com.google.android.play.core.splitcompat.SplitCompat
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
 import com.javinator9889.handwashingreminder.utils.isConnected
 import com.javinator9889.handwashingreminder.utils.isDebuggable
@@ -46,11 +47,13 @@ val ADMOB_APP_NATIVE_ID =
     if (isDebuggable()) "ca-app-pub-3940256099942544/2247696110"
     else "ca-app-pub-5517327035817913/5656089851"
 
+@SuppressLint("MissingPermission")
 @Keep
 class AdLoaderImpl private constructor(context: Context?) : AdLoader {
     private val adOptions: NativeAdOptions
     private var currentNativeAd: UnifiedNativeAd? = null
     private var isVideoEnded = true
+    private val moduleContext: Context
 
     init {
         if (context == null)
@@ -58,7 +61,9 @@ class AdLoaderImpl private constructor(context: Context?) : AdLoader {
                 "Context cannot be null when creating " +
                         "the first instance"
             )
-        MobileAds.initialize(context, ADMOB_APP_ID)
+        moduleContext = context
+        SplitCompat.install(moduleContext)
+        MobileAds.initialize(moduleContext)
         val videoOptions = VideoOptions.Builder()
             .setStartMuted(true)
             .build()
@@ -72,10 +77,12 @@ class AdLoaderImpl private constructor(context: Context?) : AdLoader {
         private var instance = WeakReference<AdLoader?>(null)
 
         override fun instance(context: Context?): AdLoader {
-            val appInstance = instance.get() ?: AdLoaderImpl(context)
-            if (instance.get() == null)
-                instance = WeakReference(appInstance)
-            return appInstance
+            instance.get()?.let { return it }
+            synchronized(this) {
+                val instance = AdLoaderImpl(context?.applicationContext)
+                this.instance = WeakReference(instance)
+                return instance
+            }
         }
     }
 
@@ -83,9 +90,9 @@ class AdLoaderImpl private constructor(context: Context?) : AdLoader {
     override fun loadAdForViewGroup(view: ViewGroup, removeAllViews: Boolean) {
         if (!isVideoEnded || !isConnected())
             return
-        val adLoader = AdBase.Builder(view.context, ADMOB_APP_NATIVE_ID)
+        val adLoader = AdBase.Builder(moduleContext, ADMOB_APP_NATIVE_ID)
             .forUnifiedNativeAd { ad: UnifiedNativeAd ->
-                val adView = LayoutInflater.from(view.context)
+                val adView = LayoutInflater.from(moduleContext)
                     .inflate(R.layout.native_ad_view, null) as CardView
                 populateUnifiedNativeAdView(ad, adView)
                 if (removeAllViews)

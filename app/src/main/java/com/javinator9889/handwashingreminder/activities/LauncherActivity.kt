@@ -19,6 +19,7 @@
 package com.javinator9889.handwashingreminder.activities
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.animation.Animation
@@ -149,7 +150,13 @@ class LauncherActivity : AppCompatActivity() {
         if (Ads.MODULE_NAME in splitInstallManager.installedModules &&
                 sharedPreferences.getBoolean(ADS_ENABLED, true)) {
             when (resultCode) {
-                Activity.RESULT_OK -> initAds()
+                Activity.RESULT_OK -> {
+                    createPackageContext(packageName, 0).also {
+                        SplitCompat.install(it)
+                    }.also {
+                        initAds(it)
+                    }
+                }
                 Activity.RESULT_CANCELED -> app.adLoader = null
             }
         }
@@ -230,7 +237,7 @@ class LauncherActivity : AppCompatActivity() {
                 splitInstallManager.installedModules
     }
 
-    private fun initAds() {
+    private fun initAds(context: Context) {
         val className = "${Ads.PACKAGE_NAME}.${Ads
             .CLASS_NAME}\$${Ads.PROVIDER_NAME}"
         val adProvider = Class.forName(className).kotlin
