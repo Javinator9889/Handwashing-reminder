@@ -28,12 +28,11 @@ import com.google.android.gms.location.ActivityTransition.ACTIVITY_TRANSITION_EX
 import com.google.android.gms.location.ActivityTransitionRequest
 import com.google.android.gms.location.DetectedActivity
 import com.google.android.gms.tasks.Task
-import com.javinator9889.handwashingreminder.BuildConfig
 import timber.log.Timber
 
 internal const val ACTIVITY_REQUEST_CODE = 64
-internal const val TRANSITIONS_RECEIVER_ACTION =
-    "${BuildConfig.APPLICATION_ID}.TRANSITIONS_RECEIVER_ACTION"
+//internal const val TRANSITIONS_RECEIVER_ACTION =
+//    "${BuildConfig.APPLICATION_ID}.TRANSITIONS_RECEIVER_ACTION"
 internal val TRANSITIONS = listOf<ActivityTransition>(
     ActivityTransition.Builder()
         .setActivityType(DetectedActivity.IN_VEHICLE)
@@ -96,7 +95,7 @@ class ActivityHandler private constructor(private val context: Context) {
 
     private fun createPendingIntent(): PendingIntent =
         with(Intent(context, ActivityReceiver::class.java)) {
-            action = TRANSITIONS_RECEIVER_ACTION
+//            action = TRANSITIONS_RECEIVER_ACTION
             PendingIntent.getBroadcast(
                 context,
                 ACTIVITY_REQUEST_CODE,

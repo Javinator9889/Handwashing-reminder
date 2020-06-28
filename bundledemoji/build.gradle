@@ -22,7 +22,7 @@ dependencies {
     implementation project(':app')
 
     // https://mvnrepository.com/artifact/androidx.emoji/emoji/1.0.0
-    implementation 'androidx.emoji:emoji-bundled:1.0.0'
+    implementation 'androidx.emoji:emoji-bundled:1.1.0'
 }
 repositories {
     mavenCentral()

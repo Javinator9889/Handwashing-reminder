@@ -20,7 +20,6 @@ package com.javinator9889.handwashingreminder.activities
 
 import android.app.Activity
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -41,7 +40,6 @@ import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.data.UserProperties
-import com.javinator9889.handwashingreminder.emoji.EmojiLoader
 import com.javinator9889.handwashingreminder.gms.activity.ActivityHandler
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
 import com.javinator9889.handwashingreminder.gms.ads.AdsEnabler
@@ -50,6 +48,7 @@ import com.javinator9889.handwashingreminder.utils.*
 import com.javinator9889.handwashingreminder.utils.Preferences.ADS_ENABLED
 import com.javinator9889.handwashingreminder.utils.Preferences.APP_INIT_KEY
 import com.javinator9889.handwashingreminder.utils.RemoteConfig.SPECIAL_EVENT
+import com.javinator9889.handwashingreminder.utils.threading.await
 import com.mikepenz.iconics.Iconics
 import javinator9889.localemanager.utils.languagesupport.LanguagesSupport.Language
 import kotlinx.android.synthetic.main.splash_screen.*
@@ -61,33 +60,36 @@ internal const val FAST_START_KEY = "intent:fast_start"
 internal const val PENDING_INTENT_CODE = 201
 
 class LauncherActivity : AppCompatActivity() {
+    private val deferreds = mutableSetOf<Deferred<Any?>>()
     private var launchOnInstall = false
     private var launchFromNotification = false
-    private var canFinishActivity = false
-    private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var app: HandwashingApplication
-    private lateinit var initDeferred: Deferred<Unit>
+    private val app = HandwashingApplication.instance
+    private val sharedPreferences =
+        PreferenceManager.getDefaultSharedPreferences(app)
+    private val dynamicFeatureDeferred = CompletableDeferred<Boolean>()
+    private val splitInstallManager = SplitInstallManagerFactory.create(app)
 
     init {
         lifecycleScope.launch {
             whenCreated {
-                app = HandwashingApplication.instance
-                sharedPreferences =
-                    PreferenceManager.getDefaultSharedPreferences(this@LauncherActivity)
-                with(intent) {
-                    notNull {
-                        launchFromNotification =
-                            it.getBooleanExtra(FAST_START_KEY, false)
-                    }
-                }
-                initDeferred = async { initVariables() }
+                launchFromNotification =
+                    intent.getBooleanExtra(FAST_START_KEY, false)
+                deferreds.add(async { initVariables() })
             }
             whenStarted {
-                try {
-                    withContext(Dispatchers.Main) { displayWelcomeScreen() }
-                    withContext(Dispatchers.Main) { installRequiredModules() }
-                } finally {
-                    initDeferred.await()
+                progressBar.show()
+                deferreds.add(showWelcomeScreenAsync())
+                deferreds.add(installRequiredModulesAsync())
+                deferreds.awaitAll()
+                if (!launchOnInstall) {
+                    with(Intent(this@LauncherActivity, MainActivity::class.java)) {
+                        if (launchFromNotification)
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or
+                                    Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(this)
+                        overridePendingTransition(0, android.R.anim.fade_out)
+                        finish()
+                    }
                 }
             }
         }
@@ -96,39 +98,36 @@ class LauncherActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.splash_screen)
-        progressBar.show()
     }
 
-    private suspend fun displayWelcomeScreen() {
+    private fun showWelcomeScreenAsync() = lifecycleScope.async {
         app.firebaseInitDeferred.await()
         val isThereAnySpecialEvent = with(Firebase.remoteConfig) {
             getBoolean(SPECIAL_EVENT) && !launchFromNotification
         }
         var sleepDuration = 0L
-        var animationLoaded = false
-        val fadeInAnimation =
-            AnimationUtils.loadAnimation(this, android.R.anim.fade_in)
+        val animationLoaded = CompletableDeferred<Boolean>()
+        val fadeInAnimation = AnimationUtils.loadAnimation(
+            this@LauncherActivity,
+            android.R.anim.fade_in
+        )
         fadeInAnimation.duration = 300L
         fadeInAnimation.setAnimationListener(object :
             Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation?) {}
-
             override fun onAnimationRepeat(animation: Animation?) {}
-
             override fun onAnimationEnd(animation: Animation?) {
+                animationLoaded.complete(true)
                 logo.playAnimation()
-                animationLoaded = true
             }
         })
         if (isThereAnySpecialEvent) {
             logo.setAnimation(AnimatedResources.STAY_SAFE_STAY_HOME.res)
-            logo.enableMergePathsForKitKatAndAbove(true)
             logo.addLottieOnCompositionLoadedListener {
                 logo.startAnimation(fadeInAnimation)
                 sleepDuration = logo.duration
             }
-            while (!animationLoaded)
-                delay(10L)
+            animationLoaded.await()
             delay(sleepDuration)
         } else {
             logo.setImageResource(R.drawable.handwashing_app_logo)
@@ -142,7 +141,32 @@ class LauncherActivity : AppCompatActivity() {
         data: Intent?
     ) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == DYNAMIC_FEATURE_INSTALL_RESULT_CODE) {
+        if (requestCode != DYNAMIC_FEATURE_INSTALL_RESULT_CODE) {
+            Timber.i("Unknown request code $requestCode")
+            return
+        }
+        if (Ads.MODULE_NAME in splitInstallManager.installedModules) {
+            when (resultCode) {
+                Activity.RESULT_OK -> {
+                    initAds()
+                    data?.let {
+                        val launchIntent = Intent(data)
+                        createPackageContext(packageName, 0).also {
+                            SplitCompat.install(it)
+                        }
+                        if (launchFromNotification) {
+                            launchIntent.flags =
+                                Intent.FLAG_ACTIVITY_NEW_TASK or
+                                        Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        }
+                        startActivity(launchIntent)
+                    }
+                }
+                Activity.RESULT_CANCELED -> app.adLoader = null
+            }
+        }
+        dynamicFeatureDeferred.complete(true)
+        /*if (requestCode == DYNAMIC_FEATURE_INSTALL_RESULT_CODE) {
             EmojiLoader.loadAsync(this)
             if (sharedPreferences.getBoolean(ADS_ENABLED, true)) {
                 when (resultCode) {
@@ -175,17 +199,37 @@ class LauncherActivity : AppCompatActivity() {
                 finish()
             else
                 canFinishActivity = true
-        }
+        }*/
     }
 
     override fun finish() {
         Timber.d("Calling finish")
         progressBar.hide()
+        runBlocking(Dispatchers.Default) { deferreds.awaitAll() }
         super.finish()
     }
 
-    private fun installRequiredModules() {
-        val modules = mutableListOf<String>()
+    private fun installRequiredModulesAsync() = lifecycleScope.async {
+        val modules = loadRequiredModules()
+        Timber.d("Required to install modules: $modules")
+        if (modules.isEmpty())
+            return@async
+        val intent = if (launchOnInstall) {
+            createDynamicFeatureActivityIntent(
+                modules.toTypedArray(),
+                launchOnInstall,
+                AppIntro.MAIN_ACTIVITY_NAME,
+                AppIntro.PACKAGE_NAME
+            )
+        } else {
+            createDynamicFeatureActivityIntent(modules.toTypedArray())
+        }
+        startActivityForResult(intent, DYNAMIC_FEATURE_INSTALL_RESULT_CODE)
+        dynamicFeatureDeferred.await()
+    }
+
+    private fun loadRequiredModules(): Set<String> {
+        val modules = mutableSetOf<String>()
         val googleApi = GoogleApiAvailability.getInstance()
         if (sharedPreferences.getBoolean(ADS_ENABLED, true))
             modules += Ads.MODULE_NAME
@@ -199,21 +243,7 @@ class LauncherActivity : AppCompatActivity() {
             ) != ConnectionResult.SUCCESS
         )
             modules += BundledEmoji.MODULE_NAME
-        else
-            with(SplitInstallManagerFactory.create(this)) {
-                deferredUninstall(listOf(BundledEmoji.MODULE_NAME))
-            }
-        val intent = if (launchOnInstall) {
-            createDynamicFeatureActivityIntent(
-                modules.toTypedArray(),
-                launchOnInstall,
-                AppIntro.MAIN_ACTIVITY_NAME,
-                AppIntro.PACKAGE_NAME
-            )
-        } else {
-            createDynamicFeatureActivityIntent(modules.toTypedArray())
-        }
-        startActivityForResult(intent, DYNAMIC_FEATURE_INSTALL_RESULT_CODE)
+        return modules - splitInstallManager.installedModules
     }
 
     private fun initAds() {
@@ -250,7 +280,8 @@ class LauncherActivity : AppCompatActivity() {
         Timber.d("Setting-up activity recognition")
         val activityHandler = ActivityHandler.getInstance(this)
         if (sharedPreferences.getBoolean(
-                Preferences.ACTIVITY_TRACKING_ENABLED, false)
+                Preferences.ACTIVITY_TRACKING_ENABLED, false
+            )
         ) {
             Timber.d("Tracking is enabled and Play Services are available so starting tracking")
             activityHandler.startTrackingActivity()
@@ -263,11 +294,11 @@ class LauncherActivity : AppCompatActivity() {
         }
         Timber.d("Adding periodic notifications if not enqueued yet")
         Timber.d("Setting-up Firebase custom properties")
-        setupFirebaseProperties()
+        setupFirebasePropertiesAsync().join()
     }
 
-    private fun setupFirebaseProperties() {
-        val firebaseAnalytics = FirebaseAnalytics.getInstance(this)
+    private fun setupFirebasePropertiesAsync() = lifecycleScope.launch {
+        val firebaseAnalytics = FirebaseAnalytics.getInstance(this@LauncherActivity)
         val firebaseRemoteConfig = Firebase.remoteConfig
         val firebasePerformance = FirebasePerformance.getInstance()
         val config = with(FirebaseRemoteConfigSettings.Builder()) {
@@ -296,12 +327,7 @@ class LauncherActivity : AppCompatActivity() {
                     }
                 }
             )
-            fetchAndActivate().addOnSuccessListener {
-                if (canFinishActivity)
-                    finish()
-                else
-                    canFinishActivity = true
-            }
+            fetchAndActivate().await()
         }
         firebaseAnalytics.setAnalyticsCollectionEnabled(
             sharedPreferences.getBoolean(

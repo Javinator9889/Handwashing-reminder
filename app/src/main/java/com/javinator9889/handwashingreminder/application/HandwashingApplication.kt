@@ -25,7 +25,6 @@ import androidx.preference.PreferenceManager
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.firebase.FirebaseApp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.javinator9889.handwashingreminder.gms.activity.ActivityHandler
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
 import com.javinator9889.handwashingreminder.utils.LogReportTree
 import com.javinator9889.handwashingreminder.utils.isDebuggable
@@ -38,7 +37,12 @@ import timber.log.Timber
 class HandwashingApplication : BaseApplication() {
     private val scope = CoroutineScope(Dispatchers.Default)
     var adLoader: AdLoader? = null
-    lateinit var activityHandler: ActivityHandler
+        set(value) = synchronized(this) {
+            field = value
+        }
+        get() = synchronized(this) {
+            field
+        }
     lateinit var firebaseInitDeferred: Deferred<Unit>
 
     companion object {
@@ -59,7 +63,6 @@ class HandwashingApplication : BaseApplication() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        activityHandler = ActivityHandler.getInstance(this)
         firebaseInitDeferred = initFirebaseAppAsync()
     }
 

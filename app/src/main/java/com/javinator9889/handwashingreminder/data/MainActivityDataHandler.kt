@@ -141,7 +141,7 @@ class MainActivityDataHandler(@IdRes var activeFragmentId: Int = R.id.diseases) 
     fun onHide(@IdRes id: Int) =
         (this[id] as LayoutVisibilityChange).onVisibilityChanged(View.INVISIBLE)
 
-    fun asyncLoadShowcase(
+    fun loadShowcaseAsync(
         activity: Activity,
         lifecycleOwner: LifecycleOwner
     ): Deferred<MaterialShowcaseSequence?> =
@@ -194,7 +194,7 @@ class MainActivityDataHandler(@IdRes var activeFragmentId: Int = R.id.diseases) 
             }
         }
 
-    fun asyncSuggestRating(
+    fun suggestRatingAsync(
         activity: Activity,
         lifecycleOwner: LifecycleOwner
     ): Deferred<AppRate> = lifecycleOwner.lifecycleScope.async {

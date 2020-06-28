@@ -25,7 +25,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenCreated
-import androidx.lifecycle.whenStarted
+import androidx.lifecycle.whenResumed
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.ktx.Firebase
@@ -63,16 +63,16 @@ class MainActivity : ActionBarBase(),
                 launch { dataHandler.setMenuIcons(menu, this@MainActivity) }
                 menu.setOnNavigationItemSelectedListener(this@MainActivity)
                 menu.setOnNavigationItemReselectedListener(this@MainActivity)
-                deferredShowcase = dataHandler.asyncLoadShowcase(
+                deferredShowcase = dataHandler.loadShowcaseAsync(
                     activity = this@MainActivity,
                     lifecycleOwner = this@MainActivity
                 )
-                deferredRating = dataHandler.asyncSuggestRating(
+                deferredRating = dataHandler.suggestRatingAsync(
                     activity = this@MainActivity,
                     lifecycleOwner = this@MainActivity
                 )
             }
-            whenStarted {
+            whenResumed {
                 with(FirebaseAnalytics.getInstance(this@MainActivity)) {
                     setCurrentScreen(this@MainActivity, "Main view", null)
                 }
@@ -93,7 +93,9 @@ class MainActivity : ActionBarBase(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null)
-            dataHandler.loadFragmentView(supportFragmentManager)
+            lifecycleScope.launch {
+                dataHandler.loadFragmentView(supportFragmentManager)
+            }
     }
 
     override fun onDestroy() {
@@ -118,7 +120,7 @@ class MainActivity : ActionBarBase(),
         try {
             Auth.logout()
         } catch (e: IllegalStateException) {
-          Timber.w(e, "Auth client was not initialized")
+            Timber.w(e, "Auth client was not initialized")
         } finally {
             super.finish()
         }
@@ -163,11 +165,10 @@ class MainActivity : ActionBarBase(),
     }
 
     override fun onNavigationItemReselected(item: MenuItem) {
-        when (item.itemId) {
-            R.id.news -> with(dataHandler.activeFragment as NewsFragment) {
+        if (item.itemId == R.id.news)
+            with(dataHandler.activeFragment as NewsFragment) {
                 goTop()
             }
-        }
     }
 
     private fun onItemSelected(@IdRes id: Int): Boolean {
