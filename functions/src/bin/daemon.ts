@@ -19,3 +19,5 @@ process.on('SIGINT', () => {
 exports.updater = functions.https.onRequest(async (req, resp) => {
   resp.sendStatus(200);
 });
+
+exports.remoteConfigTrigger = functions.remoteConfig.onUpdate(updater.remoteConfigEventHandler)

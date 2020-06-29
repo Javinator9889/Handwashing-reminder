@@ -1,6 +1,9 @@
 import {Updater} from '../updater';
 import {RemoteConfigData} from "../rcdata";
 import properties = require('../common/properties');
+import {TemplateVersion} from "firebase-functions/lib/providers/remoteConfig";
+import {languages} from "../common/properties";
+import {EventContext} from "firebase-functions";
 
 
 const updaters: Record<string, Updater> = {};
@@ -47,5 +50,13 @@ export async function stopScheduling() {
   console.info('Updates are being cancelled');
   for (const timer of timers) {
     clearInterval(timer);
+  }
+}
+
+export async function remoteConfigEventHandler(event: TemplateVersion, _: EventContext) {
+  console.debug(`RemoteConfig values have changed - version ${event.versionNumber}`);
+  for (const language of languages) {
+    console.debug(`Updating search terms for language ${language}`);
+    remoteConfig.updaters[language].searchTerms = await remoteConfig.getSearchTermsForLanguage(language);
   }
 }

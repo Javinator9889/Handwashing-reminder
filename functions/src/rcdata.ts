@@ -34,7 +34,9 @@ export class RemoteConfigData {
   }
 
   listenToRCChanges() {
-    functions.remoteConfig.onUpdate(_ => {
+    console.info('Listening to changes in RemoteConfig...');
+    functions.remoteConfig.onUpdate((version, _) => {
+      console.debug(`RemoteConfig values have changed - version: ${version}`);
       return admin.credential.applicationDefault().getAccessToken()
         // tslint:disable-next-line:no-shadowed-variable
         .then(_ => {
@@ -46,6 +48,7 @@ export class RemoteConfigData {
                   template.parameters['search_terms'].conditionalValues[language]['value']
                 );
                 try {
+                  console.debug("Updating updater search terms");
                   if (this.updaters[language].searchTerms.length !== terms.lenght)
                     this.updaters[language].searchTerms = terms;
                 } catch (e) {
