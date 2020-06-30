@@ -65,7 +65,8 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 
-class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange, View.OnClickListener {
+class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange,
+    View.OnClickListener {
     override val layoutId: Int = R.layout.main_disease_view
 
     private lateinit var parsedHTMLTexts: List<ParsedHTMLText>
@@ -88,47 +89,38 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange, View.OnClic
             informationViewModel.parsedHTMLText.observe(viewLifecycleOwner) {
                 if (it.isEmpty())
                     return@observe
-                parsedHTMLTexts = it
-                it.forEachIndexed { i, parsedText ->
-                    val animation =
-                        if (i % 2 == 0) R.raw.virus_red
-                        else R.raw.virus_loader
-                    val layoutId =
-                        if (i % 2 == 0) R.layout.disease_card_layout
-                        else R.layout.disease_card_alt_layout
-                    val disease = Disease(animation, parsedText, layoutId, i)
-                    if (diseasesAdapter.getAdapterPosition(disease) == -1)
-                        diseasesAdapter.add(disease)
+                lifecycleScope.launch {
+                    parsedHTMLTexts = it
+                    it.forEachIndexed { i, parsedText ->
+                        val animation =
+                            if (i % 2 == 0) R.raw.virus_red
+                            else R.raw.virus_loader
+                        val layoutId =
+                            if (i % 2 == 0) R.layout.disease_card_layout
+                            else R.layout.disease_card_alt_layout
+                        val disease =
+                            Disease(animation, parsedText, layoutId, i)
+                        if (diseasesAdapter.getAdapterPosition(disease) == -1)
+                            diseasesAdapter.add(disease)
+                    }
+                    loading.visibility = View.INVISIBLE
+                    container.visibility = View.VISIBLE
                 }
-                loading.visibility = View.INVISIBLE
-                container.visibility = View.VISIBLE
             }
             handwashingViewModel.allData.observe(viewLifecycleOwner) {
                 lifecycleScope.launch {
                     dataSet?.let { set ->
                         Timber.d("Adding new items to dataSet")
                         set.clear()
-                        for (entry in it.toBarEntry()) {
+                        for (entry in it.toBarEntry())
                             set.addEntry(entry)
-//                            countChart.notifyDataSetChanged()
-                        }
                     } ?: with(BarDataSet(it.toBarEntry(), "")) {
                         Timber.d("dataSet not created so instantiating it")
                         valueFormatter = IntFormatter()
                         dataSet = this
-//                        countChart.data.addDataSet(this)
-//                        countChart.notifyDataSetChanged()
                     }
                     countChart.data = BarData(dataSet)
                     countChart.notifyDataSetChanged()
-//                    countChart.data.notifyDataChanged()
-//                    countChart.minOffset = 0F
-//                    countChart.setExtraOffsets(4F, 4F, 4F, 4F)
-//                    countChart.setViewPortOffsets(0F, 4F, 0F, 0F)
-//                    countChart.data = BarData(dataSet)
-//                    countChart.notifyDataSetChanged()
-//                    countChart.axisLeft.axisMinimum = 0F
-//                    countChart.data.notifyDataChanged()
                     countChart.fitScreen()
                     countChart.moveViewToX(0F)
                     countChart.invalidate()
@@ -162,96 +154,7 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange, View.OnClic
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        emojiLoader = EmojiLoader.loadAsync(view.context)
-        val adapters = listOf(upperAdsAdapter, diseasesAdapter, lowerAdsAdapter)
-        fastAdapter = FastAdapter.with(adapters)
-        val rvManager = LinearLayoutManager(context)
-        with(view.container) {
-            layoutManager = rvManager
-            adapter = fastAdapter
-        }
-        fastAdapter.addEventHook(DiseaseClickEventHook())
-        fastAdapter.withSavedInstanceState(savedInstanceState)
-        behavior = BottomSheetBehavior.from(view.contentLayout)
-        behavior.addBottomSheetCallback(BottomSheetStateCallback())
-        view.countChart.setDrawGridBackground(false)
-        view.countChart.axisLeft.apply {
-            setDrawGridLines(false)
-            valueFormatter = IntFormatter()
-            isGranularityEnabled = true
-            granularity = 1F
-            axisMinimum = 0F
-//            spaceMax = .01F
-        }
-        view.countChart.axisRight.apply {
-            setDrawGridLines(false)
-            valueFormatter = IntFormatter()
-            isGranularityEnabled = true
-            granularity = 1F
-            axisMinimum = 0F
-//            spaceMax = .01F
-        }
-        view.countChart.xAxis.apply {
-            setDrawGridLines(false)
-            valueFormatter = IntFormatter()
-            isGranularityEnabled = true
-            granularity = 1F
-            axisMaximum = 0F
-        }
-        view.countChart.setVisibleXRangeMaximum(7F)
-        view.countChart.isAutoScaleMinMaxEnabled = true
-        view.countChart.legend.isEnabled = false
-        view.countChart.description.isEnabled = false
-//        view.countChart.extraTopOffset = 16F
-//        view.countChart.extraTopOffset = dpToPx(4F)
-        view.countChart.invalidate()
-        view.countUpButton.setOnClickListener(this)
-        view.countDownButton.setOnClickListener(this)
-        /*view.countUpButton.setOnClickListener {
-            lifecycleScope.launch {
-                val createdItem =
-                    handwashingViewModel.getAsync(CalendarUtils.today.time)
-                        .await()
-                if (createdItem == null)
-                    handwashingViewModel.create(
-                        Handwashing(
-                            CalendarUtils.today.time,
-                            0
-                        )
-                    )
-                handwashingViewModel.increment(CalendarUtils.today.time)
-                leaves.visibility = View.VISIBLE
-                if (!leaves.isAnimating)
-                    leaves.playAnimation()
-            }
-        }
-        view.countDownButton.setOnClickListener {
-            lifecycleScope.launch {
-                val createdItem =
-                    handwashingViewModel.getAsync(CalendarUtils.today.time)
-                        .await()
-                if (createdItem == null)
-                    handwashingViewModel.create(
-                        Handwashing(
-                            CalendarUtils.today.time,
-                            0
-                        )
-                    )
-                handwashingViewModel.decrement(CalendarUtils.today.time)
-            }
-        }*/
-        lifecycleScope.launch {
-            val countUpText = getText(R.string.add_another)
-            val countDownText = getText(R.string.reduce_count)
-            val emojiCompat = emojiLoader.await()
-            try {
-                countUpButton.text = emojiCompat.process(countUpText)
-                countDownButton.text = emojiCompat.process(countDownText)
-            } catch (_: IllegalStateException) {
-                countUpButton.text = countUpText
-                countDownButton.text = countDownText
-            }
-        }
+        onViewCreatedAsync(view, savedInstanceState)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -276,10 +179,7 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange, View.OnClic
         }
     }
 
-    override fun onVisibilityChanged(visibility: Int) {
-        /*if (visibility == View.VISIBLE)
-            lifecycleScope.launchWhenCreated { informationViewModel.parseHtml() }*/
-    }
+    override fun onVisibilityChanged(visibility: Int) {}
 
     override fun onClick(v: View?) {
         when (v) {
@@ -331,6 +231,62 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange, View.OnClic
             text
         }
     }
+
+    private fun onViewCreatedAsync(view: View, savedInstanceState: Bundle?) =
+        lifecycleScope.launch {
+            emojiLoader = EmojiLoader.loadAsync(view.context)
+            val adapters =
+                listOf(upperAdsAdapter, diseasesAdapter, lowerAdsAdapter)
+            fastAdapter = FastAdapter.with(adapters)
+            val rvManager = LinearLayoutManager(context)
+            with(view.container) {
+                layoutManager = rvManager
+                adapter = fastAdapter
+            }
+            fastAdapter.addEventHook(DiseaseClickEventHook())
+            fastAdapter.withSavedInstanceState(savedInstanceState)
+            behavior = BottomSheetBehavior.from(view.contentLayout)
+            behavior.addBottomSheetCallback(BottomSheetStateCallback())
+            view.countChart.setDrawGridBackground(false)
+            view.countChart.axisLeft.apply {
+                setDrawGridLines(false)
+                valueFormatter = IntFormatter()
+                isGranularityEnabled = true
+                granularity = 1F
+                axisMinimum = 0F
+            }
+            view.countChart.axisRight.apply {
+                setDrawGridLines(false)
+                valueFormatter = IntFormatter()
+                isGranularityEnabled = true
+                granularity = 1F
+                axisMinimum = 0F
+            }
+            view.countChart.xAxis.apply {
+                setDrawGridLines(false)
+                valueFormatter = IntFormatter()
+                isGranularityEnabled = true
+                granularity = 1F
+                axisMaximum = 0F
+            }
+            view.countChart.setVisibleXRangeMaximum(7F)
+            view.countChart.isAutoScaleMinMaxEnabled = true
+            view.countChart.legend.isEnabled = false
+            view.countChart.description.isEnabled = false
+            view.countChart.invalidate()
+            view.countUpButton.setOnClickListener(this@DiseasesFragment)
+            view.countDownButton.setOnClickListener(this@DiseasesFragment)
+            val countUpText = getText(R.string.add_another)
+            val countDownText = getText(R.string.reduce_count)
+            val emojiCompat = emojiLoader.await()
+            try {
+                countUpButton.text = emojiCompat.process(countUpText)
+                countDownButton.text = emojiCompat.process(countDownText)
+            } catch (_: IllegalStateException) {
+                countUpButton.text = countUpText
+                countDownButton.text = countDownText
+            }
+        }
 
     private inner class DiseaseClickEventHook : ClickEventHook<Disease>() {
         override fun onBind(viewHolder: RecyclerView.ViewHolder) =
