@@ -32,6 +32,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.Headers
 import timber.log.Timber
 import java.io.Reader
+import java.util.*
 
 
 class NewsViewModel : ViewModel() {
@@ -42,29 +43,43 @@ class NewsViewModel : ViewModel() {
         amount: Int = 10,
         @Language language: String = Language.ENGLISH
     ) {
-        val httpRequest = HttpDownloader()
-        val klaxon = with(Klaxon()) {
-            propertyStrategy(newsStrategy)
-            fieldConverter(KlaxonDate::class, dateConverter)
-            fieldConverter(KlaxonElements::class, elementConverter)
-        }
-        var requestReader: Reader? = null
-        Auth.init()
-        val token = Auth.token()
-        Timber.d("Auth token: $token")
-        withContext(Dispatchers.IO) {
-            requestReader = httpRequest.json(
-                "${API_URL}/api/v1?from=$from&amount=$amount&lang=$language",
-                headers = Headers.of(mapOf("Authorization" to "Bearer $token"))
-            )
-        }
-        withContext(Dispatchers.Default) {
-            JsonReader(requestReader!!).use { reader ->
-                reader.beginArray {
-                    while (reader.hasNext()) {
-                        newsData.postValue(klaxon.parse<NewsData>(reader))
+        try {
+            val httpRequest = HttpDownloader()
+            val klaxon = with(Klaxon()) {
+                propertyStrategy(newsStrategy)
+                fieldConverter(KlaxonDate::class, dateConverter)
+                fieldConverter(KlaxonElements::class, elementConverter)
+            }
+            var requestReader: Reader? = null
+            Auth.init()
+            val token = Auth.token()
+            Timber.d("Auth token: $token")
+            withContext(Dispatchers.IO) {
+                requestReader = httpRequest.json(
+                    "${API_URL}/api/v1?from=$from&amount=$amount&lang=$language",
+                    headers = Headers.of(mapOf("Authorization" to "Bearer $token"))
+                )
+            }
+            withContext(Dispatchers.Default) {
+                JsonReader(requestReader!!).use { reader ->
+                    reader.beginArray {
+                        while (reader.hasNext()) {
+                            newsData.postValue(klaxon.parse<NewsData>(reader))
+                        }
                     }
                 }
+            }
+        } catch (e: Throwable) {
+            Timber.w(e, "Exception while populating data")
+            withContext(Dispatchers.Main) {
+                newsData.value = NewsData(
+                    hasError = true,
+                    id = "",
+                    discoverDate = Date(),
+                    title = "",
+                    text = "",
+                    url = ""
+                )
             }
         }
     }

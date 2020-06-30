@@ -69,6 +69,11 @@ class NewsFragment : BaseFragmentView(), LayoutVisibilityChange {
                 newsViewModel.newsData.observe(viewLifecycleOwner, Observer {
                     if (::footerAdapter.isInitialized)
                         footerAdapter.clear()
+                    if (it.hasError) {
+                        if (newsAdapter.adapterItemCount == 0) {
+
+                        }
+                    }
                     if (it.id !in activeItems) {
                         val newsObject = News(
                             title = it.title,
@@ -128,9 +133,15 @@ class NewsFragment : BaseFragmentView(), LayoutVisibilityChange {
             refreshLayout.isRefreshing = true
             newsAdapter.clear()
             activeItems.clear()
+            footerAdapter.clear()
+            scrollListener.disable()
             lifecycleScope.launch {
                 newsViewModel.populateData(language = UserProperties.language)
-            }.invokeOnCompletion { refreshLayout.isRefreshing = false }
+            }.invokeOnCompletion {
+                refreshLayout.isRefreshing = false
+                scrollListener.enable()
+                scrollListener.resetPageCount()
+            }
             container.visibility = View.INVISIBLE
         }
     }

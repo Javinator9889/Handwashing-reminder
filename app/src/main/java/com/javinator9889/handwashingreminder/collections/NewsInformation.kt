@@ -35,7 +35,9 @@ data class NewsData(
     val url: String,
     @KlaxonElements
     val elements: Elements? = null,
-    val website: Website? = null
+    val website: Website? = null,
+    @Json(ignored = true)
+    val hasError: Boolean = false
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
@@ -44,7 +46,8 @@ data class NewsData(
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readParcelable(Elements::class.java.classLoader),
-        parcel.readParcelable(Website::class.java.classLoader)
+        parcel.readParcelable(Website::class.java.classLoader),
+        parcel.readInt() == 1
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -55,18 +58,15 @@ data class NewsData(
         parcel.writeString(url)
         parcel.writeParcelable(elements, flags)
         parcel.writeParcelable(website, flags)
+        parcel.writeInt(if (hasError) 1 else 0)
     }
 
     override fun describeContents() = 0
 
     companion object CREATOR : Parcelable.Creator<NewsData> {
-        override fun createFromParcel(parcel: Parcel): NewsData {
-            return NewsData(parcel)
-        }
+        override fun createFromParcel(parcel: Parcel) = NewsData(parcel)
 
-        override fun newArray(size: Int): Array<NewsData?> {
-            return arrayOfNulls(size)
-        }
+        override fun newArray(size: Int) = arrayOfNulls<NewsData>(size)
     }
 }
 
