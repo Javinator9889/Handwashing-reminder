@@ -18,6 +18,8 @@
  */
 package com.javinator9889.handwashingreminder.utils
 
+import android.util.SparseArray
+import androidx.core.util.set
 import com.github.mikephil.charting.data.BarEntry
 import com.javinator9889.handwashingreminder.data.room.entities.Handwashing
 import com.javinator9889.handwashingreminder.utils.calendar.CalendarUtils
@@ -53,14 +55,23 @@ fun List<Date>.closest(): Date {
 
 fun List<Handwashing>.toBarEntry(): List<BarEntry> {
     val entryBars = mutableListOf<BarEntry>()
+    val daysSorted = mutableListOf<Int>()
+    val daysEntriesArray = SparseArray<Float>(size)
     for (entry in this) {
         val daysBetween =
             (CalendarUtils.today.time.time - entry.date.time).run {
-                TimeUnit.DAYS.convert(this, TimeUnit.MILLISECONDS).toFloat()
+                -TimeUnit.DAYS.convert(this, TimeUnit.MILLISECONDS).toInt()
             }
-
+        daysEntriesArray[daysBetween] = entry.amount.toFloat()
+        daysSorted.add(daysBetween)
+    }
+    daysSorted.sort()
+    for (daysDifference in daysSorted) {
         entryBars.add(
-            BarEntry(daysBetween, entry.amount.toFloat())
+            BarEntry(
+                daysDifference.toFloat(),
+                daysEntriesArray[daysDifference]
+            )
         )
     }
     return entryBars

@@ -64,7 +64,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 
-class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange {
+class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange, View.OnClickListener {
     override val layoutId: Int = R.layout.main_disease_view
 
     private lateinit var parsedHTMLTexts: List<ParsedHTMLText>
@@ -84,23 +84,23 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange {
             loading.visibility = View.VISIBLE
             countLoader.visibility = View.VISIBLE
             informationViewModel.parsedHTMLText.observe(viewLifecycleOwner) {
-                    if (it.isEmpty())
-                        return@observe
-                    parsedHTMLTexts = it
-                    it.forEachIndexed { i, parsedText ->
-                        val animation =
-                            if (i % 2 == 0) R.raw.virus_red
-                            else R.raw.virus_loader
-                        val layoutId =
-                            if (i % 2 == 0) R.layout.disease_card_layout
-                            else R.layout.disease_card_alt_layout
-                        val disease = Disease(animation, parsedText, layoutId, i)
-                        if (diseasesAdapter.getAdapterPosition(disease) == -1)
-                            diseasesAdapter.add(disease)
-                    }
-                    loading.visibility = View.INVISIBLE
-                    container.visibility = View.VISIBLE
+                if (it.isEmpty())
+                    return@observe
+                parsedHTMLTexts = it
+                it.forEachIndexed { i, parsedText ->
+                    val animation =
+                        if (i % 2 == 0) R.raw.virus_red
+                        else R.raw.virus_loader
+                    val layoutId =
+                        if (i % 2 == 0) R.layout.disease_card_layout
+                        else R.layout.disease_card_alt_layout
+                    val disease = Disease(animation, parsedText, layoutId, i)
+                    if (diseasesAdapter.getAdapterPosition(disease) == -1)
+                        diseasesAdapter.add(disease)
                 }
+                loading.visibility = View.INVISIBLE
+                container.visibility = View.VISIBLE
+            }
             handwashingViewModel.allData.observe(viewLifecycleOwner) {
                 lifecycleScope.launch {
                     val dataSet = BarDataSet(it.toBarEntry(), "label")
@@ -149,26 +149,15 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange {
         fastAdapter.addEventHook(DiseaseClickEventHook())
         fastAdapter.withSavedInstanceState(savedInstanceState)
         behavior = BottomSheetBehavior.from(view.contentLayout)
-        behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
-                if (newState == STATE_EXPANDED) {
-                    if (upperAdsAdapter.adapterItemCount == 0)
-                        upperAdsAdapter.add(Ads())
-                    if (lowerAdsAdapter.adapterItemCount == 0)
-                        lowerAdsAdapter.add(Ads())
-                    informationViewModel.parseHtml()
-                }
-            }
-
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
-
-        })
-        view.countChart.setDrawGridBackground(false)
-        view.countChart.axisLeft.setDrawGridLines(false)
-        view.countChart.axisRight.setDrawGridLines(false)
-        view.countChart.xAxis.setDrawGridLines(false)
-        view.countChart.invalidate()
-        view.countUpButton.setOnClickListener {
+        behavior.addBottomSheetCallback(BottomSheetStateCallback())
+//        view.countChart.setDrawGridBackground(false)
+//        view.countChart.axisLeft.setDrawGridLines(false)
+//        view.countChart.axisRight.setDrawGridLines(false)
+//        view.countChart.xAxis.setDrawGridLines(false)
+//        view.countChart.invalidate()
+        view.countUpButton.setOnClickListener(this)
+        view.countDownButton.setOnClickListener(this)
+        /*view.countUpButton.setOnClickListener {
             lifecycleScope.launch {
                 val createdItem =
                     handwashingViewModel.getAsync(CalendarUtils.today.time)
@@ -200,7 +189,7 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange {
                     )
                 handwashingViewModel.decrement(CalendarUtils.today.time)
             }
-        }
+        }*/
         lifecycleScope.launch {
             val countUpText = getText(R.string.add_another)
             val countDownText = getText(R.string.reduce_count)
@@ -240,6 +229,40 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange {
     override fun onVisibilityChanged(visibility: Int) {
         /*if (visibility == View.VISIBLE)
             lifecycleScope.launchWhenCreated { informationViewModel.parseHtml() }*/
+    }
+
+    override fun onClick(v: View?) {
+        when (v) {
+            countUpButton -> lifecycleScope.launch {
+                val createdItem =
+                    handwashingViewModel.getAsync(CalendarUtils.today.time)
+                        .await()
+                if (createdItem == null)
+                    handwashingViewModel.create(
+                        Handwashing(
+                            CalendarUtils.today.time,
+                            0
+                        )
+                    )
+                handwashingViewModel.increment(CalendarUtils.today.time)
+                leaves.visibility = View.VISIBLE
+                if (!leaves.isAnimating)
+                    leaves.playAnimation()
+            }
+            countDownButton -> lifecycleScope.launch {
+                val createdItem =
+                    handwashingViewModel.getAsync(CalendarUtils.today.time)
+                        .await()
+                if (createdItem == null)
+                    handwashingViewModel.create(
+                        Handwashing(
+                            CalendarUtils.today.time,
+                            0
+                        )
+                    )
+                handwashingViewModel.decrement(CalendarUtils.today.time)
+            }
+        }
     }
 
     private suspend fun setCountText(
@@ -284,5 +307,21 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange {
                 null
             )
         }
+    }
+
+    private inner class BottomSheetStateCallback :
+        BottomSheetBehavior.BottomSheetCallback() {
+
+        override fun onStateChanged(bottomSheet: View, newState: Int) {
+            if (newState == STATE_EXPANDED) {
+                if (upperAdsAdapter.adapterItemCount == 0)
+                    upperAdsAdapter.add(Ads())
+                if (lowerAdsAdapter.adapterItemCount == 0)
+                    lowerAdsAdapter.add(Ads())
+                informationViewModel.parseHtml()
+            }
+        }
+
+        override fun onSlide(bottomSheet: View, slideOffset: Float) {}
     }
 }
