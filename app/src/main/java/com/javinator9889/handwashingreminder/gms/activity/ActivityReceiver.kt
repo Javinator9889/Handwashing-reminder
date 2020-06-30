@@ -23,6 +23,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.annotation.StringRes
 import androidx.emoji.text.EmojiCompat
+import androidx.preference.PreferenceManager
 import com.google.android.gms.location.ActivityTransition
 import com.google.android.gms.location.ActivityTransitionResult
 import com.google.android.gms.location.DetectedActivity
@@ -30,11 +31,16 @@ import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.emoji.EmojiLoader
 import com.javinator9889.handwashingreminder.notifications.NotificationsHandler
 import com.javinator9889.handwashingreminder.utils.ACTIVITY_CHANNEL_ID
+import com.javinator9889.handwashingreminder.utils.Preferences
+import com.javinator9889.handwashingreminder.utils.calendar.CalendarUtils
 import com.javinator9889.handwashingreminder.utils.goAsync
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.io.*
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 class ActivityReceiver : BroadcastReceiver() {
     /**
@@ -82,6 +88,24 @@ class ActivityReceiver : BroadcastReceiver() {
         detectedActivity: Int,
         context: Context
     ) {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val timeInBetweenNotifications =
+            preferences.getInt(Preferences.ACTIVITY_MINIMUM_TIME, 15)
+        val timeFile = File(context.cacheDir, "activity.time")
+        var latestNotificationTime = 0L
+        withContext(Dispatchers.IO) {
+            if (timeFile.exists()) {
+                DataInputStream(FileInputStream(timeFile)).use {
+                    latestNotificationTime = it.readLong()
+                }
+            }
+        }
+        val timeDifference = CalendarUtils.timeBetweenIn(
+            TimeUnit.MINUTES,
+            latestNotificationTime
+        )
+        if (timeDifference <= timeInBetweenNotifications)
+            return
         val notificationContent = when (detectedActivity) {
             DetectedActivity.WALKING ->
                 NotificationContent(
@@ -113,7 +137,8 @@ class ActivityReceiver : BroadcastReceiver() {
             val emojiCompat = emojiLoader.await()
             title = emojiCompat.process(title)
             content = emojiCompat.process(content)
-        } catch (_: IllegalStateException) { }
+        } catch (_: IllegalStateException) {
+        }
         withContext(Dispatchers.Main) {
             notificationsHandler.createNotification(
                 iconDrawable = R.drawable.ic_stat_handwashing,
@@ -122,6 +147,11 @@ class ActivityReceiver : BroadcastReceiver() {
                 content = content,
                 longContent = content
             )
+        }
+        withContext(Dispatchers.IO) {
+            DataOutputStream(FileOutputStream(timeFile)).use {
+                it.writeLong(Calendar.getInstance().timeInMillis)
+            }
         }
     }
 }

@@ -19,6 +19,7 @@
 package com.javinator9889.handwashingreminder.utils.calendar
 
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 object CalendarUtils {
     val today: Calendar
@@ -41,4 +42,15 @@ object CalendarUtils {
             today.add(Calendar.MONTH, -1)
             today
         }
+
+    fun timeBetweenIn(
+        unit: TimeUnit,
+        to: Long,
+        from: Long = Calendar.getInstance().timeInMillis
+    ): Long = unit.convert(timeBetween(from, to), TimeUnit.MILLISECONDS)
+
+    fun timeBetween(
+        to: Long,
+        from: Long = Calendar.getInstance().timeInMillis
+    ): Long = from - to
 }
