@@ -28,5 +28,5 @@ interface AdLoader {
 
     fun destroy()
 
-    fun loadAdForViewGroup(view: ViewGroup, removeAllViews: Boolean = true)
+    fun loadAdForViewGroup(view: ViewGroup, removeAllViews: Boolean = true): Throwable?
 }

@@ -33,7 +33,6 @@ import com.google.android.gms.ads.*
 import com.google.android.gms.ads.formats.NativeAdOptions
 import com.google.android.gms.ads.formats.UnifiedNativeAd
 import com.google.android.gms.ads.formats.UnifiedNativeAdView
-import com.google.android.play.core.splitcompat.SplitCompat
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
 import com.javinator9889.handwashingreminder.utils.isConnected
 import com.javinator9889.handwashingreminder.utils.isDebuggable
@@ -62,8 +61,7 @@ class AdLoaderImpl private constructor(context: Context?) : AdLoader {
                         "the first instance"
             )
         moduleContext = context
-        SplitCompat.install(moduleContext)
-        MobileAds.initialize(moduleContext)
+        MobileAds.initialize(moduleContext.applicationContext)
         val videoOptions = VideoOptions.Builder()
             .setStartMuted(true)
             .build()
@@ -79,7 +77,7 @@ class AdLoaderImpl private constructor(context: Context?) : AdLoader {
         override fun instance(context: Context?): AdLoader {
             instance.get()?.let { return it }
             synchronized(this) {
-                val instance = AdLoaderImpl(context?.applicationContext)
+                val instance = AdLoaderImpl(context)
                 this.instance = WeakReference(instance)
                 return instance
             }
@@ -87,31 +85,34 @@ class AdLoaderImpl private constructor(context: Context?) : AdLoader {
     }
 
     @SuppressLint("InflateParams")
-    override fun loadAdForViewGroup(view: ViewGroup, removeAllViews: Boolean) {
+    override fun loadAdForViewGroup(view: ViewGroup, removeAllViews: Boolean) = runCatching {
         if (!isVideoEnded || !isConnected())
-            return
+            throw IllegalStateException("Phone is not connected or the video didn't finished")
         val adLoader = AdBase.Builder(moduleContext, ADMOB_APP_NATIVE_ID)
             .forUnifiedNativeAd { ad: UnifiedNativeAd ->
-                val adView = LayoutInflater.from(moduleContext)
-                    .inflate(R.layout.native_ad_view, null) as CardView
-                populateUnifiedNativeAdView(ad, adView)
-                if (removeAllViews)
-                    view.removeAllViews()
-                view.addView(adView)
+                try {
+                    val adView = LayoutInflater.from(moduleContext)
+                        .inflate(R.layout.native_ad_view, null) as CardView
+                    populateUnifiedNativeAdView(ad, adView)
+                    if (removeAllViews)
+                        view.removeAllViews()
+                    view.addView(adView)
+                } catch (e: Throwable) {
+                    Timber.w(e, "Cannot load ad in view")
+                }
             }
             .withNativeAdOptions(adOptions)
             .withAdListener(object : AdListener() {
                 override fun onAdFailedToLoad(errorCode: Int) {
                     when (errorCode) {
                         AdRequest.ERROR_CODE_INVALID_REQUEST,
-                        AdRequest.ERROR_CODE_NO_FILL ->
-                            Timber.e("Error while loading the ad: $errorCode")
+                        AdRequest.ERROR_CODE_NO_FILL -> throw IllegalAccessError(errorCode.toString())
                         else -> return
                     }
                 }
             }).build()
         adLoader.loadAd(AdRequest.Builder().build())
-    }
+    }.exceptionOrNull()
 
     override fun destroy() {
         currentNativeAd?.destroy()

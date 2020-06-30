@@ -81,14 +81,14 @@ class LauncherActivity : AppCompatActivity() {
             }
             whenStarted {
                 progressBar.show()
-                val welcomeScreenDeferred = showWelcomeScreenAsync()
+                val welcomeScreenJob = showWelcomeScreenAsync()
                 deferreds.add(installRequiredModulesAsync())
                 activityIntentDeferred.await().run {
-                    Timber.d("Activity Init is now completed!")
+                    Timber.d("Activity Init is now completed! - $this")
                     if (launchFromNotification)
                         flags = Intent.FLAG_ACTIVITY_NEW_TASK or
                                 Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    welcomeScreenDeferred.join()
+                    welcomeScreenJob.join()
                     startActivity(this)
                     overridePendingTransition(0, android.R.anim.fade_out)
                     finish()
@@ -153,9 +153,8 @@ class LauncherActivity : AppCompatActivity() {
                 Activity.RESULT_OK -> {
                     createPackageContext(packageName, 0).also {
                         SplitCompat.install(it)
-                    }.also {
-                        initAds(it)
                     }
+                    initAds()
                 }
                 Activity.RESULT_CANCELED -> app.adLoader = null
             }
@@ -237,14 +236,17 @@ class LauncherActivity : AppCompatActivity() {
                 splitInstallManager.installedModules
     }
 
-    private fun initAds(context: Context) {
-        val className = "${Ads.PACKAGE_NAME}.${Ads
-            .CLASS_NAME}\$${Ads.PROVIDER_NAME}"
-        val adProvider = Class.forName(className).kotlin
-            .objectInstance as AdLoader.Provider
-        app.adLoader = adProvider.instance(app)
-        val adsEnabler = AdsEnabler(app)
-        adsEnabler.enableAds()
+    private fun initAds(context: Context = app) {
+        if (Ads.MODULE_NAME in splitInstallManager.installedModules &&
+                sharedPreferences.getBoolean(ADS_ENABLED, true)) {
+            val className = "${Ads.PACKAGE_NAME}.${Ads
+                .CLASS_NAME}\$${Ads.PROVIDER_NAME}"
+            val adProvider = Class.forName(className).kotlin
+                .objectInstance as AdLoader.Provider
+            app.adLoader = adProvider.instance(context)
+            val adsEnabler = AdsEnabler(app)
+            adsEnabler.enableAds()
+        }
     }
 
     private fun createDynamicFeatureActivityIntent(
@@ -283,6 +285,8 @@ class LauncherActivity : AppCompatActivity() {
         with(AlarmHandler(this)) {
             scheduleAllAlarms()
         }
+        Timber.d("Initializing Ads Provider")
+        initAds()
         Timber.d("Adding periodic notifications if not enqueued yet")
         Timber.d("Setting-up Firebase custom properties")
         setupFirebasePropertiesAsync().join()
