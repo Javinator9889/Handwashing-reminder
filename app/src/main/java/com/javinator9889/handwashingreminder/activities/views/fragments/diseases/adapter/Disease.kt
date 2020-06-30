@@ -36,9 +36,13 @@ data class Disease(
     override val type: Int
 ) : AbstractItem<Disease.ViewHolder>() {
 
+    init {
+        identifier = type.toLong()
+    }
+
     override fun getViewHolder(v: View): ViewHolder = ViewHolder(v)
 
-    class ViewHolder(private val view: View) :
+    class ViewHolder(view: View) :
         FastAdapter.ViewHolder<Disease>(view) {
         val cardContainer: MaterialCardView =
             view.findViewById(R.id.cardDiseaseContainer)

@@ -35,6 +35,7 @@ import kotlinx.coroutines.*
 import org.sufficientlysecure.htmltextview.HtmlFormatter
 import org.sufficientlysecure.htmltextview.HtmlFormatterBuilder
 import timber.log.Timber
+import java.util.concurrent.atomic.AtomicBoolean
 
 private const val DATA_KEY = "text:html:text"
 private const val PARSED_JSON_KEY = "text:json:parsed"
@@ -43,6 +44,7 @@ class DiseaseInformationViewModel(
     private val state: SavedStateHandle
 ) : ViewModel() {
     private val informationList: DiseasesList = loadHtmlData()
+    private val isHTMLParsed = AtomicBoolean(false)
     val parsedHTMLText: MutableLiveData<List<ParsedHTMLText>> =
         state.getLiveData(DATA_KEY, emptyList())
 
@@ -60,7 +62,9 @@ class DiseaseInformationViewModel(
 
     fun parseHtml() = viewModelScope.launch {
         Timber.d("Parsing HTML")
-        if (!state.get<List<ParsedHTMLText>>(DATA_KEY).isNullOrEmpty())
+        if (!state.get<List<ParsedHTMLText>>(DATA_KEY)
+                .isNullOrEmpty() || isHTMLParsed.get()
+        )
             return@launch
         val parsedItemsList =
             ArrayList<ParsedHTMLText>(informationList.diseases.size)
@@ -104,6 +108,7 @@ class DiseaseInformationViewModel(
                 }
             }
         }
+        isHTMLParsed.set(true)
     }
 
     private fun createHTML(htmlText: String): Spanned =

@@ -87,8 +87,6 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange {
                     if (it.isEmpty())
                         return@observe
                     parsedHTMLTexts = it
-                    upperAdsAdapter.add(Ads())
-                    lowerAdsAdapter.add(Ads())
                     it.forEachIndexed { i, parsedText ->
                         val animation =
                             if (i % 2 == 0) R.raw.virus_red
@@ -96,9 +94,9 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange {
                         val layoutId =
                             if (i % 2 == 0) R.layout.disease_card_layout
                             else R.layout.disease_card_alt_layout
-                        diseasesAdapter.add(
-                            Disease(animation, parsedText, layoutId, i)
-                        )
+                        val disease = Disease(animation, parsedText, layoutId, i)
+                        if (diseasesAdapter.getAdapterPosition(disease) == -1)
+                            diseasesAdapter.add(disease)
                     }
                     loading.visibility = View.INVISIBLE
                     container.visibility = View.VISIBLE
@@ -151,6 +149,20 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange {
         fastAdapter.addEventHook(DiseaseClickEventHook())
         fastAdapter.withSavedInstanceState(savedInstanceState)
         behavior = BottomSheetBehavior.from(view.contentLayout)
+        behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                if (newState == STATE_EXPANDED) {
+                    if (upperAdsAdapter.adapterItemCount == 0)
+                        upperAdsAdapter.add(Ads())
+                    if (lowerAdsAdapter.adapterItemCount == 0)
+                        lowerAdsAdapter.add(Ads())
+                    informationViewModel.parseHtml()
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+
+        })
         view.countChart.setDrawGridBackground(false)
         view.countChart.axisLeft.setDrawGridLines(false)
         view.countChart.axisRight.setDrawGridLines(false)
@@ -226,8 +238,8 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange {
     }
 
     override fun onVisibilityChanged(visibility: Int) {
-        if (visibility == View.VISIBLE)
-            lifecycleScope.launchWhenCreated { informationViewModel.parseHtml() }
+        /*if (visibility == View.VISIBLE)
+            lifecycleScope.launchWhenCreated { informationViewModel.parseHtml() }*/
     }
 
     private suspend fun setCountText(
