@@ -33,6 +33,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
@@ -78,6 +79,7 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange, View.OnClic
         SavedViewModelFactory(DiseaseInformationViewModel.Factory, this)
     }
     private val handwashingViewModel: HandwashingViewModel by activityViewModels()
+    private var dataSet: BarDataSet? = null
 
     init {
         lifecycleScope.launchWhenStarted {
@@ -103,11 +105,33 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange, View.OnClic
             }
             handwashingViewModel.allData.observe(viewLifecycleOwner) {
                 lifecycleScope.launch {
-                    val dataSet = BarDataSet(it.toBarEntry(), "label")
+                    dataSet?.let { set ->
+                        Timber.d("Adding new items to dataSet")
+                        set.clear()
+                        for (entry in it.toBarEntry()) {
+                            set.addEntry(entry)
+//                            countChart.notifyDataSetChanged()
+                        }
+                    } ?: with(BarDataSet(it.toBarEntry(), "")) {
+                        Timber.d("dataSet not created so instantiating it")
+                        valueFormatter = IntFormatter()
+                        dataSet = this
+//                        countChart.data.addDataSet(this)
+//                        countChart.notifyDataSetChanged()
+                    }
                     countChart.data = BarData(dataSet)
                     countChart.notifyDataSetChanged()
-                    countChart.setVisibleXRangeMaximum(7F)
+//                    countChart.data.notifyDataChanged()
+//                    countChart.minOffset = 0F
+//                    countChart.setExtraOffsets(4F, 4F, 4F, 4F)
+//                    countChart.setViewPortOffsets(0F, 4F, 0F, 0F)
+//                    countChart.data = BarData(dataSet)
+//                    countChart.notifyDataSetChanged()
+//                    countChart.axisLeft.axisMinimum = 0F
+//                    countChart.data.notifyDataChanged()
+                    countChart.fitScreen()
                     countChart.moveViewToX(0F)
+                    countChart.invalidate()
                     val todayAmount =
                         handwashingViewModel.getAsync(CalendarUtils.today.time)
                     val weeklyAmount =
@@ -150,11 +174,37 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange, View.OnClic
         fastAdapter.withSavedInstanceState(savedInstanceState)
         behavior = BottomSheetBehavior.from(view.contentLayout)
         behavior.addBottomSheetCallback(BottomSheetStateCallback())
-//        view.countChart.setDrawGridBackground(false)
-//        view.countChart.axisLeft.setDrawGridLines(false)
-//        view.countChart.axisRight.setDrawGridLines(false)
-//        view.countChart.xAxis.setDrawGridLines(false)
-//        view.countChart.invalidate()
+        view.countChart.setDrawGridBackground(false)
+        view.countChart.axisLeft.apply {
+            setDrawGridLines(false)
+            valueFormatter = IntFormatter()
+            isGranularityEnabled = true
+            granularity = 1F
+            axisMinimum = 0F
+//            spaceMax = .01F
+        }
+        view.countChart.axisRight.apply {
+            setDrawGridLines(false)
+            valueFormatter = IntFormatter()
+            isGranularityEnabled = true
+            granularity = 1F
+            axisMinimum = 0F
+//            spaceMax = .01F
+        }
+        view.countChart.xAxis.apply {
+            setDrawGridLines(false)
+            valueFormatter = IntFormatter()
+            isGranularityEnabled = true
+            granularity = 1F
+            axisMaximum = 0F
+        }
+        view.countChart.setVisibleXRangeMaximum(7F)
+        view.countChart.isAutoScaleMinMaxEnabled = true
+        view.countChart.legend.isEnabled = false
+        view.countChart.description.isEnabled = false
+//        view.countChart.extraTopOffset = 16F
+//        view.countChart.extraTopOffset = dpToPx(4F)
+        view.countChart.invalidate()
         view.countUpButton.setOnClickListener(this)
         view.countDownButton.setOnClickListener(this)
         /*view.countUpButton.setOnClickListener {
@@ -323,5 +373,9 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange, View.OnClic
         }
 
         override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+    }
+
+    private inner class IntFormatter : ValueFormatter() {
+        override fun getFormattedValue(value: Float) = value.toInt().toString()
     }
 }
