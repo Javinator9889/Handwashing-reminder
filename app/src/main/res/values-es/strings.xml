@@ -285,4 +285,9 @@
         <item quantity="one">%d minuto</item>
         <item quantity="other">%d minutos</item>
     </plurals>
+    <string name="performance_options">Opciones de rendimiento de la app</string>
+    <string name="disable_animations">Deshabilitar las animaciones en la app</string>
+    <string name="animations_on">Actualmente, las animaciones están activadas.
+        Ten en cuenta que esto puede afectar tanto al rendimiento como a la batería</string>
+    <string name="animations_off">No se mostrará ninguna animación</string>
 </resources>

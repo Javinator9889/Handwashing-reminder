@@ -313,4 +313,9 @@
         <item quantity="one">%d minute</item>
         <item quantity="other">%d minutes</item>
     </plurals>
+    <string name="performance_options">App\'s performance options</string>
+    <string name="disable_animations">Disable app\'s animations</string>
+    <string name="animations_on">Currently, the app will play some animations.
+    Keep in mind that it can affect both performance and battery life</string>
+    <string name="animations_off">No animations will be played</string>
 </resources>

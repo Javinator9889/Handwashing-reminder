@@ -10,24 +10,24 @@
         <Preference
             android:key="playstore"
             android:persistent="false"
-            android:title="@string/playstore"/>
+            android:title="@string/playstore" />
         <Preference
+            android:icon="@drawable/ic_telegram"
             android:key="telegram"
             android:persistent="false"
-            android:icon="@drawable/ic_telegram"
             android:title="@string/telegram" />
         <Preference
             android:key="github"
             android:persistent="false"
-            android:title="@string/github"/>
+            android:title="@string/github" />
         <Preference
             android:key="linkedin"
             android:persistent="false"
-            android:title="@string/linkedin"/>
+            android:title="@string/linkedin" />
         <Preference
             android:key="twitter"
             android:persistent="false"
-            android:title="@string/twitter"/>
+            android:title="@string/twitter" />
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -60,12 +60,20 @@
 
         <EditTextPreference
             android:defaultValue="15"
+            android:dependency="activity:gms:tracking"
+            android:dialogLayout="@layout/preference_edit_text"
             android:key="activity:gms:minimumInterval"
             android:selectAllOnFocus="true"
             android:singleLine="true"
-            android:dependency="activity:gms:tracking"
-            android:dialogLayout="@layout/preference_edit_text"
             android:title="@string/minimum_time" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/performance_options">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="app:performance:animations"
+            android:summaryOff="@string/animations_off"
+            android:summaryOn="@string/animations_on"
+            android:title="@string/disable_animations" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/data_sharing_category">
 

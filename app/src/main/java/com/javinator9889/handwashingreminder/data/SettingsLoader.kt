@@ -312,6 +312,10 @@ class SettingsLoader(
                     },
                     onChangeListener = this@with
                 ).also { deferreds.add(it) }
+                setupPreferenceAsync(
+                    Preferences.PERFORMANCE_ANIMATIONS,
+                    Ionicons.Icon.ion_battery_low
+                ).also { deferreds.add(it) }
                 deferreds.awaitAll()
                 arePreferencesInitialized.set(true)
             }

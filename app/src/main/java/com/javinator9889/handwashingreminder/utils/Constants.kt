@@ -43,6 +43,7 @@ object Preferences {
     const val DONATIONS = "donations"
     const val INITIAL_TUTORIAL_DONE = "app:tutorial:is_done"
     const val ACTIVITY_MINIMUM_TIME = "activity:gms:minimumInterval"
+    const val PERFORMANCE_ANIMATIONS = "app:performance:animations"
 }
 
 object TimeConfig {

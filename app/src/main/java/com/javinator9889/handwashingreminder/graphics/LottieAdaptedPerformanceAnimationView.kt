@@ -20,29 +20,36 @@ package com.javinator9889.handwashingreminder.graphics
 
 import android.content.Context
 import android.util.AttributeSet
+import androidx.preference.PreferenceManager
 import com.airbnb.lottie.LottieAnimationView
 import com.airbnb.lottie.LottieComposition
 import com.airbnb.lottie.LottieOnCompositionLoadedListener
+import com.javinator9889.handwashingreminder.utils.Preferences
 import com.javinator9889.handwashingreminder.utils.isHighPerformingDevice
 
 class LottieAdaptedPerformanceAnimationView : LottieAnimationView,
     LottieOnCompositionLoadedListener {
-    constructor(context: Context): super(context)
-    constructor(context: Context, attrs: AttributeSet): super(context, attrs)
-    constructor(context: Context, attrs: AttributeSet, attrStyle: Int):
+    constructor(context: Context) : super(context)
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
+    constructor(context: Context, attrs: AttributeSet, attrStyle: Int) :
             super(context, attrs, attrStyle)
+
+    private val areAnimationsEnabled: Boolean
 
     init {
         addLottieOnCompositionLoadedListener(this)
         enableMergePathsForKitKatAndAbove(true)
         setCacheComposition(true)
+        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        areAnimationsEnabled =
+            preferences.getBoolean(Preferences.PERFORMANCE_ANIMATIONS, true)
     }
 
     override fun getDuration(): Long =
         if (isHighPerformingDevice()) super.getDuration() else 100L
 
     override fun onCompositionLoaded(composition: LottieComposition?) {
-        if (!isHighPerformingDevice()) {
+        if (!isHighPerformingDevice() || !areAnimationsEnabled) {
             setMinFrame(maxFrame.toInt())
             repeatCount = 0
         }
