@@ -1,5 +1,6 @@
 {
   "name": "functions",
+  "version": "1.0.1",
   "scripts": {
     "lint": "tslint --project tsconfig.json",
     "build": "tsc",
@@ -10,10 +11,10 @@
     "deploy-server": "cross-env-shell RUN_SERVER=true \"firebase deploy --only functions\"",
     "logs": "firebase functions:log",
     "server": "cross-env-shell RUN_SERVER=true RUNNING_LOCAL=true \"npm run build && firebase emulators:start --only functions\"",
-    "daemon": "cross-env-shell RUN_DAEMON=true RUNNING_LOCAL=true \"npm run build && firebase emulators:start --only functions\""
+    "daemon": "cross-env-shell RUN_DAEMON=true RUNNING_LOCAL=true \"npm run build && firebase emulators:start --only functions,pubsub\""
   },
   "engines": {
-    "node": "10"
+    "node": ">=10.0.0"
   },
   "main": "lib/bin/index.js",
   "dependencies": {
@@ -26,7 +27,6 @@
     "firebase-functions-helper": "^0.7.5",
     "http-errors": "^1.7.3",
     "morgan": "^1.10.0",
-    "node-fetch": "^2.6.0",
     "pug": "^3.0.0"
   },
   "devDependencies": {
