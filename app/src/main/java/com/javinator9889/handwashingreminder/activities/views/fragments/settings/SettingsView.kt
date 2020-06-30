@@ -27,6 +27,7 @@ import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.LayoutVisibilityChange
 import com.javinator9889.handwashingreminder.data.SettingsLoader
 import com.javinator9889.handwashingreminder.gms.vendor.BillingService
+import timber.log.Timber
 import java.lang.ref.WeakReference
 
 class SettingsView : PreferenceFragmentCompat(),
@@ -61,7 +62,10 @@ class SettingsView : PreferenceFragmentCompat(),
     override fun onPreferenceChange(
         preference: Preference?,
         newValue: Any?
-    ): Boolean = loader.onPreferenceChange(preference, newValue)
+    ): Boolean {
+        Timber.d("Preference $preference changed - ${preference?.key}")
+        return loader.onPreferenceChange(preference, newValue)
+    }
 
     override fun onVisibilityChanged(visibility: Int) {
         if (visibility == View.VISIBLE)

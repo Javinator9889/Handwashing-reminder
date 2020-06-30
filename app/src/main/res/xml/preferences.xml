@@ -57,6 +57,15 @@
             android:key="activity:gms:tracking"
             android:title="@string/activity_recognition"
             app:summary="For enabling the activity recognition, you need both Google Play Services and permissions" />
+
+        <EditTextPreference
+            android:defaultValue="15"
+            android:key="activity:gms:minimumInterval"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:dependency="activity:gms:tracking"
+            android:dialogLayout="@layout/preference_edit_text"
+            android:title="@string/minimum_time" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/data_sharing_category">
 

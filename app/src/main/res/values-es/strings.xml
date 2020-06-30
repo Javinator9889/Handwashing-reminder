@@ -278,4 +278,11 @@
     <string name="add_another">¡Añade otra más! &#128588;</string>
     <string name="reduce_count">Bueno, quizás una menos &#128517;</string>
     <string name="diseases_info">Información de enfermedades</string>
+    <string name="minimum_time_hint">Tiempo mínimo en minutos…</string>
+    <string name="minimum_time">Tiempo mínimo entre notificaciones</string>
+    <string name="minimum_time_summ">Recibirás notificaciones con un tiempo mínimo de %1$s entre ellas</string>
+    <plurals name="minutes">
+        <item quantity="one">%d minuto</item>
+        <item quantity="other">%d minutos</item>
+    </plurals>
 </resources>

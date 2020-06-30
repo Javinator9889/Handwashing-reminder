@@ -27,6 +27,7 @@ import androidx.annotation.StringRes
 import androidx.emoji.text.EmojiCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import androidx.preference.EditTextPreference
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
@@ -293,6 +294,24 @@ class SettingsLoader(
                     ),
                     dispatcher = Dispatchers.Main
                 ).also { deferreds.add(it) }
+                setupPreferenceAsync(
+                    Preferences.ACTIVITY_MINIMUM_TIME,
+                    Ionicons.Icon.ion_ios_stopwatch_outline,
+                    onInitialized = { it, _ ->
+                        runCatching {
+                            it as EditTextPreference
+                            val timeText = Integer.parseInt(it.text)
+                            val minutes = resources.getQuantityString(
+                                R.plurals.minutes,
+                                timeText,
+                                timeText
+                            )
+                            it.summary =
+                                getString(R.string.minimum_time_summ, minutes)
+                        }
+                    },
+                    onChangeListener = this@with
+                ).also { deferreds.add(it) }
                 deferreds.awaitAll()
                 arePreferencesInitialized.set(true)
             }
@@ -454,9 +473,10 @@ class SettingsLoader(
         preference: Preference?,
         newValue: Any?
     ): Boolean =
-        when (preference) {
-            view.firebaseAnalyticsPreference.get() -> {
+        when (preference?.key) {
+            Preferences.ANALYTICS_ENABLED -> {
                 val enabled = newValue as Boolean
+                Timber.d("Analytics collection is $enabled")
                 with(FirebaseAnalytics.getInstance(view.requireContext())) {
                     setAnalyticsCollectionEnabled(enabled)
                     if (!enabled)
@@ -464,15 +484,17 @@ class SettingsLoader(
                 }
                 true
             }
-            view.firebasePerformancePreference.get() -> {
+            Preferences.PERFORMANCE_ENABLED -> {
                 val enabled = newValue as Boolean
+                Timber.d("Performance is $enabled")
                 with(FirebasePerformance.getInstance()) {
                     isPerformanceCollectionEnabled = enabled
                 }
                 true
             }
-            view.adsPreference.get() -> {
+            Preferences.ADS_ENABLED -> {
                 val enabled = newValue as Boolean
+                Timber.d("Ads are enabled $enabled")
                 var ret = false
                 val adEnabler = AdsEnabler(HandwashingApplication.instance)
                 if (enabled) {
@@ -512,7 +534,7 @@ class SettingsLoader(
                 }
                 ret
             }
-            view.donationsPreference.get() -> {
+            Preferences.DONATIONS -> {
                 Timber.d("Purchase clicked - $newValue")
                 val purchaseId = newValue as String
                 if (isConnected())
@@ -531,6 +553,19 @@ class SettingsLoader(
                 }
                 false
             }
+            Preferences.ACTIVITY_MINIMUM_TIME -> runCatching {
+                preference as EditTextPreference
+                Timber.d("Changing activity interval - $newValue")
+                val timeText = Integer.parseInt(newValue as String)
+                val minutes = view.resources.getQuantityString(
+                    R.plurals.minutes,
+                    timeText,
+                    timeText
+                )
+                preference.summary =
+                    view.getString(R.string.minimum_time_summ, minutes)
+                true
+            }.getOrElse { Timber.w(it); false }
             else -> true
         }
 }
