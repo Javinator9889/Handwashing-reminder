@@ -11,7 +11,7 @@
     "deploy-server": "cross-env-shell RUN_SERVER=true \"firebase deploy --only functions\"",
     "logs": "firebase functions:log",
     "server": "cross-env-shell RUN_SERVER=true RUNNING_LOCAL=true \"npm run build && firebase emulators:start --only functions\"",
-    "daemon": "cross-env-shell RUN_DAEMON=true RUNNING_LOCAL=true \"npm run build && firebase emulators:start --only functions,pubsub\""
+    "daemon": "cross-env-shell RUN_DAEMON=true RUNNING_LOCAL=true \"npm run build && firebase emulators:start --only functions\""
   },
   "engines": {
     "node": ">=10.0.0"
