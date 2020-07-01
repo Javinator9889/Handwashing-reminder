@@ -29,8 +29,9 @@
 
             <com.javinator9889.handwashingreminder.graphics.LottieAdaptedPerformanceAnimationView
                 android:id="@+id/imageHeader"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="150dp"
+                android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

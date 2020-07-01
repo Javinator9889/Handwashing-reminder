@@ -22,10 +22,11 @@ import android.annotation.SuppressLint
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import coil.Coil
 import coil.api.load
-import coil.request.GetRequest
+import coil.size.Scale
 import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.card.MaterialCardView
 import com.javinator9889.handwashingreminder.R
@@ -45,7 +46,7 @@ data class News(
     val imageUrl: String?,
     val website: String?,
     val websiteImageUrl: String?,
-    val lifecycleScope: LifecycleCoroutineScope,
+    val lifecycleOwner: LifecycleOwner,
     override val layoutRes: Int = R.layout.news_card_view,
     override val type: Int = 1
 ) : AbstractItem<News.ViewHolder>() {
@@ -68,29 +69,45 @@ data class News(
             val formatter = DateFormat.getDateTimeInstance()
             val context = view.context
             imageHeader.setAnimation(R.raw.downloading)
-            item.lifecycleScope.launch(context = Dispatchers.Main) {
+            item.lifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
                 title.text = item.title
                 description.text = item.short
                 val imageLoader = Coil.imageLoader(view.context)
                 if (item.imageUrl != null) {
-                    val request = GetRequest.Builder(view.context)
+                    imageHeader.load(item.imageUrl) {
+                        scale(Scale.FILL)
+                        lifecycle(item.lifecycleOwner)
+                        allowHardware(true)
+                    }
+                    /*val request = GetRequest.Builder(view.context)
                         .data(item.imageUrl)
-                        .size(imageHeader.width, imageHeader.height)
                         .allowHardware(true)
+                        .scale(Scale.FILL)
                         .build()
                     launch(Dispatchers.IO) {
-                        imageHeader.load(imageLoader.execute(request).drawable)
-                    }
+                        val drawable = imageLoader.execute(request).drawable
+                        withContext(Dispatchers.Main) {
+                            imageHeader.setImageDrawable(drawable)
+                        }
+                    }*/
                 } else imageHeader.visibility = View.GONE
                 if (item.websiteImageUrl != null) {
-                    val request = GetRequest.Builder(view.context)
+                    websiteLogo.load(item.websiteImageUrl) {
+                        scale(Scale.FILL)
+                        lifecycle(item.lifecycleOwner)
+                        allowHardware(true)
+                    }
+                    /*val request = GetRequest.Builder(view.context)
                         .data(item.websiteImageUrl)
-                        .size(websiteLogo.width, websiteLogo.height)
                         .allowHardware(true)
+                        .scale(Scale.FILL)
                         .build()
                     launch(Dispatchers.IO) {
-                        websiteLogo.load(imageLoader.execute(request).drawable)
-                    }
+                        val drawable = imageLoader.execute(request).drawable
+                        withContext(Dispatchers.Main) {
+                            websiteLogo.setImageDrawable(drawable)
+                        }
+                    }*/
                 } else websiteLogo.visibility = View.GONE
                 websiteName.text = item.website
                     ?: context.getString(R.string.no_website)

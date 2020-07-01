@@ -84,7 +84,7 @@ class NewsFragment : BaseFragmentView(), LayoutVisibilityChange {
                             imageUrl = it.elements?.url,
                             website = it.website?.name,
                             websiteImageUrl = it.website?.iconURL,
-                            lifecycleScope = this@NewsFragment.lifecycleScope
+                            lifecycleOwner = this@NewsFragment
                         )
                         newsAdapter.add(newsObject)
                         loading.visibility = View.INVISIBLE
