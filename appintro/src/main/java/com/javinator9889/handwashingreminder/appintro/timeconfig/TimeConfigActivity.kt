@@ -30,10 +30,10 @@ import android.widget.TextView
 import android.widget.TimePicker
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
+import coil.api.load
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.javinator9889.handwashingreminder.activities.support.ActionBarBase
 import com.javinator9889.handwashingreminder.appintro.R
-import com.javinator9889.handwashingreminder.graphics.GlideApp
 import com.javinator9889.handwashingreminder.utils.AndroidVersion
 import com.javinator9889.handwashingreminder.utils.TimeConfig
 import com.javinator9889.handwashingreminder.utils.formatTime
@@ -129,10 +129,7 @@ class TimeConfigActivity :
             }
             if (imageRes != null)
                 try {
-                    GlideApp.with(this)
-                        .load(imageRes)
-                        .centerInside()
-                        .into(image)
+                    image.load(imageRes)
                 } catch (e: Exception) {
                     Timber.e(e, "Error while loading Glide view")
                     image.setImageResource(imageRes)

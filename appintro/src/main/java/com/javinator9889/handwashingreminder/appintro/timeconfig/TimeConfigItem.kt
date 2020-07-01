@@ -22,8 +22,8 @@ import android.view.View
 import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.cardview.widget.CardView
+import coil.api.load
 import com.javinator9889.handwashingreminder.appintro.R
-import com.javinator9889.handwashingreminder.graphics.GlideApp
 import com.javinator9889.handwashingreminder.graphics.RecyclingImageView
 import com.javinator9889.handwashingreminder.utils.TimeConfig
 import com.javinator9889.handwashingreminder.utils.notNull
@@ -70,10 +70,7 @@ class TimeConfigItem(
                 TimeConfig.DINNER_ID -> R.drawable.ic_dinner
                 else -> null
             }.notNull {
-                GlideApp.with(view)
-                    .load(it)
-                    .centerInside()
-                    .into(image)
+                image.load(it)
                 image.savedDrawableRes = it
             }
         }

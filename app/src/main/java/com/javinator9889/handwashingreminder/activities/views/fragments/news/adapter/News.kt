@@ -23,13 +23,16 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.LifecycleCoroutineScope
+import coil.Coil
+import coil.api.load
+import coil.request.GetRequest
 import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.card.MaterialCardView
 import com.javinator9889.handwashingreminder.R
-import com.javinator9889.handwashingreminder.graphics.GlideApp
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.text.DateFormat
 import java.util.*
@@ -60,10 +63,6 @@ data class News(
         val cardContainer: MaterialCardView = view.findViewById(R.id.root)
         val shareImage: ImageView = view.findViewById(R.id.share)
 
-        /*init {
-            setIsRecyclable(!isHighPerformingDevice())
-        }*/
-
         @SuppressLint("SetTextI18n")
         override fun bindView(item: News, payloads: List<Any>) {
             val formatter = DateFormat.getDateTimeInstance()
@@ -72,33 +71,32 @@ data class News(
             item.lifecycleScope.launch(context = Dispatchers.Main) {
                 title.text = item.title
                 description.text = item.short
-                val deferreds = mutableSetOf<Deferred<Any?>>()
-                if (item.imageUrl != null)
-                    deferreds.add(
-                        async {
-                            GlideApp.with(context)
-                                .load(item.imageUrl)
-                                .optionalCenterCrop()
-                                .into(imageHeader)
-                        }
-                    )
-                else imageHeader.visibility = View.GONE
-                if (item.websiteImageUrl != null)
-                    deferreds.add(
-                        async {
-                            GlideApp.with(context)
-                                .load(item.websiteImageUrl)
-                                .optionalCenterCrop()
-                                .into(websiteLogo)
-                        }
-                    )
-                else websiteLogo.visibility = View.GONE
+                val imageLoader = Coil.imageLoader(view.context)
+                if (item.imageUrl != null) {
+                    val request = GetRequest.Builder(view.context)
+                        .data(item.imageUrl)
+                        .size(imageHeader.width, imageHeader.height)
+                        .allowHardware(true)
+                        .build()
+                    launch(Dispatchers.IO) {
+                        imageHeader.load(imageLoader.execute(request).drawable)
+                    }
+                } else imageHeader.visibility = View.GONE
+                if (item.websiteImageUrl != null) {
+                    val request = GetRequest.Builder(view.context)
+                        .data(item.websiteImageUrl)
+                        .size(websiteLogo.width, websiteLogo.height)
+                        .allowHardware(true)
+                        .build()
+                    launch(Dispatchers.IO) {
+                        websiteLogo.load(imageLoader.execute(request).drawable)
+                    }
+                } else websiteLogo.visibility = View.GONE
                 websiteName.text = item.website
                     ?: context.getString(R.string.no_website)
                 publishDate.text =
                     item.discoverDate?.let { formatter.format(it) }
                         ?: context.getString(R.string.no_date)
-                deferreds.awaitAll()
             }
         }
 
