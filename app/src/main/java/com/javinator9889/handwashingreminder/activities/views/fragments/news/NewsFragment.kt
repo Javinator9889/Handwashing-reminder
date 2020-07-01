@@ -24,8 +24,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.observe
 import androidx.lifecycle.whenStarted
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -66,14 +66,15 @@ class NewsFragment : BaseFragmentView(), LayoutVisibilityChange {
             whenStarted {
                 loading.visibility = View.VISIBLE
                 refreshLayout.isEnabled = false
-                newsViewModel.newsData.observe(viewLifecycleOwner, Observer {
+                newsViewModel.newsData.observe(viewLifecycleOwner) {
                     if (::footerAdapter.isInitialized)
                         footerAdapter.clear()
-                    if (it.hasError) {
-                        if (newsAdapter.adapterItemCount == 0) {
-
-                        }
-                    }
+                    if (it.hasError && newsAdapter.adapterItemCount == 0) {
+                        errorScreen.visibility = View.VISIBLE
+                        container.visibility = View.INVISIBLE
+                        refreshLayout.isEnabled = true
+                        return@observe
+                    } else errorScreen.visibility = View.INVISIBLE
                     if (it.id !in activeItems) {
                         val newsObject = News(
                             title = it.title,
@@ -91,7 +92,7 @@ class NewsFragment : BaseFragmentView(), LayoutVisibilityChange {
                         refreshLayout.isEnabled = true
                         activeItems.add(it.id)
                     }
-                })
+                }
             }
         }
     }
@@ -143,6 +144,7 @@ class NewsFragment : BaseFragmentView(), LayoutVisibilityChange {
                 scrollListener.resetPageCount()
             }
             container.visibility = View.INVISIBLE
+            errorScreen.visibility = View.INVISIBLE
         }
     }
 

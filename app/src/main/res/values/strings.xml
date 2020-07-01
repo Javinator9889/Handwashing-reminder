@@ -318,4 +318,5 @@
     <string name="animations_on">Currently, the app will play some animations.
     Keep in mind that it can affect both performance and battery life</string>
     <string name="animations_off">No animations will be played</string>
+    <string name="news_error">Error while loading news data</string>
 </resources>

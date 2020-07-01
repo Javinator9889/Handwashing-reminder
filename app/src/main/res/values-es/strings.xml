@@ -290,4 +290,5 @@
     <string name="animations_on">Actualmente, las animaciones están activadas.
         Ten en cuenta que esto puede afectar tanto al rendimiento como a la batería</string>
     <string name="animations_off">No se mostrará ninguna animación</string>
+    <string name="news_error">Error al cargar información sobre las noticias</string>
 </resources>
