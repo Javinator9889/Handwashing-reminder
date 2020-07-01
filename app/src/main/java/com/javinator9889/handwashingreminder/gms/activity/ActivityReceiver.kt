@@ -88,9 +88,9 @@ class ActivityReceiver : BroadcastReceiver() {
         detectedActivity: Int,
         context: Context
     ) {
-        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         val timeInBetweenNotifications =
-            preferences.getInt(Preferences.ACTIVITY_MINIMUM_TIME, 15)
+            prefs.getString(Preferences.ACTIVITY_MINIMUM_TIME, "15")!!.toInt()
         val timeFile = File(context.cacheDir, "activity.time")
         var latestNotificationTime = 0L
         withContext(Dispatchers.IO) {
@@ -104,6 +104,7 @@ class ActivityReceiver : BroadcastReceiver() {
             TimeUnit.MINUTES,
             latestNotificationTime
         )
+        Timber.d("$timeDifference - $timeInBetweenNotifications")
         if (timeDifference <= timeInBetweenNotifications)
             return
         val notificationContent = when (detectedActivity) {

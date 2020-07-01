@@ -47,7 +47,7 @@ object CalendarUtils {
         unit: TimeUnit,
         to: Long,
         from: Long = Calendar.getInstance().timeInMillis
-    ): Long = unit.convert(timeBetween(from, to), TimeUnit.MILLISECONDS)
+    ): Long = unit.convert(timeBetween(to, from), TimeUnit.MILLISECONDS)
 
     fun timeBetween(
         to: Long,
