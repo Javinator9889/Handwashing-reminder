@@ -12,7 +12,6 @@ export class Updater {
   private readonly language: string;
   private readonly auth: string;
   private _path: string | undefined;
-  private readonly network: AxiosInstance
 
   get path(): Promise<string> {
     if (this._path === undefined)
@@ -30,6 +29,20 @@ export class Updater {
     this._path = undefined;
   }
 
+  get network(): AxiosInstance {
+    return axios.create({
+      baseURL: 'https://api.newsriver.io/v2/',
+      headers: {
+        'Authorization': this.auth,
+        'Content-Type': 'application/json'
+      },
+      withCredentials: true,
+      responseType: 'json',
+      httpsAgent: new https.Agent({ keepAlive: true }),
+      timeout: 500000
+    });
+  }
+
   constructor(db: FirebaseFirestore.Firestore | null,
               collectionName: string | null,
               searchTerms: Array<string>,
@@ -42,17 +55,6 @@ export class Updater {
     this.language = language;
     this.auth = auth;
     this.interval = intervalMins * 60 * 1000;
-    this.network = axios.create({
-      baseURL: 'https://api.newsriver.io/v2/',
-      headers: {
-        'Authorization': this.auth,
-        'Content-Type': 'application/json'
-      },
-      withCredentials: true,
-      responseType: 'json',
-      httpsAgent: new https.Agent({ keepAlive: true }),
-      timeout: 500000
-    });
     this.doRequest()
       .then(response => {
         this.updateData(response)
@@ -78,16 +80,9 @@ export class Updater {
     try {
       for (const element of content) {
         try {
-          const document = await this.db.collection(this.collectionName).doc(element.id).get();
-          console.debug(`Item with id ${element.id} ${document.exists ? 'exists' : 'does not exist'}`)
-          if (!document.exists)
-            firebaseHelper.firestore.createDocumentWithID(this.db, this.collectionName, element.id, element)
-              .then(created => console.debug(`Item with ID: ${element.id} was ${created ? 'created' : 'not created'}`))
-              .catch(err => console.error(`Error while creating document ${err}`));
-          else
-            firebaseHelper.firestore.updateDocument(this.db, this.collectionName, element.id, element)
-              .then(updated => console.debug(`Item with ID ${element.id} was ${updated ? 'updated' : 'not updated'}`))
-              .catch(err => console.error(`Error while updating document ${err}`));
+          firebaseHelper.firestore.createDocumentWithID(this.db, this.collectionName, element.id, element)
+            .then(created => console.debug(`Item with ID: ${element.id} was ${created ? 'created' : 'not created'}`))
+            .catch(err => console.error(`Error while creating document ${err}`));
         } catch (err) {
           console.warn(`Error while creating/updating document - ${err}`);
         }
