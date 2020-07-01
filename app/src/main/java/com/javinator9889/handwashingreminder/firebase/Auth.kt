@@ -20,9 +20,8 @@ package com.javinator9889.handwashingreminder.firebase
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import kotlinx.coroutines.channels.Channel
+import com.javinator9889.handwashingreminder.utils.threading.await
 import timber.log.Timber
-import kotlin.IllegalStateException
 
 
 object Auth {
@@ -34,38 +33,20 @@ object Auth {
         if (!::auth.isInitialized)
             auth = FirebaseAuth.getInstance()
         val currentUser = auth.currentUser
-        val signedIn = Channel<Boolean>(0)
         if (currentUser == null) {
             Timber.d("No user defined lo signing-in")
-            auth.signInAnonymously()
-                .addOnCompleteListener { task ->
-                    signedIn.offer(task.isSuccessful)
-                    if (!task.isSuccessful)
-                        Timber.e(task.exception, "Error while logging")
-                }
-            if (signedIn.receive()) {
-                Timber.d("Signing-in successful so saving user")
-                this.currentUser = auth.currentUser!!
-            }
+            this.currentUser = auth.signInAnonymously().await().user!!
         } else this.currentUser = currentUser
     }
 
     suspend fun token(): String {
-        if (!::auth.isInitialized)
+        if (!::auth.isInitialized || !::currentUser.isInitialized)
             throw IllegalStateException("init must be called first")
         if (::privateToken.isInitialized) {
             Timber.d("Obtaining previous generated token")
             return privateToken
         }
-        val tokenChannel = Channel<String?>(0)
-        currentUser.getIdToken(true)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful)
-                    tokenChannel.offer(task.result!!.token!!)
-                else
-                    tokenChannel.offer(null)
-            }
-        privateToken = tokenChannel.receive()
+        privateToken = currentUser.getIdToken(true).await().token
             ?: throw IllegalStateException("token not valid")
         return privateToken
     }
