@@ -18,14 +18,36 @@
  */
 package com.javinator9889.handwashingreminder.jobs.alarms
 
+import androidx.annotation.StringRes
+import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.utils.Preferences
 
 enum class Alarms(
     val identifier: String,
     val code: Int,
-    val preferenceKey: String
+    val preferenceKey: String,
+    @StringRes val groupName: Int,
+    val channelId: String
 ) {
-    BREAKFAST_ALARM("alarms:breakfast", 0, Preferences.BREAKFAST_TIME),
-    LUNCH_ALARM("alarms:lunch", 1, Preferences.LUNCH_TIME),
-    DINNER_ALARM("alarms:dinner", 2, Preferences.DINNER_TIME)
+    BREAKFAST_ALARM(
+        "alarms:breakfast",
+        0,
+        Preferences.BREAKFAST_TIME,
+        R.string.breakfast_notifications,
+        "notifications:breakfast"
+    ),
+    LUNCH_ALARM(
+        "alarms:lunch",
+        1,
+        Preferences.LUNCH_TIME,
+        R.string.lunch_notifications,
+        "notifications:lunch"
+    ),
+    DINNER_ALARM(
+        "alarms:dinner",
+        2,
+        Preferences.DINNER_TIME,
+        R.string.dinner_notifications,
+        "notifications:dinner"
+    )
 }

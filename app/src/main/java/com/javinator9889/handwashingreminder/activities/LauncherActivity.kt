@@ -46,6 +46,8 @@ import com.javinator9889.handwashingreminder.gms.activity.ActivityHandler
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
 import com.javinator9889.handwashingreminder.gms.ads.AdsEnabler
 import com.javinator9889.handwashingreminder.jobs.alarms.AlarmHandler
+import com.javinator9889.handwashingreminder.jobs.alarms.Alarms
+import com.javinator9889.handwashingreminder.notifications.NotificationsHandler
 import com.javinator9889.handwashingreminder.utils.*
 import com.javinator9889.handwashingreminder.utils.Preferences.ADS_ENABLED
 import com.javinator9889.handwashingreminder.utils.Preferences.APP_INIT_KEY
@@ -102,40 +104,41 @@ class LauncherActivity : AppCompatActivity() {
         setContentView(R.layout.splash_screen)
     }
 
-    private fun showWelcomeScreenAsync() = lifecycleScope.launch(Dispatchers.Main) {
-        app.firebaseInitDeferred.await()
-        val isThereAnySpecialEvent = with(Firebase.remoteConfig) {
-            getBoolean(SPECIAL_EVENT) && !launchFromNotification
-        }
-        var sleepDuration = 0L
-        val animationLoaded = CompletableDeferred<Boolean>()
-        val fadeInAnimation = AnimationUtils.loadAnimation(
-            this@LauncherActivity,
-            android.R.anim.fade_in
-        )
-        fadeInAnimation.duration = 300L
-        fadeInAnimation.setAnimationListener(object :
-            Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation?) {}
-            override fun onAnimationRepeat(animation: Animation?) {}
-            override fun onAnimationEnd(animation: Animation?) {
-                animationLoaded.complete(true)
-                logo.playAnimation()
+    private fun showWelcomeScreenAsync() =
+        lifecycleScope.launch(Dispatchers.Main) {
+            app.firebaseInitDeferred.await()
+            val isThereAnySpecialEvent = with(Firebase.remoteConfig) {
+                getBoolean(SPECIAL_EVENT) && !launchFromNotification
             }
-        })
-        if (isThereAnySpecialEvent) {
-            logo.setAnimation(AnimatedResources.STAY_SAFE_STAY_HOME.res)
-            logo.addLottieOnCompositionLoadedListener {
+            var sleepDuration = 0L
+            val animationLoaded = CompletableDeferred<Boolean>()
+            val fadeInAnimation = AnimationUtils.loadAnimation(
+                this@LauncherActivity,
+                android.R.anim.fade_in
+            )
+            fadeInAnimation.duration = 300L
+            fadeInAnimation.setAnimationListener(object :
+                Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation?) {}
+                override fun onAnimationRepeat(animation: Animation?) {}
+                override fun onAnimationEnd(animation: Animation?) {
+                    animationLoaded.complete(true)
+                    logo.playAnimation()
+                }
+            })
+            if (isThereAnySpecialEvent) {
+                logo.setAnimation(AnimatedResources.STAY_SAFE_STAY_HOME.res)
+                logo.addLottieOnCompositionLoadedListener {
+                    logo.startAnimation(fadeInAnimation)
+                    sleepDuration = logo.duration
+                }
+                animationLoaded.await()
+                delay(sleepDuration)
+            } else {
+                logo.setImageResource(R.drawable.handwashing_app_logo)
                 logo.startAnimation(fadeInAnimation)
-                sleepDuration = logo.duration
             }
-            animationLoaded.await()
-            delay(sleepDuration)
-        } else {
-            logo.setImageResource(R.drawable.handwashing_app_logo)
-            logo.startAnimation(fadeInAnimation)
         }
-    }
 
     override fun onActivityResult(
         requestCode: Int,
@@ -148,7 +151,8 @@ class LauncherActivity : AppCompatActivity() {
             return
         }
         if (Ads.MODULE_NAME in splitInstallManager.installedModules &&
-                sharedPreferences.getBoolean(ADS_ENABLED, true)) {
+            sharedPreferences.getBoolean(ADS_ENABLED, true)
+        ) {
             when (resultCode) {
                 Activity.RESULT_OK -> {
                     createPackageContext(packageName, 0).also {
@@ -160,7 +164,8 @@ class LauncherActivity : AppCompatActivity() {
             }
         }
         if (sharedPreferences.getBoolean(APP_INIT_KEY, false) &&
-                AppIntro.MODULE_NAME in splitInstallManager.installedModules) {
+            AppIntro.MODULE_NAME in splitInstallManager.installedModules
+        ) {
             data?.let {
                 val launchIntent = Intent(data)
                 createPackageContext(packageName, 0).also {
@@ -190,7 +195,8 @@ class LauncherActivity : AppCompatActivity() {
         Timber.d("Required to install modules: $modules")
         if (modules.isEmpty()) {
             val intent = if (AppIntro.MODULE_NAME in installedModules &&
-                    !sharedPreferences.getBoolean(APP_INIT_KEY, false)) {
+                !sharedPreferences.getBoolean(APP_INIT_KEY, false)
+            ) {
                 with(Intent()) {
                     setClassName(
                         BuildConfig.APPLICATION_ID,
@@ -238,7 +244,8 @@ class LauncherActivity : AppCompatActivity() {
 
     private fun initAds(context: Context = app) {
         if (Ads.MODULE_NAME in splitInstallManager.installedModules &&
-                sharedPreferences.getBoolean(ADS_ENABLED, true)) {
+            sharedPreferences.getBoolean(ADS_ENABLED, true)
+        ) {
             val className = "${Ads.PACKAGE_NAME}.${Ads
                 .CLASS_NAME}\$${Ads.PROVIDER_NAME}"
             val adProvider = Class.forName(className).kotlin
@@ -268,6 +275,8 @@ class LauncherActivity : AppCompatActivity() {
             app.firebaseInitDeferred.await()
         }
         Timber.d("Firebase initialized correctly")
+        Timber.d("Setting-up Firebase custom properties")
+        val propertiesJob = setupFirebasePropertiesAsync()
         Timber.d("Initializing Iconics")
         Iconics.init(this)
         Timber.d("Setting-up activity recognition")
@@ -288,8 +297,19 @@ class LauncherActivity : AppCompatActivity() {
         Timber.d("Initializing Ads Provider")
         initAds()
         Timber.d("Adding periodic notifications if not enqueued yet")
-        Timber.d("Setting-up Firebase custom properties")
-        setupFirebasePropertiesAsync().join()
+        Timber.d("Creating alarms notification channels...")
+        for (alarm in Alarms.values()) {
+            Timber.d("Creating notification channel for ${alarm.identifier}")
+            NotificationsHandler(
+                context = this,
+                channelId = alarm.channelId,
+                channelName = getString(R.string.time_notification_channel_name),
+                channelDesc = getString(R.string.time_notification_channel_desc),
+                groupId = alarm.identifier,
+                groupName = getString(alarm.groupName)
+            )
+        }
+        propertiesJob.join()
     }
 
     private fun setupFirebasePropertiesAsync() = lifecycleScope.launch {

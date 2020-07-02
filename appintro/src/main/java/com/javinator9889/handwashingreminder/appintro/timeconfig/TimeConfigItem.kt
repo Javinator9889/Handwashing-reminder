@@ -19,12 +19,12 @@
 package com.javinator9889.handwashingreminder.appintro.timeconfig
 
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.cardview.widget.CardView
 import coil.api.load
 import com.javinator9889.handwashingreminder.appintro.R
-import com.javinator9889.handwashingreminder.graphics.RecyclingImageView
 import com.javinator9889.handwashingreminder.utils.TimeConfig
 import com.javinator9889.handwashingreminder.utils.notNull
 import com.mikepenz.fastadapter.FastAdapter
@@ -52,7 +52,7 @@ class TimeConfigItem(
         private val hours: TextView = view.findViewById(R.id.hours)
         private val ddot: TextView = view.findViewById(R.id.ddot)
         private val minutes: TextView = view.findViewById(R.id.minutes)
-        private val image: RecyclingImageView = view.findViewById(R.id.infoImage)
+        private val image: ImageView = view.findViewById(R.id.infoImage)
         private val clockIcon: IconicsImageView = view.findViewById(R.id.clockIcon)
         val cardView: CardView = view.findViewById(R.id.timeCard)
 
@@ -71,7 +71,6 @@ class TimeConfigItem(
                 else -> null
             }.notNull {
                 image.load(it)
-                image.savedDrawableRes = it
             }
         }
 
@@ -80,7 +79,7 @@ class TimeConfigItem(
             hours.text = null
             ddot.text = null
             minutes.text = null
-            image.onDetachedFromWindow()
+            image.setImageDrawable(null)
             clockIcon.icon = null
         }
     }

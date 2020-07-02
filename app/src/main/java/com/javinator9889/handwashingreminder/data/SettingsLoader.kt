@@ -23,6 +23,7 @@ import android.content.ClipDescription
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import androidx.annotation.StringRes
 import androidx.emoji.text.EmojiCompat
 import androidx.lifecycle.LifecycleOwner
@@ -315,6 +316,27 @@ class SettingsLoader(
                 setupPreferenceAsync(
                     Preferences.PERFORMANCE_ANIMATIONS,
                     Ionicons.Icon.ion_battery_low
+                ).also { deferreds.add(it) }
+                setupPreferenceAsync(
+                    "notifications:settings",
+                    onClickListener = {
+                        val intent = when {
+                            isAtLeast(AndroidVersion.O) -> Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+                                putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
+                            }
+                            isAtLeast(AndroidVersion.LOLLIPOP) -> Intent("android.settings.APP_NOTIFICATION_SETTINGS").apply {
+                                putExtra("app_package", requireContext().packageName)
+                                putExtra("app_uid", requireContext().applicationInfo.uid)
+                            }
+                            else -> Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                                addCategory(Intent.CATEGORY_DEFAULT)
+                                data = Uri.parse("package: ${requireContext().packageName}")
+                            }
+                        }
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        requireContext().startActivity(intent)
+                        true
+                    }
                 ).also { deferreds.add(it) }
                 deferreds.awaitAll()
                 arePreferencesInitialized.set(true)

@@ -68,6 +68,9 @@
         <item>¿30 segundos por una buena salud? ¡Dónde firmo! Solo lávate
             las manos &#128521;&#128166;&#128079;</item>
     </string-array>
+    <string name="breakfast_notifications">Recordatorios en el desayuno</string>
+    <string name="lunch_notifications">Recordatorios en la comida</string>
+    <string name="dinner_notifications">Recordatorios en la cenas</string>
     <string name="lunch_title">¡Hora de comer y lavarse las manos!
         &#127857;</string>
     <string-array name="lunch_comments">
@@ -291,4 +294,5 @@
         Ten en cuenta que esto puede afectar tanto al rendimiento como a la batería</string>
     <string name="animations_off">No se mostrará ninguna animación</string>
     <string name="news_error">Error al cargar información sobre las noticias</string>
+    <string name="notification_settings">Ajustes de notificaciones</string>
 </resources>

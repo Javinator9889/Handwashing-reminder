@@ -21,13 +21,13 @@ package com.javinator9889.handwashingreminder.jobs.workers
 import android.content.Context
 import androidx.annotation.ArrayRes
 import androidx.annotation.StringRes
+import androidx.core.app.NotificationCompat
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.emoji.EmojiLoader
 import com.javinator9889.handwashingreminder.jobs.alarms.AlarmHandler
 import com.javinator9889.handwashingreminder.jobs.alarms.Alarms
 import com.javinator9889.handwashingreminder.notifications.NotificationsHandler
-import com.javinator9889.handwashingreminder.utils.TIME_CHANNEL_ID
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
@@ -46,9 +46,11 @@ abstract class ScheduledNotificationWorker(context: Context) {
             val emojiLoader = EmojiLoader.loadAsync(context)
             val notificationsHandler = NotificationsHandler(
                 context = context,
-                channelId = TIME_CHANNEL_ID,
+                channelId = alarm.channelId,
                 channelName = getString(R.string.time_notification_channel_name),
-                channelDesc = getString(R.string.time_notification_channel_desc)
+                channelDesc = getString(R.string.time_notification_channel_desc),
+                groupId = alarm.identifier,
+                groupName = getString(alarm.groupName)
             )
             val emojiCompat = emojiLoader.await()
             var title = getText(titleRes)
@@ -64,7 +66,8 @@ abstract class ScheduledNotificationWorker(context: Context) {
                     largeIcon = R.drawable.handwashing_app_logo,
                     title = title,
                     content = content,
-                    longContent = content
+                    longContent = content,
+                    priority = NotificationCompat.PRIORITY_MAX
                 )
             }
             Timber.d(
