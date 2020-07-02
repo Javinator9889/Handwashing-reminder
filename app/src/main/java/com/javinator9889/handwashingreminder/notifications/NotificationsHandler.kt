@@ -48,12 +48,11 @@ class NotificationsHandler(
     private val channelId: String,
     private val channelName: String = "",
     private val channelDesc: String = "",
-    private val groupId: String = "",
-    private val groupName: String = ""
+    groupId: String = "",
+    groupName: String = ""
 ) {
     private val preferences: SharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(context)
-    private val notificationId = 1
     private val vibrationPattern = longArrayOf(300L, 300L, 300L, 300L)
     private val manager =
         context.getSystemService(Context.NOTIFICATION_SERVICE) as
@@ -79,7 +78,9 @@ class NotificationsHandler(
         @StringRes title: Int,
         @StringRes content: Int,
         priority: Int = NotificationCompat.PRIORITY_DEFAULT,
-        @StringRes longContent: Int = -1
+        @StringRes longContent: Int = -1,
+        action: Action? = null,
+        notificationId: Int = -1
     ) {
         val longContentProcessed =
             if (longContent != -1) context.getText(longContent) else null
@@ -89,7 +90,9 @@ class NotificationsHandler(
             context.getText(title),
             context.getText(content),
             priority,
-            longContentProcessed
+            longContentProcessed,
+            action,
+            notificationId
         )
     }
 
@@ -99,7 +102,9 @@ class NotificationsHandler(
         title: CharSequence,
         content: CharSequence,
         priority: Int = NotificationCompat.PRIORITY_DEFAULT,
-        longContent: CharSequence? = null
+        longContent: CharSequence? = null,
+        action: Action? = null,
+        notificationId: Int = -1
     ) {
         val bitmapIcon = if (isAtLeast(AndroidVersion.JELLY_BEAN_MR2)) {
             if (isAtLeast(AndroidVersion.P)) {
@@ -121,7 +126,9 @@ class NotificationsHandler(
             title,
             content,
             priority,
-            longContent
+            longContent,
+            action,
+            notificationId
         )
     }
 
@@ -131,7 +138,9 @@ class NotificationsHandler(
         title: CharSequence,
         content: CharSequence,
         priority: Int = NotificationCompat.PRIORITY_DEFAULT,
-        longContent: CharSequence? = null
+        longContent: CharSequence? = null,
+        action: Action? = null,
+        notificationId: Int = -1
     ) {
         val notifyIntent = Intent(context, LauncherActivity::class.java).apply {
             flags =
@@ -158,6 +167,9 @@ class NotificationsHandler(
             setPriority(priority)
             setVibrate(vibrationPattern)
             setContentIntent(notifyPendingIntent)
+            action?.let {
+                addAction(action.drawable, action.text, action.pendingIntent)
+            }
             addAction(
                 R.drawable.ic_share_black,
                 context.getString(R.string.share),
@@ -170,7 +182,8 @@ class NotificationsHandler(
             build()
         }.let {
             with(NotificationManagerCompat.from(context)) {
-                notify(notificationId, it)
+                val id = if (notificationId == -1) 1 else notificationId
+                notify(id, it)
             }
         }
     }
@@ -207,3 +220,9 @@ class NotificationsHandler(
     private fun createChannelRequired() =
         preferences.getBoolean(Preferences.CREATE_CHANNEL_KEY, true)
 }
+
+data class Action(
+    @DrawableRes val drawable: Int,
+    val text: CharSequence,
+    val pendingIntent: PendingIntent
+)

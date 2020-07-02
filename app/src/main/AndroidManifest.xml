@@ -55,6 +55,14 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name=".jobs.HandsWashedReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.javinator9889.handwashingreminder.HANDSWASHED_EVENT" />
+            </intent-filter>
+        </receiver>
+
         <receiver
             android:name=".jobs.UpdateReceiver"
             android:enabled="true">

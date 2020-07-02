@@ -295,4 +295,6 @@
     <string name="animations_off">No se mostrará ninguna animación</string>
     <string name="news_error">Error al cargar información sobre las noticias</string>
     <string name="notification_settings">Ajustes de notificaciones</string>
+    <string name="just_washed">¡Acabo de lavarlas!</string>
+    <string name="hurray">¡Yupiiii! &#128588;&#128561;</string>
 </resources>

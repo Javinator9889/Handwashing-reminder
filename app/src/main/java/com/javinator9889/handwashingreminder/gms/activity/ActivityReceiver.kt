@@ -146,7 +146,8 @@ class ActivityReceiver : BroadcastReceiver() {
                 largeIcon = R.drawable.handwashing_app_logo,
                 title = title,
                 content = content,
-                longContent = content
+                longContent = content,
+                notificationId = 2
             )
         }
         withContext(Dispatchers.IO) {
