@@ -21,7 +21,6 @@ package com.javinator9889.handwashingreminder.jobs.alarms
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.jobs.workers.BreakfastNotificationWorker
 import com.javinator9889.handwashingreminder.jobs.workers.DinnerNotificationWorker
 import com.javinator9889.handwashingreminder.jobs.workers.LunchNotificationWorker
@@ -36,6 +35,6 @@ class AlarmReceiver : BroadcastReceiver() {
             Alarms.DINNER_ALARM.identifier -> DinnerNotificationWorker(context)
             else -> return
         }
-        goAsync(coroutineScope = HandwashingApplication.scope) { worker.doWork() }
+        goAsync { worker.doWork() }
     }
 }
