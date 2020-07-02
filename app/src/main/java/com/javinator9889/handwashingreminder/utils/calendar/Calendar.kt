@@ -32,25 +32,27 @@ object CalendarUtils {
         }
 
     val lastWeek: Calendar
-        get() = with(today) {
-            today.add(Calendar.DAY_OF_YEAR, -7)
-            today
+        get() {
+            val aWeekAgo = today
+            aWeekAgo.add(Calendar.DAY_OF_MONTH, -7)
+            return aWeekAgo
         }
 
     val lastMonth: Calendar
-        get() = with(today) {
-            today.add(Calendar.MONTH, -1)
-            today
+        get() {
+            val aMonthAgo = today
+            aMonthAgo.add(Calendar.MONTH, -1)
+            return aMonthAgo
         }
 
     fun timeBetweenIn(
         unit: TimeUnit,
         to: Long,
-        from: Long = Calendar.getInstance().timeInMillis
+        from: Long = today.timeInMillis
     ): Long = unit.convert(timeBetween(to, from), TimeUnit.MILLISECONDS)
 
     fun timeBetween(
         to: Long,
-        from: Long = Calendar.getInstance().timeInMillis
+        from: Long = today.timeInMillis
     ): Long = from - to
 }

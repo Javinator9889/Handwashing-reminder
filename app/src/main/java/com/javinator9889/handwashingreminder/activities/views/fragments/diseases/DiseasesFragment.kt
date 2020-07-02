@@ -123,6 +123,7 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange,
                     countChart.notifyDataSetChanged()
                     countChart.fitScreen()
                     countChart.moveViewToX(0F)
+                    countChart.setVisibleXRangeMaximum(7F)
                     countChart.invalidate()
                     val todayAmount =
                         handwashingViewModel.getAsync(CalendarUtils.today.time)
@@ -195,6 +196,9 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange,
                         )
                     )
                 handwashingViewModel.increment(CalendarUtils.today.time)
+                Timber.d("${CalendarUtils.lastWeek.time}")
+                Timber.d("${CalendarUtils.lastMonth.time}")
+                handwashingViewModel.create(Handwashing(CalendarUtils.lastWeek.time, 12))
                 leaves.visibility = View.VISIBLE
                 if (!leaves.isAnimating)
                     leaves.playAnimation()
@@ -211,6 +215,7 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange,
                         )
                     )
                 handwashingViewModel.decrement(CalendarUtils.today.time)
+                handwashingViewModel.create(Handwashing(CalendarUtils.lastMonth.time, 123))
             }
         }
     }
