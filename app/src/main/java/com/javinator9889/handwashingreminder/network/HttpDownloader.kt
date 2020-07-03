@@ -18,16 +18,20 @@
  */
 package com.javinator9889.handwashingreminder.network
 
-import okhttp3.CacheControl
-import okhttp3.Headers
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import com.javinator9889.handwashingreminder.application.HandwashingApplication
+import okhttp3.*
 import okio.BufferedSource
 import java.io.IOException
 import java.io.Reader
+import java.util.concurrent.TimeUnit
 
 class HttpDownloader : OkHttpDownloader {
-    private val client = OkHttpClient()
+    private val client: OkHttpClient = OkHttpClient.Builder()
+        .cache(Cache(HandwashingApplication.instance.cacheDir, 2024 * 10))
+        .callTimeout(5, TimeUnit.SECONDS)
+        .readTimeout(1, TimeUnit.MINUTES)
+        .followRedirects(true)
+        .build()
 
     override fun downloadFile(url: String): BufferedSource {
         val request = with(Request.Builder()) {
