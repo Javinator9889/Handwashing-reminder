@@ -24,7 +24,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import coil.Coil
 import coil.api.load
 import coil.size.Scale
 import com.airbnb.lottie.LottieAnimationView
@@ -72,42 +71,17 @@ data class News(
             item.lifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
                 title.text = item.title
                 description.text = item.short
-                val imageLoader = Coil.imageLoader(view.context)
                 if (item.imageUrl != null) {
                     imageHeader.load(item.imageUrl) {
                         scale(Scale.FILL)
                         lifecycle(item.lifecycleOwner)
-                        allowHardware(true)
                     }
-                    /*val request = GetRequest.Builder(view.context)
-                        .data(item.imageUrl)
-                        .allowHardware(true)
-                        .scale(Scale.FILL)
-                        .build()
-                    launch(Dispatchers.IO) {
-                        val drawable = imageLoader.execute(request).drawable
-                        withContext(Dispatchers.Main) {
-                            imageHeader.setImageDrawable(drawable)
-                        }
-                    }*/
                 } else imageHeader.visibility = View.GONE
                 if (item.websiteImageUrl != null) {
                     websiteLogo.load(item.websiteImageUrl) {
                         scale(Scale.FILL)
                         lifecycle(item.lifecycleOwner)
-                        allowHardware(true)
                     }
-                    /*val request = GetRequest.Builder(view.context)
-                        .data(item.websiteImageUrl)
-                        .allowHardware(true)
-                        .scale(Scale.FILL)
-                        .build()
-                    launch(Dispatchers.IO) {
-                        val drawable = imageLoader.execute(request).drawable
-                        withContext(Dispatchers.Main) {
-                            websiteLogo.setImageDrawable(drawable)
-                        }
-                    }*/
                 } else websiteLogo.visibility = View.GONE
                 websiteName.text = item.website
                     ?: context.getString(R.string.no_website)
