@@ -1,0 +1,54 @@
+{
+  "functions": {
+    "predeploy": [
+      "npm --prefix \"$RESOURCE_DIR\" run lint",
+      "npm --prefix \"$RESOURCE_DIR\" run build"
+    ],
+    "source": "functions"
+  },
+  "hosting": {
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/{,**}",
+        "destination": "/api/v1"
+      },
+      {
+        "source": "/api/v1**",
+        "function": "www-webApi"
+      }
+    ]
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "emulators": {
+    "functions": {
+      "port": 5001
+    },
+    "firestore": {
+      "port": 8080
+    },
+    "hosting": {
+      "port": 5000
+    },
+    "pubsub": {
+      "port": 8085
+    },
+    "ui": {
+      "enabled": true
+    },
+    "database": {
+      "port": 9000
+    }
+  },
+  "storage": {
+    "rules": "storage.rules"
+  }
+}

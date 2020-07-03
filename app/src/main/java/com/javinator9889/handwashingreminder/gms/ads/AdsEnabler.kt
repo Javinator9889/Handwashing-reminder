@@ -26,7 +26,7 @@ import com.javinator9889.handwashingreminder.application.HandwashingApplication
 const val PACKAGE_NAME = "com.google.android.gms.ads"
 const val CLASS_NAME = "MobileAdsInitProvider"
 
-class AdsEnabler(private val app: HandwashingApplication) {
+class AdsEnabler(app: HandwashingApplication) {
     private val packageManager = app.packageManager
     private val componentName =
         ComponentName(app, "${PACKAGE_NAME}.${CLASS_NAME}")

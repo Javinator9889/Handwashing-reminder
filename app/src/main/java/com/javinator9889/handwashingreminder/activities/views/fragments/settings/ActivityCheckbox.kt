@@ -27,7 +27,7 @@ import androidx.preference.CheckBoxPreference
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.javinator9889.handwashingreminder.R
-import com.javinator9889.handwashingreminder.application.HandwashingApplication
+import com.javinator9889.handwashingreminder.gms.activity.ActivityHandler
 import com.javinator9889.handwashingreminder.utils.AndroidVersion
 import com.javinator9889.handwashingreminder.utils.isAtLeast
 import com.mikepenz.iconics.IconicsDrawable
@@ -89,12 +89,8 @@ class ActivityCheckbox : CheckBoxPreference {
             firstCheck = false
             return
         }
-        with(HandwashingApplication.instance) {
-            if (checked) {
-                activityHandler.startTrackingActivity()
-            } else {
-                activityHandler.disableActivityTracker()
-            }
+        with(ActivityHandler.getInstance(context)) {
+            if (checked) startTrackingActivity() else disableActivityTracker()
         }
     }
 }

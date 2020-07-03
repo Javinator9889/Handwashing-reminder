@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/coordinatorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:clipToPadding="false">
+
+    <LinearLayout
+        android:id="@+id/handwashingLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="60dp"
+        android:background="@android:color/white"
+        android:orientation="vertical">
+
+        <include layout="@layout/handwash_count" />
+    </LinearLayout>
+
+    <!--This is the backdrop's content with a BottomSheetBehaviour applied to it-->
+    <LinearLayout
+        android:id="@+id/contentLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/handwashingLayout"
+        android:background="@android:color/white"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        app:behavior_peekHeight="65dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <LinearLayout
+            android:id="@+id/backdrop"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:background="@drawable/shadowed_divider"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!--        <View style="@style/Divider" />-->
+            <View
+                android:layout_width="32dp"
+                android:layout_height="4dp"
+                android:background="@drawable/divider_shape" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/diseaseInformationHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/raleway_bold"
+                android:gravity="center"
+                android:layout_marginTop="8dp"
+                android:text="@string/diseases_info"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include layout="@layout/loading_recycler_view" />
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

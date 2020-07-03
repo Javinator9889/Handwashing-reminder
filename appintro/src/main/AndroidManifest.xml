@@ -12,6 +12,9 @@
         <dist:fusing dist:include="true" />
     </dist:module>
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         tools:ignore="LockedOrientationActivity">
         <activity android:name=".IntroActivity" />

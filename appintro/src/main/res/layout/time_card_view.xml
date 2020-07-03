@@ -60,14 +60,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/title">
 
-                <com.javinator9889.handwashingreminder.graphics.RecyclingImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/infoImage"
                     android:layout_width="0dp"
                     android:layout_height="150dp"
                     android:layout_gravity="center"
                     android:layout_margin="8dp"
                     android:layout_weight="1"
-                    android:contentDescription="TODO"
                     android:layout_marginEnd="16dp"
                     app:srcCompat="@drawable/ic_breakfast" />
 
@@ -92,6 +91,7 @@
                         app:iiv_size="16dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/hours"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
@@ -106,11 +106,9 @@
                         android:maxLines="1"
                         android:singleLine="true"
                         android:textSize="18sp"
+                        app:layout_constraintStart_toEndOf="@+id/clockIcon"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/ddot"
-                        app:layout_constraintStart_toEndOf="@+id/clockIcon"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
@@ -118,10 +116,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="1dp"
-                        android:layout_marginLeft="1dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="1dp"
-                        android:layout_marginRight="1dp"
                         android:layout_marginBottom="8dp"
                         android:text="@string/double_dot"
                         android:textSize="18sp"
@@ -141,9 +137,9 @@
                         android:maxLines="1"
                         android:singleLine="true"
                         android:textSize="18sp"
+                        app:layout_constraintStart_toEndOf="@+id/ddot"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/ddot"
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

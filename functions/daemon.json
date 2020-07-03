@@ -1,0 +1,9 @@
+{
+  "apps": [
+    {
+      "name": "Newsriver-daemon",
+      "script": "npm",
+      "args": "run daemon"
+    }
+  ]
+}

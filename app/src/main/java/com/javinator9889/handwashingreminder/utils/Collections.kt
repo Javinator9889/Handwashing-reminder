@@ -18,12 +18,18 @@
  */
 package com.javinator9889.handwashingreminder.utils
 
+import android.util.SparseArray
+import androidx.core.util.set
+import com.github.mikephil.charting.data.BarEntry
+import com.javinator9889.handwashingreminder.data.room.entities.Handwashing
+import com.javinator9889.handwashingreminder.utils.calendar.CalendarUtils
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.Comparator
 import kotlin.collections.ArrayList
 import kotlin.math.abs
 
-fun <T> Array<T>?.notEmpty(f: (it: Array<T>) -> Unit) {
+fun <T> Collection<T>?.notEmpty(f: (it: Collection<T>) -> Unit) {
     if (!this.isNullOrEmpty()) f(this)
 }
 
@@ -45,4 +51,28 @@ fun List<Date>.closest(): Date {
             val diff2 = abs(date2.time - now)
             return@Comparator diff1.compareTo(diff2)
         })
+}
+
+fun List<Handwashing>.toBarEntry(): List<BarEntry> {
+    val entryBars = mutableListOf<BarEntry>()
+    val daysSorted = mutableListOf<Int>()
+    val daysEntriesArray = SparseArray<Float>(size)
+    for (entry in this) {
+        val daysBetween =
+            (CalendarUtils.today.time.time - entry.date.time).run {
+                -TimeUnit.DAYS.convert(this, TimeUnit.MILLISECONDS).toInt()
+            }
+        daysEntriesArray[daysBetween] = entry.amount.toFloat()
+        daysSorted.add(daysBetween)
+    }
+    daysSorted.sort()
+    for (daysDifference in daysSorted) {
+        entryBars.add(
+            BarEntry(
+                daysDifference.toFloat(),
+                daysEntriesArray[daysDifference]
+            )
+        )
+    }
+    return entryBars
 }

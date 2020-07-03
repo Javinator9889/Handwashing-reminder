@@ -18,7 +18,7 @@
         application</string>
     <string name="first_slide_title">Handwashing reminder</string>
     <string name="first_slide_desc">Do you know how crucial it can be
-        washing your hands so you can avoid some diseases? With this app, you
+        washing your hands so you can avoid some diseases?\nWith this app, you
         will never forget it &#128521;
     </string>
     <string name="second_slide_title">Custom hours</string>
@@ -28,7 +28,7 @@
     <string name="fourth_slide_title">Be even more precise</string>
     <string name="fourth_slide_desc">If you allow access to user activity,
         you will receive notifications when, for example, you get off from a
-        vehicle &#128647; or after running 🤼‍&#127939;&#8205;️. You can disable this option at any
+        vehicle &#128647; or after running 🤼‍&#127939;&#8205;️.\nYou can disable this option at any
         moment</string>
     <string name="privacy_policy_title">Privacy policy and terms of
         service</string>

@@ -13,25 +13,25 @@
     <string name="activity_notification_walk">¿Disfrutaste del paseo?
     &#128694;</string>
     <string name="activity_notification_walk_content">Andar 30 minutos al día
-        es una de las mejores prácticas para tener una buena salud &#128170;
+        es una de las mejores prácticas para tener una buena salud &#128170;\n
         Recuerda lavarte las manos antes de comer o tocarte la cara
         &#129325; y así podrás tener todavía mejor salud &#128521;</string>
     <string name="activity_notification_run">¿Qué tal fue la carrera?
         &#127939;&#8205;&#9792;&#65039;</string>
     <string name="activity_notifications_run_content">Siempre es divertido
-        correr &#128578; pero sueles acabar sudando mucho &#128517;. Intenta
+        correr &#128578; pero sueles acabar sudando mucho &#128517;.\nIntenta
         lavarte las manos lo antes posible o, mejor todavía, date una ducha
         &#128704;</string>
-    <string name="activity_notification_cycling">¿Teniendo una buena vuelta?
+    <string name="activity_notification_cycling">¿Pasando un buen rato?
         &#128692;&#8205;&#9792;&#65039;</string>
     <string name="activity_notification_cycling_content">Siempre disfruto el
-        ir en bici - te hace sentir libre &#127794;. Los manillares de tu
+        ir en bici - te hace sentir libre &#127794;.\nLos manillares de tu
         bici posiblemente estuvieran sucios así que lávate las manos lo
         antes que puedas &#128166;&#128079;</string>
     <string name="activity_notification_vehicle">Hora de lavarse las manos
-        &#128649;</string>
+        &#128663;&#128649;</string>
     <string name="activity_notification_vehicle_content">En el transporte
-        público hay mucha gente y no sabes si están enfermos o no &#128567;.
+        público hay mucha gente y no sabes si están enfermos o no &#128567;.\n
         Incluso en tu propio coche pueden haber enfermedades en los pomos o
         en el volante &#128663;, así que lávate las manos lo antes que puedas
        para evitar enfermedades &#128166;&#128079;
@@ -68,6 +68,9 @@
         <item>¿30 segundos por una buena salud? ¡Dónde firmo! Solo lávate
             las manos &#128521;&#128166;&#128079;</item>
     </string-array>
+    <string name="breakfast_notifications">Recordatorios en el desayuno</string>
+    <string name="lunch_notifications">Recordatorios en la comida</string>
+    <string name="dinner_notifications">Recordatorios en la cenas</string>
     <string name="lunch_title">¡Hora de comer y lavarse las manos!
         &#127857;</string>
     <string-array name="lunch_comments">
@@ -90,9 +93,9 @@
     <string name="washing_hands_first_title">Aprendamos cómo lavarnos las manos</string>
     <string name="washing_hands_first_description">Únete a mí en este
         viaje en donde aprenderemos cómo lavarnos las manos completamente
-        &#128166;&#128079;. Es muy importante no solo por ti sino por todos
+        &#128166;&#128079;.\nEs muy importante no solo por ti sino por todos
         los que te rodean: desde un bebé &#128118; hasta tus abuelos
-        &#128116;&#128117;. Es un pequeño acto de responsabilidad que
+        &#128116;&#128117;.\n\nEs un pequeño acto de responsabilidad que
         dura solo 30 segundos.
 
     Recuerda, no es solo por ti sino por ellos.</string>
@@ -154,7 +157,7 @@
     <string name="activity_disabled">No recibirás notificaciones de ninguna
         actividad</string>
     <string name="activity_enabled">Recibirás notificaciones de las
-        actividades seleccionadas debajo</string>
+        actividades después de pasear, ir en bici, bajarte de un vehículo o correr</string>
     <string name="activity_recognition">Habilitar reconocimiento de la
         actividad</string>
     <string name="activities_to_enable">¿Cuándo recibirás notificaciones?</string>
@@ -254,8 +257,8 @@
         enfermedades</string>
     <string name="handwashing_intro">Aquí puedes aprender a cómo lavarte
         completamente las manos</string>
-    <string name="news_intro">¿Buscando las últimas noticias? Aquí
-        estarán disponibles (todavía está bajo desarrollo)</string>
+    <string name="news_intro">¿Buscando las últimas noticias? ¡Aquí
+        estarán actualizadas!</string>
     <string name="settings_intro">Finalmente, aquí podrás configurar la
         aplicación para que encaje con tus gustos y preferencias</string>
     <string name="rate_text_title">Valorar Handwashing reminder</string>
@@ -265,4 +268,33 @@
         unos segundos &#128521;</string>
     <string name="rate_text">Valorar</string>
     <string name="rate_do_not_show">No preguntar de nuevo</string>
+    <string name="no_website">Sitio no disponible</string>
+    <string name="no_date">Fecha no disponible</string>
+    <string name="how_many_wash">¿Cuántas veces te has lavado las manos? &#128166;&#128079;</string>
+    <string name="today_washed">Hoy te has lavado las manos %1$s &#128079;</string>
+    <string name="week_washed">Esta semana te has lavado las manos %1$s &#129303;</string>
+    <string name="month_washed">Este mes te has lavado las manos %1$s &#128561;</string>
+    <plurals name="times">
+        <item quantity="one">%d vez</item>
+        <item quantity="other">%d veces</item>
+    </plurals>
+    <string name="add_another">¡Añade otra más! &#128588;</string>
+    <string name="reduce_count">Bueno, quizás una menos &#128517;</string>
+    <string name="diseases_info">Información de enfermedades</string>
+    <string name="minimum_time_hint">Tiempo mínimo en minutos…</string>
+    <string name="minimum_time">Tiempo mínimo entre notificaciones</string>
+    <string name="minimum_time_summ">Recibirás notificaciones con un tiempo mínimo de %1$s entre ellas</string>
+    <plurals name="minutes">
+        <item quantity="one">%d minuto</item>
+        <item quantity="other">%d minutos</item>
+    </plurals>
+    <string name="performance_options">Opciones de rendimiento de la app</string>
+    <string name="disable_animations">Deshabilitar las animaciones en la app</string>
+    <string name="animations_on">Actualmente, las animaciones están activadas.
+        Ten en cuenta que esto puede afectar tanto al rendimiento como a la batería</string>
+    <string name="animations_off">No se mostrará ninguna animación</string>
+    <string name="news_error">Error al cargar información sobre las noticias</string>
+    <string name="notification_settings">Ajustes de notificaciones</string>
+    <string name="just_washed">¡Acabo de lavarlas!</string>
+    <string name="hurray">¡Yupiiii! &#128588;&#128561;</string>
 </resources>

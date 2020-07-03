@@ -12,26 +12,26 @@
     <string name="activity_notification_walk">Did you have a good walk?
     &#128694;</string>
     <string name="activity_notification_walk_content">Walking 30 minutes a
-        day is one of the greatest practices for having a good health &#128170;
+        day is one of the greatest practices for having a good health &#128170;\n
         Remember to wash your hands before eating or touching your face
         &#129325; so you can have even better health &#128521;</string>
     <string name="activity_notification_run">Did you enjoy running?
         &#127939;&#8205;&#9792;&#65039;</string>
     <string name="activity_notifications_run_content">It\'s always
         funny to run &#128578; but usually it comes with a lot of sweat
-    &#128517;. Try washing your hands as soon as possible or, even
+    &#128517;.\nTry washing your hands as soon as possible or, even
         better, have a shower &#128704;</string>
     <string name="activity_notification_cycling">Having a good ride?
         &#128692;&#8205;&#9792;&#65039;</string>
     <string name="activity_notification_cycling_content">I always enjoy
-    going cycling - it makes you feel free &#127794;. Your bike\'s handles were
+    going cycling - it makes you feel free &#127794;.\nYour bike\'s handles were
     probably dirty so try to wash your hands as soon as you can
         &#128166;&#128079;</string>
     <string name="activity_notification_vehicle">Time to wash your
-        hands &#128649;</string>
+        hands &#128663;&#128649;</string>
     <string name="activity_notification_vehicle_content">In public
         transport there are lots of people and you don\'t know if they
-        are ill or not &#128567;. Even in your own car there can be
+        are ill or not &#128567;.\nEven in your own car there can be
         diseases in the handles or in the steering wheel &#128663;, so
         try to wash your hands as soon as you can for avoiding diseases
         &#128166;&#128079;
@@ -69,6 +69,7 @@
         <item>30 seconds for good health? Where do I sign! Just wash your
         hands &#128521;&#128166;&#128079;</item>
     </string-array>
+    <string name="breakfast_notifications">Breakfast reminders</string>
     <string name="lunch_title">Time to lunch and wash your hands!
         &#127857;</string>
     <string-array name="lunch_comments">
@@ -79,6 +80,7 @@
         <item>If you have gone to the street is even more important to
             wash your hands before having lunch &#128166;&#128079;</item>
     </string-array>
+    <string name="lunch_notifications">Lunch reminders</string>
     <string name="dinner_title">Let\'s have a clean dinner &#129367;</string>
     <string-array name="dinner_comments">
         <item>The day is finishing and you can do it fully by
@@ -88,13 +90,14 @@
         <item>Do you know that washing your hands can keep you safe from
             more than 15 diseases? That\'s a lot &#128558;</item>
     </string-array>
+    <string name="dinner_notifications">Dinner reminders</string>
     <string name="washing_hands_first_title">Let\'s learn how to wash
         our hands</string>
     <string name="washing_hands_first_description">Join me in this trip
     in which we will learn how to completely wash our hands
-        &#128166;&#128079;. This is very important not only for you but
+        &#128166;&#128079;.\nThis is very important not only for you but
     for everyone who is around you: from a baby &#128118; to your
-        grandparents &#128116;&#128117;. It\'s a small responsibility
+        grandparents &#128116;&#128117;.\n\nIt\'s a small responsibility
         act that only lasts 30 seconds.
 
     Remember, it\'s not only for you but for them.</string>
@@ -156,8 +159,8 @@
     the access to your activity. Enable it from settings</string>
     <string name="activity_disabled">You will not receive any activity
         notifications</string>
-    <string name="activity_enabled">You will receive notifications for
-        the activities selected below</string>
+    <string name="activity_enabled">You will receive notifications after having
+        a walk, going cycling, leaving a vehicle or running</string>
     <string name="activity_recognition">Enable activity recognition</string>
     <string name="activities_to_enable">When you will receive
         notifications?</string>
@@ -283,7 +286,7 @@
     <string name="handwashing_intro">Here you can learn how to completely wash
         your hands</string>
     <string name="news_intro">Looking for latest news? Here you will
-        have it (is still under construction)</string>
+        have them updated!</string>
     <string name="settings_intro">Finally, here you will be able to
         change the application settings so it can fit your requirements</string>
     <string name="rate_text_title">Rate Handwashing reminder</string>
@@ -293,4 +296,33 @@
         people! It only takes a few seconds &#128521;</string>
     <string name="rate_text">Rate!</string>
     <string name="rate_do_not_show">Don\'t ask again</string>
+    <string name="no_website">Website not available</string>
+    <string name="no_date">Date not available</string>
+    <string name="how_many_wash">How many times did you washed your hands? &#128166;&#128079;</string>
+    <string name="today_washed">Today you washed your hands %1$s &#128079;</string>
+    <string name="week_washed">This week you have washed your hands %1$s &#129303;</string>
+    <string name="month_washed">This month you washed your hands %1$s &#128561;</string>
+    <plurals name="times">
+        <item quantity="one">%d time</item>
+        <item quantity="other">%d times</item>
+    </plurals>
+    <string name="add_another">Add another! &#128588;</string>
+    <string name="reduce_count">Well, maybe one less &#128517;</string>
+    <string name="diseases_info">Diseases information</string>
+    <string name="minimum_time_hint">Minimum time in minutes…</string>
+    <string name="minimum_time">Minimum time in between notifications</string>
+    <string name="minimum_time_summ">You will receive notifications with at least %1$s in between them</string>
+    <plurals name="minutes">
+        <item quantity="one">%d minute</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
+    <string name="performance_options">App\'s performance options</string>
+    <string name="disable_animations">Disable app\'s animations</string>
+    <string name="animations_on">Currently, the app will play some animations.
+    Keep in mind that it can affect both performance and battery life</string>
+    <string name="animations_off">No animations will be played</string>
+    <string name="news_error">Error while loading news data</string>
+    <string name="notification_settings">Edit notification settings</string>
+    <string name="just_washed">Just washed them!</string>
+    <string name="hurray">Hurray! &#128588;&#128561;</string>
 </resources>

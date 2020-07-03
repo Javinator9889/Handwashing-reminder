@@ -25,6 +25,7 @@ import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.utils.notNull
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
+import timber.log.Timber
 
 class Ads : AbstractItem<Ads.ViewHolder>() {
     override val layoutRes: Int = R.layout.simple_frame_view
@@ -38,7 +39,9 @@ class Ads : AbstractItem<Ads.ViewHolder>() {
 
         override fun bindView(item: Ads, payloads: List<Any>) {
             ads.notNull {
-                it.loadAdForViewGroup(container, false)
+                it.loadAdForViewGroup(container, false)?.let { e ->
+                    Timber.w(e, "Ads cannot be loaded")
+                }
             }
         }
 

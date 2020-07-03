@@ -1,0 +1,38 @@
+{
+  "name": "functions",
+  "version": "1.0.2",
+  "scripts": {
+    "lint": "tslint --project tsconfig.json",
+    "build": "tsc",
+    "serve": "cross-env-shell RUN_SERVER=true RUN_DAEMON=true \"npm run build && firebase emulators:start --only functions\"",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "cross-env-shell RUN_SERVER=true RUN_DAEMON=true firebase deploy --only functions",
+    "deploy-server": "cross-env-shell RUN_SERVER=true \"firebase deploy --only functions\"",
+    "logs": "firebase functions:log",
+    "server": "cross-env-shell RUN_SERVER=true RUNNING_LOCAL=true \"npm run build && firebase emulators:start --only functions\"",
+    "daemon": "cross-env-shell RUN_DAEMON=true RUNNING_LOCAL=true \"npm run build && firebase emulators:start --only functions\""
+  },
+  "engines": {
+    "node": "10"
+  },
+  "main": "lib/bin/index.js",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "body-parser": "^1.19.0",
+    "cross-env": "^7.0.2",
+    "express": "^4.17.1",
+    "firebase-admin": "^8.10.0",
+    "firebase-functions": "^3.7.0",
+    "firebase-functions-helper": "^0.7.5",
+    "http-errors": "^1.7.3",
+    "morgan": "^1.10.0",
+    "pug": "^3.0.0"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^0.2.0",
+    "tslint": "^5.12.0",
+    "typescript": "^3.8.0"
+  },
+  "private": true
+}

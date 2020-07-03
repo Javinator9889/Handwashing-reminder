@@ -18,16 +18,22 @@
  */
 package com.javinator9889.handwashingreminder.jobs.workers
 
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import androidx.annotation.ArrayRes
 import androidx.annotation.StringRes
+import androidx.core.app.NotificationCompat
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.emoji.EmojiLoader
+import com.javinator9889.handwashingreminder.jobs.HANDS_WASHED_ACTION
+import com.javinator9889.handwashingreminder.jobs.HANDS_WASHED_CODE
+import com.javinator9889.handwashingreminder.jobs.HandsWashedReceiver
 import com.javinator9889.handwashingreminder.jobs.alarms.AlarmHandler
 import com.javinator9889.handwashingreminder.jobs.alarms.Alarms
+import com.javinator9889.handwashingreminder.notifications.Action
 import com.javinator9889.handwashingreminder.notifications.NotificationsHandler
-import com.javinator9889.handwashingreminder.utils.TIME_CHANNEL_ID
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
@@ -43,12 +49,14 @@ abstract class ScheduledNotificationWorker(context: Context) {
     suspend fun doWork() = coroutineScope {
         try {
             val startTime = System.currentTimeMillis()
-            val emojiLoader = EmojiLoader.get(context)
+            val emojiLoader = EmojiLoader.loadAsync(context)
             val notificationsHandler = NotificationsHandler(
                 context = context,
-                channelId = TIME_CHANNEL_ID,
+                channelId = alarm.channelId,
                 channelName = getString(R.string.time_notification_channel_name),
-                channelDesc = getString(R.string.time_notification_channel_desc)
+                channelDesc = getString(R.string.time_notification_channel_desc),
+                groupId = alarm.identifier,
+                groupName = getString(alarm.groupName)
             )
             val emojiCompat = emojiLoader.await()
             var title = getText(titleRes)
@@ -57,14 +65,29 @@ abstract class ScheduledNotificationWorker(context: Context) {
             try {
                 title = emojiCompat.process(title)
                 content = emojiCompat.process(content)
-            } catch (_: IllegalStateException) { }
+            } catch (_: IllegalStateException) {
+            }
+            val washedPendingIntent = PendingIntent.getBroadcast(
+                context,
+                HANDS_WASHED_CODE,
+                Intent(context, HandsWashedReceiver::class.java).apply {
+                    action = HANDS_WASHED_ACTION
+                },
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
             withContext(Dispatchers.Main) {
                 notificationsHandler.createNotification(
                     iconDrawable = R.drawable.ic_stat_handwashing,
                     largeIcon = R.drawable.handwashing_app_logo,
                     title = title,
                     content = content,
-                    longContent = content
+                    longContent = content,
+                    priority = NotificationCompat.PRIORITY_MAX,
+                    action = Action(
+                        R.drawable.ic_stat_handwashing,
+                        getString(R.string.just_washed),
+                        washedPendingIntent
+                    )
                 )
             }
             Timber.d(

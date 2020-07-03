@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    viewBinding.enabled = true
+    buildFeatures.viewBinding = true
     compileSdkVersion 29
 
     android.defaultConfig.vectorDrawables.useSupportLibrary = true
@@ -43,6 +43,4 @@ dependencies {
 
     // https://github.com/AppIntro/AppIntro
     implementation 'com.github.AppIntro:AppIntro:5.1.0'
-    // https://github.com/mikepenz/FastAdapter
-    implementation "com.mikepenz:fastadapter:${latestFastAdapterRelease}"
 }

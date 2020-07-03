@@ -19,6 +19,7 @@
 package com.javinator9889.handwashingreminder.notifications
 
 import android.app.NotificationChannel
+import android.app.NotificationChannelGroup
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
@@ -31,7 +32,6 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.FAST_START_KEY
@@ -47,20 +47,29 @@ class NotificationsHandler(
     private val context: Context,
     private val channelId: String,
     private val channelName: String = "",
-    private val channelDesc: String = ""
+    private val channelDesc: String = "",
+    groupId: String = "",
+    groupName: String = ""
 ) {
     private val preferences: SharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(context)
-    private val notificationId = 1
     private val vibrationPattern = longArrayOf(300L, 300L, 300L, 300L)
+    private val manager =
+        context.getSystemService(Context.NOTIFICATION_SERVICE) as
+                NotificationManager
 
     init {
-        if (isNotificationChannelCreated() || createChannelRequired()) {
-            createNotificationChannel()
-            preferences.edit {
-                putBoolean(Preferences.CREATE_CHANNEL_KEY, false)
-            }
+        if (groupId.isNotEmpty() && groupName.isNotEmpty()
+            && isAtLeast(AndroidVersion.O)
+        ) {
+            manager.createNotificationChannelGroup(
+                NotificationChannelGroup(
+                    groupId,
+                    groupName
+                )
+            )
         }
+        createNotificationChannel(groupId)
     }
 
     fun createNotification(
@@ -69,7 +78,9 @@ class NotificationsHandler(
         @StringRes title: Int,
         @StringRes content: Int,
         priority: Int = NotificationCompat.PRIORITY_DEFAULT,
-        @StringRes longContent: Int = -1
+        @StringRes longContent: Int = -1,
+        action: Action? = null,
+        notificationId: Int = -1
     ) {
         val longContentProcessed =
             if (longContent != -1) context.getText(longContent) else null
@@ -79,7 +90,9 @@ class NotificationsHandler(
             context.getText(title),
             context.getText(content),
             priority,
-            longContentProcessed
+            longContentProcessed,
+            action,
+            notificationId
         )
     }
 
@@ -89,7 +102,9 @@ class NotificationsHandler(
         title: CharSequence,
         content: CharSequence,
         priority: Int = NotificationCompat.PRIORITY_DEFAULT,
-        longContent: CharSequence? = null
+        longContent: CharSequence? = null,
+        action: Action? = null,
+        notificationId: Int = -1
     ) {
         val bitmapIcon = if (isAtLeast(AndroidVersion.JELLY_BEAN_MR2)) {
             if (isAtLeast(AndroidVersion.P)) {
@@ -111,7 +126,9 @@ class NotificationsHandler(
             title,
             content,
             priority,
-            longContent
+            longContent,
+            action,
+            notificationId
         )
     }
 
@@ -121,7 +138,9 @@ class NotificationsHandler(
         title: CharSequence,
         content: CharSequence,
         priority: Int = NotificationCompat.PRIORITY_DEFAULT,
-        longContent: CharSequence? = null
+        longContent: CharSequence? = null,
+        action: Action? = null,
+        notificationId: Int = -1
     ) {
         val notifyIntent = Intent(context, LauncherActivity::class.java).apply {
             flags =
@@ -148,6 +167,9 @@ class NotificationsHandler(
             setPriority(priority)
             setVibrate(vibrationPattern)
             setContentIntent(notifyPendingIntent)
+            action?.let {
+                addAction(action.drawable, action.text, action.pendingIntent)
+            }
             addAction(
                 R.drawable.ic_share_black,
                 context.getString(R.string.share),
@@ -160,12 +182,13 @@ class NotificationsHandler(
             build()
         }.let {
             with(NotificationManagerCompat.from(context)) {
-                notify(notificationId, it)
+                val id = if (notificationId == -1) 1 else notificationId
+                notify(id, it)
             }
         }
     }
 
-    private fun createNotificationChannel() {
+    private fun createNotificationChannel(groupId: String = "") {
         if (isAtLeast(AndroidVersion.O)) {
             val importance = NotificationManager.IMPORTANCE_HIGH
             val that = this
@@ -175,19 +198,15 @@ class NotificationsHandler(
                         description = channelDesc
                         vibrationPattern = that.vibrationPattern
                         enableVibration(true)
+                        if (groupId.isNotEmpty())
+                            group = groupId
                     }
-            val notificationManager: NotificationManager =
-                context.getSystemService(Context.NOTIFICATION_SERVICE) as
-                        NotificationManager
-            notificationManager.createNotificationChannel(channel)
+            manager.createNotificationChannel(channel)
         }
     }
 
     private fun isNotificationChannelCreated(): Boolean {
         if (isAtLeast(AndroidVersion.O)) {
-            val manager = context
-                .getSystemService(Context.NOTIFICATION_SERVICE) as
-                    NotificationManager
             val channel = manager.getNotificationChannel(channelId)
             channel?.let {
                 return it.importance != NotificationManager.IMPORTANCE_NONE
@@ -198,7 +217,12 @@ class NotificationsHandler(
         }
     }
 
-    private fun createChannelRequired(): Boolean {
-        return preferences.getBoolean(Preferences.CREATE_CHANNEL_KEY, true)
-    }
+    private fun createChannelRequired() =
+        preferences.getBoolean(Preferences.CREATE_CHANNEL_KEY, true)
 }
+
+data class Action(
+    @DrawableRes val drawable: Int,
+    val text: CharSequence,
+    val pendingIntent: PendingIntent
+)

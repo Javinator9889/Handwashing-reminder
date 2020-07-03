@@ -40,8 +40,6 @@
         <activity
             android:name=".activities.DynamicFeatureProgress" />
         <activity
-            android:name=".activities.views.fragments.washinghands.WashingHandsFragment" />
-        <activity
             android:name=".activities.views.fragments.diseases.DiseaseExpandedView" />
 
         <meta-data
@@ -51,7 +49,19 @@
         <receiver
             android:name=".gms.activity.ActivityReceiver"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.javinator9889.handwashingreminder.TRANSITIONS_RECEIVER_ACTION" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".jobs.HandsWashedReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.javinator9889.handwashingreminder.HANDSWASHED_EVENT" />
+            </intent-filter>
+        </receiver>
 
         <receiver
             android:name=".jobs.UpdateReceiver"

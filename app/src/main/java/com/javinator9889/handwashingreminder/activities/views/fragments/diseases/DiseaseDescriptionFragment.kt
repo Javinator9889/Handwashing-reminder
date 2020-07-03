@@ -22,7 +22,7 @@ import android.os.Bundle
 import androidx.annotation.LayoutRes
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.BaseFragmentView
-import com.javinator9889.handwashingreminder.activities.views.viewmodels.ParsedHTMLText
+import com.javinator9889.handwashingreminder.data.ParsedHTMLText
 import kotlinx.android.synthetic.main.disease_description.*
 import kotlin.properties.Delegates
 

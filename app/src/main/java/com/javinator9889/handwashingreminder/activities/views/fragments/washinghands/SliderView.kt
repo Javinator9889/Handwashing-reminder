@@ -27,10 +27,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenStarted
+import coil.api.load
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.BaseFragmentView
 import com.javinator9889.handwashingreminder.activities.views.viewmodels.*
-import com.javinator9889.handwashingreminder.graphics.GlideApp
 import kotlinx.android.synthetic.main.wash_your_hands_demo.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -69,9 +69,7 @@ class SliderView : BaseFragmentView() {
                 })
                 washingHandsModel.image.observe(viewLifecycleOwner, Observer {
                     try {
-                        GlideApp.with(this@SliderView)
-                            .load(it)
-                            .into(image)
+                        image.load(it)
                     } catch (e: Exception) {
                         Timber.e(e, "Error while loading Glide view")
                         image.setImageResource(it)
@@ -124,10 +122,7 @@ class SliderView : BaseFragmentView() {
         video.requestFocus()
         video.start()
         try {
-            GlideApp.with(this)
-                .load(drawableId)
-                .centerInside()
-                .into(image)
+            image.load(drawableId)
         } catch (e: Exception) {
             Timber.e(e, "Error while loading Glide view")
             image.setImageResource(drawableId)

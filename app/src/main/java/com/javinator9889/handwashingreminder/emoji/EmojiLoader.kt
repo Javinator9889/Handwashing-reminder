@@ -20,37 +20,38 @@ package com.javinator9889.handwashingreminder.emoji
 
 import android.content.Context
 import androidx.emoji.text.EmojiCompat
+import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.async
 import timber.log.Timber
 
 object EmojiLoader {
-    fun get(context: Context): CompletableDeferred<EmojiCompat> {
-        val deferred = CompletableDeferred<EmojiCompat>()
+    fun loadAsync(context: Context) = HandwashingApplication.scope.async {
         try {
-            with(EmojiCompat.get()) {
-                deferred.complete(this)
-            }
+            EmojiCompat.get()
         } catch (_: IllegalStateException) {
             Timber.d("EmojiCompat not initialized yet")
             val emojiCompat = with(EmojiConfig.get(context)) {
                 EmojiCompat.init(this)
             }
-            emojiCompat.registerInitCallback(
-                object : EmojiCompat.InitCallback() {
-                    override fun onInitialized() {
-                        emojiCompat.unregisterInitCallback(this)
-                        deferred.complete(EmojiCompat.get())
-                    }
+            val loadDeferred = CompletableDeferred<EmojiCompat>()
+            emojiCompat.registerInitCallback(object :
+                EmojiCompat.InitCallback() {
+                override fun onInitialized() {
+                    super.onInitialized()
+                    emojiCompat.unregisterInitCallback(this)
+                    loadDeferred.complete(EmojiCompat.get())
+                }
 
-                    override fun onFailed(throwable: Throwable?) {
-                        emojiCompat.unregisterInitCallback(this)
-                        val exception = throwable
-                            ?: RuntimeException("EmojiCompat failed to load")
-                        deferred.completeExceptionally(exception)
-                    }
-                })
-        } finally {
-            return deferred
+                override fun onFailed(throwable: Throwable?) {
+                    super.onFailed(throwable)
+                    emojiCompat.unregisterInitCallback(this)
+                    val exception = throwable
+                        ?: RuntimeException("EmojiCompat failed to load")
+                    loadDeferred.completeExceptionally(exception)
+                }
+            })
+            loadDeferred.await()
         }
     }
 }

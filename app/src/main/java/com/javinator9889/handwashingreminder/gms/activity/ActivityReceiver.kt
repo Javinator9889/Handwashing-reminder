@@ -23,6 +23,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.annotation.StringRes
 import androidx.emoji.text.EmojiCompat
+import androidx.preference.PreferenceManager
 import com.google.android.gms.location.ActivityTransition
 import com.google.android.gms.location.ActivityTransitionResult
 import com.google.android.gms.location.DetectedActivity
@@ -30,54 +31,82 @@ import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.emoji.EmojiLoader
 import com.javinator9889.handwashingreminder.notifications.NotificationsHandler
 import com.javinator9889.handwashingreminder.utils.ACTIVITY_CHANNEL_ID
+import com.javinator9889.handwashingreminder.utils.Preferences
+import com.javinator9889.handwashingreminder.utils.calendar.CalendarUtils
 import com.javinator9889.handwashingreminder.utils.goAsync
-import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import timber.log.Timber
+import java.io.*
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 class ActivityReceiver : BroadcastReceiver() {
     /**
      * {@inheritDoc}
      */
     override fun onReceive(context: Context, intent: Intent) {
+        Timber.d("Detected user activity - ${intent.action}")
         if (ActivityTransitionResult.hasResult(intent)) {
-            val emojiLoader = EmojiLoader.get(context)
-            val result = ActivityTransitionResult.extractResult(intent)!!
-            for (event in result.transitionEvents) {
-                if (event.transitionType !=
-                    ActivityTransition.ACTIVITY_TRANSITION_EXIT ||
-                    event.activityType == DetectedActivity.UNKNOWN
-                )
-                    continue
-                val notificationHandler = NotificationsHandler(
-                    context,
-                    ACTIVITY_CHANNEL_ID,
-                    context.getString(
-                        R.string.activity_notification_channel_name
-                    ),
-                    context.getString(
-                        R.string.activity_notification_channel_desc
+            val emojiLoader = EmojiLoader.loadAsync(context)
+            val result = ActivityTransitionResult.extractResult(intent)
+            result?.let {
+                for (event in result.transitionEvents) {
+                    if (event.transitionType !=
+                        ActivityTransition.ACTIVITY_TRANSITION_EXIT ||
+                        event.activityType == DetectedActivity.UNKNOWN
                     )
-                )
-                goAsync {
-                    putNotification(
-                        notificationHandler,
-                        emojiLoader,
-                        event.activityType,
-                        context
+                        continue
+                    val notificationHandler = NotificationsHandler(
+                        context,
+                        ACTIVITY_CHANNEL_ID,
+                        context.getString(
+                            R.string.activity_notification_channel_name
+                        ),
+                        context.getString(
+                            R.string.activity_notification_channel_desc
+                        )
                     )
+                    goAsync {
+                        putNotification(
+                            notificationHandler,
+                            emojiLoader,
+                            event.activityType,
+                            context
+                        )
+                    }
+                    break
                 }
-                break
-            }
+            } ?: Timber.w("Received unmatched activity - $intent")
         }
     }
 
     private suspend fun putNotification(
         notificationsHandler: NotificationsHandler,
-        emojiLoader: CompletableDeferred<EmojiCompat>,
+        emojiLoader: Deferred<EmojiCompat>,
         detectedActivity: Int,
         context: Context
     ) {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val timeInBetweenNotifications =
+            prefs.getString(Preferences.ACTIVITY_MINIMUM_TIME, "15")!!.toInt()
+        val timeFile = File(context.cacheDir, "activity.time")
+        var latestNotificationTime = 0L
+        withContext(Dispatchers.IO) {
+            if (timeFile.exists()) {
+                DataInputStream(FileInputStream(timeFile)).use {
+                    latestNotificationTime = it.readLong()
+                }
+            }
+        }
+        val timeDifference = CalendarUtils.timeBetweenIn(
+            TimeUnit.MINUTES,
+            latestNotificationTime
+        )
+        Timber.d("$timeDifference - $timeInBetweenNotifications")
+        if (timeDifference <= timeInBetweenNotifications)
+            return
         val notificationContent = when (detectedActivity) {
             DetectedActivity.WALKING ->
                 NotificationContent(
@@ -100,13 +129,13 @@ class ActivityReceiver : BroadcastReceiver() {
                     R.string.activity_notification_vehicle_content
                 )
             else -> throw IllegalArgumentException(
-                "Activity not recognized"
+                "Activity not recognized - $detectedActivity"
             )
         }
-        val emojiCompat = emojiLoader.await()
         var title = context.getText(notificationContent.title)
         var content = context.getText(notificationContent.content)
         try {
+            val emojiCompat = emojiLoader.await()
             title = emojiCompat.process(title)
             content = emojiCompat.process(content)
         } catch (_: IllegalStateException) {
@@ -117,8 +146,14 @@ class ActivityReceiver : BroadcastReceiver() {
                 largeIcon = R.drawable.handwashing_app_logo,
                 title = title,
                 content = content,
-                longContent = content
+                longContent = content,
+                notificationId = 2
             )
+        }
+        withContext(Dispatchers.IO) {
+            DataOutputStream(FileOutputStream(timeFile)).use {
+                it.writeLong(Calendar.getInstance().timeInMillis)
+            }
         }
     }
 }

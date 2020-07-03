@@ -22,7 +22,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.preference.PreferenceManager
-import com.javinator9889.handwashingreminder.application.HandwashingApplication
+import com.javinator9889.handwashingreminder.gms.activity.ActivityHandler
 import com.javinator9889.handwashingreminder.jobs.alarms.AlarmHandler
 import com.javinator9889.handwashingreminder.utils.Preferences
 import timber.log.Timber
@@ -30,16 +30,19 @@ import timber.log.Timber
 class BootCompletedJob : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == Intent.ACTION_BOOT_COMPLETED) {
-            val app = HandwashingApplication.instance
+            val activityHandler = ActivityHandler.getInstance(context)
             val preferences = PreferenceManager.getDefaultSharedPreferences(context)
             if (preferences.getBoolean(
                     Preferences.ACTIVITY_TRACKING_ENABLED,
                     false
                 )
-            )
-                app.activityHandler.startTrackingActivity()
-            else
-                app.activityHandler.disableActivityTracker()
+            ) {
+                Timber.d("Device rebooted so starting activity as it's enabled")
+                activityHandler.startTrackingActivity()
+            } else {
+                Timber.d("Device rebooted but not starting activity as it isn't enabled")
+                activityHandler.disableActivityTracker()
+            }
             Timber.d("Enqueuing notifications as the device has rebooted")
             with(AlarmHandler(context)) {
                 scheduleAllAlarms()

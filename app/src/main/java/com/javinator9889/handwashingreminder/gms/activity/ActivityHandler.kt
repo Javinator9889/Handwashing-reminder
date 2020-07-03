@@ -19,34 +19,60 @@
 package com.javinator9889.handwashingreminder.gms.activity
 
 import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
-import androidx.preference.PreferenceManager
 import com.google.android.gms.location.ActivityRecognition
 import com.google.android.gms.location.ActivityTransition
+import com.google.android.gms.location.ActivityTransition.ACTIVITY_TRANSITION_EXIT
 import com.google.android.gms.location.ActivityTransitionRequest
+import com.google.android.gms.location.DetectedActivity
 import com.google.android.gms.tasks.Task
-import com.javinator9889.handwashingreminder.utils.Preferences
 import timber.log.Timber
 
+internal const val ACTIVITY_REQUEST_CODE = 64
+internal const val TRANSITIONS_RECEIVER_ACTION =
+    "com.javinator9889.handwashingreminder.TRANSITIONS_RECEIVER_ACTION"
+internal val TRANSITIONS = listOf<ActivityTransition>(
+    ActivityTransition.Builder()
+        .setActivityType(DetectedActivity.IN_VEHICLE)
+        .setActivityTransition(ACTIVITY_TRANSITION_EXIT)
+        .build(),
+    ActivityTransition.Builder()
+        .setActivityType(DetectedActivity.ON_BICYCLE)
+        .setActivityTransition(ACTIVITY_TRANSITION_EXIT)
+        .build(),
+    ActivityTransition.Builder()
+        .setActivityType(DetectedActivity.RUNNING)
+        .setActivityTransition(ACTIVITY_TRANSITION_EXIT)
+        .build(),
+    ActivityTransition.Builder()
+        .setActivityType(DetectedActivity.WALKING)
+        .setActivityTransition(ACTIVITY_TRANSITION_EXIT)
+        .build()
+)
 
-class ActivityHandler(private val context: Context) {
-    private val requestCode = 51824210
-    private val transitions: MutableList<ActivityTransition> = mutableListOf()
-    private var pendingIntent: PendingIntent
+class ActivityHandler private constructor(private val context: Context) {
+    private val pendingIntent: PendingIntent
+        get() = createPendingIntent()
     private var activityRegistered = false
 
-    init {
-        val activitiesSet = createSetOfTransitions()
-        addTransitions(activitiesSet, transitions)
-        pendingIntent = createPendingIntent()
+    companion object {
+        private var instance: ActivityHandler? = null
+
+        fun getInstance(context: Context): ActivityHandler {
+            instance?.let { return it }
+            synchronized(this) {
+                val instance = ActivityHandler(context.applicationContext)
+                this.instance = instance
+                return instance
+            }
+        }
     }
 
     fun startTrackingActivity() {
-        if (transitions.size == 0)
-            return
         Timber.d("Starting activity recognition")
-        with(ActivityTransitionRequest(transitions)) {
+        with(ActivityTransitionRequest(TRANSITIONS)) {
             ActivityRecognition.getClient(context)
                 .requestActivityTransitionUpdates(this, pendingIntent).apply {
                     addOnSuccessListener { activityRegistered = true }
@@ -60,56 +86,22 @@ class ActivityHandler(private val context: Context) {
         if (!activityRegistered)
             return null
         return ActivityRecognition.getClient(context)
-            .removeActivityTransitionUpdates(pendingIntent).apply {
-                addOnSuccessListener { pendingIntent.cancel() }
-                addOnFailureListener { e: Exception -> Timber.e(e) }
-            }
-    }
-
-    fun reload() {
-        with(createSetOfTransitions()) {
-            transitions.clear()
-            addTransitions(this, transitions)
-            disableActivityTracker()?.let {
+            .removeActivityTransitionUpdates(pendingIntent).also {
                 it.addOnSuccessListener {
-                    pendingIntent = createPendingIntent()
-                    startTrackingActivity()
+                    pendingIntent.cancel(); activityRegistered = false
                 }
+                it.addOnFailureListener { e: Exception -> Timber.e(e) }
             }
-        }
     }
 
-    private fun createSetOfTransitions(): Set<Int> {
-        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-        with(hashSetOf<Int>()) {
-            preferences.getStringSet(
-                Preferences.ACTIVITIES_ENABLED,
-                Preferences.DEFAULT_ACTIVITY_SET
-            )!!.run {
-                forEach { this@with += Integer.parseInt(it) }
-            }
-            return this
-        }
-    }
-
-    private fun addTransitions(
-        activitiesSet: Set<Int>,
-        transitions: MutableList<ActivityTransition>,
-        activityTransition: Int = ActivityTransition.ACTIVITY_TRANSITION_EXIT
-    ) {
-        for (activity in activitiesSet) {
-            transitions += ActivityTransition.Builder()
-                .setActivityType(activity)
-                .setActivityTransition(activityTransition)
-                .build()
-        }
-    }
-
-    private fun createPendingIntent(): PendingIntent {
+    private fun createPendingIntent(): PendingIntent =
         with(Intent(context, ActivityReceiver::class.java)) {
-            return PendingIntent.getBroadcast(
-                context, requestCode, this, PendingIntent.FLAG_UPDATE_CURRENT
+            action = TRANSITIONS_RECEIVER_ACTION
+            PendingIntent.getBroadcast(
+                context,
+                ACTIVITY_REQUEST_CODE,
+                this,
+                FLAG_UPDATE_CURRENT
             )
         }
-    }
 }

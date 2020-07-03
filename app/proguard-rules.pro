@@ -14,7 +14,11 @@
 
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
--keepattributes *Annotation*
+# -keepattributes *Annotation*
+# -keepattributes SourceFile,LineNumberTable
+-printmapping out.map
+
+-renamesourcefileattribute SourceFile
 -keepattributes SourceFile,LineNumberTable
 
 # If you keep the line number information, uncomment this to
@@ -22,11 +26,31 @@
 #-renamesourcefileattribute SourceFile
 
 -optimizationpasses 4
+-repackageclasses ''
+-allowaccessmodification
+-android
+-dontpreverify
+-optimizations !code/simplification/arithmetic
 
 # https://github.com/mikepenz/Android-Iconics#proguard
 -keep class .R
 -keep class **.R$* {
     <fields>;
+}
+
+-assumenosideeffects class android.util.Log {
+    public static boolean isLoggable(java.lang.String, int);
+    public static int v(...);
+    public static int i(...);
+    public static int w(...);
+    public static int d(...);
+    public static int e(...);
+}
+
+-assumenosideeffects class timber.log.Timber {
+    public static void d(...);
+    public static void i(...);
+    public static void v(...);
 }
 
 -keep class com.javinator9889.handwashingreminder.ads.AdLoaderImpl {
@@ -73,14 +97,7 @@
 -dontwarn com.bumptech.glide.load.resource.bitmap.VideoDecoder
 # Klaxon
 -keep public class kotlin.reflect.jvm.internal.impl.** { public *; }
--keep class com.beust.klaxon.** { *; }
--keep interface com.beust.klaxon.** { *; }
 -keep class kotlin.Metadata { *; }
 
 #data models
 -keep class com.javinator9889.handwashingreminder.collections.** { *;}
-
--keepclassmembers enum * {
-    public static **[] values();
-    public static ** valueOf(java.lang.String);
-}
