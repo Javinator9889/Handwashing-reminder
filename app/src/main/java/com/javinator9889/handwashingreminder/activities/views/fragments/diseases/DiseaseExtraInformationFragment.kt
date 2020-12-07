@@ -19,18 +19,21 @@
 package com.javinator9889.handwashingreminder.activities.views.fragments.diseases
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.BaseFragmentView
 import com.javinator9889.handwashingreminder.data.ParsedHTMLText
-import kotlinx.android.synthetic.main.simple_text_view.*
+import com.javinator9889.handwashingreminder.databinding.SimpleTextViewBinding
 import kotlin.properties.Delegates
 
 internal const val ARG_SYMPTOMS = "bundle:symptoms"
 internal const val ARG_PREVENTION = "bundle:prevention"
 internal const val ARG_POSITION = "bundle:item:position"
 
-class DiseaseExtraInformationFragment : BaseFragmentView() {
+class DiseaseExtraInformationFragment : BaseFragmentView<SimpleTextViewBinding>() {
     @get:LayoutRes
     override val layoutId: Int = R.layout.simple_text_view
     private var position by Delegates.notNull<Int>()
@@ -41,12 +44,22 @@ class DiseaseExtraInformationFragment : BaseFragmentView() {
         retainInstance = true
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        val view = super.onCreateView(inflater, container, savedInstanceState)
+        binding = SimpleTextViewBinding.bind(view)
+        return view
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         if (position == 1)
-            outState.putCharSequence(ARG_SYMPTOMS, text.text)
+            outState.putCharSequence(ARG_SYMPTOMS, binding.text.text)
         else if (position == 2)
-            outState.putCharSequence(ARG_PREVENTION, text.text)
+            outState.putCharSequence(ARG_PREVENTION, binding.text.text)
         outState.putInt(ARG_POSITION, position)
         outState.putParcelable(ARG_HTML_TEXT, parsedHTMLText)
     }
@@ -57,7 +70,7 @@ class DiseaseExtraInformationFragment : BaseFragmentView() {
             val data = (savedInstanceState ?: arguments)!!
             position = data.getInt(ARG_POSITION)
             parsedHTMLText = data.getParcelable(ARG_HTML_TEXT)!!
-            text.text = when (position) {
+            binding.text.text = when (position) {
                 1 -> data.getCharSequence(ARG_SYMPTOMS)
                     ?: parsedHTMLText.symptoms
                 2 -> data.getCharSequence(ARG_PREVENTION)

@@ -15,7 +15,8 @@
         android:background="@android:color/white"
         android:orientation="vertical">
 
-        <include layout="@layout/handwash_count" />
+        <include android:id="@+id/handwashing_count"
+            layout="@layout/handwash_count" />
     </LinearLayout>
 
     <!--This is the backdrop's content with a BottomSheetBehaviour applied to it-->
@@ -64,7 +65,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <include layout="@layout/loading_recycler_view" />
+            <include
+                android:id="@+id/lrv"
+                layout="@layout/loading_recycler_view" />
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

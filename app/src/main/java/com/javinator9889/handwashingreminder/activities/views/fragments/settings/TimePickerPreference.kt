@@ -26,6 +26,7 @@ import androidx.preference.EditTextPreference
 import com.javinator9889.handwashingreminder.jobs.alarms.AlarmHandler
 import com.javinator9889.handwashingreminder.jobs.alarms.Alarms
 import com.javinator9889.handwashingreminder.utils.formatTime
+import timber.log.Timber
 
 class TimePickerPreference : EditTextPreference,
     TimePickerDialog.OnTimeSetListener {
@@ -55,6 +56,7 @@ class TimePickerPreference : EditTextPreference,
     }
 
     fun updateSummary(time: String? = null) {
+        Timber.d("Updating summary of $this to $time or $text")
         setSummary(time ?: text)
     }
 

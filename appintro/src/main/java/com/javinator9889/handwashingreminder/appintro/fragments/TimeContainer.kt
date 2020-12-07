@@ -14,10 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  *
- * Created by Javinator9889 on 11/06/20 - Handwashing reminder.
+ * Created by Javinator9889 on 7/12/20 - Handwashing reminder.
  */
-package com.javinator9889.handwashingreminder.activities.base
+package com.javinator9889.handwashingreminder.appintro.fragments
 
-abstract class BaseVisibleFragmentView : BaseFragmentView() {
-    abstract fun onVisibilityChanged(visibility: Int)
-}
+data class TimeContainer(val hours: String? = "", val minutes: String? = "")

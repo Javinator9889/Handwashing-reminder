@@ -51,7 +51,7 @@ class HandwashingApplication : BaseApplication() {
             get() = instance.scope
     }
 
-    override fun attachBaseContext(base: Context?) {
+    override fun attachBaseContext(base: Context) {
         super.attachBaseContext(base)
         MultiDex.install(base)
         SplitCompat.install(base)

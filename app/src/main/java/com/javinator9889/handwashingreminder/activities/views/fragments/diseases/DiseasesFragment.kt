@@ -20,7 +20,9 @@ package com.javinator9889.handwashingreminder.activities.views.fragments.disease
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.annotation.StringRes
 import androidx.core.app.ActivityCompat
@@ -48,6 +50,9 @@ import com.javinator9889.handwashingreminder.activities.views.viewmodels.SavedVi
 import com.javinator9889.handwashingreminder.data.ParsedHTMLText
 import com.javinator9889.handwashingreminder.data.room.entities.Handwashing
 import com.javinator9889.handwashingreminder.data.viewmodels.HandwashingViewModel
+import com.javinator9889.handwashingreminder.databinding.HandwashCountBinding
+import com.javinator9889.handwashingreminder.databinding.LoadingRecyclerViewBinding
+import com.javinator9889.handwashingreminder.databinding.MainDiseaseViewBinding
 import com.javinator9889.handwashingreminder.emoji.EmojiLoader
 import com.javinator9889.handwashingreminder.utils.calendar.CalendarUtils
 import com.javinator9889.handwashingreminder.utils.toBarEntry
@@ -55,17 +60,13 @@ import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.GenericItem
 import com.mikepenz.fastadapter.adapters.ItemAdapter
 import com.mikepenz.fastadapter.listeners.ClickEventHook
-import kotlinx.android.synthetic.main.handwash_count.*
-import kotlinx.android.synthetic.main.handwash_count.view.*
-import kotlinx.android.synthetic.main.loading_recycler_view.*
-import kotlinx.android.synthetic.main.loading_recycler_view.view.*
-import kotlinx.android.synthetic.main.main_disease_view.view.*
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 
-class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange,
+class DiseasesFragment : BaseFragmentView<MainDiseaseViewBinding>(),
+    LayoutVisibilityChange,
     View.OnClickListener {
     override val layoutId: Int = R.layout.main_disease_view
 
@@ -73,6 +74,8 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange,
     private lateinit var fastAdapter: FastAdapter<GenericItem>
     private lateinit var emojiLoader: Deferred<EmojiCompat>
     private lateinit var behavior: BottomSheetBehavior<LinearLayout>
+    private lateinit var handwashBinding: HandwashCountBinding
+    private lateinit var loadingRecyclerViewBinding: LoadingRecyclerViewBinding
     private val upperAdsAdapter: ItemAdapter<Ads> = ItemAdapter()
     private val lowerAdsAdapter: ItemAdapter<Ads> = ItemAdapter()
     private val diseasesAdapter: ItemAdapter<Disease> = ItemAdapter()
@@ -84,8 +87,8 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange,
 
     init {
         lifecycleScope.launchWhenStarted {
-            loading.visibility = View.VISIBLE
-            countLoader.visibility = View.VISIBLE
+            loadingRecyclerViewBinding.loading.visibility = View.VISIBLE
+            handwashBinding.countLoader.visibility = View.VISIBLE
             informationViewModel.parsedHTMLText.observe(viewLifecycleOwner) {
                 if (it.isEmpty())
                     return@observe
@@ -103,8 +106,8 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange,
                         if (diseasesAdapter.getAdapterPosition(disease) == -1)
                             diseasesAdapter.add(disease)
                     }
-                    loading.visibility = View.INVISIBLE
-                    container.visibility = View.VISIBLE
+                    loadingRecyclerViewBinding.loading.visibility = View.INVISIBLE
+                    loadingRecyclerViewBinding.container.visibility = View.VISIBLE
                 }
             }
             handwashingViewModel.allData.observe(viewLifecycleOwner) {
@@ -119,12 +122,12 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange,
                         valueFormatter = IntFormatter()
                         dataSet = this
                     }
-                    countChart.data = BarData(dataSet)
-                    countChart.notifyDataSetChanged()
-                    countChart.fitScreen()
-                    countChart.moveViewToX(0F)
-                    countChart.setVisibleXRangeMaximum(7F)
-                    countChart.invalidate()
+                    handwashBinding.countChart.data = BarData(dataSet)
+                    handwashBinding.countChart.notifyDataSetChanged()
+                    handwashBinding.countChart.fitScreen()
+                    handwashBinding.countChart.moveViewToX(0F)
+                    handwashBinding.countChart.setVisibleXRangeMaximum(7F)
+                    handwashBinding.countChart.invalidate()
                     val todayAmount =
                         handwashingViewModel.getAsync(CalendarUtils.today.time)
                     val weeklyAmount =
@@ -132,25 +135,37 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange,
                     val monthlyAmount =
                         handwashingViewModel.getMonthlyCountAsync()
                     setCountText(
-                        countDailyTextView,
+                        handwashBinding.countDailyTextView,
                         R.string.today_washed,
                         todayAmount.await()?.amount ?: 0
                     )
                     setCountText(
-                        countWeeklyTextView,
+                        handwashBinding.countWeeklyTextView,
                         R.string.week_washed,
                         weeklyAmount.await()
                     )
                     setCountText(
-                        countMonthlyTextView,
+                        handwashBinding.countMonthlyTextView,
                         R.string.month_washed,
                         monthlyAmount.await()
                     )
-                    countLoader.visibility = View.INVISIBLE
-                    scrollView.visibility = View.VISIBLE
+                    handwashBinding.countLoader.visibility = View.INVISIBLE
+                    handwashBinding.scrollView.visibility = View.VISIBLE
                 }
             }
         }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        val view = super.onCreateView(inflater, container, savedInstanceState)
+        binding = MainDiseaseViewBinding.bind(view)
+        handwashBinding = binding.handwashingCount
+        loadingRecyclerViewBinding = binding.lrv
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -171,7 +186,7 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange,
             }
         }
         try {
-            container.adapter = null
+            loadingRecyclerViewBinding.container.adapter = null
             diseasesAdapter.clear()
         } catch (e: Exception) {
             Timber.w(e, "Exception when calling 'onBackPressed'")
@@ -184,7 +199,7 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange,
 
     override fun onClick(v: View?) {
         when (v) {
-            countUpButton -> lifecycleScope.launch {
+            handwashBinding.countUpButton -> lifecycleScope.launch {
                 val createdItem =
                     handwashingViewModel.getAsync(CalendarUtils.today.time)
                         .await()
@@ -196,11 +211,11 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange,
                         )
                     )
                 handwashingViewModel.increment(CalendarUtils.today.time)
-                leaves.visibility = View.VISIBLE
-                if (!leaves.isAnimating)
-                    leaves.playAnimation()
+                handwashBinding.leaves.visibility = View.VISIBLE
+                if (!handwashBinding.leaves.isAnimating)
+                    handwashBinding.leaves.playAnimation()
             }
-            countDownButton -> lifecycleScope.launch {
+            handwashBinding.countDownButton -> lifecycleScope.launch {
                 val createdItem =
                     handwashingViewModel.getAsync(CalendarUtils.today.time)
                         .await()
@@ -240,52 +255,52 @@ class DiseasesFragment : BaseFragmentView(), LayoutVisibilityChange,
                 listOf(upperAdsAdapter, diseasesAdapter, lowerAdsAdapter)
             fastAdapter = FastAdapter.with(adapters)
             val rvManager = LinearLayoutManager(context)
-            with(view.container) {
+            with(loadingRecyclerViewBinding.container) {
                 layoutManager = rvManager
                 adapter = fastAdapter
             }
             fastAdapter.addEventHook(DiseaseClickEventHook())
             fastAdapter.withSavedInstanceState(savedInstanceState)
-            behavior = BottomSheetBehavior.from(view.contentLayout)
+            behavior = BottomSheetBehavior.from(binding.contentLayout)
             behavior.addBottomSheetCallback(BottomSheetStateCallback())
-            view.countChart.setDrawGridBackground(false)
-            view.countChart.axisLeft.apply {
+            handwashBinding.countChart.setDrawGridBackground(false)
+            handwashBinding.countChart.axisLeft.apply {
                 setDrawGridLines(false)
                 valueFormatter = IntFormatter()
                 isGranularityEnabled = true
                 granularity = 1F
                 axisMinimum = 0F
             }
-            view.countChart.axisRight.apply {
+            handwashBinding.countChart.axisRight.apply {
                 setDrawGridLines(false)
                 valueFormatter = IntFormatter()
                 isGranularityEnabled = true
                 granularity = 1F
                 axisMinimum = 0F
             }
-            view.countChart.xAxis.apply {
+            handwashBinding.countChart.xAxis.apply {
                 setDrawGridLines(false)
                 valueFormatter = IntFormatter()
                 isGranularityEnabled = true
                 granularity = 1F
                 axisMaximum = 0F
             }
-            view.countChart.setVisibleXRangeMaximum(7F)
-            view.countChart.isAutoScaleMinMaxEnabled = true
-            view.countChart.legend.isEnabled = false
-            view.countChart.description.isEnabled = false
-            view.countChart.invalidate()
-            view.countUpButton.setOnClickListener(this@DiseasesFragment)
-            view.countDownButton.setOnClickListener(this@DiseasesFragment)
+            handwashBinding.countChart.setVisibleXRangeMaximum(7F)
+            handwashBinding.countChart.isAutoScaleMinMaxEnabled = true
+            handwashBinding.countChart.legend.isEnabled = false
+            handwashBinding.countChart.description.isEnabled = false
+            handwashBinding.countChart.invalidate()
+            handwashBinding.countUpButton.setOnClickListener(this@DiseasesFragment)
+            handwashBinding.countDownButton.setOnClickListener(this@DiseasesFragment)
             val countUpText = getText(R.string.add_another)
             val countDownText = getText(R.string.reduce_count)
             val emojiCompat = emojiLoader.await()
             try {
-                countUpButton.text = emojiCompat.process(countUpText)
-                countDownButton.text = emojiCompat.process(countDownText)
+                handwashBinding.countUpButton.text = emojiCompat.process(countUpText)
+                handwashBinding.countDownButton.text = emojiCompat.process(countDownText)
             } catch (_: IllegalStateException) {
-                countUpButton.text = countUpText
-                countDownButton.text = countDownText
+                handwashBinding.countUpButton.text = countUpText
+                handwashBinding.countDownButton.text = countDownText
             }
         }
 

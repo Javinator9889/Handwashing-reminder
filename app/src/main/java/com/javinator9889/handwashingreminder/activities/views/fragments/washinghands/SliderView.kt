@@ -21,17 +21,19 @@ package com.javinator9889.handwashingreminder.activities.views.fragments.washing
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.doOnLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenStarted
-import coil.api.load
+import coil.load
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.BaseFragmentView
 import com.javinator9889.handwashingreminder.activities.views.viewmodels.*
-import kotlinx.android.synthetic.main.wash_your_hands_demo.*
+import com.javinator9889.handwashingreminder.databinding.WashYourHandsDemoBinding
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
@@ -41,7 +43,7 @@ import kotlin.properties.Delegates
 private const val WAITING_ITEMS_COUNT = 4
 internal const val ARG_POSITION = "bundle:position"
 
-class SliderView : BaseFragmentView() {
+class SliderView : BaseFragmentView<WashYourHandsDemoBinding>() {
     override val layoutId: Int = R.layout.wash_your_hands_demo
     private lateinit var videoURI: Uri
     private var drawableId by Delegates.notNull<Int>()
@@ -59,7 +61,7 @@ class SliderView : BaseFragmentView() {
     init {
         lifecycleScope.launch {
             whenStarted {
-                loading.visibility = View.VISIBLE
+                binding.loading.visibility = View.VISIBLE
                 viewModel.videos.observe(viewLifecycleOwner, Observer {
                     with(File(requireContext().cacheDir, it)) {
                         videoURI = Uri.fromFile(this)
@@ -69,28 +71,38 @@ class SliderView : BaseFragmentView() {
                 })
                 washingHandsModel.image.observe(viewLifecycleOwner, Observer {
                     try {
-                        image.load(it)
+                        binding.image.load(it)
                     } catch (e: Exception) {
                         Timber.e(e, "Error while loading Glide view")
-                        image.setImageResource(it)
+                        binding.image.setImageResource(it)
                     }
                     drawableId = it
                     Timber.d("Image finished loading")
                     incrementCounter()
                 })
                 washingHandsModel.title.observe(viewLifecycleOwner, Observer {
-                    title.text = it
+                    binding.title.text = it
                     Timber.d("Title finished loading")
                     incrementCounter()
                 })
                 washingHandsModel.description.observe(viewLifecycleOwner,
                     Observer {
-                        description.text = it
+                        binding.description.text = it
                         Timber.d("Description finished loading")
                         incrementCounter()
                     })
             }
         }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        val view = super.onCreateView(inflater, container, savedInstanceState)
+        binding = WashYourHandsDemoBinding.bind(view)
+        return view
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -104,8 +116,8 @@ class SliderView : BaseFragmentView() {
 
     override fun onPause() {
         Timber.d("Slide paused")
-        video.requestFocus()
-        video.pause()
+        binding.video.requestFocus()
+        binding.video.pause()
         super.onPause()
     }
 
@@ -119,20 +131,20 @@ class SliderView : BaseFragmentView() {
 
     override fun onResume() {
         Timber.d("Slide resumed")
-        video.requestFocus()
-        video.start()
+        binding.video.requestFocus()
+        binding.video.start()
         try {
-            image.load(drawableId)
+            binding.image.load(drawableId)
         } catch (e: Exception) {
             Timber.e(e, "Error while loading Glide view")
-            image.setImageResource(drawableId)
+            binding.image.setImageResource(drawableId)
         }
         super.onResume()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        image.doOnLayout {
+        binding.image.doOnLayout {
             washingHandsModel.setImageSize(it.measuredWidth, it.measuredHeight)
         }
     }
@@ -150,16 +162,16 @@ class SliderView : BaseFragmentView() {
     }
 
     private fun showContent() {
-        loading.visibility = View.GONE
-        video.setVideoURI(videoURI)
-        title.visibility = View.VISIBLE
-        video.visibility = View.VISIBLE
-        video.requestFocus()
-        video.start()
-        video.setOnPreparedListener { mp: MediaPlayer? ->
+        binding.loading.visibility = View.GONE
+        binding.video.setVideoURI(videoURI)
+        binding.title.visibility = View.VISIBLE
+        binding.video.visibility = View.VISIBLE
+        binding.video.requestFocus()
+        binding.video.start()
+        binding.video.setOnPreparedListener { mp: MediaPlayer? ->
             mp?.isLooping = true
         }
-        description.visibility = View.VISIBLE
-        image.visibility = View.VISIBLE
+        binding.description.visibility = View.VISIBLE
+        binding.image.visibility = View.VISIBLE
     }
 }

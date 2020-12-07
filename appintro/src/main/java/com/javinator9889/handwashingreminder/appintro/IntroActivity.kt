@@ -45,16 +45,12 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.perf.FirebasePerformance
 import com.javinator9889.handwashingreminder.activities.MainActivity
 import com.javinator9889.handwashingreminder.appintro.custom.SliderPageBuilder
-import com.javinator9889.handwashingreminder.appintro.fragments.AnimatedAppIntro
-import com.javinator9889.handwashingreminder.appintro.fragments.SlidePolicyFragment
-import com.javinator9889.handwashingreminder.appintro.fragments.TimeConfigIntroFragment
-import com.javinator9889.handwashingreminder.appintro.fragments.TimeContainer
+import com.javinator9889.handwashingreminder.appintro.fragments.*
 import com.javinator9889.handwashingreminder.appintro.timeconfig.TimeConfigItem
 import com.javinator9889.handwashingreminder.appintro.utils.AnimatedResources
 import com.javinator9889.handwashingreminder.gms.activity.ActivityHandler
 import com.javinator9889.handwashingreminder.jobs.alarms.AlarmHandler
 import com.javinator9889.handwashingreminder.utils.*
-import kotlinx.android.synthetic.main.animated_intro.*
 import kotlinx.coroutines.*
 import timber.log.Timber
 import com.javinator9889.handwashingreminder.appintro.R as RIntro
@@ -85,6 +81,7 @@ class IntroActivity : AppIntro2(),
             setCurrentScreen(this@IntroActivity, "Intro", null)
         }
 
+        Timber.d("Creating slides...")
         val firstSlide = SliderPageBuilder.Builder()
             .title(getString(RIntro.string.first_slide_title))
             .description(getString(RIntro.string.first_slide_desc))
@@ -149,6 +146,7 @@ class IntroActivity : AppIntro2(),
         backButtonVisibilityWithDone = true
         setIndicatorColor(Color.DKGRAY, Color.GRAY)
         nextButton.setOnClickListener(this)
+        Timber.d("Finished activity creation")
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -181,6 +179,7 @@ class IntroActivity : AppIntro2(),
             sharedPreferences.edit {
                 timeConfigSlide.itemAdapter.adapterItems.forEach { item ->
                     val time = "${item.hours}:${item.minutes}"
+                    Timber.d("Saving $item with ID ${item.id} and time $time")
                     when (item.id) {
                         TimeConfig.BREAKFAST_ID ->
                             putString(Preferences.BREAKFAST_TIME, time)
@@ -334,7 +333,7 @@ class IntroActivity : AppIntro2(),
         if (newFragment is AnimatedAppIntro ||
             newFragment is SlidePolicyFragment
         )
-            newFragment.image.playAnimation()
+            (newFragment as ImageFragment).image.playAnimation()
         super.onSlideChanged(oldFragment, newFragment)
     }
 

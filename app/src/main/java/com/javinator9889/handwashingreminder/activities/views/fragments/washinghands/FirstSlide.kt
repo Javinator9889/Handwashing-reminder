@@ -18,21 +18,36 @@
  */
 package com.javinator9889.handwashingreminder.activities.views.fragments.washinghands
 
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.BaseFragmentView
-import kotlinx.android.synthetic.main.wash_your_hands_first_slide.*
+import com.javinator9889.handwashingreminder.databinding.WashYourHandsFirstSlideBinding
 
-class FirstSlide : BaseFragmentView() {
+
+class FirstSlide : BaseFragmentView<WashYourHandsFirstSlideBinding>() {
     override val layoutId: Int = R.layout.wash_your_hands_first_slide
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        val view = super.onCreateView(inflater, container, savedInstanceState)
+        binding = WashYourHandsFirstSlideBinding.bind(view)
+        return view
+    }
 
     override fun onPause() {
         super.onPause()
-        animation.pauseAnimation()
+        binding.animation.pauseAnimation()
     }
 
     override fun onResume() {
         super.onResume()
-        animation.playAnimation()
-        image.setImageResource(R.drawable.handwashing_app_logo)
+        binding.animation.playAnimation()
+        binding.image.setImageResource(R.drawable.handwashing_app_logo)
     }
 }

@@ -20,16 +20,21 @@ package com.javinator9889.handwashingreminder.activities.support
 
 import android.os.Bundle
 import androidx.annotation.LayoutRes
+import androidx.viewbinding.ViewBinding
 import com.javinator9889.handwashingreminder.R
+import com.javinator9889.handwashingreminder.activities.base.ViewBindingInflater
 import javinator9889.localemanager.activity.BaseAppCompatActivity
 
-abstract class ActionBarBase : BaseAppCompatActivity() {
+abstract class ActionBarBase<T : ViewBinding> : BaseAppCompatActivity(),
+    ViewBindingInflater<T> {
     @get:LayoutRes
     protected abstract val layoutId: Int
+    protected lateinit var binding: T
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(layoutId)
+        val layout = inflateLayout()
+        setContentView(layout.root)
         setSupportActionBar(findViewById(R.id.toolbar))
     }
 

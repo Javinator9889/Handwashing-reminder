@@ -24,7 +24,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import coil.api.load
+import coil.load
 import coil.size.Scale
 import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.card.MaterialCardView

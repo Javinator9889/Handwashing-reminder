@@ -20,14 +20,16 @@ package com.javinator9889.handwashingreminder.activities.base
 
 import android.os.Bundle
 import androidx.annotation.LayoutRes
+import androidx.viewbinding.ViewBinding
 import javinator9889.localemanager.fragment.BaseFragmentActivity
 
-abstract class BaseFragmentActivity : BaseFragmentActivity() {
+abstract class BaseFragmentActivity<T : ViewBinding> : BaseFragmentActivity(), ViewBindingInflater<T> {
     @get:LayoutRes
     protected abstract val layoutId: Int
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(layoutId)
+        val layout = inflateLayout()
+        setContentView(layout.root)
     }
 }

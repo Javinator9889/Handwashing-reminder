@@ -36,14 +36,14 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.javinator9889.handwashingreminder.BuildConfig
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.SplitCompatBaseActivity
+import com.javinator9889.handwashingreminder.databinding.DynamicContentPbBinding
 import com.javinator9889.handwashingreminder.utils.AndroidVersion
 import com.javinator9889.handwashingreminder.utils.CONFIRMATION_REQUEST_CODE
 import com.javinator9889.handwashingreminder.utils.filterNotEmpty
 import com.javinator9889.handwashingreminder.utils.isAtLeast
-import kotlinx.android.synthetic.main.dynamic_content_pb.*
 import timber.log.Timber
 
-class DynamicFeatureProgress : SplitCompatBaseActivity(),
+class DynamicFeatureProgress : SplitCompatBaseActivity<DynamicContentPbBinding>(),
     SplitInstallStateUpdatedListener {
     companion object {
         const val MODULES = "modules"
@@ -60,6 +60,7 @@ class DynamicFeatureProgress : SplitCompatBaseActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val layout = inflateLayout()
         splitInstallManager.registerListener(this)
         with(FirebaseAnalytics.getInstance(this)) {
             setCurrentScreen(
@@ -85,7 +86,7 @@ class DynamicFeatureProgress : SplitCompatBaseActivity(),
             }
         }
         if (moduleCount > 0 && modules.isNotEmpty()) {
-            setContentView(R.layout.dynamic_content_pb)
+            setContentView(layout.root)
             overridePendingTransition(android.R.anim.fade_in, 0)
             val installRequest = installRequestBuilder.build()
             splitInstallManager.startInstall(installRequest)
@@ -114,8 +115,8 @@ class DynamicFeatureProgress : SplitCompatBaseActivity(),
     }
 
     @SuppressLint("SetTextI18n")
-    override fun onStateUpdate(state: SplitInstallSessionState?) {
-        when (state?.status()) {
+    override fun onStateUpdate(state: SplitInstallSessionState) {
+        when (state.status()) {
             SplitInstallSessionStatus.FAILED -> {
                 Toast.makeText(
                     this, getString(
@@ -140,36 +141,36 @@ class DynamicFeatureProgress : SplitCompatBaseActivity(),
                 finish()
             }
             SplitInstallSessionStatus.PENDING -> {
-                install_progress.isIndeterminate = true
-                percentage.text = getString(R.string.preparing)
+                binding.installProgress.isIndeterminate = true
+                binding.percentage.text = getString(R.string.preparing)
             }
             SplitInstallSessionStatus.DOWNLOADING -> {
                 val downloadedBytes =
                     Formatter.formatFileSize(this, state.bytesDownloaded)
                 val bytesToDownload =
                     Formatter.formatFileSize(this, state.totalBytesToDownload)
-                bytesInfo.text = "$downloadedBytes / $bytesToDownload"
-                install_progress.isIndeterminate = false
-                install_progress.max = state.totalBytesToDownload.toInt()
+                binding.bytesInfo.text = "$downloadedBytes / $bytesToDownload"
+                binding.installProgress.isIndeterminate = false
+                binding.installProgress.max = state.totalBytesToDownload.toInt()
                 val progress = state.bytesDownloaded.toInt()
                 if (isAtLeast(AndroidVersion.N))
-                    install_progress.setProgress(progress, true)
+                    binding.installProgress.setProgress(progress, true)
                 else
-                    install_progress.progress = progress
+                    binding.installProgress.progress = progress
                 val currentPercentage =
                     (state.bytesDownloaded * 100 / state.totalBytesToDownload)
                         .toInt()
-                percentage.text = "$currentPercentage %"
+                binding.percentage.text = "$currentPercentage %"
             }
             SplitInstallSessionStatus.INSTALLING -> {
-                install_progress.isIndeterminate = true
-                bytesInfo.text = ""
-                percentage.text = getString(R.string.installing)
+                binding.installProgress.isIndeterminate = true
+                binding.bytesInfo.text = ""
+                binding.percentage.text = getString(R.string.installing)
             }
             SplitInstallSessionStatus.INSTALLED -> {
                 SplitInstallHelper.updateAppInfo(this)
                 if (++currentModule >= moduleCount) {
-                    dynamic_content_title.text = getString(R.string.done)
+                    binding.dynamicContentTitle.text = getString(R.string.done)
                     setResultWithIntent(Activity.RESULT_OK)
                     finish()
                 }
@@ -189,4 +190,7 @@ class DynamicFeatureProgress : SplitCompatBaseActivity(),
             finish()
         }
     }
+
+    override fun inflateLayout(): DynamicContentPbBinding =
+        DynamicContentPbBinding.inflate(layoutInflater).also { binding = it }
 }
