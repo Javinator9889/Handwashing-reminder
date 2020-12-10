@@ -40,7 +40,7 @@ class SettingsView : PreferenceFragmentCompat(),
     lateinit var adsPreference: WeakReference<Preference>
     lateinit var donationsPreference: WeakReference<ListPreference>
     lateinit var billingService: BillingService
-    private val loader = SettingsLoader(view = this, lifecycleOwner =  this)
+    private val loader = SettingsLoader(view = this, lifecycleOwner = this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +57,7 @@ class SettingsView : PreferenceFragmentCompat(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         billingService = BillingService(view.context)
+        savedInstanceState?.let { loader.loadViews() }
     }
 
     override fun onPreferenceChange(
