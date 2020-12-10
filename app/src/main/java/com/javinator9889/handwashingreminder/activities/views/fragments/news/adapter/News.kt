@@ -93,9 +93,6 @@ data class News(
                 }
                 websiteName.text =
                     item.website ?: context.getString(R.string.no_website)
-//                websiteName.text = item.website?.let {
-//                    if (it.length > 20) "${it.take(20)}…" else it
-//                } ?: context.getString(R.string.no_website)
                 publishDate.text =
                     item.discoverDate?.let { formatter.format(it) }
                         ?: context.getString(R.string.no_date)
