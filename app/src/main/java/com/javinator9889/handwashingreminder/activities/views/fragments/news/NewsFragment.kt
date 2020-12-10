@@ -77,9 +77,13 @@ class NewsFragment : BaseFragmentView<RefreshingLayoutBinding>(),
                     if (it.hasError && newsAdapter.adapterItemCount == 0) {
                         loadingRecyclerView.errorScreen.visibility = View.VISIBLE
                         loadingRecyclerView.container.visibility = View.INVISIBLE
+                        loadingRecyclerView.loading.visibility = View.INVISIBLE
                         binding.refreshLayout.isEnabled = true
                         return@observe
-                    } else loadingRecyclerView.errorScreen.visibility = View.INVISIBLE
+                    } else {
+                        loadingRecyclerView.errorScreen.visibility = View.INVISIBLE
+                        loadingRecyclerView.loading.visibility = View.VISIBLE
+                    }
                     if (it.id !in activeItems) {
                         val newsObject = News(
                             title = it.title,
