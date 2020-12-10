@@ -69,7 +69,7 @@ class NewsFragment : BaseFragmentView<RefreshingLayoutBinding>(),
             whenStarted {
                 loadingRecyclerView.loading.visibility = View.VISIBLE
                 binding.refreshLayout.isEnabled = false
-                newsViewModel.newsData.observe(viewLifecycleOwner) {
+                newsViewModel.newsData.observe(owner = viewLifecycleOwner) {
                     if (::footerAdapter.isInitialized)
                         footerAdapter.clear()
                     if (it.hasError && newsAdapter.adapterItemCount == 0) {
@@ -172,7 +172,13 @@ class NewsFragment : BaseFragmentView<RefreshingLayoutBinding>(),
             override fun getVerticalSnapPreference(): Int = SNAP_TO_START
         }
         smoothScroller.targetPosition = 0
-        loadingRecyclerView.container.layoutManager?.startSmoothScroll(smoothScroller)
+        loadingRecyclerView.container.layoutManager?.let {
+            if (it.isSmoothScrolling)
+                it.scrollToPosition(0)
+            else
+                it.startSmoothScroll(smoothScroller)
+        }
+
     }
 
     private inner class NewsClickHook : ClickEventHook<News>() {
