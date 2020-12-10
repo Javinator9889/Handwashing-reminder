@@ -22,12 +22,14 @@ import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
+import androidx.preference.PreferenceManager
 import com.google.android.gms.location.ActivityRecognition
 import com.google.android.gms.location.ActivityTransition
 import com.google.android.gms.location.ActivityTransition.ACTIVITY_TRANSITION_EXIT
 import com.google.android.gms.location.ActivityTransitionRequest
 import com.google.android.gms.location.DetectedActivity
 import com.google.android.gms.tasks.Task
+import com.javinator9889.handwashingreminder.utils.Preferences
 import timber.log.Timber
 
 internal const val ACTIVITY_REQUEST_CODE = 64
@@ -97,6 +99,11 @@ class ActivityHandler private constructor(private val context: Context) {
     private fun createPendingIntent(): PendingIntent =
         with(Intent(context, ActivityReceiver::class.java)) {
             action = TRANSITIONS_RECEIVER_ACTION
+            val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+            putExtra(
+                Preferences.ACTIVITY_MINIMUM_TIME,
+                prefs.getString(Preferences.ACTIVITY_MINIMUM_TIME, "15")!!.toInt()
+            )
             PendingIntent.getBroadcast(
                 context,
                 ACTIVITY_REQUEST_CODE,

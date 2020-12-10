@@ -47,18 +47,20 @@ abstract class ScheduledNotificationWorker(context: Context) {
     protected abstract val contentsRes: Int
 
     suspend fun doWork() = coroutineScope {
+        var result: Result<Unit> = Result.success(Unit)
         try {
-            val startTime = System.currentTimeMillis()
             val emojiLoader = EmojiLoader.loadAsync(context)
             val notificationsHandler = NotificationsHandler(
                 context = context,
                 channelId = alarm.channelId,
-                channelName = getString(R.string.time_notification_channel_name),
-                channelDesc = getString(R.string.time_notification_channel_desc),
-                groupId = alarm.identifier,
+                channelName = getString(alarm.channelName),
+                channelDesc = getString(alarm.channelDesc),
+                groupId = alarm.groupId,
                 groupName = getString(alarm.groupName)
             )
             val emojiCompat = emojiLoader.await()
+            if (titleRes == -1 && contentsRes == -1)
+                return@coroutineScope
             var title = getText(titleRes)
             var content =
                 getStringArray(contentsRes).toList().random() as CharSequence
@@ -90,11 +92,7 @@ abstract class ScheduledNotificationWorker(context: Context) {
                     )
                 )
             }
-            Timber.d(
-                "Posting a notification took: ${System
-                    .currentTimeMillis() - startTime}ms"
-            )
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             with(HandwashingApplication.instance) {
                 // Don't use so much resources, wait at most half a second until
                 // Firebase initializes or continue with execution.
@@ -104,14 +102,23 @@ abstract class ScheduledNotificationWorker(context: Context) {
                     firebaseInitDeferred.await()
                 }
             }
-            Timber.e(e, "Unhandled exception on worker class")
+            result = Result.failure(e)
             // We don't want to keep using CPU at this time if the request
             // fails so schedule next execution
         } finally {
+            onFinish(result)
+        }
+    }
+
+    protected open fun onFinish(result: Result<Unit>) {
+        if (result.isSuccess) {
             with(AlarmHandler(context)) {
                 scheduleAlarm(alarm)
             }
-        }
+        } else Timber.e(
+            result.exceptionOrNull(),
+            "Unhandled exception on worker class"
+        )
     }
 
     private fun getString(@StringRes resId: Int): String =

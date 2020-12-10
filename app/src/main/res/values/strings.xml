@@ -70,6 +70,8 @@
         hands &#128521;&#128166;&#128079;</item>
     </string-array>
     <string name="breakfast_notifications">Breakfast reminders</string>
+    <string name="breakfast_description">Get a notification when it\'s breakfast
+    time! &#9749;</string>
     <string name="lunch_title">Time to lunch and wash your hands!
         &#127857;</string>
     <string-array name="lunch_comments">
@@ -81,6 +83,8 @@
             wash your hands before having lunch &#128166;&#128079;</item>
     </string-array>
     <string name="lunch_notifications">Lunch reminders</string>
+    <string name="lunch_description">Get a notification when it\'s lunch
+    time! &#127857;</string>
     <string name="dinner_title">Let\'s have a clean dinner &#129367;</string>
     <string-array name="dinner_comments">
         <item>The day is finishing and you can do it fully by
@@ -91,6 +95,8 @@
             more than 15 diseases? That\'s a lot &#128558;</item>
     </string-array>
     <string name="dinner_notifications">Dinner reminders</string>
+    <string name="dinner_description">Get a notification when it\'s dinner
+    time! &#129367;</string>
     <string name="washing_hands_first_title">Let\'s learn how to wash
         our hands</string>
     <string name="washing_hands_first_description">Join me in this trip

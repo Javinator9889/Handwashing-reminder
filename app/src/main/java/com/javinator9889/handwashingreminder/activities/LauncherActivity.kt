@@ -309,13 +309,13 @@ class LauncherActivity : BaseFragmentActivity<SplashScreenBinding>() {
         Timber.d("Adding periodic notifications if not enqueued yet")
         Timber.d("Creating alarms notification channels...")
         for (alarm in Alarms.values()) {
-            Timber.d("Creating notification channel for ${alarm.identifier}")
+            Timber.d("Creating notification channel for ${alarm.groupId}")
             NotificationsHandler(
                 context = this,
                 channelId = alarm.channelId,
-                channelName = getString(R.string.time_notification_channel_name),
-                channelDesc = getString(R.string.time_notification_channel_desc),
-                groupId = alarm.identifier,
+                channelName = getString(alarm.channelName),
+                channelDesc = getString(alarm.channelDesc),
+                groupId = alarm.groupId,
                 groupName = getString(alarm.groupName)
             )
         }
