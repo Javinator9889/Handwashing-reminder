@@ -30,6 +30,7 @@ import com.javinator9889.handwashingreminder.emoji.EmojiLoader
 import com.javinator9889.handwashingreminder.jobs.HANDS_WASHED_ACTION
 import com.javinator9889.handwashingreminder.jobs.HANDS_WASHED_CODE
 import com.javinator9889.handwashingreminder.jobs.HandsWashedReceiver
+import com.javinator9889.handwashingreminder.jobs.NOTIFICATION_ID_KEY
 import com.javinator9889.handwashingreminder.jobs.alarms.AlarmHandler
 import com.javinator9889.handwashingreminder.jobs.alarms.Alarms
 import com.javinator9889.handwashingreminder.notifications.Action
@@ -74,6 +75,7 @@ abstract class ScheduledNotificationWorker(context: Context) {
                 HANDS_WASHED_CODE,
                 Intent(context, HandsWashedReceiver::class.java).apply {
                     action = HANDS_WASHED_ACTION
+                    putExtra(NOTIFICATION_ID_KEY, 1)
                 },
                 PendingIntent.FLAG_UPDATE_CURRENT
             )
