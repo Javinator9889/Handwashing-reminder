@@ -18,10 +18,15 @@
  */
 package com.javinator9889.handwashingreminder.jobs
 
+import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import com.javinator9889.handwashingreminder.BuildConfig
 import com.javinator9889.handwashingreminder.jobs.alarms.AlarmHandler
+import com.javinator9889.handwashingreminder.utils.ACTIVITY_CHANNEL_ID
+import com.javinator9889.handwashingreminder.utils.AndroidVersion
+import com.javinator9889.handwashingreminder.utils.isAtLeast
 import timber.log.Timber
 
 class UpdateReceiver : BroadcastReceiver() {
@@ -30,6 +35,27 @@ class UpdateReceiver : BroadcastReceiver() {
             Timber.d("Package updated so rescheduling jobs")
             with(AlarmHandler(context)) {
                 scheduleAllAlarms()
+            }
+            // Here, we need to remove all the notifications channels
+            // previously created as they have changed
+            if (BuildConfig.VERSION_CODE == 141 && isAtLeast(AndroidVersion.O)) {
+                val notificationManager =
+                    context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                for (id in setOf(
+                    "notifications:breakfast",
+                    "notifications:lunch",
+                    "notifications:dinner",
+                    ACTIVITY_CHANNEL_ID
+                )) {
+                    notificationManager.deleteNotificationChannel(id)
+                }
+                for (id in setOf(
+                    "alarms:breakfast",
+                    "alarms:lunch",
+                    "alarms:dinner"
+                )) {
+                    notificationManager.deleteNotificationChannelGroup(id)
+                }
             }
         }
     }
