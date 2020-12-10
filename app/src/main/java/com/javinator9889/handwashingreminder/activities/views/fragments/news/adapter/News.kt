@@ -44,6 +44,7 @@ data class News(
     val discoverDate: Date?,
     val imageUrl: String?,
     val website: String?,
+    val websiteHostname: String?,
     val websiteImageUrl: String?,
     val lifecycleOwner: LifecycleOwner,
     override val layoutRes: Int = R.layout.news_card_view,
@@ -82,9 +83,19 @@ data class News(
                         scale(Scale.FILL)
                         lifecycle(item.lifecycleOwner)
                     }
-                } else websiteLogo.visibility = View.GONE
-                websiteName.text = item.website
-                    ?: context.getString(R.string.no_website)
+                } else {
+                    if (item.websiteHostname != null) {
+                        websiteLogo.load("https://www.google.com/s2/favicons?domain=${item.websiteHostname}") {
+                            scale(Scale.FILL)
+                            lifecycle(item.lifecycleOwner)
+                        }
+                    } else websiteLogo.visibility = View.GONE
+                }
+                websiteName.text =
+                    item.website ?: context.getString(R.string.no_website)
+//                websiteName.text = item.website?.let {
+//                    if (it.length > 20) "${it.take(20)}…" else it
+//                } ?: context.getString(R.string.no_website)
                 publishDate.text =
                     item.discoverDate?.let { formatter.format(it) }
                         ?: context.getString(R.string.no_date)

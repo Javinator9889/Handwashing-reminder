@@ -88,9 +88,11 @@ class NewsFragment : BaseFragmentView<RefreshingLayoutBinding>(),
                             discoverDate = it.discoverDate,
                             imageUrl = it.elements?.url,
                             website = it.website?.name,
+                            websiteHostname = it.website?.hostName,
                             websiteImageUrl = it.website?.iconURL,
                             lifecycleOwner = this@NewsFragment
                         )
+                        Timber.d(newsObject.toString())
                         newsAdapter.add(newsObject)
                         loadingRecyclerView.loading.visibility = View.INVISIBLE
                         loadingRecyclerView.container.visibility = View.VISIBLE
