@@ -25,20 +25,20 @@ import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.support.ActionBarBase
 import com.javinator9889.handwashingreminder.collections.DiseaseTextAdapter
 import com.javinator9889.handwashingreminder.data.ParsedHTMLText
-import kotlinx.android.synthetic.main.disease_view_expanded.*
+import com.javinator9889.handwashingreminder.databinding.DiseaseViewExpandedBinding
 import kotlin.properties.Delegates
 
 internal const val ARG_ANIMATION = "card:animation"
 internal const val ARG_PARSED_TEXT = "text:HTML:parsed"
 
-class DiseaseExpandedView : ActionBarBase() {
+class DiseaseExpandedView : ActionBarBase<DiseaseViewExpandedBinding>() {
     override val layoutId: Int = R.layout.disease_view_expanded
     private var animId by Delegates.notNull<Int>()
     private var parsedHTMLText: ParsedHTMLText? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        toolbar.setTitleTextColor(Color.BLACK)
+        binding.toolbar.setTitleTextColor(Color.BLACK)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(true)
 
@@ -48,8 +48,11 @@ class DiseaseExpandedView : ActionBarBase() {
             parsedHTMLText = data.getParcelable(ARG_PARSED_TEXT)
             if (parsedHTMLText != null) {
                 val adapter = DiseaseTextAdapter(this, animId, parsedHTMLText!!)
-                pager.adapter = adapter
-                TabLayoutMediator(diseaseInfoTab, pager) { tab, position ->
+                binding.pager.adapter = adapter
+                TabLayoutMediator(
+                    binding.diseaseInfoTab,
+                    binding.pager
+                ) { tab, position ->
                     when (position) {
                         0 -> tab.text = getText(R.string.description)
                         1 -> tab.text = getText(R.string.symptoms)
@@ -70,4 +73,7 @@ class DiseaseExpandedView : ActionBarBase() {
         super.onBackPressed()
         finish()
     }
+
+    override fun inflateLayout(): DiseaseViewExpandedBinding =
+        DiseaseViewExpandedBinding.inflate(layoutInflater).also { binding = it }
 }

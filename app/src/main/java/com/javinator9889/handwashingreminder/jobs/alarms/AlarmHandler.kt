@@ -26,8 +26,11 @@ import android.content.Intent
 import androidx.annotation.IntRange
 import androidx.core.app.AlarmManagerCompat
 import androidx.preference.PreferenceManager
+import com.javinator9889.handwashingreminder.utils.calendar.CalendarUtils
 import com.javinator9889.handwashingreminder.utils.timeAt
 import timber.log.Timber
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 internal const val IDENTIFIER = "intent:id"
 
@@ -74,6 +77,16 @@ class AlarmHandler(private val context: Context) {
 
     private fun getTimeForAlarm(alarm: Alarms): ScheduleTimeData {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        if (alarm == Alarms.PENDING_ACTIVITY_ALARM) {
+            val elapsedTimeAlarm =
+                preferences.getString(alarm.preferenceKey, "15")!!.toInt()
+            val nextAlarm =
+                CalendarUtils.timeIn(elapsedTimeAlarm, TimeUnit.MINUTES)
+            return ScheduleTimeData(
+                nextAlarm[Calendar.HOUR_OF_DAY],
+                nextAlarm[Calendar.MINUTE]
+            )
+        }
         val savedTime = preferences.getString(alarm.preferenceKey, "")
         if (savedTime.isNullOrBlank())
             throw IllegalStateException("Time value cannot be null")

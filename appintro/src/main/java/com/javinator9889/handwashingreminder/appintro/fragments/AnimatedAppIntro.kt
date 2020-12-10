@@ -38,12 +38,14 @@ import com.github.paolorotolo.appintro.util.TypefaceContainer
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.javinator9889.handwashingreminder.appintro.R
 import com.javinator9889.handwashingreminder.appintro.custom.*
+import com.javinator9889.handwashingreminder.appintro.databinding.AnimatedIntroBinding
 
 class AnimatedAppIntro :
     Fragment(),
     ISlideSelectionListener,
-    ISlideBackgroundColorHolder/*,
-    LottieOnCompositionLoadedListener*/ {
+    ISlideBackgroundColorHolder,
+    IFragmentBinder<AnimatedIntroBinding>,
+    ImageFragment {
     private var drawable = 0
     private var bgColor = 0
     private var titleColor = 0
@@ -52,6 +54,11 @@ class AnimatedAppIntro :
     @get:LayoutRes
     protected val layoutId: Int = R.layout.animated_intro
     private var title: String? = null
+    override var _binding: AnimatedIntroBinding? = null
+    private lateinit var _image: LottieAnimationView
+    override var image: LottieAnimationView
+        get() = _image
+        set(value) {_image = value}
 
     @RawRes
     private var animatedDrawable: Int? = null
@@ -64,7 +71,7 @@ class AnimatedAppIntro :
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        SplitCompat.installActivity(activity)
+        activity?.let { SplitCompat.installActivity(it) }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -125,12 +132,12 @@ class AnimatedAppIntro :
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(layoutId, container, false)
+        _binding = AnimatedIntroBinding.bind(view)
+        image = binding.image
         val titleText = view.findViewById<TextView>(R.id.title)
         val descriptionText = view.findViewById<TextView>(R.id.description)
         val slideImage = view.findViewById<LottieAnimationView>(R.id.image)
         mainLayout = view.findViewById(R.id.main)
-//        slideImage.addLottieOnCompositionLoadedListener(this)
-//        slideImage.enableMergePathsForKitKatAndAbove(true)
         titleText.text = title
         if (titleColor != 0) {
             titleText.setTextColor(titleColor)

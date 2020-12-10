@@ -18,17 +18,26 @@
  */
 package com.javinator9889.handwashingreminder.gms.activity
 
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.annotation.StringRes
+import androidx.core.app.NotificationCompat
 import androidx.emoji.text.EmojiCompat
-import androidx.preference.PreferenceManager
 import com.google.android.gms.location.ActivityTransition
+import com.google.android.gms.location.ActivityTransitionEvent
 import com.google.android.gms.location.ActivityTransitionResult
 import com.google.android.gms.location.DetectedActivity
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.emoji.EmojiLoader
+import com.javinator9889.handwashingreminder.jobs.HANDS_WASHED_ACTION
+import com.javinator9889.handwashingreminder.jobs.HANDS_WASHED_CODE
+import com.javinator9889.handwashingreminder.jobs.HandsWashedReceiver
+import com.javinator9889.handwashingreminder.jobs.NOTIFICATION_ID_KEY
+import com.javinator9889.handwashingreminder.jobs.alarms.AlarmHandler
+import com.javinator9889.handwashingreminder.jobs.alarms.Alarms
+import com.javinator9889.handwashingreminder.notifications.Action
 import com.javinator9889.handwashingreminder.notifications.NotificationsHandler
 import com.javinator9889.handwashingreminder.utils.ACTIVITY_CHANNEL_ID
 import com.javinator9889.handwashingreminder.utils.Preferences
@@ -38,11 +47,16 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.io.*
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 class ActivityReceiver : BroadcastReceiver() {
+    companion object ReceiverData {
+        val pendingActivities: Deque<ActivityTransitionEvent> = ArrayDeque()
+        var latestNotificationTime: Long = 0L
+        var alarmScheduled: Boolean = false
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -66,14 +80,19 @@ class ActivityReceiver : BroadcastReceiver() {
                         ),
                         context.getString(
                             R.string.activity_notification_channel_desc
+                        ),
+                        "alarms:pending_activities",
+                        context.getString(
+                            R.string.activity_notification_channel_name
                         )
                     )
                     goAsync {
                         putNotification(
                             notificationHandler,
                             emojiLoader,
-                            event.activityType,
-                            context
+                            event,
+                            context,
+                            intent
                         )
                     }
                     break
@@ -85,29 +104,29 @@ class ActivityReceiver : BroadcastReceiver() {
     private suspend fun putNotification(
         notificationsHandler: NotificationsHandler,
         emojiLoader: Deferred<EmojiCompat>,
-        detectedActivity: Int,
-        context: Context
+        event: ActivityTransitionEvent,
+        context: Context,
+        intent: Intent
     ) {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         val timeInBetweenNotifications =
-            prefs.getString(Preferences.ACTIVITY_MINIMUM_TIME, "15")!!.toInt()
-        val timeFile = File(context.cacheDir, "activity.time")
-        var latestNotificationTime = 0L
-        withContext(Dispatchers.IO) {
-            if (timeFile.exists()) {
-                DataInputStream(FileInputStream(timeFile)).use {
-                    latestNotificationTime = it.readLong()
-                }
-            }
-        }
+            intent.getIntExtra(Preferences.ACTIVITY_MINIMUM_TIME, 15)
         val timeDifference = CalendarUtils.timeBetweenIn(
             TimeUnit.MINUTES,
             latestNotificationTime
         )
         Timber.d("$timeDifference - $timeInBetweenNotifications")
-        if (timeDifference <= timeInBetweenNotifications)
+        if (timeDifference < timeInBetweenNotifications) {
+            pendingActivities.add(event)
+            if (!alarmScheduled) {
+                with(AlarmHandler(context)) {
+                    scheduleAlarm(Alarms.PENDING_ACTIVITY_ALARM)
+                }
+                alarmScheduled = true
+            }
             return
-        val notificationContent = when (detectedActivity) {
+        }
+        latestNotificationTime = CalendarUtils.now
+        val notificationContent = when (event.activityType) {
             DetectedActivity.WALKING ->
                 NotificationContent(
                     R.string.activity_notification_walk,
@@ -129,7 +148,7 @@ class ActivityReceiver : BroadcastReceiver() {
                     R.string.activity_notification_vehicle_content
                 )
             else -> throw IllegalArgumentException(
-                "Activity not recognized - $detectedActivity"
+                "Activity not recognized - $event"
             )
         }
         var title = context.getText(notificationContent.title)
@@ -140,6 +159,15 @@ class ActivityReceiver : BroadcastReceiver() {
             content = emojiCompat.process(content)
         } catch (_: IllegalStateException) {
         }
+        val washedPendingIntent = PendingIntent.getBroadcast(
+            context,
+            HANDS_WASHED_CODE,
+            Intent(context, HandsWashedReceiver::class.java).apply {
+                action = HANDS_WASHED_ACTION
+                putExtra(NOTIFICATION_ID_KEY, 2)
+            },
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
         withContext(Dispatchers.Main) {
             notificationsHandler.createNotification(
                 iconDrawable = R.drawable.ic_stat_handwashing,
@@ -147,13 +175,14 @@ class ActivityReceiver : BroadcastReceiver() {
                 title = title,
                 content = content,
                 longContent = content,
-                notificationId = 2
+                notificationId = 2,
+                priority = NotificationCompat.PRIORITY_MAX,
+                action = Action(
+                    R.drawable.ic_stat_handwashing,
+                    context.getText(R.string.just_washed),
+                    washedPendingIntent
+                )
             )
-        }
-        withContext(Dispatchers.IO) {
-            DataOutputStream(FileOutputStream(timeFile)).use {
-                it.writeLong(Calendar.getInstance().timeInMillis)
-            }
         }
     }
 }

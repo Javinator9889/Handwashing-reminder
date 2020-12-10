@@ -24,6 +24,7 @@ import android.content.Intent
 import com.javinator9889.handwashingreminder.jobs.workers.BreakfastNotificationWorker
 import com.javinator9889.handwashingreminder.jobs.workers.DinnerNotificationWorker
 import com.javinator9889.handwashingreminder.jobs.workers.LunchNotificationWorker
+import com.javinator9889.handwashingreminder.jobs.workers.PendingActivityAlarmWorker
 import com.javinator9889.handwashingreminder.utils.goAsync
 
 class AlarmReceiver : BroadcastReceiver() {
@@ -33,7 +34,7 @@ class AlarmReceiver : BroadcastReceiver() {
                 BreakfastNotificationWorker(context)
             Alarms.LUNCH_ALARM.identifier -> LunchNotificationWorker(context)
             Alarms.DINNER_ALARM.identifier -> DinnerNotificationWorker(context)
-            else -> return
+            else -> PendingActivityAlarmWorker(context)
         }
         goAsync { worker.doWork() }
     }

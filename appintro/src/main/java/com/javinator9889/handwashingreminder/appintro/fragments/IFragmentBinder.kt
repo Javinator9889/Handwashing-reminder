@@ -14,26 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  *
- * Created by Javinator9889 on 12/04/20 - Handwashing reminder.
+ * Created by Javinator9889 on 7/12/20 - Handwashing reminder.
  */
-package com.javinator9889.handwashingreminder.activities.base
+package com.javinator9889.handwashingreminder.appintro.fragments
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.annotation.LayoutRes
 import androidx.viewbinding.ViewBinding
-import javinator9889.localemanager.fragment.BaseFragment
 
-abstract class BaseFragmentView<T : ViewBinding> : BaseFragment() {
-    @get:LayoutRes
-    protected abstract val layoutId: Int
-    internal lateinit var binding: T
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View = inflater.inflate(layoutId, container, false)
+interface IFragmentBinder<T : ViewBinding> {
+    var _binding: T?
+    val binding: T get() = _binding!!
 }

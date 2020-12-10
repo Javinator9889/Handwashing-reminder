@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.mikepenz.aboutlibraries.plugin'
 apply plugin: 'com.google.firebase.firebase-perf'
 apply plugin: 'com.google.firebase.crashlytics'
@@ -32,16 +31,19 @@ def gitCommitHash = { ->
 }
 
 android {
-    buildFeatures.viewBinding = true
-    compileSdkVersion 29
+    buildFeatures {
+        viewBinding true
+        dataBinding true
+    }
+    compileSdkVersion 30
     buildToolsVersion "29.0.3"
 
     defaultConfig {
         applicationId "com.javinator9889.handwashingreminder"
-        minSdkVersion 17
-        targetSdkVersion 29
-        versionCode 137
-        versionName "1.2.0-${gitCommitHash}"
+        minSdkVersion 16
+        targetSdkVersion 30
+        versionCode 142
+        versionName "1.2.1-${gitCommitHash}"
         multiDexEnabled true
         resConfigs "en", "es"
         vectorDrawables.useSupportLibrary = true
@@ -111,20 +113,22 @@ dependencies {
     def room_version = "2.2.5"
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    api 'androidx.appcompat:appcompat:1.1.0'
-    api 'androidx.core:core-ktx:1.3.0'
+    api 'androidx.appcompat:appcompat:1.2.0'
+    api 'androidx.core:core-ktx:1.3.2'
     api 'androidx.legacy:legacy-support-v4:1.0.0'
-    api 'androidx.constraintlayout:constraintlayout:1.1.3'
-    testImplementation 'junit:junit:4.13'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    api 'androidx.constraintlayout:constraintlayout:2.0.4'
+    testImplementation 'junit:junit:4.13.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
+    // https://stackoverflow.com/questions/64247956/why-does-im-getting-service-not-registered-exception-even-though-i-not-used
+    api 'com.google.android.gms:play-services-basement:17.5.0'
     // https://github.com/Javinator9889/LocaleManager
     api 'com.github.javinator9889:localemanager:1.1X'
     // https://material.io/develop/android/docs/getting-started/
-    api 'com.google.android.material:material:1.1.0'
+    api 'com.google.android.material:material:1.2.1'
     // https://developers.google.com/android/guides/setup
-    implementation 'com.google.android.gms:play-services-location:17.0.0'
+    implementation 'com.google.android.gms:play-services-location:17.1.0'
     // https://developer.android.com/jetpack/androidx/releases/annotation
     api 'androidx.annotation:annotation:1.1.0'
     // https://developer.android.com/jetpack/androidx/releases/cardview
@@ -134,32 +138,32 @@ dependencies {
     // https://developer.android.com/studio/build/multidex
     api 'androidx.multidex:multidex:2.0.1'
     // https://github.com/mikepenz/Android-Iconics
-    api 'com.mikepenz:iconics-core:5.0.3'
-    api 'com.mikepenz:iconics-views:5.0.3'
+    api 'com.mikepenz:iconics-core:5.2.1'
+    api 'com.mikepenz:iconics-views:5.2.1'
     //noinspection GradleDependency
-    api 'com.mikepenz:google-material-typeface:3.0.1.4.original-kotlin@aar'
-    api 'com.mikepenz:ionicons-typeface:2.0.1.5-kotlin@aar'
+    api 'com.mikepenz:google-material-typeface:3.0.1.6.original-kotlin@aar'
+    api 'com.mikepenz:ionicons-typeface:2.0.1.7-kotlin@aar'
     // https://github.com/mikepenz/AboutLibraries
     implementation "com.mikepenz:aboutlibraries-core:$latestAboutLibsRelease"
     implementation "com.mikepenz:aboutlibraries:$latestAboutLibsRelease"
     // https://developer.android.com/kotlin/ktx#play-core
-    api 'com.google.android.play:core:1.7.3'
-    api 'com.google.android.play:core-ktx:1.7.0'
+    api 'com.google.android.play:core:1.9.0'
+    api 'com.google.android.play:core-ktx:1.8.1'
     // https://developer.android.com/kotlin/ktx#collection
     implementation 'androidx.collection:collection-ktx:1.1.0'
     // https://kotlinlang.org/docs/reference/reflection.html
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     // https://firebase.google.com/docs/android/setup#add-sdks
-    api 'com.google.firebase:firebase-common-ktx:19.3.0'
-    api 'com.google.firebase:firebase-analytics:17.4.3'
-    api 'com.google.firebase:firebase-crashlytics:17.1.0'
-    api 'com.google.firebase:firebase-perf:19.0.7'
-    implementation 'com.google.firebase:firebase-auth:19.3.1'
+    api 'com.google.firebase:firebase-common-ktx:19.4.0'
+    api 'com.google.firebase:firebase-analytics:18.0.0'
+    api 'com.google.firebase:firebase-crashlytics:17.3.0'
+    api 'com.google.firebase:firebase-perf:19.0.10'
+    implementation 'com.google.firebase:firebase-auth:20.0.1'
     // http://airbnb.io/lottie/#/android?id=getting-started
-    api 'com.airbnb.android:lottie:3.4.1'
+    api 'com.airbnb.android:lottie:3.5.0'
     // https://firebase.google.com/docs/remote-config/use-config-android
-    implementation 'com.google.firebase:firebase-config:19.1.4'
-    implementation 'com.google.firebase:firebase-config-ktx:19.1.4'
+    implementation 'com.google.firebase:firebase-config:20.0.2'
+    implementation 'com.google.firebase:firebase-config-ktx:20.0.2'
     // https://mvnrepository.com/artifact/androidx.emoji/emoji/
     api 'androidx.emoji:emoji:1.1.0'
     api 'androidx.emoji:emoji-appcompat:1.1.0'
@@ -184,16 +188,16 @@ dependencies {
     // https://github.com/afollestad/material-dialogs/
     implementation 'com.afollestad.material-dialogs:core:3.3.0'
     // https://developer.android.com/google/play/billing/billing_library_overview
-    implementation 'com.android.billingclient:billing:3.0.0'
-    implementation 'com.android.billingclient:billing-ktx:3.0.0'
+    implementation 'com.android.billingclient:billing:3.0.2'
+    implementation 'com.android.billingclient:billing-ktx:3.0.2'
     // https://github.com/cbeust/klaxon
-    implementation 'com.beust:klaxon:5.2'
+    implementation 'com.beust:klaxon:5.4'
     // https://github.com/SufficientlySecure/html-textview
-    implementation 'org.sufficientlysecure:html-textview:3.9'
+    implementation 'org.sufficientlysecure:html-textview:4.0'
     // https://github.com/square/okhttp/tree/okhttp_3.12.x
-    implementation 'com.squareup.okhttp3:okhttp:3.12.11'
+    implementation 'com.squareup.okhttp3:okhttp:3.12.12'
     // https://square.github.io/okio/#releases
-    implementation 'com.squareup.okio:okio:2.6.0'
+    implementation 'com.squareup.okio:okio:2.9.0'
     // https://github.com/deano2390/MaterialShowcaseView
     implementation 'com.github.deano2390:MaterialShowcaseView:1.3.4'
     // https://github.com/PhilJay/MPAndroidChart
@@ -202,6 +206,8 @@ dependencies {
     implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
     // https://coil-kt.github.io/coil/
-    api "io.coil-kt:coil:0.11.0"
+    api "io.coil-kt:coil:1.1.0"
+    // https://developer.android.com/jetpack/androidx/releases/work#declaring_dependencies
+    implementation "androidx.work:work-runtime-ktx:2.4.0"
 }
 apply plugin: 'com.google.gms.google-services'

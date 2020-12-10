@@ -14,26 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  *
- * Created by Javinator9889 on 12/04/20 - Handwashing reminder.
+ * Created by Javinator9889 on 10/12/20 - Handwashing reminder.
  */
-package com.javinator9889.handwashingreminder.activities.base
+package com.javinator9889.handwashingreminder.utils
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.annotation.LayoutRes
-import androidx.viewbinding.ViewBinding
-import javinator9889.localemanager.fragment.BaseFragment
+import com.google.firebase.analytics.FirebaseAnalytics
+import kotlin.reflect.KClass
 
-abstract class BaseFragmentView<T : ViewBinding> : BaseFragment() {
-    @get:LayoutRes
-    protected abstract val layoutId: Int
-    internal lateinit var binding: T
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View = inflater.inflate(layoutId, container, false)
+fun FirebaseAnalytics.setCurrentScreen(name: String?, cls: KClass<*>?) {
+    with(Bundle(2)) {
+        putString(FirebaseAnalytics.Param.SCREEN_NAME, name)
+        putString(FirebaseAnalytics.Param.SCREEN_CLASS, cls?.simpleName)
+        logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, this)
+    }
 }

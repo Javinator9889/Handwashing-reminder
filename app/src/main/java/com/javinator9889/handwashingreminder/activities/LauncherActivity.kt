@@ -21,10 +21,9 @@ package com.javinator9889.handwashingreminder.activities
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import androidx.appcompat.app.AppCompatActivity
+import androidx.annotation.LayoutRes
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenCreated
 import androidx.lifecycle.whenStarted
@@ -40,8 +39,10 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.javinator9889.handwashingreminder.BuildConfig
 import com.javinator9889.handwashingreminder.R
+import com.javinator9889.handwashingreminder.activities.base.BaseFragmentActivity
 import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.data.UserProperties
+import com.javinator9889.handwashingreminder.databinding.SplashScreenBinding
 import com.javinator9889.handwashingreminder.gms.activity.ActivityHandler
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
 import com.javinator9889.handwashingreminder.gms.ads.AdsEnabler
@@ -55,7 +56,6 @@ import com.javinator9889.handwashingreminder.utils.RemoteConfig.SPECIAL_EVENT
 import com.javinator9889.handwashingreminder.utils.threading.await
 import com.mikepenz.iconics.Iconics
 import javinator9889.localemanager.utils.languagesupport.LanguagesSupport.Language
-import kotlinx.android.synthetic.main.splash_screen.*
 import kotlinx.coroutines.*
 import timber.log.Timber
 import com.javinator9889.handwashingreminder.utils.Firebase as FirebaseConf
@@ -63,7 +63,7 @@ import com.javinator9889.handwashingreminder.utils.Firebase as FirebaseConf
 internal const val FAST_START_KEY = "intent:fast_start"
 internal const val PENDING_INTENT_CODE = 201
 
-class LauncherActivity : AppCompatActivity() {
+class LauncherActivity : BaseFragmentActivity<SplashScreenBinding>() {
     private val deferreds = mutableSetOf<Deferred<Any?>>()
     private var launchOnInstall = false
     private var launchFromNotification = false
@@ -73,6 +73,9 @@ class LauncherActivity : AppCompatActivity() {
     private val dynamicFeatureDeferred = CompletableDeferred<Boolean>()
     private val activityIntentDeferred = CompletableDeferred<Intent>()
     private val splitInstallManager = SplitInstallManagerFactory.create(app)
+    private lateinit var binding: SplashScreenBinding
+    @get:LayoutRes
+    override val layoutId: Int = R.layout.splash_screen
 
     init {
         lifecycleScope.launch {
@@ -82,7 +85,7 @@ class LauncherActivity : AppCompatActivity() {
                 deferreds.add(async { initVariables() })
             }
             whenStarted {
-                progressBar.show()
+                binding.progressBar.show()
                 val welcomeScreenJob = showWelcomeScreenAsync()
                 deferreds.add(installRequiredModulesAsync())
                 activityIntentDeferred.await().run {
@@ -90,7 +93,9 @@ class LauncherActivity : AppCompatActivity() {
                     if (launchFromNotification)
                         flags = Intent.FLAG_ACTIVITY_NEW_TASK or
                                 Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    Timber.d("Joining welcome screen...")
                     welcomeScreenJob.join()
+                    Timber.d("Start")
                     startActivity(this)
                     overridePendingTransition(0, android.R.anim.fade_out)
                     finish()
@@ -99,17 +104,17 @@ class LauncherActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.splash_screen)
-    }
+    override fun inflateLayout(): SplashScreenBinding =
+        SplashScreenBinding.inflate(layoutInflater).also { binding = it }
 
     private fun showWelcomeScreenAsync() =
         lifecycleScope.launch(Dispatchers.Main) {
+            Timber.d("Awaiting Firebase initialization...")
             app.firebaseInitDeferred.await()
             val isThereAnySpecialEvent = with(Firebase.remoteConfig) {
                 getBoolean(SPECIAL_EVENT) && !launchFromNotification
             }
+            Timber.d("Is any special event? $isThereAnySpecialEvent")
             var sleepDuration = 0L
             val animationLoaded = CompletableDeferred<Boolean>()
             val fadeInAnimation = AnimationUtils.loadAnimation(
@@ -119,24 +124,29 @@ class LauncherActivity : AppCompatActivity() {
             fadeInAnimation.duration = 300L
             fadeInAnimation.setAnimationListener(object :
                 Animation.AnimationListener {
-                override fun onAnimationStart(animation: Animation?) {}
+                override fun onAnimationStart(animation: Animation?) {
+                    Timber.d("Animation started!")
+                }
                 override fun onAnimationRepeat(animation: Animation?) {}
                 override fun onAnimationEnd(animation: Animation?) {
+                    Timber.d("Animation is completed")
                     animationLoaded.complete(true)
-                    logo.playAnimation()
+                    binding.logo.playAnimation()
                 }
             })
-            if (isThereAnySpecialEvent) {
-                logo.setAnimation(AnimatedResources.STAY_SAFE_STAY_HOME.res)
-                logo.addLottieOnCompositionLoadedListener {
-                    logo.startAnimation(fadeInAnimation)
-                    sleepDuration = logo.duration
+            if (isThereAnySpecialEvent && !isDebuggable()) {
+                Timber.d("Starting custom animation...")
+                binding.logo.setAnimation(AnimatedResources.STAY_SAFE_STAY_HOME.res)
+                binding.logo.addLottieOnCompositionLoadedListener {
+                    Timber.d("Animation loaded!")
+                    binding.logo.startAnimation(fadeInAnimation)
+                    sleepDuration = binding.logo.duration
                 }
                 animationLoaded.await()
                 delay(sleepDuration)
             } else {
-                logo.setImageResource(R.drawable.handwashing_app_logo)
-                logo.startAnimation(fadeInAnimation)
+                binding.logo.setImageResource(R.drawable.handwashing_app_logo)
+                binding.logo.startAnimation(fadeInAnimation)
             }
         }
 
@@ -173,7 +183,7 @@ class LauncherActivity : AppCompatActivity() {
                 }
                 Timber.d("Created launch intent $launchIntent")
                 activityIntentDeferred.complete(launchIntent)
-            }
+            } ?: Timber.e("Data was empty!")
         } else {
             Timber.d("Created launch intent at MainActivity")
             activityIntentDeferred.complete(
@@ -185,7 +195,7 @@ class LauncherActivity : AppCompatActivity() {
 
     override fun finish() {
         Timber.d("Calling finish")
-        progressBar.hide()
+        binding.progressBar.hide()
         runBlocking(Dispatchers.Default) { deferreds.awaitAll() }
         super.finish()
     }
@@ -299,13 +309,13 @@ class LauncherActivity : AppCompatActivity() {
         Timber.d("Adding periodic notifications if not enqueued yet")
         Timber.d("Creating alarms notification channels...")
         for (alarm in Alarms.values()) {
-            Timber.d("Creating notification channel for ${alarm.identifier}")
+            Timber.d("Creating notification channel for ${alarm.groupId}")
             NotificationsHandler(
                 context = this,
                 channelId = alarm.channelId,
-                channelName = getString(R.string.time_notification_channel_name),
-                channelDesc = getString(R.string.time_notification_channel_desc),
-                groupId = alarm.identifier,
+                channelName = getString(alarm.channelName),
+                channelDesc = getString(alarm.channelDesc),
+                groupId = alarm.groupId,
                 groupName = getString(alarm.groupName)
             )
         }

@@ -19,11 +19,14 @@
 package com.javinator9889.handwashingreminder.activities.views.fragments.diseases
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.BaseFragmentView
 import com.javinator9889.handwashingreminder.data.ParsedHTMLText
-import kotlinx.android.synthetic.main.disease_description.*
+import com.javinator9889.handwashingreminder.databinding.DiseaseDescriptionBinding
 import kotlin.properties.Delegates
 
 internal const val ARG_TITLE = "bundle:title"
@@ -34,7 +37,7 @@ internal const val ARG_WEBSITE = "bundle:website"
 internal const val ARG_ANIMATION_ID = "bundle:animation:id"
 internal const val ARG_HTML_TEXT = "bundle:text:html"
 
-class DiseaseDescriptionFragment : BaseFragmentView() {
+class DiseaseDescriptionFragment : BaseFragmentView<DiseaseDescriptionBinding>() {
     @get:LayoutRes
     override val layoutId: Int = R.layout.disease_description
     private lateinit var parsedHTMLText: ParsedHTMLText
@@ -45,13 +48,23 @@ class DiseaseDescriptionFragment : BaseFragmentView() {
         retainInstance = true
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        val view = super.onCreateView(inflater, container, savedInstanceState)
+        binding = DiseaseDescriptionBinding.bind(view)
+        return view
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putCharSequence(ARG_TITLE, title.text)
-        outState.putCharSequence(ARG_SDESC, shortDescription.text)
-        outState.putCharSequence(ARG_LDESC, longDescription.text)
-        outState.putCharSequence(ARG_PROVIDER, provider.text)
-        outState.putCharSequence(ARG_WEBSITE, website.text)
+        outState.putCharSequence(ARG_TITLE, binding.title.text)
+        outState.putCharSequence(ARG_SDESC, binding.shortDescription.text)
+        outState.putCharSequence(ARG_LDESC, binding.longDescription.text)
+        outState.putCharSequence(ARG_PROVIDER, binding.provider.text)
+        outState.putCharSequence(ARG_WEBSITE, binding.website.text)
         outState.putParcelable(ARG_HTML_TEXT, parsedHTMLText)
         outState.putInt(ARG_ANIMATION_ID, animId)
     }
@@ -62,15 +75,15 @@ class DiseaseDescriptionFragment : BaseFragmentView() {
             val data = (savedInstanceState ?: arguments)!!
             parsedHTMLText = data.getParcelable(ARG_HTML_TEXT)!!
             animId = data.getInt(ARG_ANIMATION_ID)
-            animatedView.setAnimation(animId)
-            title.text = data.getCharSequence(ARG_TITLE) ?: parsedHTMLText.name
-            shortDescription.text = data.getCharSequence(ARG_SDESC)
+            binding.animatedView.setAnimation(animId)
+            binding.title.text = data.getCharSequence(ARG_TITLE) ?: parsedHTMLText.name
+            binding.shortDescription.text = data.getCharSequence(ARG_SDESC)
                 ?: parsedHTMLText.shortDescription
-            longDescription.text = data.getCharSequence(ARG_LDESC)
+            binding.longDescription.text = data.getCharSequence(ARG_LDESC)
                 ?: parsedHTMLText.longDescription
-            provider.text = data.getCharSequence(ARG_PROVIDER)
+            binding.provider.text = data.getCharSequence(ARG_PROVIDER)
                 ?: getString(R.string.written_by, parsedHTMLText.provider)
-            website.text = data.getCharSequence(ARG_WEBSITE)
+            binding.website.text = data.getCharSequence(ARG_WEBSITE)
                 ?: getString(R.string.available_at, parsedHTMLText.website)
         }
     }

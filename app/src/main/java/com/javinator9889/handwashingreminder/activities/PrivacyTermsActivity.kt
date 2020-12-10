@@ -26,9 +26,10 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.support.ActionBarBase
 import com.javinator9889.handwashingreminder.collections.PrivacyTermsCollectionAdapter
-import kotlinx.android.synthetic.main.disease_view_expanded.*
+import com.javinator9889.handwashingreminder.databinding.PrivacyTermsBinding
 
-class PrivacyTermsActivity : ActionBarBase() {
+
+class PrivacyTermsActivity : ActionBarBase<PrivacyTermsBinding>() {
     override val layoutId: Int = R.layout.privacy_terms
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,8 +45,11 @@ class PrivacyTermsActivity : ActionBarBase() {
         }
 
         val adapter = PrivacyTermsCollectionAdapter(this)
-        pager.adapter = adapter
-        TabLayoutMediator(diseaseInfoTab, pager) { tab, position ->
+        binding.pager.adapter = adapter
+        TabLayoutMediator(
+            binding.diseaseInfoTab,
+            binding.pager
+        ) { tab, position ->
             when (position) {
                 0 -> tab.text = getString(R.string.privacy_policy_title)
                 1 -> tab.text = getString(R.string.tos_title)
@@ -57,4 +61,7 @@ class PrivacyTermsActivity : ActionBarBase() {
         super.onBackPressed()
         finish()
     }
+
+    override fun inflateLayout(): PrivacyTermsBinding =
+        PrivacyTermsBinding.inflate(layoutInflater).also { binding = it }
 }

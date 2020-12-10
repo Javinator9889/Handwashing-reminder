@@ -30,10 +30,11 @@ import android.widget.TextView
 import android.widget.TimePicker
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
-import coil.api.load
+import coil.load
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.javinator9889.handwashingreminder.activities.support.ActionBarBase
 import com.javinator9889.handwashingreminder.appintro.R
+import com.javinator9889.handwashingreminder.appintro.databinding.TimeCardViewExpandedBinding
 import com.javinator9889.handwashingreminder.utils.AndroidVersion
 import com.javinator9889.handwashingreminder.utils.TimeConfig
 import com.javinator9889.handwashingreminder.utils.formatTime
@@ -43,7 +44,7 @@ import java.util.*
 import kotlin.properties.Delegates
 
 class TimeConfigActivity :
-    ActionBarBase(),
+    ActionBarBase<TimeCardViewExpandedBinding>(),
     View.OnClickListener,
     TimePickerDialog.OnTimeSetListener {
     companion object Transitions {
@@ -95,22 +96,28 @@ class TimeConfigActivity :
         ddot.setOnClickListener(this)
         minutes.setOnClickListener(this)
         clockIcon.setOnClickListener(this)
-        ViewCompat.setTransitionName(title,
+        ViewCompat.setTransitionName(
+            title,
             VIEW_TITLE_NAME
         )
-        ViewCompat.setTransitionName(image,
+        ViewCompat.setTransitionName(
+            image,
             INFO_IMAGE_NAME
         )
-        ViewCompat.setTransitionName(hours,
+        ViewCompat.setTransitionName(
+            hours,
             USER_TIME_HOURS
         )
-        ViewCompat.setTransitionName(ddot,
+        ViewCompat.setTransitionName(
+            ddot,
             USER_DDOT
         )
-        ViewCompat.setTransitionName(minutes,
+        ViewCompat.setTransitionName(
+            minutes,
             USER_TIME_MINUTES
         )
-        ViewCompat.setTransitionName(clockIcon,
+        ViewCompat.setTransitionName(
+            clockIcon,
             USER_TIME_ICON
         )
 
@@ -207,4 +214,8 @@ class TimeConfigActivity :
         hours.text = formatTime(hourOfDay)
         minutes.text = formatTime(minute)
     }
+
+    override fun inflateLayout(): TimeCardViewExpandedBinding =
+        TimeCardViewExpandedBinding.inflate(layoutInflater)
+            .also { binding = it }
 }

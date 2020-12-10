@@ -37,9 +37,9 @@ import com.javinator9889.handwashingreminder.activities.views.fragments.news.New
 import com.javinator9889.handwashingreminder.activities.views.fragments.washinghands.WashingHandsFragment
 import com.javinator9889.handwashingreminder.custom.libraries.AppRate
 import com.javinator9889.handwashingreminder.data.MainActivityDataHandler
+import com.javinator9889.handwashingreminder.databinding.ActivityMainBinding
 import com.javinator9889.handwashingreminder.firebase.Auth
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.how_to_wash_hands_layout.*
+import com.javinator9889.handwashingreminder.utils.setCurrentScreen
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -48,7 +48,7 @@ import timber.log.Timber
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence
 
 
-class MainActivity : ActionBarBase(),
+class MainActivity : ActionBarBase<ActivityMainBinding>(),
     BottomNavigationView.OnNavigationItemSelectedListener,
     BottomNavigationView.OnNavigationItemReselectedListener {
     override val layoutId: Int = R.layout.activity_main
@@ -60,9 +60,14 @@ class MainActivity : ActionBarBase(),
         lifecycleScope.launch {
             whenCreated {
                 with(Firebase.remoteConfig) { fetchAndActivate() }
-                launch { dataHandler.setMenuIcons(menu, this@MainActivity) }
-                menu.setOnNavigationItemSelectedListener(this@MainActivity)
-                menu.setOnNavigationItemReselectedListener(this@MainActivity)
+                launch {
+                    dataHandler.setMenuIcons(
+                        binding.menu,
+                        this@MainActivity
+                    )
+                }
+                binding.menu.setOnNavigationItemSelectedListener(this@MainActivity)
+                binding.menu.setOnNavigationItemReselectedListener(this@MainActivity)
                 deferredShowcase = dataHandler.loadShowcaseAsync(
                     activity = this@MainActivity,
                     lifecycleOwner = this@MainActivity
@@ -74,7 +79,7 @@ class MainActivity : ActionBarBase(),
             }
             whenResumed {
                 with(FirebaseAnalytics.getInstance(this@MainActivity)) {
-                    setCurrentScreen(this@MainActivity, "Main view", null)
+                    setCurrentScreen("Main view", this@MainActivity::class)
                 }
                 deferredShowcase.await()?.let {
                     withContext(Dispatchers.Main) {
@@ -136,15 +141,15 @@ class MainActivity : ActionBarBase(),
             R.id.handwashing -> {
                 val washingHandsFragment =
                     dataHandler.activeFragment as WashingHandsFragment
-                if (washingHandsFragment.pager.currentItem != 0)
-                    washingHandsFragment.pager.currentItem--
+                if (washingHandsFragment.binding.pager.currentItem != 0)
+                    washingHandsFragment.binding.pager.currentItem--
                 else {
-                    menu.selectedItemId = R.id.diseases
+                    binding.menu.selectedItemId = R.id.diseases
                     onItemSelected(R.id.diseases)
                 }
             }
             else -> {
-                menu.selectedItemId = R.id.diseases
+                binding.menu.selectedItemId = R.id.diseases
                 onItemSelected(R.id.diseases)
             }
         }
@@ -159,7 +164,7 @@ class MainActivity : ActionBarBase(),
             else -> "Main view"
         }
         with(FirebaseAnalytics.getInstance(this)) {
-            setCurrentScreen(this@MainActivity, screenTitle, null)
+            setCurrentScreen(screenTitle, this@MainActivity::class)
         }
         return onItemSelected(item.itemId)
     }
@@ -201,4 +206,7 @@ class MainActivity : ActionBarBase(),
             disallowAddToBackStack()
         }
     }
+
+    override fun inflateLayout(): ActivityMainBinding =
+        ActivityMainBinding.inflate(layoutInflater).also { binding = it }
 }

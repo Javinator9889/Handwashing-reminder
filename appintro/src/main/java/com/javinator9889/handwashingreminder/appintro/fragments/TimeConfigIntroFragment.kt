@@ -34,6 +34,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.paolorotolo.appintro.AppIntroBaseFragment
 import com.javinator9889.handwashingreminder.appintro.R
 import com.javinator9889.handwashingreminder.appintro.TIME_CONFIG_REQUEST_CODE
+import com.javinator9889.handwashingreminder.appintro.databinding.TimeCardViewBinding
+import com.javinator9889.handwashingreminder.appintro.databinding.TimeConfigBinding
 import com.javinator9889.handwashingreminder.appintro.timeconfig.TimeConfigActivity
 import com.javinator9889.handwashingreminder.appintro.timeconfig.TimeConfigItem
 import com.javinator9889.handwashingreminder.utils.AndroidVersion
@@ -43,8 +45,6 @@ import com.javinator9889.handwashingreminder.utils.isViewVisible
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
 import com.mikepenz.fastadapter.listeners.ClickEventHook
-import kotlinx.android.synthetic.main.time_card_view.view.*
-import kotlinx.android.synthetic.main.time_config.view.*
 
 class TimeConfigIntroFragment : AppIntroBaseFragment() {
     var bgColor: Int = Color.WHITE
@@ -53,6 +53,7 @@ class TimeConfigIntroFragment : AppIntroBaseFragment() {
     lateinit var recyclerView: RecyclerView
     lateinit var fastAdapter: FastAdapter<TimeConfigItem>
     lateinit var itemAdapter: ItemAdapter<TimeConfigItem>
+    internal lateinit var binding: TimeConfigBinding
 
     init {
         propertyContainer[TimeConfig.BREAKFAST_ID.toInt()] = TimeContainer()
@@ -95,13 +96,17 @@ class TimeConfigIntroFragment : AppIntroBaseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = inflater.inflate(layoutId, container, false)
+    ): View {
+        val view = inflater.inflate(layoutId, container, false)
+        binding = TimeConfigBinding.bind(view)
+        return view
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val manager = LinearLayoutManager(context)
         fastAdapter = FastAdapter.with(itemAdapter)
-        recyclerView = view.cardsView.apply {
+        recyclerView = binding.cardsView.apply {
             setHasFixedSize(true)
             layoutManager = manager
             adapter = fastAdapter
@@ -120,15 +125,21 @@ class TimeConfigIntroFragment : AppIntroBaseFragment() {
                 item: TimeConfigItem
             ) {
                 val intent = Intent(context, TimeConfigActivity::class.java)
+                val cardBinding = TimeCardViewBinding.bind(v)
                 val options = if (isAtLeast(AndroidVersion.LOLLIPOP)) {
                     val pairs = mutableListOf<Pair<View, String>>()
                     val items = HashMap<String, View>(6).apply {
-                        this[TimeConfigActivity.VIEW_TITLE_NAME] = v.title
-                        this[TimeConfigActivity.INFO_IMAGE_NAME] = v.infoImage
-                        this[TimeConfigActivity.USER_TIME_ICON] = v.clockIcon
-                        this[TimeConfigActivity.USER_TIME_HOURS] = v.hours
-                        this[TimeConfigActivity.USER_DDOT] = v.ddot
-                        this[TimeConfigActivity.USER_TIME_MINUTES] = v.minutes
+                        this[TimeConfigActivity.VIEW_TITLE_NAME] =
+                            cardBinding.title
+                        this[TimeConfigActivity.INFO_IMAGE_NAME] =
+                            cardBinding.infoImage
+                        this[TimeConfigActivity.USER_TIME_ICON] =
+                            cardBinding.clockIcon
+                        this[TimeConfigActivity.USER_TIME_HOURS] =
+                            cardBinding.hours
+                        this[TimeConfigActivity.USER_DDOT] = cardBinding.ddot
+                        this[TimeConfigActivity.USER_TIME_MINUTES] =
+                            cardBinding.minutes
                     }
                     items.onEach {
                         if (it.value.isViewVisible(recyclerView))
@@ -142,9 +153,9 @@ class TimeConfigIntroFragment : AppIntroBaseFragment() {
                     null
                 }
                 intent.apply {
-                    putExtra("title", v.title.text)
-                    putExtra("hours", v.hours.text)
-                    putExtra("minutes", v.minutes.text)
+                    putExtra("title", cardBinding.title.text)
+                    putExtra("hours", cardBinding.hours.text)
+                    putExtra("minutes", cardBinding.minutes.text)
                     putExtra("id", item.id)
                     putExtra("position", position)
                 }
@@ -160,5 +171,3 @@ class TimeConfigIntroFragment : AppIntroBaseFragment() {
 
     override fun getLayoutId(): Int = R.layout.time_config
 }
-
-data class TimeContainer(val hours: String? = "", val minutes: String? = "")

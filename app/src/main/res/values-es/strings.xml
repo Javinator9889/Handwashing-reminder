@@ -69,8 +69,14 @@
             las manos &#128521;&#128166;&#128079;</item>
     </string-array>
     <string name="breakfast_notifications">Recordatorios en el desayuno</string>
+    <string name="breakfast_description">¡Recibe una notificación cuando es la
+        hora del desayuno! &#9749;</string>
     <string name="lunch_notifications">Recordatorios en la comida</string>
+    <string name="lunch_description">¡Recibe una notificación cuando es
+        la hora de la comida! &#127857;</string>
     <string name="dinner_notifications">Recordatorios en la cenas</string>
+    <string name="dinner_description">¡Recibe una notificación cuando es la hora
+        de la cena! &#129367;</string>
     <string name="lunch_title">¡Hora de comer y lavarse las manos!
         &#127857;</string>
     <string-array name="lunch_comments">
@@ -297,4 +303,5 @@
     <string name="notification_settings">Ajustes de notificaciones</string>
     <string name="just_washed">¡Acabo de lavarlas!</string>
     <string name="hurray">¡Yupiiii! &#128588;&#128561;</string>
+    <string name="try_again">Pulsa aquí para intentarlo de nuevo</string>
 </resources>

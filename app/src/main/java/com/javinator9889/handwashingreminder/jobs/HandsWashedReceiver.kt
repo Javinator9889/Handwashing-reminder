@@ -36,6 +36,8 @@ import kotlinx.coroutines.withContext
 internal const val HANDS_WASHED_CODE = 128
 internal const val HANDS_WASHED_ACTION =
     "com.javinator9889.handwashingreminder.HANDSWASHED_EVENT"
+internal const val NOTIFICATION_ID_KEY =
+    "com.javinator9889.handwashingreminder.NID"
 
 class HandsWashedReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
@@ -44,8 +46,11 @@ class HandsWashedReceiver : BroadcastReceiver() {
             with(HandwashingDatabase.getDatabase(context).handwashingDao()) {
                 HandwashingRepository(this)
             }
-        with(NotificationManagerCompat.from(context)) {
-            cancel(1)
+        intent.getIntExtra(NOTIFICATION_ID_KEY, -1).let {
+            if (it != -1)
+                with(NotificationManagerCompat.from(context)) {
+                    cancel(it)
+                }
         }
         goAsync {
             val createdItem = withContext(Dispatchers.IO) {

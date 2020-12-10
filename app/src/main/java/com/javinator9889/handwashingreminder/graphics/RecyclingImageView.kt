@@ -25,7 +25,7 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.AppCompatImageView
-import coil.api.load
+import coil.load
 
 class RecyclingImageView : AppCompatImageView {
     constructor(context: Context) : super(context)

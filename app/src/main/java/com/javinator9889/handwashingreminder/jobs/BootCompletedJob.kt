@@ -27,11 +27,14 @@ import com.javinator9889.handwashingreminder.jobs.alarms.AlarmHandler
 import com.javinator9889.handwashingreminder.utils.Preferences
 import timber.log.Timber
 
+const val ACTION_QBP = "android.intent.action.QUICKBOOT_POWERON"
+
 class BootCompletedJob : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        if (intent.action == Intent.ACTION_BOOT_COMPLETED) {
+        if (intent.action in setOf(Intent.ACTION_BOOT_COMPLETED, ACTION_QBP)) {
             val activityHandler = ActivityHandler.getInstance(context)
-            val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+            val preferences =
+                PreferenceManager.getDefaultSharedPreferences(context)
             if (preferences.getBoolean(
                     Preferences.ACTIVITY_TRACKING_ENABLED,
                     false

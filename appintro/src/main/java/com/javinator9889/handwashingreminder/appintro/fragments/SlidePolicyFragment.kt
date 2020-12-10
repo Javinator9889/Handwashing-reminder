@@ -25,6 +25,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.airbnb.lottie.LottieAnimationView
 import com.github.paolorotolo.appintro.AppIntroBaseFragment
 import com.github.paolorotolo.appintro.ISlidePolicy
 import com.google.android.material.checkbox.MaterialCheckBox
@@ -34,12 +35,13 @@ import com.google.android.play.core.splitcompat.SplitCompat
 import com.javinator9889.handwashingreminder.activities.PrivacyTermsActivity
 import com.javinator9889.handwashingreminder.appintro.R
 import com.javinator9889.handwashingreminder.appintro.custom.ARG_ANIM_DRAWABLE
+import com.javinator9889.handwashingreminder.appintro.databinding.SlidePolicyBinding
 import com.javinator9889.handwashingreminder.appintro.utils.AnimatedResources
 import com.javinator9889.handwashingreminder.utils.notNull
-import kotlinx.android.synthetic.main.slide_policy.view.*
 import com.javinator9889.handwashingreminder.R as RBase
 
-class SlidePolicyFragment : AppIntroBaseFragment(), ISlidePolicy {
+class SlidePolicyFragment : AppIntroBaseFragment(), ISlidePolicy,
+    IFragmentBinder<SlidePolicyBinding>, ImageFragment {
     companion object {
         const val FIREBASE_ANALYTICS_CHECKED = "switch:fa:status"
         const val FIREBASE_PERFORMANCE_CHECKED = "switch:fp:status"
@@ -51,6 +53,11 @@ class SlidePolicyFragment : AppIntroBaseFragment(), ISlidePolicy {
     lateinit var firebasePerformance: SwitchMaterial
     private lateinit var slidePolicyCheckBox: MaterialCheckBox
     private var wasPolicyActivityLaunched = false
+    override var _binding: SlidePolicyBinding? = null
+    private lateinit var _image: LottieAnimationView
+    override var image: LottieAnimationView
+        get() = _image
+        set(value) {_image = value}
     var title: String? = null
     var titleColor: Int? = null
     var imageDrawable: Int? = null
@@ -60,7 +67,7 @@ class SlidePolicyFragment : AppIntroBaseFragment(), ISlidePolicy {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        SplitCompat.installActivity(activity)
+        activity?.let { SplitCompat.installActivity(it) }
     }
 
     override fun onCreateView(
@@ -69,13 +76,15 @@ class SlidePolicyFragment : AppIntroBaseFragment(), ISlidePolicy {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(layoutId, container, false)
-        firebaseAnalytics = view.analyticsSwitch
-        firebasePerformance = view.performanceSwitch
-        slidePolicyCheckBox = view.policyCheckbox
-        layout = view.main
+        _binding = SlidePolicyBinding.bind(view)
+        image = binding.image
+        firebaseAnalytics = binding.analyticsSwitch
+        firebasePerformance = binding.performanceSwitch
+        slidePolicyCheckBox = binding.policyCheckbox
+        layout = binding.main
 
-        val image = view.image
-        val title = view.title
+        val image = binding.image
+        val title = binding.title
         this.title?.let { title.text = it }
         this.titleColor?.let { title.setTextColor(it) }
         bgColor?.let { layout.setBackgroundColor(it) }

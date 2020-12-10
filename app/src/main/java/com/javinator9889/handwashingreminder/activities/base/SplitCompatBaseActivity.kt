@@ -20,13 +20,16 @@ package com.javinator9889.handwashingreminder.activities.base
 
 import android.content.Context
 import android.os.Bundle
+import androidx.viewbinding.ViewBinding
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.android.play.core.splitinstall.SplitInstallManager
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import javinator9889.localemanager.activity.BaseAppCompatActivity
 
-abstract class SplitCompatBaseActivity : BaseAppCompatActivity() {
+abstract class SplitCompatBaseActivity<T : ViewBinding> :
+    BaseAppCompatActivity(), ViewBindingInflater<T> {
     protected lateinit var splitInstallManager: SplitInstallManager
+    protected lateinit var binding: T
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

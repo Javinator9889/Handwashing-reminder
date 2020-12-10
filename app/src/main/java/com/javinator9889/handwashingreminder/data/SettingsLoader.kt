@@ -44,6 +44,7 @@ import com.javinator9889.handwashingreminder.application.HandwashingApplication
 import com.javinator9889.handwashingreminder.emoji.EmojiLoader
 import com.javinator9889.handwashingreminder.gms.ads.AdsEnabler
 import com.javinator9889.handwashingreminder.gms.splitservice.SplitInstallService
+import com.javinator9889.handwashingreminder.jobs.alarms.AlarmHandler
 import com.javinator9889.handwashingreminder.jobs.alarms.Alarms
 import com.javinator9889.handwashingreminder.listeners.OnPurchaseFinishedListener
 import com.javinator9889.handwashingreminder.utils.*
@@ -506,7 +507,7 @@ class SettingsLoader(
                 with(FirebaseAnalytics.getInstance(view.requireContext())) {
                     setAnalyticsCollectionEnabled(enabled)
                     if (!enabled)
-                        setCurrentScreen(view.requireActivity(), null, null)
+                        setCurrentScreen(null, view.requireActivity()::class)
                 }
                 true
             }
@@ -590,6 +591,12 @@ class SettingsLoader(
                 )
                 preference.summary =
                     view.getString(R.string.minimum_time_summ, minutes)
+
+                // Cancel the old alarm and schedule a new one with the updated
+                // time
+                with(AlarmHandler(view.requireContext())) {
+                    scheduleAlarm(Alarms.PENDING_ACTIVITY_ALARM)
+                }
                 true
             }.getOrElse { Timber.w(it); false }
             else -> true

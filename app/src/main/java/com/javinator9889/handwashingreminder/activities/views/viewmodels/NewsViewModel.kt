@@ -50,7 +50,7 @@ class NewsViewModel : ViewModel() {
                 fieldConverter(KlaxonDate::class, dateConverter)
                 fieldConverter(KlaxonElements::class, elementConverter)
             }
-            var requestReader: Reader? = null
+            var requestReader: Reader?
             Auth.init()
             val token = Auth.token()
             Timber.d("Auth token: $token")

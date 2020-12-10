@@ -30,6 +30,7 @@ import com.javinator9889.handwashingreminder.emoji.EmojiLoader
 import com.javinator9889.handwashingreminder.jobs.HANDS_WASHED_ACTION
 import com.javinator9889.handwashingreminder.jobs.HANDS_WASHED_CODE
 import com.javinator9889.handwashingreminder.jobs.HandsWashedReceiver
+import com.javinator9889.handwashingreminder.jobs.NOTIFICATION_ID_KEY
 import com.javinator9889.handwashingreminder.jobs.alarms.AlarmHandler
 import com.javinator9889.handwashingreminder.jobs.alarms.Alarms
 import com.javinator9889.handwashingreminder.notifications.Action
@@ -47,18 +48,20 @@ abstract class ScheduledNotificationWorker(context: Context) {
     protected abstract val contentsRes: Int
 
     suspend fun doWork() = coroutineScope {
+        var result: Result<Unit> = Result.success(Unit)
         try {
-            val startTime = System.currentTimeMillis()
             val emojiLoader = EmojiLoader.loadAsync(context)
             val notificationsHandler = NotificationsHandler(
                 context = context,
                 channelId = alarm.channelId,
-                channelName = getString(R.string.time_notification_channel_name),
-                channelDesc = getString(R.string.time_notification_channel_desc),
-                groupId = alarm.identifier,
+                channelName = getString(alarm.channelName),
+                channelDesc = getString(alarm.channelDesc),
+                groupId = alarm.groupId,
                 groupName = getString(alarm.groupName)
             )
             val emojiCompat = emojiLoader.await()
+            if (titleRes == -1 && contentsRes == -1)
+                return@coroutineScope
             var title = getText(titleRes)
             var content =
                 getStringArray(contentsRes).toList().random() as CharSequence
@@ -72,6 +75,7 @@ abstract class ScheduledNotificationWorker(context: Context) {
                 HANDS_WASHED_CODE,
                 Intent(context, HandsWashedReceiver::class.java).apply {
                     action = HANDS_WASHED_ACTION
+                    putExtra(NOTIFICATION_ID_KEY, 1)
                 },
                 PendingIntent.FLAG_UPDATE_CURRENT
             )
@@ -90,11 +94,7 @@ abstract class ScheduledNotificationWorker(context: Context) {
                     )
                 )
             }
-            Timber.d(
-                "Posting a notification took: ${System
-                    .currentTimeMillis() - startTime}ms"
-            )
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             with(HandwashingApplication.instance) {
                 // Don't use so much resources, wait at most half a second until
                 // Firebase initializes or continue with execution.
@@ -104,14 +104,23 @@ abstract class ScheduledNotificationWorker(context: Context) {
                     firebaseInitDeferred.await()
                 }
             }
-            Timber.e(e, "Unhandled exception on worker class")
+            result = Result.failure(e)
             // We don't want to keep using CPU at this time if the request
             // fails so schedule next execution
         } finally {
+            onFinish(result)
+        }
+    }
+
+    protected open fun onFinish(result: Result<Unit>) {
+        if (result.isSuccess) {
             with(AlarmHandler(context)) {
                 scheduleAlarm(alarm)
             }
-        }
+        } else Timber.e(
+            result.exceptionOrNull(),
+            "Unhandled exception on worker class"
+        )
     }
 
     private fun getString(@StringRes resId: Int): String =

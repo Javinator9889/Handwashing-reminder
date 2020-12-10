@@ -24,7 +24,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import coil.api.load
+import coil.load
 import coil.size.Scale
 import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.card.MaterialCardView
@@ -44,6 +44,7 @@ data class News(
     val discoverDate: Date?,
     val imageUrl: String?,
     val website: String?,
+    val websiteHostname: String?,
     val websiteImageUrl: String?,
     val lifecycleOwner: LifecycleOwner,
     override val layoutRes: Int = R.layout.news_card_view,
@@ -82,9 +83,16 @@ data class News(
                         scale(Scale.FILL)
                         lifecycle(item.lifecycleOwner)
                     }
-                } else websiteLogo.visibility = View.GONE
-                websiteName.text = item.website
-                    ?: context.getString(R.string.no_website)
+                } else {
+                    if (item.websiteHostname != null) {
+                        websiteLogo.load("https://www.google.com/s2/favicons?domain=${item.websiteHostname}") {
+                            scale(Scale.FILL)
+                            lifecycle(item.lifecycleOwner)
+                        }
+                    } else websiteLogo.visibility = View.GONE
+                }
+                websiteName.text =
+                    item.website ?: context.getString(R.string.no_website)
                 publishDate.text =
                     item.discoverDate?.let { formatter.format(it) }
                         ?: context.getString(R.string.no_date)

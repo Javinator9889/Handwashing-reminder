@@ -23,7 +23,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.cardview.widget.CardView
-import coil.api.load
+import coil.load
 import com.javinator9889.handwashingreminder.appintro.R
 import com.javinator9889.handwashingreminder.utils.TimeConfig
 import com.javinator9889.handwashingreminder.utils.notNull

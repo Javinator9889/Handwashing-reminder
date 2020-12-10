@@ -45,6 +45,9 @@ object CalendarUtils {
             return aMonthAgo
         }
 
+    val now: Long
+        get() = Calendar.getInstance().timeInMillis
+
     fun timeBetweenIn(
         unit: TimeUnit,
         to: Long,
@@ -55,4 +58,17 @@ object CalendarUtils {
         to: Long,
         from: Long = today.timeInMillis
     ): Long = from - to
+
+    fun timeIn(amount: Int, unit: TimeUnit): Calendar =
+        with(Calendar.getInstance()) {
+            when (unit) {
+                TimeUnit.MILLISECONDS -> this[Calendar.MILLISECOND] += amount
+                TimeUnit.SECONDS -> this[Calendar.SECOND] += amount
+                TimeUnit.MINUTES -> this[Calendar.MINUTE] += amount
+                TimeUnit.HOURS -> this[Calendar.HOUR_OF_DAY] += amount
+                TimeUnit.DAYS -> this[Calendar.DAY_OF_MONTH] += amount
+                else -> Unit
+            }
+            this
+        }
 }
