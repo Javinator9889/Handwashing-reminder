@@ -325,4 +325,5 @@
     <string name="notification_settings">Edit notification settings</string>
     <string name="just_washed">Just washed them!</string>
     <string name="hurray">Hurray! &#128588;&#128561;</string>
+    <string name="try_again">Click here to try again</string>
 </resources>

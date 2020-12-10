@@ -47,11 +47,31 @@
             android:text="@string/news_error"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/reloadText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/errorAnimation"
             tools:text="Error while obtaining new data" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/reloadText"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="@font/raleway_medium"
+            android:text="@string/try_again"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textColor="#4D4DFF"
+            android:textSize="18sp"
+            android:textAllCaps="false"
+            app:icon="@drawable/ic_update_black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/errorText" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView

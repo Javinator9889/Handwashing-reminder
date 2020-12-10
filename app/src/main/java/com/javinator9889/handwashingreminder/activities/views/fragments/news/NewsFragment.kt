@@ -33,6 +33,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.afollestad.materialdialogs.MaterialDialog
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.BaseFragmentView
@@ -53,12 +54,13 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class NewsFragment : BaseFragmentView<RefreshingLayoutBinding>(),
-    LayoutVisibilityChange {
+    LayoutVisibilityChange, SwipeRefreshLayout.OnRefreshListener {
     @LayoutRes
     override val layoutId: Int = R.layout.refreshing_layout
     private lateinit var fastAdapter: FastAdapter<GenericItem>
     private lateinit var footerAdapter: GenericItemAdapter
     private lateinit var loadingRecyclerView: LoadingRecyclerViewBinding
+    private lateinit var scrollListener: EndlessRecyclerOnScrollListener
     private var viewCreated = false
     private val newsAdapter = ItemAdapter<News>()
     private val newsViewModel: NewsViewModel by viewModels()
@@ -116,7 +118,7 @@ class NewsFragment : BaseFragmentView<RefreshingLayoutBinding>(),
         footerAdapter = ItemAdapter.items()
         fastAdapter = FastAdapter.with(listOf(newsAdapter, footerAdapter))
         val rvManager = LinearLayoutManager(context)
-        val scrollListener =
+        scrollListener =
             object : EndlessRecyclerOnScrollListener(footerAdapter) {
                 override fun onLoadMore(currentPage: Int) {
                     loadingRecyclerView.container.post {
@@ -144,21 +146,9 @@ class NewsFragment : BaseFragmentView<RefreshingLayoutBinding>(),
         fastAdapter.addEventHooks(listOf(NewsClickHook(), ShareClickHook()))
         fastAdapter.withSavedInstanceState(savedInstanceState)
         viewCreated = savedInstanceState == null
-        binding.refreshLayout.setOnRefreshListener {
-            binding.refreshLayout.isRefreshing = true
-            newsAdapter.clear()
-            activeItems.clear()
-            footerAdapter.clear()
-            scrollListener.disable()
-            lifecycleScope.launch {
-                newsViewModel.populateData(language = UserProperties.language)
-            }.invokeOnCompletion {
-                binding.refreshLayout.isRefreshing = false
-                scrollListener.enable()
-                scrollListener.resetPageCount()
-            }
-            loadingRecyclerView.container.visibility = View.INVISIBLE
-            loadingRecyclerView.errorScreen.visibility = View.INVISIBLE
+        binding.refreshLayout.setOnRefreshListener(this)
+        binding.loadingView.reloadText.setOnClickListener {
+            onRefresh()
         }
     }
 
@@ -248,5 +238,22 @@ class NewsFragment : BaseFragmentView<RefreshingLayoutBinding>(),
                 startActivity(this)
             }
         }
+    }
+
+    override fun onRefresh() {
+        binding.refreshLayout.isRefreshing = true
+        newsAdapter.clear()
+        activeItems.clear()
+        footerAdapter.clear()
+        scrollListener.disable()
+        lifecycleScope.launch {
+            newsViewModel.populateData(language = UserProperties.language)
+        }.invokeOnCompletion {
+            binding.refreshLayout.isRefreshing = false
+            scrollListener.enable()
+            scrollListener.resetPageCount()
+        }
+        loadingRecyclerView.container.visibility = View.INVISIBLE
+        loadingRecyclerView.errorScreen.visibility = View.INVISIBLE
     }
 }
