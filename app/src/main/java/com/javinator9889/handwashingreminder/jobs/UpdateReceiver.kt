@@ -38,7 +38,7 @@ class UpdateReceiver : BroadcastReceiver() {
             }
             // Here, we need to remove all the notifications channels
             // previously created as they have changed
-            if (BuildConfig.VERSION_CODE == 141 && isAtLeast(AndroidVersion.O)) {
+            if (BuildConfig.VERSION_CODE in 141..142 && isAtLeast(AndroidVersion.O)) {
                 val notificationManager =
                     context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 for (id in setOf(
