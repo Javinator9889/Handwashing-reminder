@@ -39,6 +39,7 @@ import com.javinator9889.handwashingreminder.custom.libraries.AppRate
 import com.javinator9889.handwashingreminder.data.MainActivityDataHandler
 import com.javinator9889.handwashingreminder.databinding.ActivityMainBinding
 import com.javinator9889.handwashingreminder.firebase.Auth
+import com.javinator9889.handwashingreminder.utils.setCurrentScreen
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -78,7 +79,7 @@ class MainActivity : ActionBarBase<ActivityMainBinding>(),
             }
             whenResumed {
                 with(FirebaseAnalytics.getInstance(this@MainActivity)) {
-                    setCurrentScreen(this@MainActivity, "Main view", null)
+                    setCurrentScreen("Main view", this@MainActivity::class)
                 }
                 deferredShowcase.await()?.let {
                     withContext(Dispatchers.Main) {
@@ -163,7 +164,7 @@ class MainActivity : ActionBarBase<ActivityMainBinding>(),
             else -> "Main view"
         }
         with(FirebaseAnalytics.getInstance(this)) {
-            setCurrentScreen(this@MainActivity, screenTitle, null)
+            setCurrentScreen(screenTitle, this@MainActivity::class)
         }
         return onItemSelected(item.itemId)
     }

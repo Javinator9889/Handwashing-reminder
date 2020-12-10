@@ -40,7 +40,7 @@ android {
 
     defaultConfig {
         applicationId "com.javinator9889.handwashingreminder"
-        minSdkVersion 17
+        minSdkVersion 16
         targetSdkVersion 30
         versionCode 140
         versionName "1.2.1-${gitCommitHash}"

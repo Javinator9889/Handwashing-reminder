@@ -59,7 +59,7 @@ object CalendarUtils {
         from: Long = today.timeInMillis
     ): Long = from - to
 
-    fun timeIn(amount: Int, unit: TimeUnit) =
+    fun timeIn(amount: Int, unit: TimeUnit): Calendar =
         with(Calendar.getInstance()) {
             when (unit) {
                 TimeUnit.MILLISECONDS -> this[Calendar.MILLISECOND] += amount

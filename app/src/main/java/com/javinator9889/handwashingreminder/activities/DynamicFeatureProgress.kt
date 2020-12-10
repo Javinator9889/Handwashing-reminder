@@ -37,13 +37,11 @@ import com.javinator9889.handwashingreminder.BuildConfig
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.activities.base.SplitCompatBaseActivity
 import com.javinator9889.handwashingreminder.databinding.DynamicContentPbBinding
-import com.javinator9889.handwashingreminder.utils.AndroidVersion
-import com.javinator9889.handwashingreminder.utils.CONFIRMATION_REQUEST_CODE
-import com.javinator9889.handwashingreminder.utils.filterNotEmpty
-import com.javinator9889.handwashingreminder.utils.isAtLeast
+import com.javinator9889.handwashingreminder.utils.*
 import timber.log.Timber
 
-class DynamicFeatureProgress : SplitCompatBaseActivity<DynamicContentPbBinding>(),
+class DynamicFeatureProgress :
+    SplitCompatBaseActivity<DynamicContentPbBinding>(),
     SplitInstallStateUpdatedListener {
     companion object {
         const val MODULES = "modules"
@@ -64,7 +62,8 @@ class DynamicFeatureProgress : SplitCompatBaseActivity<DynamicContentPbBinding>(
         splitInstallManager.registerListener(this)
         with(FirebaseAnalytics.getInstance(this)) {
             setCurrentScreen(
-                this@DynamicFeatureProgress, "Dynamic module", null
+                "Dynamic module",
+                this@DynamicFeatureProgress::class
             )
         }
         modules =

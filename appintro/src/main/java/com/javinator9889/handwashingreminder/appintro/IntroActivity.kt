@@ -78,7 +78,7 @@ class IntroActivity : AppIntro2(),
 
         with(FirebaseAnalytics.getInstance(this)) {
             logEvent(FirebaseAnalytics.Event.TUTORIAL_BEGIN, null)
-            setCurrentScreen(this@IntroActivity, "Intro", null)
+            setCurrentScreen("Intro", this@IntroActivity::class)
         }
 
         Timber.d("Creating slides...")
@@ -254,9 +254,8 @@ class IntroActivity : AppIntro2(),
                 )
                 if (!policySlide.firebaseAnalytics.isChecked) {
                     firebaseAnalytics.setCurrentScreen(
-                        this@IntroActivity,
                         null,
-                        null
+                        this@IntroActivity::class
                     )
                     firebaseAnalytics.setAnalyticsCollectionEnabled(false)
                 }

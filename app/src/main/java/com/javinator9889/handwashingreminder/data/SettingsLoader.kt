@@ -507,7 +507,7 @@ class SettingsLoader(
                 with(FirebaseAnalytics.getInstance(view.requireContext())) {
                     setAnalyticsCollectionEnabled(enabled)
                     if (!enabled)
-                        setCurrentScreen(view.requireActivity(), null, null)
+                        setCurrentScreen(null, view.requireActivity()::class)
                 }
                 true
             }
