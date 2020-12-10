@@ -18,10 +18,12 @@
  */
 package com.javinator9889.handwashingreminder.gms.activity
 
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.annotation.StringRes
+import androidx.core.app.NotificationCompat
 import androidx.emoji.text.EmojiCompat
 import com.google.android.gms.location.ActivityTransition
 import com.google.android.gms.location.ActivityTransitionEvent
@@ -29,8 +31,12 @@ import com.google.android.gms.location.ActivityTransitionResult
 import com.google.android.gms.location.DetectedActivity
 import com.javinator9889.handwashingreminder.R
 import com.javinator9889.handwashingreminder.emoji.EmojiLoader
+import com.javinator9889.handwashingreminder.jobs.HANDS_WASHED_ACTION
+import com.javinator9889.handwashingreminder.jobs.HANDS_WASHED_CODE
+import com.javinator9889.handwashingreminder.jobs.HandsWashedReceiver
 import com.javinator9889.handwashingreminder.jobs.alarms.AlarmHandler
 import com.javinator9889.handwashingreminder.jobs.alarms.Alarms
+import com.javinator9889.handwashingreminder.notifications.Action
 import com.javinator9889.handwashingreminder.notifications.NotificationsHandler
 import com.javinator9889.handwashingreminder.utils.ACTIVITY_CHANNEL_ID
 import com.javinator9889.handwashingreminder.utils.Preferences
@@ -108,7 +114,7 @@ class ActivityReceiver : BroadcastReceiver() {
             latestNotificationTime
         )
         Timber.d("$timeDifference - $timeInBetweenNotifications")
-        if (timeDifference <= timeInBetweenNotifications) {
+        if (timeDifference < timeInBetweenNotifications) {
             pendingActivities.add(event)
             if (!alarmScheduled) {
                 with(AlarmHandler(context)) {
@@ -118,6 +124,7 @@ class ActivityReceiver : BroadcastReceiver() {
             }
             return
         }
+        latestNotificationTime = CalendarUtils.now
         val notificationContent = when (event.activityType) {
             DetectedActivity.WALKING ->
                 NotificationContent(
@@ -151,6 +158,14 @@ class ActivityReceiver : BroadcastReceiver() {
             content = emojiCompat.process(content)
         } catch (_: IllegalStateException) {
         }
+        val washedPendingIntent = PendingIntent.getBroadcast(
+            context,
+            HANDS_WASHED_CODE,
+            Intent(context, HandsWashedReceiver::class.java).apply {
+                action = HANDS_WASHED_ACTION
+            },
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
         withContext(Dispatchers.Main) {
             notificationsHandler.createNotification(
                 iconDrawable = R.drawable.ic_stat_handwashing,
@@ -158,10 +173,15 @@ class ActivityReceiver : BroadcastReceiver() {
                 title = title,
                 content = content,
                 longContent = content,
-                notificationId = 2
+                notificationId = 2,
+                priority = NotificationCompat.PRIORITY_MAX,
+                action = Action(
+                    R.drawable.ic_stat_handwashing,
+                    context.getText(R.string.just_washed),
+                    washedPendingIntent
+                )
             )
         }
-        latestNotificationTime = CalendarUtils.now
     }
 }
 
