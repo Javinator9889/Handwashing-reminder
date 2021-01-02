@@ -18,7 +18,6 @@
  */
 package com.javinator9889.handwashingreminder.gms.activity
 
-import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -34,7 +33,6 @@ import com.javinator9889.handwashingreminder.emoji.EmojiLoader
 import com.javinator9889.handwashingreminder.jobs.HANDS_WASHED_ACTION
 import com.javinator9889.handwashingreminder.jobs.HANDS_WASHED_CODE
 import com.javinator9889.handwashingreminder.jobs.HandsWashedReceiver
-import com.javinator9889.handwashingreminder.jobs.NOTIFICATION_ID_KEY
 import com.javinator9889.handwashingreminder.jobs.alarms.AlarmHandler
 import com.javinator9889.handwashingreminder.jobs.alarms.Alarms
 import com.javinator9889.handwashingreminder.notifications.Action
@@ -159,28 +157,21 @@ class ActivityReceiver : BroadcastReceiver() {
             content = emojiCompat.process(content)
         } catch (_: IllegalStateException) {
         }
-        val washedPendingIntent = PendingIntent.getBroadcast(
-            context,
-            HANDS_WASHED_CODE,
-            Intent(context, HandsWashedReceiver::class.java).apply {
-                action = HANDS_WASHED_ACTION
-                putExtra(NOTIFICATION_ID_KEY, 2)
-            },
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
         withContext(Dispatchers.Main) {
             notificationsHandler.createNotification(
                 iconDrawable = R.drawable.ic_stat_handwashing,
                 largeIcon = R.drawable.handwashing_app_logo,
                 title = title,
                 content = content,
-                longContent = content,
-                notificationId = 2,
                 priority = NotificationCompat.PRIORITY_MAX,
+                longContent = content,
                 action = Action(
                     R.drawable.ic_stat_handwashing,
                     context.getText(R.string.just_washed),
-                    washedPendingIntent
+                    HANDS_WASHED_CODE,
+                    Intent(context, HandsWashedReceiver::class.java).apply {
+                        action = HANDS_WASHED_ACTION
+                    }
                 )
             )
         }
