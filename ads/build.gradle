@@ -41,7 +41,7 @@ dependencies {
     implementation project(':app')
 
     // https://firebase.google.com/docs/admob/android/quick-start#import_the_mobile_ads_sdk
-    implementation 'com.google.firebase:firebase-ads:19.6.0'
+    implementation 'com.google.firebase:firebase-ads'
 }
 repositories {
     mavenCentral()

@@ -42,7 +42,7 @@ android {
         applicationId "com.javinator9889.handwashingreminder"
         minSdkVersion 16
         targetSdkVersion 30
-        versionCode 147
+        versionCode 148
         versionName "1.2.1-${gitCommitHash}"
         multiDexEnabled true
         resConfigs "en", "es"
@@ -109,6 +109,7 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
     }
 }
 
+apply plugin: 'com.google.gms.google-services'
 dependencies {
     def room_version = "2.2.6"
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -153,17 +154,17 @@ dependencies {
     implementation 'androidx.collection:collection-ktx:1.1.0'
     // https://kotlinlang.org/docs/reference/reflection.html
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    // https://firebase.google.com/docs/android/setup#add-sdks
-    api 'com.google.firebase:firebase-common-ktx:19.4.0'
-    api 'com.google.firebase:firebase-analytics:18.0.0'
-    api 'com.google.firebase:firebase-crashlytics:17.3.0'
-    api 'com.google.firebase:firebase-perf:19.0.10'
-    implementation 'com.google.firebase:firebase-auth:20.0.1'
+    // https://firebase.google.com/docs/android/setup#analytics-enabled
+    api platform('com.google.firebase:firebase-bom:26.1.1')
+    // https://firebase.google.com/docs/android/setup#available-libraries
+    api 'com.google.firebase:firebase-analytics-ktx'
+    api 'com.google.firebase:firebase-crashlytics-ktx'
+    api 'com.google.firebase:firebase-perf-ktx'
+    implementation 'com.google.firebase:firebase-auth-ktx'
+    // https://firebase.google.com/docs/remote-config/use-config-android
+    implementation 'com.google.firebase:firebase-config-ktx'
     // http://airbnb.io/lottie/#/android?id=getting-started
     api 'com.airbnb.android:lottie:3.6.0'
-    // https://firebase.google.com/docs/remote-config/use-config-android
-    implementation 'com.google.firebase:firebase-config:20.0.2'
-    implementation 'com.google.firebase:firebase-config-ktx:20.0.2'
     // https://mvnrepository.com/artifact/androidx.emoji/emoji/
     api 'androidx.emoji:emoji:1.1.0'
     api 'androidx.emoji:emoji-appcompat:1.1.0'
@@ -210,4 +211,3 @@ dependencies {
     // https://developer.android.com/jetpack/androidx/releases/work#declaring_dependencies
     implementation "androidx.work:work-runtime-ktx:2.4.0"
 }
-apply plugin: 'com.google.gms.google-services'
