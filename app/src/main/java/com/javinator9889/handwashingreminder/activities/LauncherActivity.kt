@@ -319,6 +319,8 @@ class LauncherActivity : BaseFragmentActivity<SplashScreenBinding>() {
                 groupName = getString(alarm.groupName)
             )
         }
+        Timber.d("Creating periodic work scheduler for ensuring alarms are active")
+        app.scheduleWorkChecker()
         propertiesJob.join()
     }
 
