@@ -42,7 +42,7 @@ android {
         applicationId "com.javinator9889.handwashingreminder"
         minSdkVersion 16
         targetSdkVersion 30
-        versionCode 143
+        versionCode 144
         versionName "1.2.1-${gitCommitHash}"
         multiDexEnabled true
         resConfigs "en", "es"
@@ -110,7 +110,7 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
 }
 
 dependencies {
-    def room_version = "2.2.5"
+    def room_version = "2.2.6"
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     api 'androidx.appcompat:appcompat:1.2.0'
@@ -154,10 +154,10 @@ dependencies {
     // https://kotlinlang.org/docs/reference/reflection.html
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     // https://firebase.google.com/docs/android/setup#add-sdks
-    api 'com.google.firebase:firebase-common-ktx:19.4.0'
+    api 'com.google.firebase:firebase-common-ktx:19.5.0'
     api 'com.google.firebase:firebase-analytics:18.0.0'
     api 'com.google.firebase:firebase-crashlytics:17.3.0'
-    api 'com.google.firebase:firebase-perf:19.0.10'
+    api 'com.google.firebase:firebase-perf:19.0.11'
     implementation 'com.google.firebase:firebase-auth:20.0.1'
     // http://airbnb.io/lottie/#/android?id=getting-started
     api 'com.airbnb.android:lottie:3.5.0'
