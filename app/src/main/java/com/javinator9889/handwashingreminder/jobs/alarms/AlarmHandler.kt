@@ -41,7 +41,10 @@ class AlarmHandler(private val context: Context) {
     fun scheduleAlarm(alarm: Alarms) {
         try {
             cancelAlarm(alarm)
-            val pendingIntent = createPendingIntentForAlarm(alarm)
+            val pendingIntent = createPendingIntentForAlarm(
+                alarm,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )!!
             val alarmTime = getTimeForAlarm(alarm)
             val scheduleTime = timeAt(alarmTime.hour, alarmTime.minute)
             AlarmManagerCompat.setExactAndAllowWhileIdle(
@@ -59,8 +62,9 @@ class AlarmHandler(private val context: Context) {
     }
 
     fun cancelAlarm(alarm: Alarms) {
-        val pendingIntent = createPendingIntentForAlarm(alarm)
-        alarmManager.cancel(pendingIntent)
+        val pendingIntent =
+            createPendingIntentForAlarm(alarm, PendingIntent.FLAG_NO_CREATE)
+        pendingIntent?.let { alarmManager.cancel(it) }
     }
 
     fun cancelAllAlarms() {
@@ -68,10 +72,16 @@ class AlarmHandler(private val context: Context) {
             cancelAlarm(alarm)
     }
 
-    private fun createPendingIntentForAlarm(alarm: Alarms): PendingIntent {
+    fun isAlarmAlive(alarm: Alarms) =
+        createPendingIntentForAlarm(alarm, PendingIntent.FLAG_NO_CREATE) != null
+
+    private fun createPendingIntentForAlarm(
+        alarm: Alarms,
+        flags: Int = 0
+    ): PendingIntent? {
         return with(Intent(context, AlarmReceiver::class.java)) {
             putExtra(IDENTIFIER, alarm.identifier)
-            PendingIntent.getBroadcast(context, alarm.code, this, 0)
+            PendingIntent.getBroadcast(context, alarm.code, this, flags)
         }
     }
 

@@ -79,6 +79,13 @@
             android:summaryOff="@string/animations_off"
             android:summaryOn="@string/animations_on"
             android:title="@string/disable_animations" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="app:performance:intro_animation"
+            android:summaryOff="@string/intro_animations_off"
+            android:summaryOn="@string/intro_animations_on"
+            android:title="@string/disable_intro_animation" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/data_sharing_category">
 

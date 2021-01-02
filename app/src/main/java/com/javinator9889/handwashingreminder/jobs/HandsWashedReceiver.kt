@@ -34,10 +34,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 internal const val HANDS_WASHED_CODE = 128
+internal const val HANDS_WASHED_SCHED_CODE = 129
 internal const val HANDS_WASHED_ACTION =
     "com.javinator9889.handwashingreminder.HANDSWASHED_EVENT"
 internal const val NOTIFICATION_ID_KEY =
     "com.javinator9889.handwashingreminder.NID"
+
 
 class HandsWashedReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {

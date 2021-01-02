@@ -22,16 +22,21 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.multidex.MultiDex
 import androidx.preference.PreferenceManager
+import androidx.work.*
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.firebase.FirebaseApp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.javinator9889.handwashingreminder.gms.ads.AdLoader
+import com.javinator9889.handwashingreminder.jobs.workers.AlarmCheckerWorker
+import com.javinator9889.handwashingreminder.utils.AndroidVersion
 import com.javinator9889.handwashingreminder.utils.LogReportTree
+import com.javinator9889.handwashingreminder.utils.isAtLeast
 import com.javinator9889.handwashingreminder.utils.isDebuggable
 import javinator9889.localemanager.application.BaseApplication
 import javinator9889.localemanager.utils.languagesupport.LanguagesSupport.Language
 import kotlinx.coroutines.*
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 
 class HandwashingApplication : BaseApplication() {
@@ -64,6 +69,39 @@ class HandwashingApplication : BaseApplication() {
         super.onCreate()
         instance = this
         firebaseInitDeferred = initFirebaseAppAsync()
+    }
+
+    internal fun scheduleWorkChecker() {
+        val constraints = Constraints.Builder().run {
+            setRequiredNetworkType(NetworkType.NOT_REQUIRED)
+            setRequiresBatteryNotLow(false)
+            setRequiresCharging(false)
+            if (isAtLeast(AndroidVersion.O))
+                setRequiresDeviceIdle(false)
+            setRequiresStorageNotLow(false)
+            build()
+        }
+        val work =
+            PeriodicWorkRequestBuilder<AlarmCheckerWorker>(
+                1, TimeUnit.HOURS,
+                15, TimeUnit.MINUTES
+            ).run {
+                setBackoffCriteria(
+                    BackoffPolicy.EXPONENTIAL,
+                    OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
+                    TimeUnit.MILLISECONDS
+                )
+                setConstraints(constraints)
+                addTag("Alarm Checker")
+                build()
+            }
+        with(WorkManager.getInstance(this)) {
+            enqueueUniquePeriodicWork(
+                "Alarm checker job",
+                ExistingPeriodicWorkPolicy.KEEP,
+                work
+            )
+        }
     }
 
     private fun initFirebaseAppAsync(): Deferred<Unit> {

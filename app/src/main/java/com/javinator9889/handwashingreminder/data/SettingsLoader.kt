@@ -319,6 +319,10 @@ class SettingsLoader(
                     Ionicons.Icon.ion_battery_low
                 ).also { deferreds.add(it) }
                 setupPreferenceAsync(
+                    Preferences.INTRO_ANIMATIONS,
+                    Ionicons.Icon.ion_play
+                ).also { deferreds.add(it) }
+                setupPreferenceAsync(
                     "notifications:settings",
                     onClickListener = {
                         val intent = when {

@@ -89,7 +89,7 @@ class DiseasesFragment : BaseFragmentView<MainDiseaseViewBinding>(),
         lifecycleScope.launchWhenStarted {
             loadingRecyclerViewBinding.loading.visibility = View.VISIBLE
             handwashBinding.countLoader.visibility = View.VISIBLE
-            informationViewModel.parsedHTMLText.observe(viewLifecycleOwner) {
+            informationViewModel.parsedHTMLText.observe(owner = viewLifecycleOwner) {
                 if (it.isEmpty())
                     return@observe
                 lifecycleScope.launch {
@@ -110,7 +110,7 @@ class DiseasesFragment : BaseFragmentView<MainDiseaseViewBinding>(),
                     loadingRecyclerViewBinding.container.visibility = View.VISIBLE
                 }
             }
-            handwashingViewModel.allData.observe(viewLifecycleOwner) {
+            handwashingViewModel.allData.observe(owner = viewLifecycleOwner) {
                 lifecycleScope.launch {
                     dataSet?.let { set ->
                         Timber.d("Adding new items to dataSet")

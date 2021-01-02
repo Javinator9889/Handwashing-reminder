@@ -327,6 +327,10 @@
     <string name="animations_on">Currently, the app will play some animations.
     Keep in mind that it can affect both performance and battery life</string>
     <string name="animations_off">No animations will be played</string>
+    <string name="disable_intro_animation">Disable app\'s intro animations</string>
+    <string name="intro_animations_on">When opening the app, if there is an special
+    event, an animation is displayed. Uncheck this to skip that animation</string>
+    <string name="intro_animations_off">No animations will be played while opening the app</string>
     <string name="news_error">Error while loading news data</string>
     <string name="notification_settings">Edit notification settings</string>
     <string name="just_washed">Just washed them!</string>
