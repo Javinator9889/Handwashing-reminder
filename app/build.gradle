@@ -154,13 +154,13 @@ dependencies {
     // https://kotlinlang.org/docs/reference/reflection.html
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     // https://firebase.google.com/docs/android/setup#add-sdks
-    api 'com.google.firebase:firebase-common-ktx:19.5.0'
+    api 'com.google.firebase:firebase-common-ktx:19.4.0'
     api 'com.google.firebase:firebase-analytics:18.0.0'
     api 'com.google.firebase:firebase-crashlytics:17.3.0'
-    api 'com.google.firebase:firebase-perf:19.0.11'
+    api 'com.google.firebase:firebase-perf:19.0.10'
     implementation 'com.google.firebase:firebase-auth:20.0.1'
     // http://airbnb.io/lottie/#/android?id=getting-started
-    api 'com.airbnb.android:lottie:3.5.0'
+    api 'com.airbnb.android:lottie:3.6.0'
     // https://firebase.google.com/docs/remote-config/use-config-android
     implementation 'com.google.firebase:firebase-config:20.0.2'
     implementation 'com.google.firebase:firebase-config-ktx:20.0.2'
