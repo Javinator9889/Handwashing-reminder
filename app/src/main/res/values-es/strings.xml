@@ -34,7 +34,7 @@
         público hay mucha gente y no sabes si están enfermos o no &#128567;.\n
         Incluso en tu propio coche pueden haber enfermedades en los pomos o
         en el volante &#128663;, así que lávate las manos lo antes que puedas
-       para evitar enfermedades &#128166;&#128079;
+        para evitar enfermedades &#128166;&#128079;
     </string>
     <string name="privacy_policy_title">Política de privacidad</string>
     <string name="tos_title">Términos y condiciones</string>
@@ -299,6 +299,10 @@
     <string name="animations_on">Actualmente, las animaciones están activadas.
         Ten en cuenta que esto puede afectar tanto al rendimiento como a la batería</string>
     <string name="animations_off">No se mostrará ninguna animación</string>
+    <string name="disable_intro_animation">Deshabilita las animaciones al inicio</string>
+    <string name="intro_animations_on">Si, al abrir la aplicación, hay algún evento especial, se muestra una animación.
+    Desmarca esta opción para saltarla</string>
+    <string name="intro_animations_off">No se mostrarán animaciones al iniciar la aplicación</string>
     <string name="news_error">Error al cargar información sobre las noticias</string>
     <string name="notification_settings">Ajustes de notificaciones</string>
     <string name="just_washed">¡Acabo de lavarlas!</string>

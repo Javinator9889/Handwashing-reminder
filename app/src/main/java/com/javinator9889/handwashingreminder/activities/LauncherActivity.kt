@@ -74,6 +74,7 @@ class LauncherActivity : BaseFragmentActivity<SplashScreenBinding>() {
     private val activityIntentDeferred = CompletableDeferred<Intent>()
     private val splitInstallManager = SplitInstallManagerFactory.create(app)
     private lateinit var binding: SplashScreenBinding
+
     @get:LayoutRes
     override val layoutId: Int = R.layout.splash_screen
 
@@ -127,6 +128,7 @@ class LauncherActivity : BaseFragmentActivity<SplashScreenBinding>() {
                 override fun onAnimationStart(animation: Animation?) {
                     Timber.d("Animation started!")
                 }
+
                 override fun onAnimationRepeat(animation: Animation?) {}
                 override fun onAnimationEnd(animation: Animation?) {
                     Timber.d("Animation is completed")
@@ -134,7 +136,11 @@ class LauncherActivity : BaseFragmentActivity<SplashScreenBinding>() {
                     binding.logo.playAnimation()
                 }
             })
-            if (isThereAnySpecialEvent && !isDebuggable()) {
+            val introAnimationDisabled = sharedPreferences.getBoolean(
+                Preferences.INTRO_ANIMATIONS,
+                false
+            )
+            if (isThereAnySpecialEvent && !isDebuggable() && !introAnimationDisabled) {
                 Timber.d("Starting custom animation...")
                 binding.logo.setAnimation(AnimatedResources.STAY_SAFE_STAY_HOME.res)
                 binding.logo.addLottieOnCompositionLoadedListener {
@@ -256,8 +262,10 @@ class LauncherActivity : BaseFragmentActivity<SplashScreenBinding>() {
         if (Ads.MODULE_NAME in splitInstallManager.installedModules &&
             sharedPreferences.getBoolean(ADS_ENABLED, true)
         ) {
-            val className = "${Ads.PACKAGE_NAME}.${Ads
-                .CLASS_NAME}\$${Ads.PROVIDER_NAME}"
+            val className = "${Ads.PACKAGE_NAME}.${
+                Ads
+                    .CLASS_NAME
+            }\$${Ads.PROVIDER_NAME}"
             val adProvider = Class.forName(className).kotlin
                 .objectInstance as AdLoader.Provider
             app.adLoader = adProvider.instance(context)

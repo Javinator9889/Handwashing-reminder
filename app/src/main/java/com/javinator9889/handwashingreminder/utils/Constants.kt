@@ -44,6 +44,7 @@ object Preferences {
     const val INITIAL_TUTORIAL_DONE = "app:tutorial:is_done"
     const val ACTIVITY_MINIMUM_TIME = "activity:gms:minimumInterval"
     const val PERFORMANCE_ANIMATIONS = "app:performance:animations"
+    const val INTRO_ANIMATIONS = "app:performance:intro_animation"
 }
 
 object TimeConfig {
