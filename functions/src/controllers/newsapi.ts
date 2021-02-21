@@ -1,47 +1,28 @@
-import { NewsAPIResponse } from '../interfaces/inewsapi';
-import { Database } from '../database';
-import { ProjectProperties } from '../interfaces/projectProperties';
-import properties = require('../common/properties');
+import { Request, Response } from 'express';
+import { newsApiController } from '../models/newsapi';
 
-class NewsAPIController {
-  private readonly databases: Record<string, Database>;
-  private readonly cachedResults: Record<string, Array<NewsAPIResponse>>;
-  private readonly lastUpdate: Record<string, number>;
-  private properties: ProjectProperties;
 
-  constructor() {
-    this.databases = {};
-    this.cachedResults = {};
-    this.lastUpdate = {};
-    this.properties =
-        properties.projectProperties(properties.firebaseApp, '2.0');
-    properties.languages.forEach(language => {
-      this.databases[language] = new Database(
-          this.properties.database,
-          `${this.properties.collection}_${language}`);
-      this.lastUpdate[language] = 0;
-      this.cachedResults[language] = null;
-    });
-  }
+export async function queryNews(req: Request, res: Response): Promise<Response> {
+  const language = req.query.lang as string;
+  const fromParam = req.query.form;
+  const amountParam = req.query.amount;
+  try {
+    const newsData = await newsApiController.queryNews(language);
+    if (fromParam === undefined && amountParam === undefined)
+      return res.json(newsData);
+    else {
+      const from = fromParam !== undefined ? Number(fromParam) : 0;
+      const amount = amountParam !== undefined
+          ? Number(amountParam)
+          : newsData.length;
 
-  async queryNews(language: string): Promise<NewsAPIResponse[]> {
-    if (language ! in properties.languages)
-      throw new RangeError(`invalid language: "${language}" - ` +
-          `available are: ${properties.languages}`);
-
-    if (Math.floor((Date.now() - this.lastUpdate[language] / 60000)) <= 15)
-      return this.cachedResults[language];
-
-    const collection = this.databases[language].collection;
-    const snapshot = await collection.orderBy('publishedAt', 'desc').get();
-    const data = new Array<NewsAPIResponse>();
-    snapshot.forEach(item => {
-      if (item.data() !== null) data.push(item.data() as NewsAPIResponse);
-    });
-    this.cachedResults[language] = data;
-    return data;
+      return res.json(newsData.slice(from, from + amount));
+    }
+  } catch (err) {
+    if (err !instanceof RangeError) {
+      console.error(`Error while getting news data: ${err}`);
+      return res.sendStatus(500);
+    } else
+      return res.status(403).send(err);
   }
 }
-
-
-export const newsApiController = new NewsAPIController();
