@@ -3,7 +3,7 @@ import { Database } from '../database';
 import { ProjectProperties } from '../interfaces/projectProperties';
 import properties = require('../common/properties');
 
-class NewsAPIController {
+class NewsAPIModel {
   private readonly databases: Record<string, Database>;
   private readonly cachedResults: Record<string, Array<NewsAPIResponse>>;
   private readonly lastUpdate: Record<string, number>;
@@ -45,4 +45,4 @@ class NewsAPIController {
 }
 
 
-export const newsApiController = new NewsAPIController();
+export const newsAPIModel = new NewsAPIModel();

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { newsApiController } from '../models/newsapi';
+import { newsAPIModel } from '../models/newsapi';
 
 
 export async function queryNews(req: Request, res: Response): Promise<Response> {
@@ -7,7 +7,7 @@ export async function queryNews(req: Request, res: Response): Promise<Response> 
   const fromParam = req.query.form;
   const amountParam = req.query.amount;
   try {
-    const newsData = await newsApiController.queryNews(language);
+    const newsData = await newsAPIModel.queryNews(language);
     if (fromParam === undefined && amountParam === undefined)
       return res.json(newsData);
     else {
