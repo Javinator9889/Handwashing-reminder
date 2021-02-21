@@ -1,4 +1,4 @@
-import {Updater} from '../updater';
+import {NewsriverUpdater} from '../newsriverUpdater';
 import {RemoteConfigData} from "../rcdata";
 import properties = require('../common/properties');
 import {TemplateVersion} from "firebase-functions/lib/providers/remoteConfig";
@@ -6,19 +6,19 @@ import {languages} from "../common/properties";
 import {EventContext} from "firebase-functions";
 
 
-const updaters: Record<string, Updater> = {};
+const updaters: Record<string, NewsriverUpdater> = {};
 const remoteConfig = new RemoteConfigData(properties.firebaseApp);
 const timers = new Set<NodeJS.Timer>();
 let initCalled = false;
 
 export async function initialize() {
   try {
-    console.info('Updater is being initialized');
+    console.info('NewsriverUpdater is being initialized');
     initCalled = true;
     const projectProperties = properties.projectProperties(properties.firebaseApp);
     for (const language of properties.languages) {
       const terms = await remoteConfig.getSearchTermsForLanguage(language);
-      updaters[language] = new Updater(
+      updaters[language] = new NewsriverUpdater(
         projectProperties.database,
         `${projectProperties.collection}_${language}`,
         terms,

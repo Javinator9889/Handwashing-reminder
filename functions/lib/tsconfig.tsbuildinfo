@@ -431,7 +431,7 @@
         "signature": "4f64b8107769278a6dada173dadb40afc975024b5551c3419f208677830a99c0",
         "affectsGlobalScope": false
       },
-      "../src/updater.ts": {
+      "../src/newsriverUpdater.ts": {
         "version": "a95ed0ec52eb5fd158644846bdf7c4b5b97957c394e6d98d8d9d07df2c2c2669",
         "signature": "468e09e13fd92c765047426e852c73d7064f2f2968097cc1a379fa52293bd1d4",
         "affectsGlobalScope": false
@@ -1492,7 +1492,7 @@
         "../src/interfaces/projectProperties.ts",
         "../src/newsriver.ts",
         "../src/rcdata.ts",
-        "../src/updater.ts"
+        "../src/newsriverUpdater.ts"
       ],
       "../src/newsriver.ts": [
         "../node_modules/@types/node/base.d.ts",
@@ -1503,7 +1503,7 @@
         "../node_modules/@types/node/ts3.2/index.d.ts",
         "../node_modules/firebase-admin/lib/index.d.ts",
         "../node_modules/firebase-functions/lib/index.d.ts",
-        "../src/updater.ts"
+        "../src/newsriverUpdater.ts"
       ],
       "../src/routes/api.ts": [
         "../node_modules/@types/express/index.d.ts",
@@ -1513,7 +1513,7 @@
         "../src/controllers/api.ts",
         "../src/models/api.ts"
       ],
-      "../src/updater.ts": [
+      "../src/newsriverUpdater.ts": [
         "../node_modules/@types/node/base.d.ts",
         "../node_modules/@types/node/ts3.2/index.d.ts",
         "../node_modules/firebase-functions-helper/dist/index.d.ts",
@@ -2352,11 +2352,11 @@
         "../src/interfaces/projectProperties.ts",
         "../src/newsriver.ts",
         "../src/rcdata.ts",
-        "../src/updater.ts"
+        "../src/newsriverUpdater.ts"
       ],
       "../src/rcdata.ts": [
         "../node_modules/firebase-admin/lib/index.d.ts",
-        "../src/updater.ts"
+        "../src/newsriverUpdater.ts"
       ],
       "../src/routes/api.ts": [
         "../node_modules/@types/express/index.d.ts",
@@ -2364,7 +2364,7 @@
         "../src/controllers/api.ts",
         "../src/models/api.ts"
       ],
-      "../src/updater.ts": [
+      "../src/newsriverUpdater.ts": [
         "../src/newsriver.ts"
       ]
     },
@@ -2493,7 +2493,7 @@
       "../src/newsriver.ts",
       "../src/rcdata.ts",
       "../src/routes/api.ts",
-      "../src/updater.ts"
+      "../src/newsriverUpdater.ts"
     ]
   },
   "version": "3.9.3"

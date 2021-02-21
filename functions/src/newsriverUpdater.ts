@@ -4,7 +4,7 @@ import {AxiosInstance, default as axios} from "axios";
 import * as https from "https";
 
 
-export class Updater {
+export class NewsriverUpdater {
   private readonly db: FirebaseFirestore.Firestore;
   private readonly collectionName: string;
   private readonly interval: number;
@@ -80,7 +80,7 @@ export class Updater {
     try {
       for (const element of content) {
         try {
-          firebaseHelper.firestore.createDocumentWithID(this.db, this.collectionName, element.id, element)
+          firebaseHelper.firestoreHelper.createDocumentWithID(this.db, this.collectionName, element.id, element)
             .then(created => console.debug(`Item with ID: ${element.id} was ${created ? 'created' : 'not created'}`))
             .catch(err => console.error(`Error while creating document ${err}`));
         } catch (err) {

@@ -2,7 +2,8 @@ import * as path from 'path';
 import * as logger from 'morgan';
 import * as express from 'express';
 import * as createError from 'http-errors';
-import router = require("./routes/newsriver");
+import * as newsAPIRouter from './routes/newsapi';
+import * as newsriverRouter from './routes/newsriver';
 
 
 const app = express();
@@ -16,7 +17,8 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(router);
+app.use(newsriverRouter);
+app.use(newsAPIRouter);
 // catch 404 and forward to error handler
 app.use((req, res, next) => next(createError(404)));
 

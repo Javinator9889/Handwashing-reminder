@@ -1,10 +1,10 @@
-import {Updater} from './updater';
+import {NewsriverUpdater} from './newsriverUpdater';
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions'
 
 export class RemoteConfigData {
   remoteConfig: admin.remoteConfig.RemoteConfig;
-  updaters: Record<string, Updater>;
+  updaters: Record<string, NewsriverUpdater>;
 
   constructor(app: admin.app.App) {
     this.remoteConfig = admin.remoteConfig(app);
@@ -29,7 +29,7 @@ export class RemoteConfigData {
     return JSON.parse(template.parameters['search_terms'].conditionalValues[condition]['value']);
   }
 
-  subscribeUpdaters(updaters: Record<string, Updater>) {
+  subscribeUpdaters(updaters: Record<string, NewsriverUpdater>) {
     this.updaters = updaters;
   }
 
