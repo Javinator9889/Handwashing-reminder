@@ -1,6 +1,6 @@
 {
   "name": "functions",
-  "version": "1.0.2",
+  "version": "2.0",
   "scripts": {
     "lint": "tslint --project tsconfig.json",
     "build": "tsc",
@@ -28,7 +28,8 @@
     "http-errors": "^1.7.3",
     "morgan": "^1.10.0",
     "newsapi": "^2.4.1",
-    "pug": "^3.0.0"
+    "pug": "^3.0.0",
+    "semver": "^7.3.4"
   },
   "devDependencies": {
     "firebase-functions-test": "^0.2.0",
