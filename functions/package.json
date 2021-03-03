@@ -27,7 +27,7 @@
     "firebase-functions-helper": "^0.7.5",
     "http-errors": "^1.7.3",
     "morgan": "^1.10.0",
-    "pug": "^3.0.0"
+    "pug": "^3.0.1"
   },
   "devDependencies": {
     "firebase-functions-test": "^0.2.0",
